@@ -1,38 +1,32 @@
-# sv
+# Portfolio Website
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Personal portfolio and blog built with SvelteKit.
 
-## Creating a project
+## TODO
 
-If you're seeing this, you've probably already done this step. Congrats!
+-[ ] Write project descriptions for Bagchal Reforged, Kathmandu Shame Map, Bhetum
 
-```bash
-# create a new project in the current directory
-npx sv create
+-[x] Add blog posts (technical deep-dives, Nepal tech scene, minimalist dev practices)
 
-# create a new project in my-app
-npx sv create my-app
-```
+- [ ] Create resume page with downloadable PDF
 
-## Developing
+Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Implement dark/light theme toggle
+Add search functionality for blog posts
+Build RSS feed for blog
+Add analytics (privacy-focused)
 
-```bash
-npm run dev
+Technical
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+Optimize images and add lazy loading
+Implement proper SEO meta tags
+Add sitemap generation
+Set up automated testing pipeline
 
-## Building
+Design
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Mobile responsiveness improvements
+Add subtle animations and hover effects
+Create custom 404 page
+Improve typography hierarchy
