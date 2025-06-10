@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "build": "vite build",
-    "deploy": "wrangler deploy .svelte-kit/cloudflare"
+    "deploy": "wrangler deploy --config wrangler.toml"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
