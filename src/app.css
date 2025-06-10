@@ -1,3 +1,202 @@
+/* Import Fira Code font */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+/* Import Gruvbox Dark theme for code highlighting */
+@import 'prism-themes/themes/prism-gruvbox-dark.css';
+
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+
+/* Dark theme custom properties for Tailwind */
+@theme {
+	--color-bg-primary: #1e1e1e;
+	--color-bg-secondary: #212121;
+	--color-text-primary: #f8f8f8;
+	--color-text-secondary: #b3b3b3;
+	--color-primary-red: #c92a2a;
+	--color-border: #333333;
+	
+	--font-family-mono: 'Fira Code', monospace;
+}
+
+/* Base body styles */
+body {
+	@apply bg-bg-primary text-text-primary font-mono leading-relaxed min-h-screen;
+}
+
+/* Global link styles */
+a {
+	@apply text-text-primary no-underline transition-all duration-300;
+}
+
+a:hover {
+	@apply text-primary-red;
+}
+
+/* List reset */
+ul {
+	@apply list-none;
+}
+
+li {
+	@apply mb-2 text-text-secondary transition-all duration-300;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-bg-primary;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-border rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	@apply bg-primary-red;
+}
+
+/* Base card styles */
+.section-card {
+	@apply bg-bg-secondary border border-border rounded-md p-6 mb-6 relative overflow-hidden transition-all duration-300 shadow-lg;
+}
+
+.section-card:hover {
+	@apply -translate-y-0.5 border-primary-red;
+	box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
+}
+
+.section-title {
+	@apply text-primary-red text-xl font-semibold mb-4 pb-2 border-b border-border relative;
+}
+
+.section-title::after {
+	content: '';
+	@apply absolute -bottom-px left-0 h-px bg-primary-red transition-all duration-300 w-0;
+}
+
+.section-card:hover .section-title::after {
+	width: 30%;
+}
+
+/* Container and layout */
+.container {
+	@apply max-w-6xl mx-auto px-4;
+}
+
+.main-grid {
+	@apply grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 mt-8 opacity-100;
+}
+
+/* Button styles */
+.btn {
+	@apply bg-transparent border border-border text-text-primary px-4 py-2 font-mono text-sm cursor-pointer transition-all duration-300 rounded relative overflow-hidden;
+}
+
+.btn::before {
+	content: '';
+	@apply absolute top-0 -left-full w-full h-full transition-all duration-500;
+	background: linear-gradient(90deg, transparent, rgba(201, 42, 42, 0.1), transparent);
+}
+
+.btn:hover::before {
+	@apply left-full;
+}
+
+.btn:hover {
+	@apply border-primary-red text-primary-red;
+}
+
+/* Placeholder boxes */
+.placeholder-box {
+	@apply bg-bg-primary border border-border rounded h-32 mb-4 flex items-center justify-center text-text-secondary text-sm transition-all duration-300 relative;
+}
+
+.placeholder-box:hover {
+	@apply border-primary-red text-primary-red;
+	background-color: rgba(201, 42, 42, 0.05);
+}
+
+/* Profile section styles */
+.profile-icon {
+	@apply w-20 h-20 bg-bg-primary border-2 border-primary-red rounded-md flex items-center justify-center mb-4 text-primary-red text-3xl transition-all duration-300 relative overflow-hidden;
+}
+
+.profile-icon::before {
+	content: '';
+	@apply absolute top-1/2 left-1/2 w-0 h-0 rounded-full transition-all duration-600;
+	background: rgba(201, 42, 42, 0.1);
+	transform: translate(-50%, -50%);
+}
+
+.profile-icon:hover::before {
+	@apply w-52 h-52;
+}
+
+.profile-icon:hover {
+	@apply scale-105;
+}
+
+.profile-name {
+	@apply text-2xl font-bold text-text-primary mb-1 tracking-wide;
+}
+
+.profile-title {
+	@apply text-primary-red text-base mb-1;
+}
+
+.profile-location {
+	@apply text-text-secondary text-sm;
+}
+
+/* Focus and selection styles */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+	@apply outline-2 outline-primary-red outline-offset-2;
+}
+
+::selection {
+	@apply bg-primary-red text-text-primary;
+}
+
+/* Copy button styles for code blocks */
+.copy-code-button {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	background: rgba(248, 248, 248, 0.15);
+	color: #f8f8f8;
+	border: 1px solid rgba(248, 248, 248, 0.3);
+	border-radius: 4px;
+	padding: 0.5rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	backdrop-filter: blur(4px);
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+}
+
+.copy-code-button:hover {
+	background: rgba(248, 248, 248, 0.15);
+	border-color: rgba(248, 248, 248, 0.4);
+	color: #c92a2a;
+}
+
+.copy-code-button.copied {
+	background: rgba(201, 42, 42, 0.2);
+	border-color: #c92a2a;
+	color: #c92a2a;
+}
+
+.copy-code-button:focus {
+	outline: 2px solid #c92a2a;
+	outline-offset: 2px;
+}
