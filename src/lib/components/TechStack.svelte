@@ -16,7 +16,7 @@
 						<Zap size={16} class="text-primary-red" />
 						Go
 					</span>
-					<span class="text-xs text-text-secondary">3+ years</span>
+					<span class="text-xs text-text-secondary">1+ years</span>
 				</div>
 				<div class="flex justify-between items-center py-1 border-b border-transparent transition-all duration-300 hover:border-primary-red hover:text-text-primary">
 					<span class="flex items-center gap-2">

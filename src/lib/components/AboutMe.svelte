@@ -1,22 +1,28 @@
 <script lang="ts">
 	import { User } from 'lucide-svelte';
-	import VimGopherCursor from './VimGopherCursor.svelte';
 	import { onMount } from 'svelte';
 
 	let vimText: HTMLElement;
-	let showCustomCursor = false;
+	let showGopher = false;
 	let hoverTimer: ReturnType<typeof setTimeout> | null = null;
+	let mouseX = 0;
+	let mouseY = 0;
 
 	function handleMouseEnter() {
 		if (hoverTimer) clearTimeout(hoverTimer);
 		hoverTimer = setTimeout(() => {
-			showCustomCursor = true;
-		}, 1000);
+			showGopher = true;
+		}, 200);
 	}
 
 	function handleMouseLeave() {
 		if (hoverTimer) clearTimeout(hoverTimer);
-		showCustomCursor = false;
+		showGopher = false;
+	}
+
+	function handleMouseMove(event: MouseEvent) {
+		mouseX = event.clientX;
+		mouseY = event.clientY;
 	}
 
 	onMount(() => {
@@ -32,21 +38,24 @@
 	</h2>
 	<div class="space-y-4">
 		<p class="text-text-primary leading-relaxed">
-			I build systems that actually work. Based in Kathmandu, Nepal, I spend my days writing Go for distributed systems and Python when data gets messy.
+			I build distributed systems that stay up. Based in Kathmandu, I write Go for multi-region back ends and Python for data pipelines. Front end only when necessary—SvelteKit if it must be interactive, plain HTML if it's static.
 		</p>
 		<p class="text-text-primary leading-relaxed">
-			Most software today is overengineered garbage. I prefer boring solutions that scale over clever abstractions that break. When I need a frontend, it's SvelteKit for interactivity or plain HTML when it's just content.
+			Current work: remote contracts with global teams, turning specs into production services and keeping PostgreSQL happy under load.
 		</p>
 		<p class="text-text-primary leading-relaxed">
-			I've been coding since I was 14, started with C++ (terrible idea), survived PHP, and now mostly stick to Go and Python. PostgreSQL is my database of choice because it just works and doesn't pretend to be something it's not. Working remotely with international clients has taught me the value of clear communication and reliable code.
+			Past work: ad agencies, early-stage startups, civic projects like Nepal Trash Map. Open-sourced several Go libraries and recorded walkthroughs on building reliable APIs.
+		</p>
+		<p class="text-text-primary leading-relaxed">
+			Spare hours: minimalist calisthenics, NEPSE portfolio tuning, wandering Kathmandu's streets for design cues.
 		</p>
 		<p class="text-text-secondary italic">
 			<span 
 				bind:this={vimText}
 				class="vim-easter-egg"
-				class:show-gopher-cursor={showCustomCursor}
 				on:mouseenter={handleMouseEnter}
 				on:mouseleave={handleMouseLeave}
+				on:mousemove={handleMouseMove}
 				role="button"
 				tabindex="0"
 			>
@@ -56,12 +65,17 @@
 	</div>
 </section>
 
-<!-- Hidden SVG for cursor -->
-{#if showCustomCursor}
-	<div class="gopher-cursor-container">
-		<VimGopherCursor />
+<!-- Go Gopher that follows cursor -->
+{#if showGopher}
+	<div 
+		class="gopher-cursor" 
+		style="left: {mouseX - 16}px; top: {mouseY + 20}px;"
+	>
+		<img src="/go-vim.svg" alt="Go Gopher with Vim" width="48" height="36" />
 	</div>
 {/if}
+
+
 
 <style>
 	.vim-easter-egg {
@@ -85,18 +99,16 @@
 		100% { background-position: 0% 50%; }
 	}
 
-	.show-gopher-cursor {
-		cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEwIiByPSI4IiBmaWxsPSIjOTZkNmZmIiBzdHJva2U9IiMzOTQ2NTUiIHN0cm9rZS13aWR0aD0iMSIvPjxjaXJjbGUgY3g9IjkiIGN5PSI4IiByPSIxLjUiIGZpbGw9IiMzOTQ2NTUiLz48Y2lyY2xlIGN4PSIxNSIgY3k9IjgiIHI9IjEuNSIgZmlsbD0iIzM5NDY1NSIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjcuNSIgcj0iMC41IiBmaWxsPSIjZmZmZmZmIi8+PGNpcmNsZSBjeD0iMTQuNSIgY3k9IjcuNSIgcj0iMC41IiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTSA5IDEyIFEgMTIgMTUgMTUgMTIiIHN0cm9rZT0iIzM5NDY1NSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIi8+PGVsbGlwc2UgY3g9IjciIGN5PSI2IiByeD0iMiIgcnk9IjMiIGZpbGw9IiM5NmQ2ZmYiIHN0cm9rZT0iIzM5NDY1NSIgc3Ryb2tlLXdpZHRoPSIxIi8+PGVsbGlwc2UgY3g9IjE3IiBjeT0iNiIgcng9IjIiIHJ5PSIzIiBmaWxsPSIjOTZkNmZmIiBzdHJva2U9IiMzOTQ2NTUiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg=='), auto !important;
-	}
-
-	.gopher-cursor-container {
+	.gopher-cursor {
 		position: fixed;
-		top: 0;
-		left: 0;
-		width: 32px;
-		height: 32px;
 		pointer-events: none;
 		z-index: 9999;
-		display: none;
+		transition: all 0.1s ease-out;
+		animation: gopherFloat 2s ease-in-out infinite;
+	}
+
+	@keyframes gopherFloat {
+		0%, 100% { transform: translateY(0px); }
+		50% { transform: translateY(-5px); }
 	}
 </style> 

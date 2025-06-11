@@ -4,7 +4,7 @@
 
 <section class="section-card">
 	<div class="flex justify-start mb-4">
-		<img src="/bird-logo.svg" alt="Anish's Logo" width="32" height="58" class="transition-transform duration-300 hover:scale-105" />
+		<img src="/bird-logo.svg" alt="Anish's Logo" width="32" height="58" class="" />
 	</div>
 	<div class="profile-name">ANISH SHRESTHA</div>
 	<div class="profile-title">
