@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils/blog';
 	import type { BlogPost } from '$lib/utils/blog';
-	import { Zap } from 'lucide-svelte';
+	import { Rss } from 'lucide-svelte';
 
 	interface Props {
 		posts: BlogPost[];
@@ -12,7 +12,7 @@
 
 <section class="section-card">
 	<h2 class="section-title">
-		<Zap size={20} class="inline" /> Latest Posts
+		<Rss size={20} class="inline text-primary-red" /> Latest Posts
 	</h2>
 	<div class="flex flex-col gap-6">
 		{#if posts.length > 0}
@@ -28,7 +28,7 @@
 						<p class="text-text-secondary text-sm leading-relaxed mb-3 line-clamp-2">{post.description}</p>
 						<div class="flex gap-1 flex-wrap">
 							{#each post.tags.slice(0, 3) as tag}
-								<span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 border border-border">#{tag}</span>
+								<span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 border border-border">{tag}</span>
 							{/each}
 						</div>
 					</article>

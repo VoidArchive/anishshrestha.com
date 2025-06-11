@@ -34,7 +34,7 @@
 				<time class="post-date">{formatDate(post.date)}</time>
 				<div class="post-tags">
 					{#each post.tags as tag}
-						<span class="tag">#{tag}</span>
+						<span class="tag">{tag}</span>
 					{/each}
 				</div>
 			</div>

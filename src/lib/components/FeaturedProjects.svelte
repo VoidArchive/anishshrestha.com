@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Folder, ArrowRight } from 'lucide-svelte';
+	import { FolderGit, ArrowRight } from 'lucide-svelte';
 	import MiniProjectCard from './MiniProjectCard.svelte';
 </script>
 
 <section class="section-card">
 	<h2 class="section-title flex items-center gap-2">
-		<Folder size={20} class="inline" /> Featured Projects
+		<FolderGit size={20} class="inline text-primary-red" /> Featured Projects
 	</h2>
 	<div class="flex flex-col gap-6">
 		<MiniProjectCard

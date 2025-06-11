@@ -25,8 +25,8 @@
 		<!-- Right Column -->
 		<section class="flex flex-col">
 			<AboutMe />
-			<LatestPosts posts={data.latestPosts} />
 			<FeaturedProjects />
+			<LatestPosts posts={data.latestPosts} />
 		</section>
 	</div>
 </main>

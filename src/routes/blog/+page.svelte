@@ -35,7 +35,7 @@
 								<time class="text-text-secondary text-sm font-mono">{formatDate(post.date)}</time>
 								<div class="flex gap-2 flex-wrap">
 									{#each post.tags as tag}
-										<span class="bg-bg-primary text-white text-xs px-2 py-1 border border-border">#{tag}</span>
+										<span class="bg-bg-primary text-white text-xs px-2 py-1 border border-border">{tag}</span>
 									{/each}
 								</div>
 							</div>

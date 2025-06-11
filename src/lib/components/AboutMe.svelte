@@ -34,20 +34,20 @@
 
 <section class="section-card">
 	<h2 class="section-title">
-		<User size={20} class="inline" /> About Me
+		<User size={20} class="inline text-primary-red" /> About Me
 	</h2>
 	<div class="space-y-4">
 		<p class="text-text-primary leading-relaxed">
-			I build distributed systems that stay up. Based in Kathmandu, I write Go for multi-region back ends and Python for data pipelines. Front end only when necessary—SvelteKit if it must be interactive, plain HTML if it's static.
+			Software engineer in Kathmandu. I write Go & Python.
 		</p>
 		<p class="text-text-primary leading-relaxed">
-			Current work: remote contracts with global teams, turning specs into production services and keeping PostgreSQL happy under load.
+			Currently building production services at Global Square, turning specifications into scalable systems.
 		</p>
 		<p class="text-text-primary leading-relaxed">
-			Past work: ad agencies, early-stage startups, civic projects like Nepal Trash Map. Open-sourced several Go libraries and recorded walkthroughs on building reliable APIs.
+			Previously built ERP systems focusing on accounting and invoicing modules, plus e-commerce platforms. 
 		</p>
 		<p class="text-text-primary leading-relaxed">
-			Spare hours: minimalist calisthenics, NEPSE portfolio tuning, wandering Kathmandu's streets for design cues.
+			Spare hours: Calisthenics, NEPSE portfolio management, hiking around Nepal
 		</p>
 		<p class="text-text-secondary italic">
 			<span 

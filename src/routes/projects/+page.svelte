@@ -22,7 +22,7 @@
 
 	<section class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-16">
 		<ProjectCard
-			title="Advent of Go – Advent of Code 2024 Solutions"
+			title="Advent of Go"
 			description="My attempt at Advent of Code 2024 using Go. Some solutions are elegant, others are brute force. All of them work eventually. Includes notes on what I learned."
 			tech={[
 				'Go',

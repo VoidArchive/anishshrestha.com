@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Folder, Github, ExternalLink } from 'lucide-svelte';
+  import { FolderGit, Github, ExternalLink } from 'lucide-svelte';
   export let title: string;
   export let description: string;
   export let tech: string[] = [];
@@ -9,7 +9,7 @@
 
 <section class="section-card">
   <h2 class="section-title flex items-center gap-2">
-    <Folder size={20} class="inline" />
+    <FolderGit size={20} class="inline" />
     {title}
   </h2>
 
