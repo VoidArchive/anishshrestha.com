@@ -18,7 +18,7 @@
   {#if tech.length}
     <div class="flex flex-wrap gap-2 mb-4">
       {#each tech as t}
-        <span class="text-xs bg-bg-primary border border-border rounded px-2 py-1">
+        <span class="text-xs bg-bg-primary border border-border px-2 py-1">
           {t}
         </span>
       {/each}

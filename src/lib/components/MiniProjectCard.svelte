@@ -10,7 +10,7 @@
   href={repo}
   target="_blank"
   rel="noopener noreferrer"
-  class="block bg-bg-primary border border-border rounded p-4 transition-all duration-300 hover:border-primary-red no-underline"
+  class="block bg-bg-primary border border-border p-4 transition-all duration-300 hover:border-primary-red no-underline"
 >
   <article>
     <h3 class="mb-2 flex items-center gap-1">
@@ -24,7 +24,7 @@
     {#if tech.length}
       <div class="flex gap-1 flex-wrap">
         {#each tech.slice(0, 4) as t}
-          <span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 rounded-sm border border-border">{t}</span>
+          <span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 border border-border">{t}</span>
         {/each}
       </div>
     {/if}

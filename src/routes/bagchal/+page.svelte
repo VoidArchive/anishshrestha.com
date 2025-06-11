@@ -2,6 +2,15 @@
 	import Header from '$lib/components/Header.svelte';
 </script>
 
+<svelte:head>
+	<title>Bagchal - Traditional Nepali Board Game | Nepal Developer</title>
+	<meta name="description" content="Bagchal implementation by Anish Shrestha - Traditional Nepali board game built with modern web technologies. Cultural software project from Nepal." />
+	<meta name="keywords" content="Bagchal Nepal, Nepali board game, traditional games Nepal, Nepal culture software, game development Nepal, Kathmandu developer" />
+	<meta property="og:title" content="Bagchal - Traditional Nepali Board Game" />
+	<meta property="og:description" content="Bagchal implementation - Traditional Nepali board game built with modern web technologies by Nepal developer." />
+	<meta property="og:url" content="https://anishshrestha.com/bagchal" />
+</svelte:head>
+
 <Header />
 
 <main class="container">

@@ -17,7 +17,7 @@
 	<div class="flex flex-col gap-6">
 		{#if posts.length > 0}
 			{#each posts as post}
-				<a href="/blog/{post.slug}" class="block bg-bg-primary border border-border rounded p-4 transition-all duration-300 hover:border-primary-red no-underline">
+				<a href="/blog/{post.slug}" class="block bg-bg-primary border border-border p-4 transition-all duration-300 hover:border-primary-red no-underline">
 					<article>
 						<div class="mb-2">
 							<time class="text-text-secondary text-xs font-mono">{formatDate(post.date)}</time>
@@ -28,7 +28,7 @@
 						<p class="text-text-secondary text-sm leading-relaxed mb-3 line-clamp-2">{post.description}</p>
 						<div class="flex gap-1 flex-wrap">
 							{#each post.tags.slice(0, 3) as tag}
-								<span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 rounded-sm border border-border">#{tag}</span>
+								<span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 border border-border">#{tag}</span>
 							{/each}
 						</div>
 					</article>

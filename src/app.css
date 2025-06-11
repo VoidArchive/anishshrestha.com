@@ -60,7 +60,7 @@ li {
 
 /* Base card styles */
 .section-card {
-	@apply bg-bg-secondary border border-border rounded-md p-6 mb-6 relative overflow-hidden transition-all duration-300 shadow-lg;
+	@apply bg-bg-secondary border border-border p-6 mb-6 relative overflow-hidden transition-all duration-300 shadow-lg;
 }
 
 .section-card:hover {
@@ -92,7 +92,7 @@ li {
 
 /* Button styles */
 .btn {
-	@apply bg-transparent border border-border text-text-primary px-4 py-2 font-mono text-sm cursor-pointer transition-all duration-300 rounded relative overflow-hidden;
+	@apply bg-transparent border border-border text-text-primary px-4 py-2 font-mono text-sm cursor-pointer transition-all duration-300 relative overflow-hidden;
 }
 
 .btn::before {
@@ -111,7 +111,7 @@ li {
 
 /* Placeholder boxes */
 .placeholder-box {
-	@apply bg-bg-primary border border-border rounded h-32 mb-4 flex items-center justify-center text-text-secondary text-sm transition-all duration-300 relative;
+	@apply bg-bg-primary border border-border h-32 mb-4 flex items-center justify-center text-text-secondary text-sm transition-all duration-300 relative;
 }
 
 .placeholder-box:hover {
@@ -125,12 +125,9 @@ li {
 }
 
 .profile-title {
-	@apply text-primary-red text-base mb-1;
+	@apply text-text-primary text-base mb-1;
 }
 
-.profile-location {
-	@apply text-text-secondary text-sm;
-}
 
 /* Focus and selection styles */
 button:focus,
@@ -206,4 +203,35 @@ hr {
 /* Footnote superscripts */
 sup {
 	color: var(--color-primary-red) !important;
+}
+
+/* Blockquotes */
+blockquote {
+	@apply border-l-4 border-primary-red pl-4 italic text-text-secondary my-6;
+}
+
+/* Details / summary */
+details summary {
+	@apply cursor-pointer inline-flex items-center gap-2 text-text-secondary hover:text-primary-red transition-colors duration-300 list-none;
+}
+
+details summary::-webkit-details-marker {
+	display: none;
+}
+
+/* Table styling */
+table {
+	@apply w-full border border-border my-6 text-left;
+}
+
+th, td {
+	@apply px-4 py-2 border-b border-border;
+}
+
+th {
+	@apply bg-bg-secondary text-text-primary font-semibold;
+}
+
+tr:last-child td {
+	@apply border-b-0;
 }

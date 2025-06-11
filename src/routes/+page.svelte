@@ -18,8 +18,8 @@
 		<!-- Left Column -->
 		<aside class="flex flex-col">
 			<ProfileSection />
-			<TechStack />
 			<Links />
+			<TechStack />
 		</aside>
 
 		<!-- Right Column -->

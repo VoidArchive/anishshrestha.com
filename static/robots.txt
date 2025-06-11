@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://anishshrestha.com/sitemap.xml
+
+# Specific allowances for important pages
+Allow: /blog/
+Allow: /projects/
+Allow: /resume/
+Allow: /bagchal/
+
+# Block any potential admin or private areas
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Crawl delay for politeness
+Crawl-delay: 1 

@@ -8,9 +8,9 @@
 	</div>
 	<div class="profile-name">ANISH SHRESTHA</div>
 	<div class="profile-title">
-		<Building2 size={16} class="inline" /> Software Engineer
+		<Building2 size={16} class="inline text-primary-red" /> Software Engineer
 	</div>
-	<div class="profile-location">
-		<MapPin size={16} class="inline" /> Nepal
+	<div class="profile-title">
+		<MapPin size={16} class="inline text-primary-red" /> Nepal
 	</div>
 </section> 
