@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { formatDate } from '$lib/utils/blog.js';
-	import type { BlogPost } from '$lib/utils/blog.js';
+	import { formatDate } from '$lib/utils/blog';
+	import type { BlogPost } from '$lib/utils/blog';
 	import { Zap } from 'lucide-svelte';
 
 	interface Props {

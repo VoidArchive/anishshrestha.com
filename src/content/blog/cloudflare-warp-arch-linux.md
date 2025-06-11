@@ -2,7 +2,7 @@
 title: 'Setting Up Cloudflare WARP on Arch Linux: A Complete Guide'
 slug: 'cloudflare-warp-arch-linux'
 description: 'Learn how to install, configure, and use Cloudflare WARP on Arch Linux for enhanced privacy and performance.'
-date: '2024-12-28'
+date: '2025-06-10'
 published: true
 tags: ['arch-linux', 'cloudflare', 'warp', 'vpn', 'privacy', 'networking']
 ---

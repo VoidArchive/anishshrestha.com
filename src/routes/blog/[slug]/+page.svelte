@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
-	import { formatDate } from '$lib/utils/blog.js';
+	import { formatDate } from '$lib/utils/blog';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

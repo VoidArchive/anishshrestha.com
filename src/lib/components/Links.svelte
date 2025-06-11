@@ -1,5 +1,5 @@
 <script>
-	import { Link, Mail, Github, Linkedin, Target } from 'lucide-svelte';
+	import { Link, Mail, Github, ShieldHalf, Linkedin } from 'lucide-svelte';
 </script>
 
 <section class="section-card">
@@ -13,18 +13,18 @@
 			</a>
 		</li>
 		<li>
-			<a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
+			<a href="https://github.com/VoidArchive" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
 				<Github size={16} /> GitHub
 			</a>
 		</li>
 		<li>
-			<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
-				<Linkedin size={16} /> LinkedIn
+			<a href="https://linkedin.com/in/theinanish" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
+				<Linkedin size={16} color="currentColor" /> LinkedIn
 			</a>
 		</li>
 		<li>
-			<a href="https://boot.dev" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
-				<Target size={16} /> Boot.dev
+			<a href="https://boot.dev/u/kshatrya" target="_blank" rel="noopener noreferrer" class="text-text-secondary transition-all duration-300 p-2 rounded border border-transparent hover:text-primary-red hover:border-border hover:bg-bg-primary block flex items-center gap-2">
+				<ShieldHalf size={16} /> Boot.dev
 			</a>
 		</li>
 	</ul>

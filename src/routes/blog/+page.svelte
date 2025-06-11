@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
-	import { formatDate } from '$lib/utils/blog.js';
+	import { formatDate } from '$lib/utils/blog';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -11,7 +11,7 @@
 <main class="container">
 	<div class="py-8 max-w-4xl mx-auto">
 		<header class="text-center mb-12 pb-8 border-b border-border">
-			<h1 class="text-primary-red text-4xl lg:text-5xl font-bold mb-2">Blog</h1>
+			<h1 class=" text-primary-red text-4xl lg:text-5xl mb-2">Blog</h1>
 			<p class="text-text-secondary text-lg">Technical deep-dives and thoughts on software engineering</p>
 		</header>
 

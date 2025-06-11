@@ -34,7 +34,7 @@ a:hover {
 
 /* List reset */
 ul {
-	@apply list-none;
+	list-style-position: inside;
 }
 
 li {
@@ -120,25 +120,6 @@ li {
 }
 
 /* Profile section styles */
-.profile-icon {
-	@apply w-20 h-20 bg-bg-primary border-2 border-primary-red rounded-md flex items-center justify-center mb-4 text-primary-red text-3xl transition-all duration-300 relative overflow-hidden;
-}
-
-.profile-icon::before {
-	content: '';
-	@apply absolute top-1/2 left-1/2 w-0 h-0 rounded-full transition-all duration-600;
-	background: rgba(201, 42, 42, 0.1);
-	transform: translate(-50%, -50%);
-}
-
-.profile-icon:hover::before {
-	@apply w-52 h-52;
-}
-
-.profile-icon:hover {
-	@apply scale-105;
-}
-
 .profile-name {
 	@apply text-2xl font-bold text-text-primary mb-1 tracking-wide;
 }
@@ -199,4 +180,30 @@ select:focus {
 .copy-code-button:focus {
 	outline: 2px solid #c92a2a;
 	outline-offset: 2px;
+}
+
+/* Markdown content tweaks */
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--color-text-primary) !important;
+}
+
+/* List markers */
+ul li::marker {
+	color: var(--color-primary-red) !important;
+}
+
+ol li::marker {
+	color: var(--color-primary-red) !important;
+}
+
+/* Horizontal rules */
+hr {
+	border-color: var(--color-primary-red) !important;
+	margin-block: 1.5rem;
+}
+
+/* Footnote superscripts */
+sup {
+	color: var(--color-primary-red) !important;
 }
