@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	
-	$: currentPath = page.url.pathname;
+	// With $app/state, page is already reactive
+	// Access page.url.pathname directly in the template
 </script>
 
 <header class="py-4 border-b border-border">
@@ -12,13 +13,13 @@
 			</div>
 			<nav class="flex items-center gap-2 flex-wrap justify-center">
 				<a href="/bagchal" 
-				   class="nav-link {currentPath === '/bagchal' ? 'active' : ''}">Bagchal</a>
+				   class="nav-link {page.url.pathname === '/bagchal' ? 'active' : ''}">Bagchal</a>
 				<span class="text-text-secondary mx-1">/</span>
 				<a href="/blog" 
-				   class="nav-link {currentPath.startsWith('/blog') ? 'active' : ''}">Blog</a>
+				   class="nav-link {page.url.pathname.startsWith('/blog') ? 'active' : ''}">Blog</a>
 				<span class="text-text-secondary mx-1">/</span>
 				<a href="/projects" 
-				   class="nav-link {currentPath === '/projects' ? 'active' : ''}">Projects</a>
+				   class="nav-link {page.url.pathname === '/projects' ? 'active' : ''}">Projects</a>
 			</nav>
 		</div>
 	</div>

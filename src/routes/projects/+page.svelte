@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 </script>
 
@@ -11,8 +10,6 @@
 	<meta property="og:description" content="Open source projects by Anish Shrestha - Go and Python applications including CLI tools, web apps, and algorithms." />
 	<meta property="og:url" content="https://anishshrestha.com/projects" />
 </svelte:head>
-
-<Header />
 
 <main class="container">
 	<div class="py-8 text-center">

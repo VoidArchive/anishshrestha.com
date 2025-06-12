@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
 	import ProfileSection from '$lib/components/ProfileSection.svelte';
 	import TechStack from '$lib/components/TechStack.svelte';
 	import Links from '$lib/components/Links.svelte';
@@ -10,8 +9,6 @@
 
 	let { data }: { data: PageData } = $props();
 </script>
-
-<Header />
 
 <main class="container min-h-[calc(100vh-100px)] pb-8 lg:pb-8">
 	<div class="main-grid">

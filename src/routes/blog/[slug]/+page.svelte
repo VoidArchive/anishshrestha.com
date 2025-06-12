@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
 	import { formatDate } from '$lib/utils/blog';
 	import type { PageData } from './$types';
 
@@ -14,8 +13,6 @@
 	<meta property="og:description" content={post.description} />
 	<meta property="og:type" content="article" />
 </svelte:head>
-
-<Header />
 
 <main class="container">
 	<article class="blog-post">

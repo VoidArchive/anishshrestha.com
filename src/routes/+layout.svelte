@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { onNavigate, afterNavigate } from '$app/navigation';
-	import { page } from '$app/state';
+	import Header from '$lib/components/Header.svelte';
 
 	let { children } = $props();
 
@@ -133,5 +133,7 @@
 	
 
 </svelte:head>
+
+<Header />
 
 {@render children()}

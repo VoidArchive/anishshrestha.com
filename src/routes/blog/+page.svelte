@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
 	import { formatDate } from '$lib/utils/blog';
 	import type { PageData } from './$types';
 
@@ -14,8 +13,6 @@
 	<meta property="og:description" content="Technical blog by Anish Shrestha, Go and Python developer from Kathmandu, Nepal. Deep-dives into software engineering." />
 	<meta property="og:url" content="https://anishshrestha.com/blog" />
 </svelte:head>
-
-<Header />
 
 <main class="container">
 	<div class="py-8 max-w-4xl mx-auto">
