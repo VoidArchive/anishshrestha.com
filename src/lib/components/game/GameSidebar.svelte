@@ -11,9 +11,11 @@
 		moveHistory: string[];
 		isPlayingComputer: boolean;
 		playerSide: string;
+		aiDifficulty: 'easy' | 'medium' | 'hard';
 		onReset: () => void;
 		onGameModeChange: (isComputer: boolean) => void;
 		onPlayerSideChange: (side: string) => void;
+		onDifficultyChange: (difficulty: 'easy' | 'medium' | 'hard') => void;
 		onUndo: () => void;
 		canUndo: boolean;
 	}
@@ -23,9 +25,11 @@
 		moveHistory, 
 		isPlayingComputer,
 		playerSide,
+		aiDifficulty,
 		onReset, 
 		onGameModeChange,
 		onPlayerSideChange,
+		onDifficultyChange,
 		onUndo,
 		canUndo
 	}: Props = $props();
@@ -33,8 +37,8 @@
 
 <aside class="space-y-6 lg:order-1">
 	<GameStatus {gameState} />
+	<GameSettings {isPlayingComputer} {playerSide} {aiDifficulty} {onGameModeChange} {onPlayerSideChange} {onDifficultyChange} {onReset} />
 	<GameControls {onReset} {onUndo} {canUndo} />
-	<GameSettings {isPlayingComputer} {playerSide} {onGameModeChange} {onPlayerSideChange} {onReset} />
 	<GameRules />
 	<MoveHistory {moveHistory} />
 </aside> 

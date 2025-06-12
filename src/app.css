@@ -93,6 +93,11 @@ li {
 /* Button styles */
 .btn {
 	@apply bg-transparent border border-border text-text-primary px-4 py-2 font-mono text-sm cursor-pointer transition-all duration-300 relative overflow-hidden;
+	outline: none; /* Remove focus outline */
+}
+
+.btn:focus {
+	outline: none; /* Remove focus outline */
 }
 
 .btn::before {
@@ -135,6 +140,12 @@ input:focus,
 textarea:focus,
 select:focus {
 	@apply outline-2 outline-primary-red outline-offset-2;
+}
+
+/* Remove focus outlines for game buttons */
+.mode-btn:focus,
+.btn:focus {
+	outline: none !important;
 }
 
 ::selection {

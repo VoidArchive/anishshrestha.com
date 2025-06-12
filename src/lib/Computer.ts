@@ -1,5 +1,5 @@
 import type { GameState, Point, CaptureInfo } from './bagchal';
-import { executeMove, checkIfTigersAreTrapped } from './bagchal';
+import { executeMove, checkIfTigersAreTrapped, getBoardPositionHash, checkForDraw } from './bagchal';
 
 /**
  * Represents a move in the Bagchal game
@@ -16,6 +16,10 @@ export interface Move {
  */
 export class GameEvaluator {
 	public readonly maxDepth: number;
+	
+	// Transposition table for memoization
+	private transpositionTable = new Map<string, { score: number; move: Move | null; depth: number }>();
+	private maxTableSize = 10000; // Prevent memory bloat
 	
 	// Evaluation weights
 	private readonly WEIGHTS = {
@@ -35,7 +39,37 @@ export class GameEvaluator {
 	}
 
 	/**
-	 * Main Minimax algorithm with Alpha-Beta pruning
+	 * Clear the transposition table (call between games)
+	 */
+	public clearCache(): void {
+		this.transpositionTable.clear();
+	}
+
+	/**
+	 * Generate a unique hash for the game state
+	 */
+	private getStateHash(state: GameState): string {
+		return `${state.board.join('')}_${state.turn}_${state.phase}_${state.goatsPlaced}_${state.goatsCaptured}`;
+	}
+
+	/**
+	 * Cache a result in the transposition table
+	 */
+	private cacheResult(stateHash: string, score: number, move: Move | null, depth: number): void {
+		// Prevent table from growing too large
+		if (this.transpositionTable.size >= this.maxTableSize) {
+			// Clear oldest entries (simple strategy)
+			const keys = Array.from(this.transpositionTable.keys());
+			for (let i = 0; i < keys.length / 2; i++) {
+				this.transpositionTable.delete(keys[i]);
+			}
+		}
+		
+		this.transpositionTable.set(stateHash, { score, move, depth });
+	}
+
+	/**
+	 * Main Minimax algorithm with Alpha-Beta pruning and memoization
 	 * @param state Current game state
 	 * @param depth Current search depth
 	 * @param alpha Alpha value for pruning
@@ -54,9 +88,18 @@ export class GameEvaluator {
 		adjacency: Map<number, number[]>,
 		points: Point[]
 	): [number, Move | null] {
+		// Check transposition table
+		const stateHash = this.getStateHash(state);
+		const cached = this.transpositionTable.get(stateHash);
+		if (cached && cached.depth >= depth) {
+			return [cached.score, cached.move];
+		}
+
 		// Terminal state check
 		if (depth === 0 || this.isGameOver(state, adjacency, points)) {
-			return [this.evaluatePosition(state, adjacency, points), null];
+			const score = this.evaluatePosition(state, adjacency, points);
+			this.cacheResult(stateHash, score, null, depth);
+			return [score, null];
 		}
 
 		const validMoves = this.getValidMoves(state, adjacency, points);
@@ -76,7 +119,7 @@ export class GameEvaluator {
 			let maxEval = -Infinity;
 			
 			for (const move of orderedMoves) {
-				const newState = this.applyMove(state, move);
+				const newState = this.applyMove(state, move, adjacency, points);
 				const [evaluation] = this.minimax(newState, depth - 1, alpha, beta, false, adjacency, points);
 				
 				if (evaluation > maxEval) {
@@ -92,13 +135,15 @@ export class GameEvaluator {
 				}
 			}
 			
+			// Cache the result
+			this.cacheResult(stateHash, maxEval, bestMove, depth);
 			return [maxEval, bestMove];
 		} else {
 			// Goats (minimizing player)
 			let minEval = Infinity;
 			
 			for (const move of orderedMoves) {
-				const newState = this.applyMove(state, move);
+				const newState = this.applyMove(state, move, adjacency, points);
 				const [evaluation] = this.minimax(newState, depth - 1, alpha, beta, true, adjacency, points);
 				
 				if (evaluation < minEval) {
@@ -114,6 +159,8 @@ export class GameEvaluator {
 				}
 			}
 			
+			// Cache the result
+			this.cacheResult(stateHash, minEval, bestMove, depth);
 			return [minEval, bestMove];
 		}
 	}
@@ -129,6 +176,9 @@ export class GameEvaluator {
 		}
 		if (state.winner === 'GOAT') {
 			return -this.WEIGHTS.ENDGAME;
+		}
+		if (state.winner === 'DRAW') {
+			return 0; // Draw is neutral
 		}
 
 		let score = 0;
@@ -340,7 +390,7 @@ export class GameEvaluator {
 	/**
 	 * Applies a move to the game state and returns a new state
 	 */
-	private applyMove(state: GameState, move: Move): GameState {
+	private applyMove(state: GameState, move: Move, adjacency: Map<number, number[]>, points: Point[]): GameState {
 		const newState: GameState = {
 			board: [...state.board],
 			turn: state.turn,
@@ -350,7 +400,9 @@ export class GameEvaluator {
 			selectedPieceId: null,
 			winner: state.winner,
 			validMoves: [],
-			message: ''
+			message: '',
+			positionHistory: [...state.positionHistory],
+			positionCounts: new Map(state.positionCounts)
 		};
 
 		if (move.moveType === 'PLACEMENT') {
@@ -380,9 +432,30 @@ export class GameEvaluator {
 			newState.turn = 'GOAT';
 		}
 
+		// Track position for draw detection (only during movement phase)
+		if (!newState.winner && newState.phase === 'MOVEMENT') {
+			const currentPosition = getBoardPositionHash(newState);
+			newState.positionHistory.push(currentPosition);
+			
+			// Limit position history to prevent memory issues
+			if (newState.positionHistory.length > 50) {
+				newState.positionHistory.shift();
+			}
+			
+			// Check for draw
+			if (checkForDraw(newState)) {
+				newState.winner = 'DRAW';
+			}
+		}
+
 		// Check for win conditions
-		if (newState.goatsCaptured >= 5) {
+		if (!newState.winner && newState.goatsCaptured >= 5) {
 			newState.winner = 'TIGER';
+		}
+
+		// Check if tigers are trapped (only if no winner yet)
+		if (!newState.winner && checkIfTigersAreTrapped(newState, adjacency, points)) {
+			newState.winner = 'GOAT';
 		}
 
 		return newState;
@@ -400,21 +473,28 @@ export class GameEvaluator {
 
 	/**
 	 * Orders moves for better alpha-beta pruning efficiency
-	 * Prioritizes: captures > strategic positions > other moves
+	 * Prioritizes: captures > strategic positions > center > other moves
 	 */
 	private orderMoves(moves: Move[], state: GameState, maximizing: boolean): Move[] {
 		return moves.sort((a, b) => {
-			// Prioritize captures for tigers
+			// Prioritize captures for tigers (highest priority)
 			if (maximizing) {
 				if (a.moveType === 'CAPTURE' && b.moveType !== 'CAPTURE') return -1;
 				if (b.moveType === 'CAPTURE' && a.moveType !== 'CAPTURE') return 1;
 			}
 
-			// Prioritize strategic positions
-			const aStrategic = this.STRATEGIC_POSITIONS.has(a.to) ? 1 : 0;
-			const bStrategic = this.STRATEGIC_POSITIONS.has(b.to) ? 1 : 0;
+			// Secondary: Strategic positions
+			const aStrategic = this.STRATEGIC_POSITIONS.has(a.to) ? 2 : 0;
+			const bStrategic = this.STRATEGIC_POSITIONS.has(b.to) ? 2 : 0;
 			
-			return bStrategic - aStrategic;
+			// Tertiary: Center positions (id 12 is center of 5x5 board)
+			const aCenter = a.to === 12 ? 1 : 0;
+			const bCenter = b.to === 12 ? 1 : 0;
+			
+			const aScore = aStrategic + aCenter;
+			const bScore = bStrategic + bCenter;
+			
+			return bScore - aScore;
 		});
 	}
 
@@ -479,16 +559,26 @@ export class ComputerPlayer {
 
 			return bestMove;
 		} catch (error) {
-			console.error('Error in computer move calculation:', error);
+			// Environment-based logging
+			if (import.meta.env.DEV) {
+				console.error('Error in computer move calculation:', error);
+			}
 			return null;
 		}
 	}
 
 	/**
-	 * Changes the difficulty level
+	 * Changes the difficulty level and clears cache
 	 */
 	public setDifficulty(difficulty: 'easy' | 'medium' | 'hard'): void {
 		const depths = { easy: 4, medium: 6, hard: 8 };
 		this.evaluator = new GameEvaluator(depths[difficulty]);
+	}
+
+	/**
+	 * Clear the AI cache (call between games)
+	 */
+	public clearCache(): void {
+		this.evaluator.clearCache();
 	}
 } 

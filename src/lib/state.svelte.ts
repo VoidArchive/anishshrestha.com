@@ -25,7 +25,9 @@ let gameState = $state<GameState>({
 	winner: null,
 	selectedPieceId: null,
 	validMoves: [],
-	message: ''
+	message: '',
+	positionHistory: [],
+	positionCounts: new Map()
 });
 
 // Optimized: Single calculation for tiger moves (cached automatically by $derived)

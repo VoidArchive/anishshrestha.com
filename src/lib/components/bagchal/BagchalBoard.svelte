@@ -117,4 +117,15 @@ class="mx-auto block">
 			/>
 		{/if}
 	{/each}
-</svg> 
+</svg>
+
+<style>
+	/* Remove focus outline from clickable game pieces */
+	text[role="button"]:focus {
+		outline: none;
+	}
+	
+	circle[role="button"]:focus {
+		outline: none;
+	}
+</style> 

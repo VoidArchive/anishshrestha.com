@@ -32,7 +32,11 @@
 			<div class="mt-3 text-center">
 				{#if gameState.winner}
 					<p class="text-lg font-bold text-primary-red">
-						🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
+						{#if gameState.winner === 'DRAW'}
+							🤝 It's a Draw!
+						{:else}
+							🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
+						{/if}
 					</p>
 				{:else if gameState.phase === 'MOVEMENT'}
 					<p class="text-text-secondary text-sm">

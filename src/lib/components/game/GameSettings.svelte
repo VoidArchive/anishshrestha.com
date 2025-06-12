@@ -2,12 +2,14 @@
 	interface Props {
 		isPlayingComputer: boolean;
 		playerSide: string;
+		aiDifficulty: 'easy' | 'medium' | 'hard';
 		onGameModeChange: (isComputer: boolean) => void;
 		onPlayerSideChange: (side: string) => void;
+		onDifficultyChange: (difficulty: 'easy' | 'medium' | 'hard') => void;
 		onReset: () => void;
 	}
 
-	let { isPlayingComputer, playerSide, onGameModeChange, onPlayerSideChange, onReset }: Props = $props();
+	let { isPlayingComputer, playerSide, aiDifficulty, onGameModeChange, onPlayerSideChange, onDifficultyChange, onReset }: Props = $props();
 
 	function handleModeChange(isComputer: boolean) {
 		onGameModeChange(isComputer);
@@ -17,6 +19,11 @@
 	function handleSideChange(side: string) {
 		onPlayerSideChange(side);
 		onReset(); // Reset the game when switching sides
+	}
+
+	function handleDifficultyChange(difficulty: 'easy' | 'medium' | 'hard') {
+		onDifficultyChange(difficulty);
+		// No need to reset the game when changing difficulty
 	}
 </script>
 
@@ -39,7 +46,7 @@
 					class:active={isPlayingComputer}
 					onclick={() => handleModeChange(true)}
 				>
-					Computer
+					AI
 				</button>
 			</div>
 		</div>
@@ -68,13 +75,50 @@
 				</button>
 			</div>
 		</div>
+
+		<!-- AI Difficulty Selection (only when playing computer) -->
+		<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
+			<span class="text-text-secondary">AI MODE:</span>
+			<div class="mode-buttons">
+				<button 
+					class="mode-btn difficulty-btn"
+					class:active={aiDifficulty === 'easy'}
+					class:disabled={!isPlayingComputer}
+					onclick={() => handleDifficultyChange('easy')}
+					disabled={!isPlayingComputer}
+					title="Easy: Depth 4 - Quick moves"
+				>
+					Easy
+				</button>
+				<button 
+					class="mode-btn difficulty-btn"
+					class:active={aiDifficulty === 'medium'}
+					class:disabled={!isPlayingComputer}
+					onclick={() => handleDifficultyChange('medium')}
+					disabled={!isPlayingComputer}
+					title="Medium: Depth 6 - Balanced play"
+				>
+					Medium
+				</button>
+				<button 
+					class="mode-btn difficulty-btn"
+					class:active={aiDifficulty === 'hard'}
+					class:disabled={!isPlayingComputer}
+					onclick={() => handleDifficultyChange('hard')}
+					disabled={!isPlayingComputer}
+					title="Hard: Depth 8 - Strategic moves"
+				>
+					Hard
+				</button>
+			</div>
+		</div>
 	</div>
 </div>
 
 <style>
 	.mode-buttons {
 		display: flex;
-		gap: 4px;
+		gap: 8px;
 	}
 
 	.mode-btn {
@@ -89,6 +133,7 @@
 		cursor: pointer;
 		transition: all 0.2s ease;
 		min-width: 70px;
+		outline: none; /* Remove focus outline */
 	}
 
 	.mode-btn:hover:not(:disabled) {
@@ -96,18 +141,15 @@
 		color: var(--color-text-primary);
 	}
 
+	.mode-btn:focus {
+		outline: none; /* Remove focus outline */
+	}
+
 	.mode-btn.active {
-		background: var(--color-primary-red);
+		background: var(--color-bg-primary);
 		border-color: var(--color-primary-red);
-		color: white;
-	}
-
-	.mode-btn:first-child {
-		border-right: none;
-	}
-
-	.mode-btn:last-child {
-		border-left: none;
+		color: var(--color-text-primary);
+		font-weight: 700; /* Slightly bolder text */
 	}
 
 	/* Subtle pressed effect */
@@ -127,5 +169,11 @@
 
 	.disabled .text-text-secondary {
 		opacity: 0.5;
+	}
+
+	/* Difficulty buttons styling */
+	.difficulty-btn {
+		min-width: 55px;
+		font-size: 0.7rem;
 	}
 </style> 

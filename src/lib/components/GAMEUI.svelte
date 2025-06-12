@@ -1,21 +1,38 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { gameState, points, lines, adjacency, getValidMoves, getCurrentTigerCaptures, resetGameState } from '$lib/state.svelte';
-	import { executeMove, checkIfTigersAreTrapped } from '$lib/bagchal';
+	import { executeMove, checkIfTigersAreTrapped, type PieceType, type Player, type GamePhase } from '$lib/bagchal';
 	import { ComputerPlayer, type Move } from '$lib/Computer';
 	import GameBoard from './game/GameBoard.svelte';
 	import GameSidebar from './game/GameSidebar.svelte';
 	import WinnerModal from './game/WinnerModal.svelte';
+	import ErrorBoundary from './ErrorBoundary.svelte';
 	
 	// Game history for undo functionality
 	let moveHistory: string[] = $state([]);
-	let gameStateHistory: any[] = $state([]); // Store previous game states
+	
+	// Type for saved game state
+	interface SavedGameState {
+		board: PieceType[];
+		turn: Player;
+		phase: GamePhase;
+		goatsPlaced: number;
+		goatsCaptured: number;
+		selectedPieceId: number | null;
+		winner: Player | 'DRAW' | null;
+		positionHistory: string[];
+		positionCounts: Map<string, number>;
+		moveHistoryLength: number;
+	}
+	
+	let gameStateHistory: SavedGameState[] = $state([]); // Store previous game states
 	
 	// Game settings
 	let isPlayingComputer = $state(true); // Default to computer
 	let playerSide = $state('GOAT'); // Default to playing as goats
+	let aiDifficulty: 'easy' | 'medium' | 'hard' = $state('medium'); // Default difficulty
 	
-	// Computer player
+	// Computer player - initialize with default difficulty
 	let computerPlayer = new ComputerPlayer('medium');
 	
 	// Local derived state
@@ -36,6 +53,8 @@
 			goatsCaptured: gameState.goatsCaptured,
 			selectedPieceId: gameState.selectedPieceId,
 			winner: gameState.winner,
+			positionHistory: [...gameState.positionHistory],
+			positionCounts: new Map(gameState.positionCounts),
 			moveHistoryLength: moveHistory.length
 		});
 		
@@ -102,7 +121,9 @@
 				gameState.selectedPieceId = null;
 			}
 		} catch (error) {
-			console.error('Computer move error:', error);
+			if (import.meta.env.DEV) {
+				console.error('Computer move error:', error);
+			}
 		} finally {
 			isComputerThinking = false;
 		}
@@ -110,12 +131,16 @@
 	
 	// Handle board position clicks
 	function handlePointClick(id: number) {
-		console.log(
-			`Click on ID: ${id}, Current Turn: ${gameState.turn}, Phase: ${gameState.phase}, Selected: ${gameState.selectedPieceId}`
-		);
+		if (import.meta.env.DEV) {
+			console.log(
+				`Click on ID: ${id}, Current Turn: ${gameState.turn}, Phase: ${gameState.phase}, Selected: ${gameState.selectedPieceId}`
+			);
+		}
 
 		if (gameState.winner) {
-			console.log('Game already won, ignoring click.');
+			if (import.meta.env.DEV) {
+				console.log('Game already won, ignoring click.');
+			}
 			return;
 		}
 
@@ -133,15 +158,21 @@
 					// Place the goat
 					gameState.board[id] = 'GOAT';
 					gameState.goatsPlaced++;
-					console.log(`Goat placed at ${id}. Total placed: ${gameState.goatsPlaced}`);
+					if (import.meta.env.DEV) {
+						console.log(`Goat placed at ${id}. Total placed: ${gameState.goatsPlaced}`);
+					}
 					
 					// Add to move history
 					moveHistory.push(`Goat placed at position ${id}`);
 
 					// Check for Goat Win by Trapping
-					console.log('Checking for trap after placement...');
+					if (import.meta.env.DEV) {
+						console.log('Checking for trap after placement...');
+					}
 					if (checkIfTigersAreTrapped(gameState, adjacency, points)) {
-						console.log('Goats Win! Tigers detected as trapped after placement.');
+						if (import.meta.env.DEV) {
+							console.log('Goats Win! Tigers detected as trapped after placement.');
+						}
 						gameState.winner = 'GOAT';
 						moveHistory.push('Goats win by trapping tigers!');
 					}
@@ -149,12 +180,16 @@
 					// Change phase if 20 goats are placed AND no winner yet
 					if (!gameState.winner && gameState.goatsPlaced >= 20) {
 						gameState.phase = 'MOVEMENT';
-						console.log('Goat phase changed to MOVEMENT.');
+						if (import.meta.env.DEV) {
+							console.log('Goat phase changed to MOVEMENT.');
+						}
 					}
 
 					// Switch turn ONLY if no winner was determined
 					if (!gameState.winner) {
-						console.log('Switching turn to TIGER.');
+						if (import.meta.env.DEV) {
+							console.log('Switching turn to TIGER.');
+						}
 						gameState.turn = 'TIGER';
 					}
 
@@ -225,6 +260,7 @@
 		resetGameState();
 		moveHistory = [];
 		gameStateHistory = []; // Clear undo history
+		computerPlayer.clearCache(); // Clear AI cache for new game
 	}
 
 	// Undo the last move
@@ -241,6 +277,8 @@
 			gameState.goatsCaptured = previousState.goatsCaptured;
 			gameState.selectedPieceId = previousState.selectedPieceId;
 			gameState.winner = previousState.winner;
+			gameState.positionHistory = previousState.positionHistory;
+			gameState.positionCounts = previousState.positionCounts;
 			
 			// Restore move history to previous length
 			moveHistory = moveHistory.slice(0, previousState.moveHistoryLength);
@@ -256,6 +294,12 @@
 	function handlePlayerSideChange(side: string) {
 		playerSide = side;
 	}
+
+	// Difficulty handler
+	function handleDifficultyChange(difficulty: 'easy' | 'medium' | 'hard') {
+		aiDifficulty = difficulty;
+		computerPlayer.setDifficulty(difficulty);
+	}
 	
 	// Reactive computer move trigger
 	$effect(() => {
@@ -266,33 +310,39 @@
 	
 	onMount(() => {
 		resetGame();
-		console.log('Bagchal game initialized');
+		if (import.meta.env.DEV) {
+			console.log('Bagchal game initialized');
+		}
 	});
 </script>
 
-<div class="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-8 h-full">
-	<GameBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
-	<GameSidebar 
+<ErrorBoundary fallback="The Bagchal game encountered an error. Please try restarting the game.">
+	<div class="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-8 h-full">
+		<GameBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
+			<GameSidebar 
 		{gameState} 
 		{moveHistory} 
 		{isPlayingComputer}
 		{playerSide}
+		{aiDifficulty}
 		{canUndo}
 		onReset={resetGame}
 		onGameModeChange={handleGameModeChange}
 		onPlayerSideChange={handlePlayerSideChange}
+		onDifficultyChange={handleDifficultyChange}
 		onUndo={undoMove}
 	/>
-</div>
+	</div>
 
-<WinnerModal 
-	{gameState} 
-	{moveHistory}
-	{isPlayingComputer}
-	{playerSide}
-	onPlayAgain={resetGame} 
-	onSwitchSides={() => {
-		playerSide = playerSide === 'GOAT' ? 'TIGER' : 'GOAT';
-		resetGame();
-	}}
-/> 
+	<WinnerModal 
+		{gameState} 
+		{moveHistory}
+		{isPlayingComputer}
+		{playerSide}
+		onPlayAgain={resetGame} 
+		onSwitchSides={() => {
+			playerSide = playerSide === 'GOAT' ? 'TIGER' : 'GOAT';
+			resetGame();
+		}}
+	/>
+</ErrorBoundary> 

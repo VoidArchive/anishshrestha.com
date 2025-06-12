@@ -31,14 +31,15 @@
 		).length;
 		const computerMoves = totalMoves - playerMoves;
 
-		// Determine if player won/lost
+		// Determine if player won/lost/drew
 		const playerWon = isPlayingComputer 
 			? gameState.winner === playerSide
 			: null;
+		const isDraw = gameState.winner === 'DRAW';
 
 		// Performance rating for computer games
 		let performance = '';
-		if (isPlayingComputer && playerWon !== null) {
+		if (isPlayingComputer && !isDraw && playerWon !== null) {
 			if (playerWon) {
 				if (playerSide === 'GOAT' && gameState.goatsCaptured <= 1) {
 					performance = 'Excellent';
@@ -48,8 +49,29 @@
 					performance = 'Good';
 				}
 			} else {
-				performance = gameState.goatsCaptured >= 4 ? 'Bad' : 'Good';
+				// Player lost - rate based on how well they fought
+				if (playerSide === 'GOAT') {
+					// Goats lost, so tigers captured 5. Rate based on game length
+					if (totalMoves >= 50) {
+						performance = 'Good'; // Put up a long fight
+					} else if (totalMoves >= 30) {
+						performance = 'Fair'; // Decent resistance
+					} else {
+						performance = 'Bad'; // Quick defeat
+					}
+				} else {
+					// Tigers lost (goats trapped them) - rate based on captures made
+					if (gameState.goatsCaptured >= 3) {
+						performance = 'Good'; // Got close to winning
+					} else if (gameState.goatsCaptured >= 1) {
+						performance = 'Fair'; // Made some progress
+					} else {
+						performance = 'Bad'; // No captures
+					}
+				}
 			}
+		} else if (isDraw) {
+			performance = 'Draw'; // Special case for draws
 		}
 
 		return {
@@ -58,6 +80,7 @@
 			computerMoves,
 			goatsCaptured: gameState.goatsCaptured,
 			playerWon,
+			isDraw,
 			performance
 		};
 	});
@@ -93,19 +116,25 @@
 			<!-- Winner Announcement -->
 			<div class="winner-section">
 				<div class="winner-icon">
-					{gameState.winner === 'TIGER' ? '🐅' : '🐐'}
+					{gameState.winner === 'DRAW' ? '🤝' : gameState.winner === 'TIGER' ? '🐅' : '🐐'}
 				</div>
 				<h2 class="winner-title">
-					{#if isPlayingComputer && gameStats()}
+					{#if gameState.winner === 'DRAW'}
+						It's a Draw!
+					{:else if isPlayingComputer && gameStats()}
 						{gameStats()?.playerWon ? 'Victory!' : 'Defeat!'}
 					{:else}
 						{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
 					{/if}
 				</h2>
 				<p class="winner-subtitle">
-					{gameState.winner === 'TIGER' 
-						? `Captured ${gameState.goatsCaptured} goats!` 
-						: 'All tigers are trapped!'}
+					{#if gameState.winner === 'DRAW'}
+						Position repeated too many times!
+					{:else if gameState.winner === 'TIGER'}
+						Captured {gameState.goatsCaptured} goats!
+					{:else}
+						All tigers are trapped!
+					{/if}
 				</p>
 			</div>
 
@@ -290,8 +319,16 @@
 		color: #f59e0b; /* Amber */
 	}
 
+	.stat-value.performance.fair {
+		color: #f97316; /* Orange */
+	}
+
 	.stat-value.performance.bad {
 		color: #ef4444; /* Red */
+	}
+
+	.stat-value.performance.draw {
+		color: #6b7280; /* Gray */
 	}
 
 	.actions-section {

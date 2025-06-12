@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils/blog';
 	import type { BlogPost } from '$lib/utils/blog';
-	import { Rss } from 'lucide-svelte';
+	import { Rss, ArrowRight } from 'lucide-svelte';
 
 	interface Props {
 		posts: BlogPost[];
@@ -40,12 +40,21 @@
 			</div>
 		{/if}
 	</div>
+
+	<a
+		href="/blog"
+		class="btn flex items-center gap-1 w-max mt-4 ml-auto"
+	>
+		<span>View all posts</span>
+		<ArrowRight size={14} />
+	</a>
 </section>
 
 <style>
 	.line-clamp-2 {
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
+		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}

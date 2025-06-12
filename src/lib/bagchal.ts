@@ -21,10 +21,12 @@ export interface GameState {
 	phase: GamePhase;
 	goatsPlaced: number;
 	goatsCaptured: number;
-	winner: Player | null;
+	winner: Player | 'DRAW' | null;
 	selectedPieceId: number | null;
 	validMoves: number[];
 	message: string;
+	positionHistory: string[]; // Track board positions for draw detection
+	positionCounts: Map<string, number>; // Fast O(1) position counting
 }
 
 export interface CaptureInfo {
@@ -170,6 +172,22 @@ export function calculateValidGoatMoves(
 	return (adjacency.get(goatId) || []).filter((nid) => state.board[nid] === null);
 }
 
+// Generate a hash string for the current board position
+export function getBoardPositionHash(state: GameState): string {
+	return state.board.map(piece => piece || 'E').join('') + '_' + state.turn;
+}
+
+// Check for draw by position repetition
+export function checkForDraw(state: GameState): boolean {
+	if (state.phase !== 'MOVEMENT') return false;
+	
+	const currentPosition = getBoardPositionHash(state);
+	const positionCount = state.positionCounts.get(currentPosition) || 0;
+	
+	// If the same position occurs 5 or more times, it's a draw
+	return positionCount >= 5;
+}
+
 export function checkIfTigersAreTrapped(
 	state: GameState,
 	adjacency: Map<number, number[]>,
@@ -190,9 +208,13 @@ export function checkIfTigersAreTrapped(
 	}
 
 	for (const tigerId of tigerIds) {
-		console.log(`Checking tiger at ID: ${tigerId}`);
+		if (import.meta.env.DEV) {
+			console.log(`Checking tiger at ID: ${tigerId}`);
+		}
 		const { destinations } = calculateValidTigerMoves(state, tigerId, adjacency, points);
-		console.log(`  Valid destinations for tiger ${tigerId}:`, destinations);
+		if (import.meta.env.DEV) {
+			console.log(`  Valid destinations for tiger ${tigerId}:`, destinations);
+		}
 		if (destinations.length > 0) {
 			state.message = `Tiger ${tigerId} CAN move. Returning false (not trapped. \n --- Trap check finished ---`;
 			return false;
@@ -236,7 +258,9 @@ export function executeMove(
 
 	// 3. Check GOAT win by trapping after a GOAT move
 	if (!state.winner && movingPiece === 'GOAT') {
-		console.log('Goat moved. Checking if tigers are now trapped...');
+		if (import.meta.env.DEV) {
+			console.log('Goat moved. Checking if tigers are now trapped...');
+		}
 		if (checkIfTigersAreTrapped(state, adjacency, points)) {
 			state.message = 'Goats Win! Tigers detected as trapped after goat move.';
 			state.winner = 'GOAT';
@@ -253,9 +277,39 @@ export function executeMove(
 		state.message = `Winner found (${state.winner}), turn remains ${state.turn}`;
 	}
 
-	// 5. Reset selection ALWAYS after a successful move
+	// 5. Track position for draw detection (only during movement phase)
+	if (!state.winner && state.phase === 'MOVEMENT') {
+		const currentPosition = getBoardPositionHash(state);
+		state.positionHistory.push(currentPosition);
+		
+		// Update position count
+		const currentCount = state.positionCounts.get(currentPosition) || 0;
+		state.positionCounts.set(currentPosition, currentCount + 1);
+		
+		// Limit position history to last 50 positions to prevent memory issues
+		if (state.positionHistory.length > 50) {
+			const removedPosition = state.positionHistory.shift()!;
+			// Decrement count for removed position
+			const removedCount = state.positionCounts.get(removedPosition) || 0;
+			if (removedCount <= 1) {
+				state.positionCounts.delete(removedPosition);
+			} else {
+				state.positionCounts.set(removedPosition, removedCount - 1);
+			}
+		}
+		
+		// Check for draw
+		if (checkForDraw(state)) {
+			state.winner = 'DRAW';
+			state.message = 'Game drawn by position repetition!';
+		}
+	}
+
+	// 6. Reset selection ALWAYS after a successful move
 	state.selectedPieceId = null;
-	console.log('Selection reset.');
+	if (import.meta.env.DEV) {
+		console.log('Selection reset.');
+	}
 }
 
 // Reset game to initial state
@@ -271,4 +325,6 @@ export function resetGame(state: GameState, points: Point[]): void {
 	state.selectedPieceId = null;
 	state.validMoves = [];
 	state.message = '';
+	state.positionHistory = []; // Reset position history for draw detection
+	state.positionCounts = new Map(); // Reset position counts
 } 
