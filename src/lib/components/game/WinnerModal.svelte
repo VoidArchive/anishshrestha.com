@@ -116,7 +116,13 @@
 			<!-- Winner Announcement -->
 			<div class="winner-section">
 				<div class="winner-icon">
-					{gameState.winner === 'DRAW' ? '🤝' : gameState.winner === 'TIGER' ? '🐅' : '🐐'}
+					{#if gameState.winner === 'DRAW'}
+						🤝
+					{:else if gameState.winner === 'TIGER'}
+						<img src="/icons/tiger.svg" alt="Tiger" class="winner-img" />
+					{:else}
+						<img src="/icons/goat.svg" alt="Goat" class="winner-img" />
+					{/if}
 				</div>
 				<h2 class="winner-title">
 					{#if gameState.winner === 'DRAW'}
@@ -239,9 +245,14 @@
 	}
 
 	.winner-icon {
-		font-size: 3rem;
 		margin-bottom: 1rem;
 		animation: bounce 0.6s ease;
+	}
+
+	.winner-img {
+		width: 3rem;
+		height: 3rem;
+		display: inline-block;
 	}
 
 	@keyframes bounce {

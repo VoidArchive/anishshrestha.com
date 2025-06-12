@@ -87,7 +87,7 @@
 	}
 
 	.post-title {
-		color: #c92a2a;
+		color: var(--color-primary-secondary);
 		font-size: 2.5rem;
 		font-weight: 700;
 		line-height: 1.2;
@@ -130,8 +130,8 @@
 	}
 
 	/* Global markdown styles for the post content */
-	:global(.post-content h1) {
-		color: #c92a2a;
+	:global(.post-content h1, h2, h3) {
+		color: var(--color-primary-secondary);
 		font-size: 2rem;
 		font-weight: 700;
 		margin: 2.5rem 0 1rem 0;
@@ -140,25 +140,11 @@
 		font-family: system-ui, -apple-system, sans-serif;
 	}
 
-	:global(.post-content h2) {
-		color: #c92a2a;
-		font-size: 1.5rem;
-		font-weight: 600;
-		margin: 2rem 0 1rem 0;
-		font-family: system-ui, -apple-system, sans-serif;
-	}
-
-	:global(.post-content h3) {
-		color: #c92a2a;
-		font-size: 1.25rem;
-		font-weight: 500;
-		margin: 1.5rem 0 0.75rem 0;
-		font-family: system-ui, -apple-system, sans-serif;
-	}
+	
 
 	:global(.post-content p) {
 		margin-bottom: 1.5rem;
-		color: #f8f8f8;
+		color: var(--color-text-secondary);
 	}
 
 	:global(.post-content ul, .post-content ol) {
@@ -168,7 +154,7 @@
 
 	:global(.post-content li) {
 		margin-bottom: 0.5rem;
-		color: #f8f8f8;
+		color: var(--color-text-secondary);
 	}
 
 	:global(.post-content code) {

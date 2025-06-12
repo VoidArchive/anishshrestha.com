@@ -96,7 +96,7 @@
 					class:disabled={!isPlayingComputer}
 					onclick={() => handleDifficultyChange('medium')}
 					disabled={!isPlayingComputer}
-					title="Medium: Depth 6 - Balanced play"
+					title="Medium: Depth 7 - Balanced play"
 				>
 					Medium
 				</button>
@@ -106,7 +106,7 @@
 					class:disabled={!isPlayingComputer}
 					onclick={() => handleDifficultyChange('hard')}
 					disabled={!isPlayingComputer}
-					title="Hard: Depth 8 - Strategic moves"
+					title="Hard: Depth 12 - Strategic moves"
 				>
 					Hard
 				</button>

@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { gameState, points, lines, adjacency, getValidMoves, getCurrentTigerCaptures, resetGameState } from '$lib/state.svelte';
 	import { executeMove, checkIfTigersAreTrapped, type PieceType, type Player, type GamePhase } from '$lib/bagchal';
-	import { ComputerPlayer, type Move } from '$lib/Computer';
+	import { ComputerPlayer, type Move } from '$lib/ai';
 	import GameBoard from './game/GameBoard.svelte';
 	import GameSidebar from './game/GameSidebar.svelte';
 	import WinnerModal from './game/WinnerModal.svelte';
@@ -42,6 +42,7 @@
 	
 	// Computer move flag to prevent infinite loops
 	let isComputerThinking = $state(false);
+	let aiCalculatedMove = $state(null as any);
 	
 	// Save current game state before making a move
 	function saveGameState() {
@@ -75,14 +76,21 @@
 		if (isComputerThinking || gameState.winner) return;
 		
 		isComputerThinking = true;
+		aiCalculatedMove = null;
 		
 		try {
 			// Add a small delay for better UX
-			await new Promise(resolve => setTimeout(resolve, 500));
+			await new Promise(resolve => setTimeout(resolve, 200));
 			
 			const computerMove = computerPlayer.getBestMove(gameState, adjacency, points);
 			
 			if (computerMove) {
+				// Store the calculated move for animation
+				aiCalculatedMove = computerMove;
+				
+				// Wait for animation to complete before executing move
+				await new Promise(resolve => setTimeout(resolve, 800)); // Faster animation
+				
 				saveGameState();
 				
 				if (computerMove.moveType === 'PLACEMENT') {
@@ -104,7 +112,7 @@
 					
 					// Switch turn
 					if (!gameState.winner) {
-						gameState.turn = 'TIGER';
+						gameState.turn = gameState.turn === 'GOAT' ? 'TIGER' : 'GOAT';
 					}
 				} else {
 					// Computer movement or capture
@@ -117,8 +125,9 @@
 					executeMove(gameState, computerMove.from!, computerMove.to, computerMove.jumpedGoatId || null, adjacency, points);
 				}
 				
-				// Reset selection
+				// Reset selection and clear animation
 				gameState.selectedPieceId = null;
+				aiCalculatedMove = null;
 			} else {
 				// No valid move available for computer - check if game should end
 				if (gameState.turn === 'TIGER') {
@@ -136,7 +145,9 @@
 			if (import.meta.env.DEV) {
 				console.error('Computer move error:', error);
 			}
+			aiCalculatedMove = null;
 		} finally {
+			// Always reset thinking state at the end
 			isComputerThinking = false;
 		}
 	}
@@ -212,8 +223,20 @@
 			}
 			// --- MOVEMENT PHASE ---
 			else {
+				if (import.meta.env.DEV) {
+					console.log('Movement phase - GOAT turn. Piece at click:', pieceAtClickId, 'Selected:', currentlySelectedId, 'Valid moves:', validMoves);
+					if (currentlySelectedId !== null) {
+						const adjacentPositions = adjacency.get(currentlySelectedId) || [];
+						console.log('Adjacent positions for selected goat at', currentlySelectedId, ':', adjacentPositions);
+						const emptyAdjacent = adjacentPositions.filter(pos => gameState.board[pos] === null);
+						console.log('Empty adjacent positions:', emptyAdjacent);
+					}
+				}
 				if (pieceAtClickId === 'GOAT') {
 					// Selecting a goat
+					if (import.meta.env.DEV) {
+						console.log('Selecting goat at:', id);
+					}
 					gameState.selectedPieceId = id;
 				} else if (
 					pieceAtClickId === null &&
@@ -221,6 +244,9 @@
 					validMoves.includes(id)
 				) {
 					// Save state before making move
+					if (import.meta.env.DEV) {
+						console.log('Moving goat from', currentlySelectedId, 'to', id);
+					}
 					saveGameState();
 					
 					// Moving a goat
@@ -228,6 +254,9 @@
 					moveHistory.push(`Goat moved from ${currentlySelectedId} to ${id}`);
 				} else {
 					// Invalid click
+					if (import.meta.env.DEV) {
+						console.log('Invalid goat click - deselecting');
+					}
 					gameState.selectedPieceId = null; // Deselect
 				}
 				return;
@@ -273,6 +302,10 @@
 		moveHistory = [];
 		gameStateHistory = []; // Clear undo history
 		computerPlayer.clearCache(); // Clear AI cache for new game
+		
+		// Reset AI state
+		isComputerThinking = false;
+		aiCalculatedMove = null;
 	}
 
 	// Undo the last move
@@ -315,8 +348,17 @@
 	
 	// Reactive computer move trigger
 	$effect(() => {
-		if (isComputerTurn() && !isComputerThinking && !gameState.winner) {
-			executeComputerMove();
+		// Only trigger if it's really the computer's turn and we're not already processing
+		if (isComputerTurn() && !isComputerThinking && !gameState.winner && !aiCalculatedMove) {
+			if (import.meta.env.DEV) {
+				console.log('Triggering computer move - Turn:', gameState.turn, 'Player Side:', playerSide);
+			}
+			// Use setTimeout to prevent immediate re-triggering
+			setTimeout(() => {
+				if (isComputerTurn() && !isComputerThinking && !gameState.winner && !aiCalculatedMove) {
+					executeComputerMove();
+				}
+			}, 100);
 		}
 	});
 	
@@ -330,13 +372,14 @@
 
 <ErrorBoundary fallback="The Bagchal game encountered an error. Please try restarting the game.">
 	<div class="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-8 h-full">
-		<GameBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
+		<GameBoard {points} {lines} {gameState} {validMoves} {handlePointClick} {isComputerThinking} {isPlayingComputer} {playerSide} {aiCalculatedMove} />
 			<GameSidebar 
 		{gameState} 
 		{moveHistory} 
 		{isPlayingComputer}
 		{playerSide}
 		{aiDifficulty}
+		{isComputerThinking}
 		{canUndo}
 		onReset={resetGame}
 		onGameModeChange={handleGameModeChange}

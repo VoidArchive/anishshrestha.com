@@ -8,22 +8,86 @@
 		gameState: GameState;
 		validMoves: number[];
 		handlePointClick: (id: number) => void;
+		isComputerThinking?: boolean;
+		isPlayingComputer?: boolean;
+		playerSide?: string;
+		aiCalculatedMove?: any;
 	}
 
-	let { points, lines, gameState, validMoves, handlePointClick }: Props = $props();
+	let { points, lines, gameState, validMoves, handlePointClick, isComputerThinking = false, isPlayingComputer = false, playerSide = 'GOAT', aiCalculatedMove = null }: Props = $props();
+	
+	// Determine if it's computer's turn and should disable interaction
+	let isComputerTurn = $derived(() => {
+		const computerTurn = isPlayingComputer && gameState.turn !== playerSide;
+		if (import.meta.env.DEV) {
+			console.log('Computer turn check:', 'isPlayingComputer:', isPlayingComputer, 'gameState.turn:', gameState.turn, 'playerSide:', playerSide, 'result:', computerTurn);
+		}
+		return computerTurn;
+	});
+	
+	// Animation state for AI move visualization
+	let showAiAnimation = $state(false);
+	let animationProgress = $state(0);
+	
+	// Disable clicks when computer is thinking or animating
+	function handleBoardClick(id: number) {
+		if (import.meta.env.DEV) {
+			console.log('Board click:', id, 'isComputerThinking:', isComputerThinking, 'showAiAnimation:', showAiAnimation, 'isComputerTurn:', isComputerTurn);
+		}
+		if (isComputerThinking || showAiAnimation) return;
+		handlePointClick(id);
+	}
+	
+	// Watch for AI calculated move to trigger animation
+	$effect(() => {
+		if (aiCalculatedMove && isComputerTurn() && !gameState.winner) {
+			showAiAnimation = true;
+			animateAiMove();
+		} else if (!aiCalculatedMove) {
+			// Clear animation when no AI move
+			showAiAnimation = false;
+			animationProgress = 0;
+		}
+	});
+	
+	async function animateAiMove() {
+		// Reset animation
+		animationProgress = 0;
+		
+		// Faster, smoother animation
+		const duration = 600; // 0.6 seconds
+		const startTime = Date.now();
+		
+		function animate() {
+			const elapsed = Date.now() - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			
+			animationProgress = progress;
+			
+			if (progress < 1) {
+				requestAnimationFrame(animate);
+			} else {
+				// Animation complete, hide it immediately
+				showAiAnimation = false;
+				animationProgress = 0;
+			}
+		}
+		
+		requestAnimationFrame(animate);
+	}
 </script>
 
 <section class="flex flex-col lg:order-2">
 	<div class="section-card h-full">
-		<h2 class="section-title">Bagchal Board</h2>
+		<h2 class="section-title">Bagchal Reforged</h2>
 		
 		<!-- Recessed Game Board Container -->
 		<div class="flex-1 flex flex-col items-center justify-center p-3 sm:p-6">
 			<!-- Carved Board Well -->
 			<div class="board-well">
-				<div class="board-inner">
+				<div class="board-inner" class:thinking={isComputerThinking && isComputerTurn}>
 					<div class="board-wrapper">
-						<BagchalBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
+						<BagchalBoard {points} {lines} {gameState} {validMoves} handlePointClick={handleBoardClick} {aiCalculatedMove} {showAiAnimation} {animationProgress} />
 					</div>
 				</div>
 			</div>
@@ -37,6 +101,10 @@
 						{:else}
 							🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
 						{/if}
+					</p>
+				{:else if isComputerThinking && isComputerTurn()}
+					<p class="text-text-secondary text-sm font-medium">
+						⏳ Computer is thinking...
 					</p>
 				{:else if gameState.phase === 'MOVEMENT'}
 					<p class="text-text-secondary text-sm">
@@ -123,8 +191,10 @@
 	
 	@media (min-width: 1024px) {
 		.board-wrapper :global(svg) {
-			width: min(50vw, 700px);
-			height: min(50vw, 700px);
-		}
+					width: min(50vw, 700px);
+		height: min(50vw, 700px);
 	}
+	
+
+}
 </style> 

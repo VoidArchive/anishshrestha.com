@@ -192,33 +192,35 @@ select:focus {
 
 /* Markdown content tweaks */
 
-h1, h2, h3, h4, h5, h6 {
-	color: var(--color-text-primary) !important;
+
+
+/* Bold / strong text */
+strong, b {
+	color: var(--color-primary-red);
+	font-weight: 700;
 }
 
-/* List markers */
-ul li::marker {
-	color: var(--color-primary-red) !important;
+/* Lists */
+ul {
+	list-style-type: disc;
+	list-style-position: inside;
 }
 
+ol {
+	list-style-type: decimal;
+	list-style-position: inside;
+}
+
+/* List markers color */
+ul li::marker,
 ol li::marker {
-	color: var(--color-primary-red) !important;
-}
-
-/* Horizontal rules */
-hr {
-	border-color: var(--color-primary-red) !important;
-	margin-block: 1.5rem;
-}
-
-/* Footnote superscripts */
-sup {
 	color: var(--color-primary-red) !important;
 }
 
 /* Blockquotes */
 blockquote {
 	@apply border-l-4 border-primary-red pl-4 italic text-text-secondary my-6;
+	display: block;
 }
 
 /* Details / summary */

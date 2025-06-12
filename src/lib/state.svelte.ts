@@ -47,7 +47,12 @@ export function getValidMoves() {
 	}
 
 	if (gameState.turn === 'GOAT') {
-		return calculateValidGoatMoves(gameState, sel, adjacency);
+		const moves = calculateValidGoatMoves(gameState, sel, adjacency);
+		if (import.meta.env.DEV) {
+			console.log('getValidMoves for GOAT at', sel, ':', moves);
+			console.log('calculateValidGoatMoves direct call:', calculateValidGoatMoves(gameState, sel, adjacency));
+		}
+		return moves;
 	} else {
 		return tigerMoveResult.destinations;
 	}

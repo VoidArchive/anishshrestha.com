@@ -12,6 +12,7 @@
 		isPlayingComputer: boolean;
 		playerSide: string;
 		aiDifficulty: 'easy' | 'medium' | 'hard';
+		isComputerThinking: boolean;
 		onReset: () => void;
 		onGameModeChange: (isComputer: boolean) => void;
 		onPlayerSideChange: (side: string) => void;
@@ -26,6 +27,7 @@
 		isPlayingComputer,
 		playerSide,
 		aiDifficulty,
+		isComputerThinking,
 		onReset, 
 		onGameModeChange,
 		onPlayerSideChange,
@@ -36,7 +38,7 @@
 </script>
 
 <aside class="space-y-6 lg:order-1">
-	<GameStatus {gameState} />
+	<GameStatus {gameState} {isComputerThinking} {isPlayingComputer} {playerSide} />
 	<GameSettings {isPlayingComputer} {playerSide} {aiDifficulty} {onGameModeChange} {onPlayerSideChange} {onDifficultyChange} {onReset} />
 	<GameControls {onReset} {onUndo} {canUndo} />
 	<GameRules />
