@@ -1,21 +1,29 @@
 <script lang="ts">
 	interface Props {
 		isPlayingComputer: boolean;
+		playerSide: string;
 		onGameModeChange: (isComputer: boolean) => void;
+		onPlayerSideChange: (side: string) => void;
 		onReset: () => void;
 	}
 
-	let { isPlayingComputer, onGameModeChange, onReset }: Props = $props();
+	let { isPlayingComputer, playerSide, onGameModeChange, onPlayerSideChange, onReset }: Props = $props();
 
 	function handleModeChange(isComputer: boolean) {
 		onGameModeChange(isComputer);
 		onReset(); // Reset the game when switching modes
+	}
+
+	function handleSideChange(side: string) {
+		onPlayerSideChange(side);
+		onReset(); // Reset the game when switching sides
 	}
 </script>
 
 <div class="section-card">
 	<h2 class="section-title">Game Mode</h2>
 	<div class="space-y-3">
+		<!-- Opponent Selection -->
 		<div class="flex items-center justify-between">
 			<span class="text-text-secondary">Opponent:</span>
 			<div class="mode-buttons">
@@ -32,6 +40,31 @@
 					onclick={() => handleModeChange(true)}
 				>
 					Computer
+				</button>
+			</div>
+		</div>
+
+		<!-- Player Side Selection (only when playing computer) -->
+		<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
+			<span class="text-text-secondary">Play as:</span>
+			<div class="mode-buttons">
+				<button 
+					class="mode-btn"
+					class:active={playerSide === 'GOAT'}
+					class:disabled={!isPlayingComputer}
+					onclick={() => handleSideChange('GOAT')}
+					disabled={!isPlayingComputer}
+				>
+					Goat
+				</button>
+				<button 
+					class="mode-btn"
+					class:active={playerSide === 'TIGER'}
+					class:disabled={!isPlayingComputer}
+					onclick={() => handleSideChange('TIGER')}
+					disabled={!isPlayingComputer}
+				>
+					Tiger
 				</button>
 			</div>
 		</div>
@@ -58,7 +91,7 @@
 		min-width: 70px;
 	}
 
-	.mode-btn:hover {
+	.mode-btn:hover:not(:disabled) {
 		border-color: var(--color-primary-red);
 		color: var(--color-text-primary);
 	}
@@ -78,7 +111,21 @@
 	}
 
 	/* Subtle pressed effect */
-	.mode-btn:active {
+	.mode-btn:active:not(:disabled) {
 		transform: translateY(1px);
+	}
+
+	/* Disabled state */
+	.mode-btn:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+
+	.disabled {
+		opacity: 0.6;
+	}
+
+	.disabled .text-text-secondary {
+		opacity: 0.5;
 	}
 </style> 

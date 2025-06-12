@@ -10,8 +10,10 @@
 		gameState: GameState;
 		moveHistory: string[];
 		isPlayingComputer: boolean;
+		playerSide: string;
 		onReset: () => void;
 		onGameModeChange: (isComputer: boolean) => void;
+		onPlayerSideChange: (side: string) => void;
 		onUndo: () => void;
 		canUndo: boolean;
 	}
@@ -19,9 +21,11 @@
 	let { 
 		gameState, 
 		moveHistory, 
-		isPlayingComputer, 
+		isPlayingComputer,
+		playerSide,
 		onReset, 
 		onGameModeChange,
+		onPlayerSideChange,
 		onUndo,
 		canUndo
 	}: Props = $props();
@@ -30,7 +34,7 @@
 <aside class="space-y-6 lg:order-1">
 	<GameStatus {gameState} />
 	<GameControls {onReset} {onUndo} {canUndo} />
-	<GameSettings {isPlayingComputer} {onGameModeChange} {onReset} />
+	<GameSettings {isPlayingComputer} {playerSide} {onGameModeChange} {onPlayerSideChange} {onReset} />
 	<GameRules />
 	<MoveHistory {moveHistory} />
 </aside> 
