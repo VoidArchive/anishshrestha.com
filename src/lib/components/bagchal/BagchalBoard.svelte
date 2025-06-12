@@ -15,10 +15,9 @@
 <svg
 	width="100%"
 	viewBox="0 0 500 500"
-	class="mx-auto block border border-gray-300 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-600"
->
+class="mx-auto block">
 	<!-- Board Background -->
-	<rect width="100%" height="100%" fill="var(--color-bg-primary)" />
+	<!-- <rect width="100%" height="100%" fill="var(--color-bg-primary)" /> -->
 	
 	<!-- Board Lines -->
 	{#each lines as line}
@@ -27,7 +26,8 @@
 			y1={line.y1}
 			x2={line.x2}
 			y2={line.y2}
-			class="stroke-2 stroke-gray-600 dark:stroke-gray-400"
+			stroke-width="0.4%"
+			class="stroke-gray-600 dark:stroke-gray-400"
 		/>
 	{/each}
 	
@@ -44,27 +44,28 @@
 					<circle
 						cx={0}
 						cy={0}
-						r="25"
+						r="5%"
 						fill="rgba(239, 68, 68, 0.3)"
 						stroke="rgb(239, 68, 68)"
-						stroke-width="2"
+						stroke-width="0.4%"
 					/>
 				{/if}
 				
 				<!-- Tiger piece -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<image
-					x={-20}
-					y={-20}
-					width={40}
-					height={40}
-					href="/icons/tiger.svg"
+				<text
+					x={0}
+					y={8}
+					font-size="35"
+					text-anchor="middle"
 					class="cursor-pointer select-none {selected ? 'drop-shadow-lg' : ''}"
 					tabindex="0"
 					role="button"
 					aria-label={`Tiger at position ${id}`}
 					onclick={() => handlePointClick(id)}
-				/>
+				>
+					🐯
+				</text>
 			</g>
 		{:else if piece === 'GOAT'}
 			<g transform={`translate(${x}, ${y})`}>
@@ -73,27 +74,28 @@
 					<circle
 						cx={0}
 						cy={0}
-						r="25"
+						r="5%"
 						fill="rgba(34, 197, 94, 0.3)"
 						stroke="rgb(34, 197, 94)"
-						stroke-width="2"
+						stroke-width="0.4%"
 					/>
 				{/if}
 				
 				<!-- Goat piece -->
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<image
-					x={-20}
-					y={-20}
-					width={40}
-					height={40}
-					href="/icons/goat.svg"
+				<text
+					x={0}
+					y={8}
+					font-size="35"
+					text-anchor="middle"
 					class="cursor-pointer select-none {selected ? 'drop-shadow-lg' : ''}"
 					tabindex="0"
 					role="button"
 					aria-label={`Goat at position ${id}`}
 					onclick={() => handlePointClick(id)}
-				/>
+				>
+					🐐
+				</text>
 			</g>
 		{:else}
 			<!-- Empty Point -->
@@ -101,9 +103,9 @@
 			<circle
 				cx={x}
 				cy={y}
-				r="12"
+				r="2.4%"
 				stroke="var(--color-border)"
-				stroke-width="1"
+				stroke-width="0.2%"
 				class={valid 
 					? 'cursor-pointer fill-red-200 stroke-red-400 animate-pulse' 
 					: 'fill-white dark:fill-gray-700 hover:fill-gray-100 dark:hover:fill-gray-600 cursor-pointer'

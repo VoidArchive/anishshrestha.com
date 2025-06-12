@@ -1,19 +1,41 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import BagchalBoard from './bagchal/BagchalBoard.svelte';
 	import { gameState, points, lines, adjacency, getValidMoves, getCurrentTigerCaptures, resetGameState } from '$lib/state.svelte';
 	import { executeMove, checkIfTigersAreTrapped } from '$lib/bagchal';
+	import GameBoard from './game/GameBoard.svelte';
+	import GameSidebar from './game/GameSidebar.svelte';
+	import WinnerModal from './game/WinnerModal.svelte';
 	
-	// Game history
+	// Game history for undo functionality
 	let moveHistory: string[] = $state([]);
+	let gameStateHistory: any[] = $state([]); // Store previous game states
 	
 	// Game settings
-	let showHints = $state(true);
-	let soundEnabled = $state(true);
+	let isPlayingComputer = $state(false);
 	
 	// Local derived state
 	let validMoves = $derived(getValidMoves());
 	let currentTigerCaptures = $derived(getCurrentTigerCaptures());
+	let canUndo = $derived(gameStateHistory.length > 0 && !gameState.winner);
+	
+	// Save current game state before making a move
+	function saveGameState() {
+		gameStateHistory.push({
+			board: [...gameState.board],
+			turn: gameState.turn,
+			phase: gameState.phase,
+			goatsPlaced: gameState.goatsPlaced,
+			goatsCaptured: gameState.goatsCaptured,
+			selectedPieceId: gameState.selectedPieceId,
+			winner: gameState.winner,
+			moveHistoryLength: moveHistory.length
+		});
+		
+		// Keep only last 10 moves to prevent memory issues
+		if (gameStateHistory.length > 10) {
+			gameStateHistory.shift();
+		}
+	}
 	
 	// Handle board position clicks
 	function handlePointClick(id: number) {
@@ -34,6 +56,9 @@
 			// --- PLACEMENT PHASE ---
 			if (gameState.phase === 'PLACEMENT') {
 				if (pieceAtClickId === null) {
+					// Save state before making move
+					saveGameState();
+					
 					// Place the goat
 					gameState.board[id] = 'GOAT';
 					gameState.goatsPlaced++;
@@ -77,6 +102,9 @@
 					currentlySelectedId !== null &&
 					validMoves.includes(id)
 				) {
+					// Save state before making move
+					saveGameState();
+					
 					// Moving a goat
 					executeMove(gameState, currentlySelectedId, id, null, adjacency, points);
 					moveHistory.push(`Goat moved from ${currentlySelectedId} to ${id}`);
@@ -98,6 +126,9 @@
 				currentlySelectedId !== null &&
 				validMoves.includes(id)
 			) {
+				// Save state before making move
+				saveGameState();
+				
 				// Moving/Capturing
 				const captureInfo = currentTigerCaptures.find((c) => c.destinationId === id);
 				const jumpedGoatId = captureInfo ? captureInfo.jumpedGoatId : null;
@@ -122,6 +153,33 @@
 	function resetGame() {
 		resetGameState();
 		moveHistory = [];
+		gameStateHistory = []; // Clear undo history
+	}
+
+	// Undo the last move
+	function undoMove() {
+		if (gameStateHistory.length === 0) return;
+		
+		const previousState = gameStateHistory.pop();
+		if (previousState) {
+			// Restore game state
+			gameState.board = previousState.board;
+			gameState.turn = previousState.turn;
+			gameState.phase = previousState.phase;
+			gameState.goatsPlaced = previousState.goatsPlaced;
+			gameState.goatsCaptured = previousState.goatsCaptured;
+			gameState.selectedPieceId = previousState.selectedPieceId;
+			gameState.winner = previousState.winner;
+			
+			// Restore move history to previous length
+			moveHistory = moveHistory.slice(0, previousState.moveHistoryLength);
+		}
+	}
+
+	// Game mode handler
+	function handleGameModeChange(isComputer: boolean) {
+		isPlayingComputer = isComputer;
+		// TODO: Implement computer AI logic when isComputer is true
 	}
 	
 	onMount(() => {
@@ -131,247 +189,16 @@
 </script>
 
 <div class="grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-8 h-full">
-	<!-- Game Board - First on mobile, second on desktop -->
-	<section class="flex flex-col lg:order-2">
-		<div class="section-card h-full">
-			<h2 class="section-title">Bagchal Board</h2>
-			
-			<!-- Game Board Container -->
-			<div class="flex-1 flex flex-col items-center justify-center p-4">
-				<!-- Game Board -->
-				<div class="board-wrapper w-full max-w-none">
-					<BagchalBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
-				</div>
-				
-				<!-- Game Instructions based on current state -->
-				<div class="mt-3 text-center">
-					{#if gameState.winner}
-						<p class="text-lg font-bold text-primary-red">
-							🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
-						</p>
-					{:else if gameState.phase === 'PLACEMENT'}
-						<p class="text-text-secondary text-sm">
-							Click to place goat #{gameState.goatsPlaced + 1}
-						</p>
-					{:else}
-						<p class="text-text-secondary text-sm">
-							{gameState.turn === 'GOAT' ? 'Select and move a goat' : 'Select a tiger and move or capture'}
-						</p>
-					{/if}
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Sidebar - Second on mobile, first on desktop -->
-	<aside class="space-y-6 lg:order-1">
-		<!-- Game Status Card -->
-		<div class="section-card">
-			<h2 class="section-title">Game Status</h2>
-			<div class="space-y-3">
-				<div class="flex justify-between items-center">
-					<span class="text-text-secondary">Current Turn:</span>
-					<span class="capitalize font-semibold" class:text-primary-red={gameState.turn === 'TIGER'}>
-						{gameState.turn.toLowerCase()}
-					</span>
-				</div>
-				<div class="flex justify-between items-center">
-					<span class="text-text-secondary">Phase:</span>
-					<span class="capitalize font-semibold">{gameState.phase.toLowerCase()}</span>
-				</div>
-				<div class="flex justify-between items-center">
-					<span class="text-text-secondary">Goats Placed:</span>
-					<span class="font-semibold">{gameState.goatsPlaced}/20</span>
-				</div>
-				<div class="flex justify-between items-center">
-					<span class="text-text-secondary">Goats Captured:</span>
-					<span class="font-semibold text-primary-red">{gameState.goatsCaptured}</span>
-				</div>
-			</div>
-		</div>
-		
-		<!-- Game Controls -->
-		<div class="section-card">
-			<h2 class="section-title">Game Controls</h2>
-			<div class="space-y-3">
-				<button class="btn w-full" onclick={resetGame}>
-					New Game
-				</button>
-				<button class="btn w-full" disabled>
-					Undo Move
-				</button>
-				<button class="btn w-full" disabled>
-					Save Game
-				</button>
-			</div>
-		</div>
-		
-		<!-- Game Settings -->
-		<div class="section-card">
-			<h2 class="section-title">Settings</h2>
-			<div class="space-y-3">
-				<label class="flex items-center justify-between cursor-pointer">
-					<span class="text-text-secondary">Show Hints</span>
-					<input 
-						type="checkbox" 
-						bind:checked={showHints}
-						class="w-4 h-4 text-primary-red bg-bg-primary border-border focus:ring-primary-red"
-					>
-				</label>
-				<label class="flex items-center justify-between cursor-pointer">
-					<span class="text-text-secondary">Sound Effects</span>
-					<input 
-						type="checkbox" 
-						bind:checked={soundEnabled}
-						class="w-4 h-4 text-primary-red bg-bg-primary border-border focus:ring-primary-red"
-					>
-				</label>
-			</div>
-		</div>
-		
-		<!-- Game Rules -->
-		<div class="section-card">
-			<h2 class="section-title">Quick Rules</h2>
-			<div class="text-sm text-text-secondary space-y-2">
-				<p><strong class="text-text-primary">Goal:</strong></p>
-				<ul class="text-xs space-y-1 ml-4">
-					<li>• Tigers: Capture 5 goats to win</li>
-					<li>• Goats: Block all tiger moves</li>
-				</ul>
-				<p><strong class="text-text-primary">Phases:</strong></p>
-				<ul class="text-xs space-y-1 ml-4">
-					<li>• Place 20 goats on board</li>
-					<li>• Move pieces strategically</li>
-				</ul>
-			</div>
-		</div>
-		
-		<!-- Move History -->
-		<div class="section-card">
-			<h2 class="section-title">Move History</h2>
-			<div class="max-h-32 overflow-y-auto">
-				{#if moveHistory.length === 0}
-					<p class="text-text-secondary text-sm">No moves yet</p>
-				{:else}
-					<ul class="text-sm space-y-1">
-						{#each moveHistory as move, index}
-							<li class="text-text-secondary">
-								{index + 1}. {move}
-							</li>
-						{/each}
-					</ul>
-				{/if}
-			</div>
-		</div>
-	</aside>
+	<GameBoard {points} {lines} {gameState} {validMoves} {handlePointClick} />
+	<GameSidebar 
+		{gameState} 
+		{moveHistory} 
+		{isPlayingComputer}
+		{canUndo}
+		onReset={resetGame}
+		onGameModeChange={handleGameModeChange}
+		onUndo={undoMove}
+	/>
 </div>
 
-<!-- Winner Modal -->
-{#if gameState.winner}
-	<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div class="mx-auto max-w-sm bg-white dark:bg-gray-800 p-8 text-center shadow-2xl">
-			<h2 class="mb-4 text-4xl font-bold text-green-600">
-				🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
-			</h2>
-			<p class="mb-4 text-text-secondary">
-				{gameState.winner === 'TIGER' 
-					? `Captured ${gameState.goatsCaptured} goats!` 
-					: 'All tigers are trapped!'}
-			</p>
-			<button
-				onclick={resetGame}
-				class="mt-4 bg-indigo-600 px-8 py-3 text-white transition hover:bg-indigo-700"
-			>
-				Play Again
-			</button>
-		</div>
-	</div>
-{/if}
-
-<style>
-	/* Custom checkbox styling for dark theme */
-	input[type="checkbox"] {
-		appearance: none;
-		background-color: var(--color-bg-primary);
-		border: 1px solid var(--color-border);
-		border-radius: 3px;
-		width: 1rem;
-		height: 1rem;
-		cursor: pointer;
-		position: relative;
-		transition: all 0.3s ease;
-	}
-	
-	input[type="checkbox"]:checked {
-		background-color: var(--color-primary-red);
-		border-color: var(--color-primary-red);
-	}
-	
-	input[type="checkbox"]:checked::after {
-		content: '✓';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		color: white;
-		font-size: 0.75rem;
-		font-weight: bold;
-	}
-	
-	input[type="checkbox"]:hover {
-		border-color: var(--color-primary-red);
-	}
-	
-	/* Disable button styling */
-	button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-	
-	button:disabled:hover {
-		border-color: var(--color-border);
-		color: var(--color-text-primary);
-	}
-	
-	/* Scrollbar for move history */
-	.max-h-32::-webkit-scrollbar {
-		width: 4px;
-	}
-	
-	.max-h-32::-webkit-scrollbar-track {
-		background: var(--color-bg-primary);
-	}
-	
-	.max-h-32::-webkit-scrollbar-thumb {
-		background: var(--color-border);
-		border-radius: 2px;
-	}
-	
-	.max-h-32::-webkit-scrollbar-thumb:hover {
-		background: var(--color-primary-red);
-	}
-	
-	/* Board wrapper styling */
-	.board-wrapper {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 100%;
-		min-height: 400px;
-	}
-	
-	/* Make board responsive and larger */
-	.board-wrapper :global(svg) {
-		width: min(80vw, 600px);
-		height: min(80vw, 600px);
-		max-width: none;
-	}
-	
-	@media (min-width: 1024px) {
-		.board-wrapper :global(svg) {
-			width: min(50vw, 700px);
-			height: min(50vw, 700px);
-		}
-	}
-</style> 
+<WinnerModal {gameState} onPlayAgain={resetGame} /> 
