@@ -119,6 +119,18 @@
 				
 				// Reset selection
 				gameState.selectedPieceId = null;
+			} else {
+				// No valid move available for computer - check if game should end
+				if (gameState.turn === 'TIGER') {
+					// Tiger has no moves - tigers are trapped, goats win
+					if (checkIfTigersAreTrapped(gameState, adjacency, points)) {
+						gameState.winner = 'GOAT';
+						moveHistory.push('Tigers are trapped - Goats win!');
+					}
+				} else {
+					// Goat has no moves (very rare case)
+					moveHistory.push('Computer (Goats) has no valid moves available');
+				}
 			}
 		} catch (error) {
 			if (import.meta.env.DEV) {

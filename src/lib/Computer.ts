@@ -533,7 +533,7 @@ export class ComputerPlayer {
 	private evaluator: GameEvaluator;
 
 	constructor(difficulty: 'easy' | 'medium' | 'hard' = 'medium') {
-		const depths = { easy: 4, medium: 6, hard: 8 };
+		const depths = { easy: 4, medium: 6, hard: 10 };
 		this.evaluator = new GameEvaluator(depths[difficulty]);
 	}
 
@@ -571,7 +571,7 @@ export class ComputerPlayer {
 	 * Changes the difficulty level and clears cache
 	 */
 	public setDifficulty(difficulty: 'easy' | 'medium' | 'hard'): void {
-		const depths = { easy: 4, medium: 6, hard: 8 };
+		const depths = { easy: 4, medium: 6, hard: 10 };
 		this.evaluator = new GameEvaluator(depths[difficulty]);
 	}
 
