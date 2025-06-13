@@ -133,10 +133,10 @@
 					// Computer movement or capture
 					if (computerMove.jumpedGoatId) {
 						moveHistory.push(
-							`Computer captured goat at ${computerMove.jumpedGoatId} and moved to ${computerMove.to}`
+							`AI captured goat at ${computerMove.jumpedGoatId} and moved to ${computerMove.to}`
 						);
 					} else {
-						moveHistory.push(`Computer moved from ${computerMove.from} to ${computerMove.to}`);
+						moveHistory.push(`AI moved from ${computerMove.from} to ${computerMove.to}`);
 					}
 
 					executeMove(
@@ -178,16 +178,7 @@
 
 	// Handle board position clicks
 	function handlePointClick(id: number) {
-		if (import.meta.env.DEV) {
-			console.log(
-				`Click on ID: ${id}, Current Turn: ${gameState.turn}, Phase: ${gameState.phase}, Selected: ${gameState.selectedPieceId}`
-			);
-		}
-
 		if (gameState.winner) {
-			if (import.meta.env.DEV) {
-				console.log('Game already won, ignoring click.');
-			}
 			return;
 		}
 
@@ -205,21 +196,12 @@
 					// Place the goat
 					gameState.board[id] = 'GOAT';
 					gameState.goatsPlaced++;
-					if (import.meta.env.DEV) {
-						console.log(`Goat placed at ${id}. Total placed: ${gameState.goatsPlaced}`);
-					}
 
 					// Add to move history
 					moveHistory.push(`Goat placed at position ${id}`);
 
 					// Check for Goat Win by Trapping
-					if (import.meta.env.DEV) {
-						console.log('Checking for trap after placement...');
-					}
 					if (checkIfTigersAreTrapped(gameState, adjacency, points)) {
-						if (import.meta.env.DEV) {
-							console.log('Goats Win! Tigers detected as trapped after placement.');
-						}
 						gameState.winner = 'GOAT';
 						moveHistory.push('Goats win by trapping tigers!');
 					}
@@ -227,16 +209,10 @@
 					// Change phase if 20 goats are placed AND no winner yet
 					if (!gameState.winner && gameState.goatsPlaced >= 20) {
 						gameState.phase = 'MOVEMENT';
-						if (import.meta.env.DEV) {
-							console.log('Goat phase changed to MOVEMENT.');
-						}
 					}
 
 					// Switch turn ONLY if no winner was determined
 					if (!gameState.winner) {
-						if (import.meta.env.DEV) {
-							console.log('Switching turn to TIGER.');
-						}
 						gameState.turn = 'TIGER';
 					}
 
@@ -270,9 +246,6 @@
 				}
 				if (pieceAtClickId === 'GOAT') {
 					// Selecting a goat
-					if (import.meta.env.DEV) {
-						console.log('Selecting goat at:', id);
-					}
 					gameState.selectedPieceId = id;
 				} else if (
 					pieceAtClickId === null &&
@@ -280,9 +253,6 @@
 					validMoves.includes(id)
 				) {
 					// Save state before making move
-					if (import.meta.env.DEV) {
-						console.log('Moving goat from', currentlySelectedId, 'to', id);
-					}
 					saveGameState();
 
 					// Moving a goat
@@ -290,9 +260,6 @@
 					moveHistory.push(`Goat moved from ${currentlySelectedId} to ${id}`);
 				} else {
 					// Invalid click
-					if (import.meta.env.DEV) {
-						console.log('Invalid goat click - deselecting');
-					}
 					gameState.selectedPieceId = null; // Deselect
 				}
 				return;
@@ -387,9 +354,6 @@
 	$effect(() => {
 		// Only trigger if it's really the computer's turn and we're not already processing
 		if (isComputerTurn() && !isComputerThinking && !gameState.winner && !aiCalculatedMove) {
-			if (import.meta.env.DEV) {
-				console.log('Triggering computer move - Turn:', gameState.turn, 'Player Side:', playerSide);
-			}
 			// Use setTimeout to prevent immediate re-triggering
 			setTimeout(() => {
 				if (isComputerTurn() && !isComputerThinking && !gameState.winner && !aiCalculatedMove) {
@@ -401,14 +365,11 @@
 
 	onMount(() => {
 		resetGame();
-		if (import.meta.env.DEV) {
-			console.log('Bagchal game initialized');
-		}
 	});
 </script>
 
 <ErrorBoundary fallback="The Bagchal game encountered an error. Please try restarting the game.">
-	<div class="grid h-full grid-cols-1 gap-8 lg:grid-cols-[350px_1fr]">
+	<div class="flex flex-col gap-4 lg:grid lg:h-full lg:grid-cols-[350px_1fr] lg:gap-8">
 		<GameBoard
 			{points}
 			{lines}
@@ -419,10 +380,10 @@
 			{isPlayingComputer}
 			{playerSide}
 			{aiCalculatedMove}
+			{moveHistory}
 		/>
 		<GameSidebar
 			{gameState}
-			{moveHistory}
 			{isPlayingComputer}
 			{playerSide}
 			{gameMode}

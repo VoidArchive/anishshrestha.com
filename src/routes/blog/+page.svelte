@@ -25,54 +25,124 @@
 
 <main class="container">
 	<div class="mx-auto max-w-4xl py-8">
-		<header class="border-border mb-12 border-b pb-8 text-center">
-			<h1 class=" text-primary-red mb-4 text-4xl lg:text-4xl">Blog</h1>
-			<p class="text-text-secondary text-lg">
+		<header class="mb-12 border-b pb-8 text-center" style="border-color: var(--color-border);">
+			<h1 class="mb-4 text-4xl lg:text-4xl" style="color: var(--color-primary-red);">Blog</h1>
+			<p class="text-lg" style="color: var(--color-text-secondary);">
 				Technical deep-dives and thoughts on software engineering
 			</p>
 		</header>
 
 		{#if data.posts.length > 0}
-			<div class="flex flex-col gap-8">
+			<div class="blog-posts-container">
 				{#each data.posts as post}
-					<a
-						href="/blog/{post.slug}"
-						class="bg-bg-secondary border-border hover:border-primary-red relative block overflow-hidden border p-6 no-underline transition-all duration-300 hover:-translate-y-0.5"
-						style="box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);"
-					>
-						<article>
-							<div
-								class="absolute top-0 right-0 left-0 h-0.5 opacity-50 transition-opacity duration-300 hover:opacity-80"
-								style="background: linear-gradient(135deg, var(--color-primary-red) 0%, transparent 50%);"
-							></div>
-
-							<div class="mb-4 flex items-center justify-between">
-								<time class="text-text-secondary font-mono text-sm">{formatDate(post.date)}</time>
-								<div class="flex flex-wrap gap-2">
+					<a href="/blog/{post.slug}" class="blog-card">
+						<article class="blog-content">
+							<div class="blog-meta">
+								<time class="blog-date">{formatDate(post.date)}</time>
+								<div class="blog-tags">
 									{#each post.tags as tag}
-										<span class="bg-bg-primary border-border border px-2 py-1 text-xs text-white"
-											>{tag}</span
-										>
+										<span class="blog-tag">{tag}</span>
 									{/each}
 								</div>
 							</div>
+							
+							<!-- Decorative separator removed to prevent layout shift -->
 
-							<h2 class="mb-3">
-								<span
-									class="text-text-primary hover:text-primary-red text-2xl font-semibold transition-colors duration-300"
-									>{post.title}</span
-								>
-							</h2>
-
-							<p class="text-text-secondary mb-4 leading-relaxed">{post.description}</p>
+							<h2 class="blog-title-text">{post.title}</h2>
+							<p class="blog-description">{post.description}</p>
 						</article>
 					</a>
 				{/each}
 			</div>
 		{:else}
-			<div class="text-text-secondary py-8 text-center">
+			<div class="py-8 text-center" style="color: var(--color-text-secondary);">
 				<p>No blog posts found. Check back soon!</p>
 			</div>
 		{/if}
 	</div>
 </main>
+
+<style>
+	/* Reset all potential conflicts */
+	.blog-posts-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.blog-card {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+		background-color: var(--color-bg-secondary);
+		border: 1px solid var(--color-border);
+		padding: 1.25rem;
+		box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);
+		transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+		/* Removed translateZ - we will no longer force GPU */
+		will-change: box-shadow, border-color;
+		position: relative;
+	}
+
+	.blog-card:hover {
+		border-color: var(--color-primary-red);
+		box-shadow: 0 0 0 0 rgba(0,0,0,0);
+	}
+
+	.blog-content {
+		/* Lock in spacing to prevent shifts */
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+
+	.blog-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.75rem;
+		gap: 1rem;
+	}
+
+	.blog-date {
+		font-family: var(--font-family-mono);
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.blog-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.blog-tag {
+		background-color: var(--color-bg-primary);
+		color: var(--color-text-primary);
+		border: 1px solid var(--color-border);
+		padding: 0.25rem 0.5rem;
+		font-size: 0.75rem;
+		line-height: 1;
+		margin: 0;
+	}
+
+	.blog-title-text {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		margin: 0 0 0.5rem 0;
+		line-height: 1.3;
+		transition: color 0.3s ease;
+	}
+
+	.blog-description {
+		color: var(--color-text-secondary);
+		margin: 0;
+		line-height: 1.5;
+		font-size: 0.95rem;
+	}
+
+	/* Removed decorative pseudo-element and title color change to avoid layout/antialiasing shifts */
+</style>

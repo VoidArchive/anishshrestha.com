@@ -8,13 +8,13 @@
 
 <div class="section-card">
 	<h2 class="section-title">Move History</h2>
-	<div class="max-h-32 overflow-y-auto">
+	<div class="max-h-40 overflow-y-auto sm:max-h-none sm:overflow-visible">
 		{#if moveHistory.length === 0}
 			<p class="text-text-secondary text-sm">No moves yet</p>
 		{:else}
-			<ul class="space-y-1 text-sm">
+			<ul class="space-y-1 text-xs sm:text-sm ">
 				{#each moveHistory as move, index}
-					<li class="text-text-secondary">
+					<li class="text-text-secondary list-none">
 						{index + 1}. {move}
 					</li>
 				{/each}
@@ -24,21 +24,21 @@
 </div>
 
 <style>
-	/* Scrollbar for move history */
-	.max-h-32::-webkit-scrollbar {
+	/* Mobile scrollbar styling */
+	.max-h-40::-webkit-scrollbar {
 		width: 4px;
 	}
 
-	.max-h-32::-webkit-scrollbar-track {
+	.max-h-40::-webkit-scrollbar-track {
 		background: var(--color-bg-primary);
 	}
 
-	.max-h-32::-webkit-scrollbar-thumb {
+	.max-h-40::-webkit-scrollbar-thumb {
 		background: var(--color-border);
 		border-radius: 2px;
 	}
 
-	.max-h-32::-webkit-scrollbar-thumb:hover {
+	.max-h-40::-webkit-scrollbar-thumb:hover {
 		background: var(--color-primary-red);
 	}
 </style>

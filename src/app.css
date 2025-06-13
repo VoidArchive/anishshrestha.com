@@ -6,6 +6,7 @@
 @import 'tailwindcss';
 
 /* Dark theme custom properties for Tailwind */
+/* stylelint-disable-next-line at-rule-no-unknown */
 @theme {
 	--color-bg-primary: #1e1e1e;
 	--color-bg-secondary: #212121;
@@ -36,10 +37,6 @@ ul {
 	list-style-position: inside;
 }
 
-li {
-	@apply text-text-secondary mb-2 transition-all duration-300;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
 	width: 8px;
@@ -59,11 +56,11 @@ li {
 
 /* Base card styles */
 .section-card {
-	@apply bg-bg-secondary border-border relative mb-6 overflow-hidden border p-6 shadow-lg transition-all duration-300;
+	@apply bg-bg-secondary border-border relative mb-4 overflow-hidden border p-4 shadow-lg transition-all duration-300 sm:mb-6 sm:p-6;
 }
 
 .section-card:hover {
-	@apply border-primary-red -translate-y-0.5;
+	@apply border-primary-red;
 	box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
 }
 
@@ -206,12 +203,6 @@ ul {
 ol {
 	list-style-type: decimal;
 	list-style-position: inside;
-}
-
-/* List markers color */
-ul li::marker,
-ol li::marker {
-	color: var(--color-primary-red) !important;
 }
 
 /* Blockquotes */

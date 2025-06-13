@@ -220,13 +220,7 @@ export function checkIfTigersAreTrapped(
 	}
 
 	for (const tigerId of tigerIds) {
-		if (import.meta.env.DEV) {
-			console.log(`Checking tiger at ID: ${tigerId}`);
-		}
 		const { destinations } = calculateValidTigerMoves(state, tigerId, adjacency, points);
-		if (import.meta.env.DEV) {
-			console.log(`  Valid destinations for tiger ${tigerId}:`, destinations);
-		}
 		if (destinations.length > 0) {
 			state.message = `Tiger ${tigerId} CAN move. Returning false (not trapped. \n --- Trap check finished ---`;
 			return false;
@@ -281,9 +275,6 @@ export function executeMove(
 
 	// 3. Check GOAT win by trapping after a GOAT move
 	if (!state.winner && movingPiece === 'GOAT') {
-		if (import.meta.env.DEV) {
-			console.log('Goat moved. Checking if tigers are now trapped...');
-		}
 		if (checkIfTigersAreTrapped(state, adjacency, points)) {
 			state.message = 'Goats Win! Tigers detected as trapped after goat move.';
 			state.winner = 'GOAT';
@@ -334,9 +325,7 @@ export function executeMove(
 
 	// 6. Reset selection ALWAYS after a successful move
 	state.selectedPieceId = null;
-	if (import.meta.env.DEV) {
-		console.log('Selection reset.');
-	}
+	
 }
 
 // Reset game to initial state

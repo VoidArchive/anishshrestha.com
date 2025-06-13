@@ -9,7 +9,7 @@
 
 	<div class="space-y-4">
 		<div>
-			<h3 class="text-primary-red mb-2 text-sm font-semibold">Backend & Systems</h3>
+			<h3 class="text-primary-red mb-2 text-sm font-semibold">Backend</h3>
 			<div class="space-y-1">
 				<div
 					class="hover:border-primary-red hover:text-text-primary flex items-center border-b border-transparent py-1 transition-all duration-300"

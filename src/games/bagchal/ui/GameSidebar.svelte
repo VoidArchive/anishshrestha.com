@@ -4,11 +4,9 @@
 	import GameControls from './GameControls.svelte';
 	import GameSettings from './GameSettings.svelte';
 	import GameRules from './GameRules.svelte';
-	import MoveHistory from './MoveHistory.svelte';
 
 	interface Props {
 		gameState: GameState;
-		moveHistory: string[];
 		isPlayingComputer: boolean;
 		playerSide: string;
 		gameMode: 'CLASSIC' | 'REFORGED';
@@ -23,7 +21,6 @@
 
 	let {
 		gameState,
-		moveHistory,
 		isPlayingComputer,
 		playerSide,
 		gameMode,
@@ -37,7 +34,7 @@
 	}: Props = $props();
 </script>
 
-<aside class="space-y-6 lg:order-1">
+<aside class="space-y-4 lg:order-1 lg:space-y-6">
 	<GameStatus {gameState} {isComputerThinking} {isPlayingComputer} {playerSide} />
 	<GameSettings
 		{isPlayingComputer}
@@ -50,5 +47,4 @@
 	/>
 	<GameControls {onReset} {onUndo} {canUndo} />
 	<GameRules />
-	<MoveHistory {moveHistory} />
 </aside>

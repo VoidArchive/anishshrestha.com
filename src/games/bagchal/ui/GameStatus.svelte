@@ -36,18 +36,6 @@
 			</div>
 		</div>
 
-		<!-- AI Thinking Indicator -->
-		{#if isComputerThinking && isComputerTurn && !gameState.winner}
-			<div class="bg-bg-primary border-primary-red/20 flex items-center gap-2 rounded border p-2">
-				<div class="thinking-dots">
-					<span></span>
-					<span></span>
-					<span></span>
-				</div>
-				<span class="text-primary-red text-sm font-medium">AI is thinking...</span>
-			</div>
-		{/if}
-
 		<div class="flex items-center justify-between">
 			<span class="text-text-secondary">Phase:</span>
 			<span class="font-semibold capitalize">{gameState.phase.toLowerCase()}</span>
@@ -75,41 +63,3 @@
 		{/if}
 	</div>
 </div>
-
-<style>
-	/* Thinking dots animation */
-	.thinking-dots {
-		display: flex;
-		gap: 3px;
-		align-items: center;
-	}
-
-	.thinking-dots span {
-		width: 4px;
-		height: 4px;
-		background-color: var(--color-primary-red);
-		border-radius: 50%;
-		animation: thinking-pulse 1.4s ease-in-out infinite both;
-	}
-
-	.thinking-dots span:nth-child(1) {
-		animation-delay: -0.32s;
-	}
-
-	.thinking-dots span:nth-child(2) {
-		animation-delay: -0.16s;
-	}
-
-	@keyframes thinking-pulse {
-		0%,
-		80%,
-		100% {
-			transform: scale(0.8);
-			opacity: 0.5;
-		}
-		40% {
-			transform: scale(1);
-			opacity: 1;
-		}
-	}
-</style>

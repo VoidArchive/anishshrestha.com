@@ -1,6 +1,7 @@
 <script lang="ts">
 	import BagchalBoard from './BagchalBoard.svelte';
 	import type { GameState } from '$games/bagchal/rules';
+	import MoveHistory from './MoveHistory.svelte';
 
 	interface Props {
 		points: any;
@@ -12,6 +13,7 @@
 		isPlayingComputer?: boolean;
 		playerSide?: string;
 		aiCalculatedMove?: any;
+		moveHistory?: string[];
 	}
 
 	let {
@@ -23,25 +25,13 @@
 		isComputerThinking = false,
 		isPlayingComputer = false,
 		playerSide = 'GOAT',
-		aiCalculatedMove = null
+		aiCalculatedMove = null,
+		moveHistory = []
 	}: Props = $props();
 
 	// Determine if it's computer's turn and should disable interaction
 	let isComputerTurn = $derived(() => {
-		const computerTurn = isPlayingComputer && gameState.turn !== playerSide;
-		if (import.meta.env.DEV) {
-			console.log(
-				'Computer turn check:',
-				'isPlayingComputer:',
-				isPlayingComputer,
-				'gameState.turn:',
-				gameState.turn,
-				'playerSide:',
-				playerSide,
-				'result:',
-				computerTurn
-			);
-		}
+		const computerTurn = isPlayingComputer && gameState.turn !== playerSide;	
 		return computerTurn;
 	});
 
@@ -51,18 +41,6 @@
 
 	// Disable clicks when computer is thinking or animating
 	function handleBoardClick(id: number) {
-		if (import.meta.env.DEV) {
-			console.log(
-				'Board click:',
-				id,
-				'isComputerThinking:',
-				isComputerThinking,
-				'showAiAnimation:',
-				showAiAnimation,
-				'isComputerTurn:',
-				isComputerTurn
-			);
-		}
 		if (isComputerThinking || showAiAnimation) return;
 		handlePointClick(id);
 	}
@@ -107,11 +85,11 @@
 </script>
 
 <section class="flex flex-col lg:order-2">
-	<div class="section-card h-full">
-		<h2 class="section-title">Bagchal Reforged</h2>
+	<div class="section-card min-h-0 lg:h-full">
+		<h2 class="section-title">Board</h2>
 
 		<!-- Recessed Game Board Container -->
-		<div class="flex flex-1 flex-col items-center justify-center p-3 sm:p-6">
+		<div class="flex flex-1 flex-col items-center justify-center p-2 sm:p-4 lg:p-6">
 			<!-- Carved Board Well -->
 			<div class="board-well">
 				<div class="board-inner" class:thinking={isComputerThinking && isComputerTurn}>
@@ -131,9 +109,9 @@
 			</div>
 
 			<!-- Game Instructions based on current state -->
-			<div class="mt-3 text-center">
+			<div class="mt-2 text-center sm:mt-3">
 				{#if gameState.winner}
-					<p class="text-primary-red text-lg font-bold">
+					<p class="text-primary-red text-base font-bold sm:text-lg">
 						{#if gameState.winner === 'DRAW'}
 							🤝 It's a Draw!
 						{:else}
@@ -141,9 +119,17 @@
 						{/if}
 					</p>
 				{:else if isComputerThinking && isComputerTurn()}
-					<p class="text-text-secondary text-sm font-medium">⏳ Computer is thinking...</p>
+					<!-- AI Thinking Indicator moved from GameStatus -->
+					<div class="bg-bg-primary border-primary-red/20 mx-auto flex max-w-xs items-center gap-2 rounded border p-2 text-xs sm:text-sm">
+						<div class="thinking-dots">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+						<span class="text-primary-red font-medium">AI is thinking...</span>
+					</div>
 				{:else if gameState.phase === 'MOVEMENT'}
-					<p class="text-text-secondary text-sm">
+					<p class="text-text-secondary text-xs sm:text-sm">
 						{gameState.turn === 'GOAT'
 							? 'Select and move a goat'
 							: 'Select a tiger and move or capture'}
@@ -152,6 +138,11 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Move history below the board -->
+	{#if moveHistory}
+		<MoveHistory {moveHistory} />
+	{/if}
 </section>
 
 <style>
@@ -159,8 +150,14 @@
 	.board-well {
 		width: 100%;
 		max-width: none;
-		padding: 0.75rem;
+		padding: 0.5rem;
 		position: relative;
+	}
+
+	@media (min-width: 640px) {
+		.board-well {
+			padding: 0.75rem;
+		}
 	}
 
 	.board-inner {
@@ -168,7 +165,7 @@
 		aspect-ratio: 1;
 		height: 100%;
 		background: linear-gradient(145deg, #151515, var(--color-bg-primary));
-		padding: 0.75rem;
+		padding: 0.5rem;
 		position: relative;
 		/* Deep inset effect */
 		box-shadow: 
@@ -177,6 +174,12 @@
 			inset -2px -2px 8px rgba(255, 255, 255, 0.04),
 			/* Inner glow */ inset 0 0 20px rgba(0, 0, 0, 0.5),
 			/* Subtle red accent glow */ inset 0 0 40px rgba(201, 42, 42, 0.02);
+	}
+
+	@media (min-width: 640px) {
+		.board-inner {
+			padding: 0.75rem;
+		}
 	}
 
 	/* Add subtle texture overlay */
@@ -206,29 +209,63 @@
 
 	/* Make board responsive and larger */
 	.board-wrapper :global(svg) {
-		width: min(95vw, 450px);
-		height: min(95vw, 450px);
+		width: min(90vw, 350px);
+		height: min(90vw, 350px);
 		max-width: none;
 	}
 
 	@media (min-width: 640px) {
 		.board-wrapper :global(svg) {
-			width: min(85vw, 500px);
-			height: min(85vw, 500px);
+			width: min(80vw, 450px);
+			height: min(80vw, 450px);
 		}
 	}
 
 	@media (min-width: 768px) {
 		.board-wrapper :global(svg) {
-			width: min(70vw, 550px);
-			height: min(70vw, 550px);
+			width: min(65vw, 500px);
+			height: min(65vw, 500px);
 		}
 	}
 
 	@media (min-width: 1024px) {
 		.board-wrapper :global(svg) {
-			width: min(50vw, 700px);
-			height: min(50vw, 700px);
+			width: min(45vw, 600px);
+			height: min(45vw, 600px);
+		}
+	}
+
+	/* Thinking dots animation (moved from GameStatus) */
+	.thinking-dots {
+		display: flex;
+		gap: 3px;
+		align-items: center;
+	}
+
+	.thinking-dots span {
+		width: 4px;
+		height: 4px;
+		background-color: var(--color-primary-red);
+		border-radius: 50%;
+		animation: thinking-pulse 1.4s ease-in-out infinite both;
+	}
+
+	.thinking-dots span:nth-child(1) {
+		animation-delay: -0.32s;
+	}
+
+	.thinking-dots span:nth-child(2) {
+		animation-delay: -0.16s;
+	}
+
+	@keyframes thinking-pulse {
+		0%, 80%, 100% {
+			transform: scale(0.8);
+			opacity: 0.5;
+		}
+		40% {
+			transform: scale(1);
+			opacity: 1;
 		}
 	}
 </style>
