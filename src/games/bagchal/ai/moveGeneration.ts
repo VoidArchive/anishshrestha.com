@@ -44,7 +44,17 @@ export class MoveGenerator {
 				const neighbors = adjacency.get(i) || [];
 				for (const neighbor of neighbors) {
 					if (state.board[neighbor] === null) {
-						moves.push({ from: i, to: neighbor, moveType: 'MOVEMENT' });
+						const move: Move = { from: i, to: neighbor, moveType: 'MOVEMENT' };
+						
+						// CRITICAL FIX: In CLASSIC mode, filter out suicide movement moves
+						if (state.mode === 'CLASSIC') {
+							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(neighbor, state, adjacency);
+							if (wouldBeCaptured) {
+								continue; // Skip this move - it's a suicide move
+							}
+						}
+						
+						moves.push(move);
 					}
 				}
 			}

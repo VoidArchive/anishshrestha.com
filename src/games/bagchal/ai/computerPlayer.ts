@@ -41,31 +41,8 @@ export class ComputerPlayer {
 			// Use the engine directly instead of iterative deepening
 			const [bestMove] = this.engine.search(state, maximizing);
 			
-			// CRITICAL SAFETY CHECK: In CLASSIC mode, never allow goat suicide moves
-			if (bestMove && state.mode === 'CLASSIC' && state.turn === 'GOAT' && bestMove.moveType === 'PLACEMENT') {
-				// Double-check this move won't result in immediate capture
-				const testState = { ...state, board: [...state.board] };
-				testState.board[bestMove.to] = 'GOAT';
-				
-				// Check if any tigers can capture this goat
-				const neighbors = _adjacency.get(bestMove.to) || [];
-				for (const neighbor of neighbors) {
-					if (testState.board[neighbor] === 'TIGER') {
-						const goatNeighbors = _adjacency.get(bestMove.to) || [];
-						const possibleLandings = goatNeighbors.filter(pos => 
-							pos !== neighbor && testState.board[pos] === null
-						);
-						
-						if (possibleLandings.length > 0) {
-							// This move would be suicidal - find a safe alternative
-							console.warn('Rejected suicidal move, finding alternative...');
-							return this.findSafeAlternative(state, _adjacency);
-						}
-					}
-				}
-			}
-			
-			return bestMove;
+					// Simple fallback for edge cases
+		return bestMove || this.getEmergencyMove(state, _adjacency);
 		} catch (err) {
 			if (import.meta.env.DEV) console.error('AI move error:', err);
 			return null;
@@ -73,42 +50,29 @@ export class ComputerPlayer {
 	}
 
 	/**
-	 * Find a safe placement move when the AI tries to make a suicidal move
+	 * Emergency move fallback for edge cases
 	 */
-	private findSafeAlternative(state: GameState, adjacency: Map<number, number[]>): Move | null {
-		// Find any safe placement position
-		for (let i = 0; i < state.board.length; i++) {
-			if (state.board[i] === null) {
-				const neighbors = adjacency.get(i) || [];
-				let isSafe = true;
-				
-				for (const neighbor of neighbors) {
-					if (state.board[neighbor] === 'TIGER') {
-						const goatNeighbors = adjacency.get(i) || [];
-						const possibleLandings = goatNeighbors.filter(pos => 
-							pos !== neighbor && state.board[pos] === null
-						);
-						
-						if (possibleLandings.length > 0) {
-							isSafe = false;
-							break;
-						}
-					}
-				}
-				
-				if (isSafe) {
+	private getEmergencyMove(state: GameState, adjacency: Map<number, number[]>): Move | null {
+		if (state.phase === 'PLACEMENT') {
+			// Return first available placement
+			for (let i = 0; i < state.board.length; i++) {
+				if (state.board[i] === null) {
 					return { from: null, to: i, moveType: 'PLACEMENT' };
 				}
 			}
-		}
-		
-		// If no safe moves available, just return the first available placement
-		for (let i = 0; i < state.board.length; i++) {
-			if (state.board[i] === null) {
-				return { from: null, to: i, moveType: 'PLACEMENT' };
+		} else {
+			// Return first available movement
+			for (let i = 0; i < state.board.length; i++) {
+				if (state.board[i] === 'GOAT') {
+					const neighbors = adjacency.get(i) || [];
+					for (const neighbor of neighbors) {
+						if (state.board[neighbor] === null) {
+							return { from: i, to: neighbor, moveType: 'MOVEMENT' };
+						}
+					}
+				}
 			}
 		}
-		
 		return null;
 	}
 

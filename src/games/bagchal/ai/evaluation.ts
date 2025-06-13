@@ -7,17 +7,17 @@ import type { EvaluationWeights, StrategicPositions } from './types';
 export class PositionEvaluator {
 	// Evaluation weights - rebalanced to prevent early sacrifices and improve goat play
 	private static readonly WEIGHTS: EvaluationWeights = {
-		GOAT_CAPTURED: 300, // Increased from 200 to heavily penalize goat losses
-		TIGER_MOBILITY: 6,
-		POSITION_CONTROL: 4,
-		ENDGAME: 50000,
-		GOAT_MOBILITY: 3, // Increased to value goat mobility more
-		TIGER_TRAPPED: 150,
-		GOAT_CONNECTIVITY: 12, // Increased to promote better coordination
-		TIGER_COORDINATION: 20,
-		CENTRALIZATION: 15,
-		TEMPO: 25,
-		CAPTURE_THREAT: 40
+		GOAT_CAPTURED: 400, 
+		TIGER_MOBILITY: 8,
+		POSITION_CONTROL: 6,
+		ENDGAME: 10000,
+		GOAT_MOBILITY: 4, 
+		TIGER_TRAPPED: 200,
+		GOAT_CONNECTIVITY: 15, 
+		TIGER_COORDINATION: 25,
+		CENTRALIZATION: 20,
+		TEMPO: 30,
+		CAPTURE_THREAT: 60
 	};
 
 	// Strategic positions
@@ -47,16 +47,12 @@ export class PositionEvaluator {
 			return 0;
 		}
 
-		// CRITICAL FIX: In CLASSIC mode, immediately reject any position where goats can be captured
+		// Calculate total capture threats for graduated penalty
+		let totalCaptureThreats = 0;
 		if (state.mode === 'CLASSIC') {
-			// Check if any goat can be immediately captured by tigers
 			for (let i = 0; i < state.board.length; i++) {
 				if (state.board[i] === 'GOAT') {
-					const captureThreats = PositionEvaluator.checkImmediateCaptureThreats(i, state, adjacency);
-					if (captureThreats > 0) {
-						// Return extremely negative score for goats - this position is unacceptable
-						return -PositionEvaluator.WEIGHTS.ENDGAME * 10;
-					}
+					totalCaptureThreats += PositionEvaluator.checkImmediateCaptureThreats(i, state, adjacency);
 				}
 			}
 		}
@@ -66,6 +62,12 @@ export class PositionEvaluator {
 		// Heavily penalize captured goats, especially early in the game
 		const earlyGamePenalty = state.goatsPlaced < 15 ? 5.0 : state.goatsPlaced < 18 ? 3.0 : 1.0; // Much stronger early penalty
 		score += state.goatsCaptured * PositionEvaluator.WEIGHTS.GOAT_CAPTURED * earlyGamePenalty;
+
+		// Apply graduated threat penalty instead of catastrophic rejection
+		if (totalCaptureThreats > 0) {
+			const threatPenalty = state.phase === 'PLACEMENT' ? 200 : 150;
+			score += totalCaptureThreats * threatPenalty;
+		}
 
 		// Phase-specific evaluation
 		if (state.phase === 'PLACEMENT') {
@@ -106,11 +108,23 @@ export class PositionEvaluator {
 					score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL * 2;
 				}
 				
-				// CRITICAL: Check for immediate capture threats for this goat
-				const captureThreats = PositionEvaluator.checkImmediateCaptureThreats(i, state, adjacency);
-				if (captureThreats > 0) {
-					// Massive penalty for placing goats where they can be immediately captured
-					score += captureThreats * 500; // This will make the move very unattractive
+				// Progressive position strategy based on game progress
+				const gameProgress = state.goatsPlaced / 20.0;
+				if (gameProgress < 0.3) {
+					// Early game: prefer safe edges
+					const neighbors = adjacency.get(i) || [];
+					const tigerNeighbors = neighbors.filter(n => state.board[n] === 'TIGER').length;
+					if (tigerNeighbors === 0) score -= 50; // Reward safe positions early
+				} else if (gameProgress < 0.7) {
+					// Mid game: gradual movement toward strategic positions
+					if (PositionEvaluator.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
+						score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL * 0.5;
+					}
+				} else {
+					// Late game: aggressive center control
+					if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
+						score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL * 1.5;
+					}
 				}
 			} else if (state.board[i] === 'TIGER') {
 				if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
@@ -152,7 +166,7 @@ export class PositionEvaluator {
 				
 				tigerMobility += freeNeighbors;
 				
-				// Check for capture threats (simple version)
+				// Simple capture threat counting
 				for (const goatPos of goatNeighbors) {
 					const goatNeighbors = adjacency.get(goatPos) || [];
 					const potentialLandings = goatNeighbors.filter(n => 
@@ -177,14 +191,12 @@ export class PositionEvaluator {
 		}
 		score -= goatMobility * PositionEvaluator.WEIGHTS.GOAT_MOBILITY;
 
-		// Check if tigers are getting trapped (simple version)
-		let trappedTigers = 0;
+		// Simple tiger trap check
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'TIGER') {
 				const neighbors = adjacency.get(i) || [];
 				const freeNeighbors = neighbors.filter(n => state.board[n] === null).length;
 				if (freeNeighbors === 0) {
-					trappedTigers += 1;
 					score -= PositionEvaluator.WEIGHTS.ENDGAME; // Heavily penalize trapped tigers
 				} else if (freeNeighbors <= 1) {
 					score -= PositionEvaluator.WEIGHTS.TIGER_TRAPPED;
@@ -192,20 +204,28 @@ export class PositionEvaluator {
 			}
 		}
 
-		// Enhanced strategic position control
-		score += PositionEvaluator.evaluatePositionalControl(state);
+		// SIMPLIFIED strategic position control - no expensive helper functions
+		for (let i = 0; i < state.board.length; i++) {
+			if (PositionEvaluator.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
+				if (state.board[i] === 'TIGER') score += PositionEvaluator.WEIGHTS.POSITION_CONTROL;
+				else if (state.board[i] === 'GOAT') score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL;
+			}
+			if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
+				if (state.board[i] === 'TIGER') score += PositionEvaluator.WEIGHTS.CENTRALIZATION;
+				else if (state.board[i] === 'GOAT') score -= PositionEvaluator.WEIGHTS.CENTRALIZATION * 1.5;
+			}
+		}
 
-		// Basic goat strategy evaluation (no sacrifice encouragement)
-		score -=
-			PositionEvaluator.evaluateGoatConnectivity(state, adjacency) *
-			PositionEvaluator.WEIGHTS.GOAT_CONNECTIVITY;
-		score -= PositionEvaluator.evaluateGoatTrapFormation(state, adjacency, _points) * 1.2;
-		score -= PositionEvaluator.evaluateGoatDefensiveCoordination(state, adjacency) * 1.0;
-
-		// Tiger coordination
-		score +=
-			PositionEvaluator.evaluateTigerCoordination(state, adjacency) *
-			PositionEvaluator.WEIGHTS.TIGER_COORDINATION;
+		// SIMPLIFIED goat connectivity - just count adjacent goats
+		let goatConnectivity = 0;
+		for (let i = 0; i < state.board.length; i++) {
+			if (state.board[i] === 'GOAT') {
+				const neighbors = adjacency.get(i) || [];
+				const goatNeighbors = neighbors.filter((n) => state.board[n] === 'GOAT').length;
+				goatConnectivity += goatNeighbors;
+			}
+		}
+		score -= goatConnectivity * PositionEvaluator.WEIGHTS.GOAT_CONNECTIVITY;
 
 		// Progressive aggression only in very late game
 		const totalGoats = 20 - state.goatsCaptured;
