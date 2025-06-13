@@ -19,7 +19,7 @@
 			title="Bagchal – Nepali Strategy Game"
 			description="SvelteKit implementation of Bagchal, the traditional Tigers & Goats board game. Play against AI or friends. Includes Classic and upcoming Reforged modes."
 			tech={['SvelteKit', 'TypeScript', 'Game', 'AI']}
-			repo="https://github.com/VoidArchive/anishshrestha.com/tree/main/src/games/bagchal"
+			repo="/games/bagchal"
 		/>
 	</div>
 

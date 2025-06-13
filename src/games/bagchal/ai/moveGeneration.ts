@@ -17,7 +17,7 @@ export class MoveGenerator {
 						
 						// CRITICAL FIX: In CLASSIC mode, filter out suicide placement moves
 						if (state.mode === 'CLASSIC') {
-							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(i, state, adjacency);
+							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(i, state, adjacency, points);
 							if (wouldBeCaptured) {
 								continue; // Skip this move - it's a suicide move
 							}
@@ -27,7 +27,7 @@ export class MoveGenerator {
 					}
 				}
 			} else {
-				moves.push(...this.getGoatMoves(state, adjacency));
+				moves.push(...MoveGenerator.getGoatMoves(state, adjacency, points));
 			}
 		} else {
 			moves.push(...this.getTigerMoves(state, adjacency, points));
@@ -36,7 +36,7 @@ export class MoveGenerator {
 		return moves;
 	}
 
-	static getGoatMoves(state: GameState, adjacency: Map<number, number[]>): Move[] {
+	static getGoatMoves(state: GameState, adjacency: Map<number, number[]>, points?: Point[]): Move[] {
 		const moves: Move[] = [];
 
 		for (let i = 0; i < state.board.length; i++) {
@@ -48,7 +48,7 @@ export class MoveGenerator {
 						
 						// CRITICAL FIX: In CLASSIC mode, filter out suicide movement moves
 						if (state.mode === 'CLASSIC') {
-							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(neighbor, state, adjacency);
+							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(neighbor, state, adjacency, points);
 							if (wouldBeCaptured) {
 								continue; // Skip this move - it's a suicide move
 							}
@@ -162,10 +162,11 @@ export class MoveGenerator {
 	/**
 	 * Check if placing a goat at a position would result in immediate capture
 	 */
-	private static wouldBeImmediatelyCaptured(
+	static wouldBeImmediatelyCaptured(
 		position: number,
 		state: GameState,
-		adjacency: Map<number, number[]>
+		adjacency: Map<number, number[]>,
+		points?: Point[]
 	): boolean {
 		const neighbors = adjacency.get(position) || [];
 		
@@ -173,12 +174,15 @@ export class MoveGenerator {
 			if (state.board[neighbor] === 'TIGER') {
 				// Check if this tiger can capture the goat at 'position'
 				const goatNeighbors = adjacency.get(position) || [];
-				const possibleLandings = goatNeighbors.filter(pos => 
-					pos !== neighbor && state.board[pos] === null
-				);
 				
-				if (possibleLandings.length > 0) {
-					return true; // This goat would be immediately capturable
+				for (const landing of goatNeighbors) {
+					if (landing !== neighbor && state.board[landing] === null) {
+						// If points are provided, verify the capture line is geometrically valid
+						if (points && !this.isValidCaptureLine(neighbor, position, landing, points)) {
+							continue;
+						}
+						return true; // This goat would be immediately capturable
+					}
 				}
 			}
 		}

@@ -60,6 +60,19 @@
 			<span class="text-text-secondary">Goats Captured:</span>
 			<span class="text-primary-red font-semibold">{gameState.goatsCaptured}</span>
 		</div>
+		
+		{#if gameState.phase === 'MOVEMENT'}
+			<div class="flex items-center justify-between">
+				<span class="text-text-secondary">Moves without capture:</span>
+				<span 
+					class="font-semibold" 
+					class:text-yellow-400={gameState.movesWithoutCapture >= 40}
+					class:text-primary-red={gameState.movesWithoutCapture >= 50}
+				>
+					{gameState.movesWithoutCapture}/51
+				</span>
+			</div>
+		{/if}
 	</div>
 </div>
 

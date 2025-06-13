@@ -29,6 +29,7 @@ export interface GameState {
 	positionHistory: string[]; // Track board positions for draw detection
 	positionCounts: Map<string, number>; // Fast O(1) position counting
 	mode: GameMode; // NEW: classic or reforged
+	movesWithoutCapture: number; // Track moves in movement phase without capture for 51-move rule
 }
 
 export interface CaptureInfo {
@@ -183,9 +184,14 @@ export function getBoardPositionHash(state: GameState): string {
 	return state.board.map((piece) => piece || 'E').join('') + '_' + state.turn;
 }
 
-// Check for draw by position repetition
+// Check for draw by position repetition or 51-move rule
 export function checkForDraw(state: GameState): boolean {
 	if (state.phase !== 'MOVEMENT') return false;
+
+	// Check for 51-move rule (no captures in 51 moves during movement phase)
+	if (state.movesWithoutCapture >= 51) {
+		return true;
+	}
 
 	const currentPosition = getBoardPositionHash(state);
 	const positionCount = state.positionCounts.get(currentPosition) || 0;
@@ -248,10 +254,12 @@ export function executeMove(
 	state.message = `Moved ${movingPiece} from ${fromId} to ${toId}. Board updated.`;
 
 	// 2. Handle Capture & Check TIGER win by capture
+	let captureOccurred = false;
 	if (movingPiece === 'TIGER' && jumpedGoatId !== null) {
 		if (state.board[jumpedGoatId] === 'GOAT') {
 			state.board[jumpedGoatId] = null;
 			state.goatsCaptured++;
+			captureOccurred = true;
 			state.message = `Goat captured. Total captured: ${state.goatsCaptured}`;
 			if (state.goatsCaptured >= 5) {
 				state.message = 'Tiger wins by capturing 5 goats!';
@@ -259,6 +267,15 @@ export function executeMove(
 			}
 		} else {
 			state.message = `Attempted capture move, but ID ${jumpedGoatId} is not a GOAT.`;
+		}
+	}
+
+	// 2.5. Update move counter for 51-move rule (only during movement phase)
+	if (state.phase === 'MOVEMENT') {
+		if (captureOccurred) {
+			state.movesWithoutCapture = 0; // Reset counter on capture
+		} else {
+			state.movesWithoutCapture++; // Increment counter for non-capture moves
 		}
 	}
 
@@ -307,7 +324,11 @@ export function executeMove(
 		// Check for draw
 		if (checkForDraw(state)) {
 			state.winner = 'DRAW';
-			state.message = 'Game drawn by position repetition!';
+			if (state.movesWithoutCapture >= 51) {
+				state.message = 'Game drawn by 51-move rule (no captures in 51 moves)!';
+			} else {
+				state.message = 'Game drawn by position repetition!';
+			}
 		}
 	}
 
@@ -333,4 +354,5 @@ export function resetGame(state: GameState, points: Point[]): void {
 	state.message = '';
 	state.positionHistory = []; // Reset position history for draw detection
 	state.positionCounts = new Map(); // Reset position counts
+	state.movesWithoutCapture = 0; // Reset move counter for 51-move rule
 }

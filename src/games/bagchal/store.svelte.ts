@@ -28,7 +28,8 @@ export const gameState = $state<GameState>({
 	message: '',
 	positionHistory: [],
 	positionCounts: new Map(),
-	mode: 'CLASSIC'
+	mode: 'CLASSIC',
+	movesWithoutCapture: 0
 });
 
 // Cached tiger move calculation
