@@ -11,7 +11,21 @@ const lines = generateLines(points);
 const adjacency = buildAdjacencyMap(points, lines);
 
 function cloneState(state: GameState): GameState {
-	return JSON.parse(JSON.stringify(state));
+	// Efficient shallow cloning instead of expensive JSON methods
+	return {
+		board: [...state.board],
+		turn: state.turn,
+		phase: state.phase,
+		goatsPlaced: state.goatsPlaced,
+		goatsCaptured: state.goatsCaptured,
+		winner: state.winner,
+		selectedPieceId: state.selectedPieceId,
+		validMoves: [...state.validMoves],
+		message: state.message,
+		positionHistory: [...state.positionHistory],
+		positionCounts: new Map(state.positionCounts),
+		mode: state.mode
+	};
 }
 
 export const BagchalEngine: BaseEngine<BagchalMove, GameState> = {

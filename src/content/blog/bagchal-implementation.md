@@ -177,4 +177,4 @@ Traditional games have nuanced rules that don't map cleanly to typical game algo
 
 Graph-based board representation was the right choice over trying to hack a grid system. The adjacency map approach generalizes to other traditional board games too.
 
-You can **[play it here](/bagchal)** or check the source on GitHub.
+You can **[play it here](/games/bagchal)** or check the source on GitHub.

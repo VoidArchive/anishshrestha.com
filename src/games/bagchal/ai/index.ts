@@ -7,4 +7,3 @@ export type { Move, EvaluationWeights, StrategicPositions, TranspositionEntry } 
 
 // Re-export generic helpers so game code can import everything from one place
 export { ComputerPlayer } from './computerPlayer.js';
-export { GameEvaluator } from './gameEvaluator.js';

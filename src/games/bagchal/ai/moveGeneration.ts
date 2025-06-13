@@ -13,7 +13,17 @@ export class MoveGenerator {
 			if (state.phase === 'PLACEMENT') {
 				for (let i = 0; i < state.board.length; i++) {
 					if (state.board[i] === null) {
-						moves.push({ from: null, to: i, moveType: 'PLACEMENT' });
+						const move: Move = { from: null, to: i, moveType: 'PLACEMENT' };
+						
+						// CRITICAL FIX: In CLASSIC mode, filter out suicide placement moves
+						if (state.mode === 'CLASSIC') {
+							const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(i, state, adjacency);
+							if (wouldBeCaptured) {
+								continue; // Skip this move - it's a suicide move
+							}
+						}
+						
+						moves.push(move);
 					}
 				}
 			} else {
@@ -137,5 +147,32 @@ export class MoveGenerator {
 
 		const crossProduct = Math.abs(dx1 * dy2 - dy1 * dx2);
 		return crossProduct < 0.001;
+	}
+
+	/**
+	 * Check if placing a goat at a position would result in immediate capture
+	 */
+	private static wouldBeImmediatelyCaptured(
+		position: number,
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): boolean {
+		const neighbors = adjacency.get(position) || [];
+		
+		for (const neighbor of neighbors) {
+			if (state.board[neighbor] === 'TIGER') {
+				// Check if this tiger can capture the goat at 'position'
+				const goatNeighbors = adjacency.get(position) || [];
+				const possibleLandings = goatNeighbors.filter(pos => 
+					pos !== neighbor && state.board[pos] === null
+				);
+				
+				if (possibleLandings.length > 0) {
+					return true; // This goat would be immediately capturable
+				}
+			}
+		}
+		
+		return false;
 	}
 }
