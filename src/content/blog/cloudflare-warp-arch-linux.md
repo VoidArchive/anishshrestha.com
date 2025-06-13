@@ -14,6 +14,7 @@ Cloudflare WARP is more than just a VPN—it's a modern approach to secure, fast
 ## What is Cloudflare WARP?
 
 WARP offers several modes of operation:
+
 - **DNS-only mode**: Fast, secure DNS resolution without VPN tunneling
 - **WARP mode**: Full VPN protection through Cloudflare's network
 - **WARP + DoH**: VPN with DNS-over-HTTPS for maximum security
@@ -30,7 +31,7 @@ If you're using an AUR helper like `yay` or `paru`:
 # Using yay
 yay -S cloudflare-warp-bin
 
-# Using paru  
+# Using paru
 paru -S cloudflare-warp-bin
 
 # Manual installation
@@ -51,6 +52,7 @@ warp-cli registration new
 ```
 
 This command:
+
 - Creates a unique device identifier
 - Generates cryptographic keys for your device
 - Registers your device with Cloudflare's servers
@@ -73,11 +75,13 @@ This displays your current operating mode and available options.
 ### Available Modes
 
 #### 1. Full VPN Mode (`warp`)
+
 ```bash
 warp-cli mode -- warp
 ```
 
 **What it does:**
+
 - Routes all your traffic through Cloudflare's network
 - Encrypts all data between your device and Cloudflare
 - Changes your apparent IP address
@@ -86,11 +90,13 @@ warp-cli mode -- warp
 **When to use:** When you need full VPN protection, especially on untrusted networks.
 
 #### 2. VPN + DNS over HTTPS (`warp+doh`)
+
 ```bash
 warp-cli mode -- warp+doh
 ```
 
 **What it does:**
+
 - Combines full VPN protection with DNS-over-HTTPS
 - Encrypts both your traffic and DNS queries
 - Prevents DNS snooping and manipulation
@@ -99,11 +105,13 @@ warp-cli mode -- warp+doh
 **When to use:** Maximum security scenarios, public Wi-Fi, or regions with DNS censorship.
 
 #### 3. DNS-Only Mode (`doh`)
+
 ```bash
 warp-cli mode -- doh
 ```
 
 **What it does:**
+
 - Only routes DNS queries through Cloudflare
 - Doesn't change your IP address
 - Faster than full VPN mode
@@ -112,11 +120,13 @@ warp-cli mode -- doh
 **When to use:** When you want faster DNS resolution and privacy without VPN overhead.
 
 #### 4. Disabled (`off`)
+
 ```bash
 warp-cli mode -- off
 ```
 
 **What it does:**
+
 - Completely disables WARP
 - Returns to your system's default networking
 - Useful for troubleshooting connectivity issues
@@ -132,6 +142,7 @@ warp-cli connect
 ```
 
 This command:
+
 - Establishes connection based on your selected mode
 - Configures network routing
 - Begins protecting your traffic
@@ -143,6 +154,7 @@ warp-cli status
 ```
 
 **Example output:**
+
 ```
 Status update: Connected
 Success: 192.0.2.1
@@ -179,7 +191,7 @@ Some applications might not work well with WARP. You can exclude them:
 # Exclude specific applications
 warp-cli exclude add "application-name"
 
-# List excluded applications  
+# List excluded applications
 warp-cli exclude list
 
 # Remove exclusions
@@ -230,16 +242,19 @@ warp-cli connect
 ## Why WARP on Arch Linux?
 
 **Performance Benefits:**
+
 - Cloudflare's global network often provides faster connections than traditional VPNs
 - Argo Smart Routing optimizes paths to destinations
 - No bandwidth limitations on the free tier
 
 **Privacy Advantages:**
+
 - Prevents ISP tracking and logging
 - Encrypts traffic on untrusted networks
 - DNS queries are encrypted and not logged
 
 **Arch Linux Integration:**
+
 - Lightweight CLI tool fits Arch's philosophy
 - No heavy GUI applications required
 - Easy to script and automate
@@ -270,4 +285,4 @@ The CLI interface aligns perfectly with Arch Linux's philosophy, giving you full
 
 ---
 
-*Have questions about WARP or other networking topics? I'd love to hear about your experience in the comments!* 
+_Have questions about WARP or other networking topics? I'd love to hear about your experience in the comments!_

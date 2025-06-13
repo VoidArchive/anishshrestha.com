@@ -24,9 +24,9 @@
 				<span class="separator">/</span>
 				<span class="current">{post.title}</span>
 			</nav>
-			
+
 			<h1 class="post-title">{post.title}</h1>
-			
+
 			<div class="post-meta">
 				<time class="post-date">{formatDate(post.date)}</time>
 				<div class="post-tags">
@@ -92,7 +92,10 @@
 		font-weight: 700;
 		line-height: 1.2;
 		margin-bottom: 1.5rem;
-		font-family: system-ui, -apple-system, sans-serif;
+		font-family:
+			system-ui,
+			-apple-system,
+			sans-serif;
 	}
 
 	.post-meta {
@@ -137,10 +140,12 @@
 		margin: 2.5rem 0 1rem 0;
 		padding-bottom: 0.5rem;
 		border-bottom: 1px solid #333333;
-		font-family: var(--font-family-mono), system-ui, -apple-system, sans-serif;
+		font-family:
+			var(--font-family-mono),
+			system-ui,
+			-apple-system,
+			sans-serif;
 	}
-
-	
 
 	:global(.post-content p) {
 		margin-bottom: 1.5rem;
@@ -266,4 +271,4 @@
 			font-size: 0.8rem;
 		}
 	}
-</style> 
+</style>

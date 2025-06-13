@@ -1,0 +1,48 @@
+import type { BaseEngine } from '$core/engine/BaseEngine';
+import type { GameState } from './rules';
+import { makeInitialBoard, generatePoints, generateLines, buildAdjacencyMap } from './rules';
+import { MoveGenerator, PositionEvaluator } from '$games/bagchal/ai';
+import { executeMove } from './rules';
+import type { Move as BagchalMove } from '$games/bagchal/ai/types';
+
+// Pre-compute board description
+const points = generatePoints();
+const lines = generateLines(points);
+const adjacency = buildAdjacencyMap(points, lines);
+
+function cloneState(state: GameState): GameState {
+	return JSON.parse(JSON.stringify(state));
+}
+
+export const BagchalEngine: BaseEngine<BagchalMove, GameState> = {
+	initialState(): GameState {
+		return {
+			board: makeInitialBoard(),
+			turn: 'GOAT',
+			phase: 'PLACEMENT',
+			goatsPlaced: 0,
+			goatsCaptured: 0,
+			winner: null,
+			selectedPieceId: null,
+			validMoves: [],
+			message: '',
+			positionHistory: [],
+			positionCounts: new Map(),
+			mode: 'CLASSIC'
+		};
+	},
+
+	validMoves(state: GameState): BagchalMove[] {
+		return MoveGenerator.getValidMoves(state, adjacency, points);
+	},
+
+	applyMove(state: GameState, move: BagchalMove): GameState {
+		const newState = cloneState(state);
+		executeMove(newState, move.from ?? 0, move.to, move.jumpedGoatId ?? null, adjacency, points);
+		return newState;
+	},
+
+	evaluate(state: GameState): number {
+		return PositionEvaluator.evaluatePosition(state, adjacency, points);
+	}
+};

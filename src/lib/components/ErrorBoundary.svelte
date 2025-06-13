@@ -6,7 +6,11 @@
 		onError?: (error: Error) => void;
 	}
 
-	let { fallback = 'Something went wrong with the game.', onError, children }: Props & { children: any } = $props();
+	let {
+		fallback = 'Something went wrong with the game.',
+		onError,
+		children
+	}: Props & { children: any } = $props();
 
 	let hasError = $state(false);
 	let error: Error | null = $state(null);
@@ -16,7 +20,7 @@
 	onMount(() => {
 		// Store original error handler
 		originalErrorHandler = window.onerror;
-		
+
 		// Set up global error handler
 		window.onerror = (message, filename, lineno, colno, errorObj) => {
 			const err = errorObj || new Error(String(message));
@@ -41,11 +45,11 @@
 	function handleError(err: Error) {
 		hasError = true;
 		error = err;
-		
+
 		if (import.meta.env.DEV) {
 			console.error('ErrorBoundary caught error:', error);
 		}
-		
+
 		onError?.(error);
 	}
 
@@ -65,21 +69,17 @@
 			<div class="error-icon">⚠️</div>
 			<h2 class="error-title">Game Error</h2>
 			<p class="error-message">{fallback}</p>
-			
+
 			{#if import.meta.env.DEV && error}
 				<details class="error-details">
 					<summary>Error Details (Development)</summary>
 					<pre class="error-stack">{error.message}\n{error.stack}</pre>
 				</details>
 			{/if}
-			
+
 			<div class="error-actions">
-				<button class="error-btn primary" onclick={handleReset}>
-					Try Again
-				</button>
-				<button class="error-btn secondary" onclick={handleReload}>
-					Reload Page
-				</button>
+				<button class="error-btn primary" onclick={handleReset}> Try Again </button>
+				<button class="error-btn secondary" onclick={handleReload}> Reload Page </button>
 			</div>
 		</div>
 	</div>
@@ -210,4 +210,4 @@
 			width: 100%;
 		}
 	}
-</style> 
+</style>

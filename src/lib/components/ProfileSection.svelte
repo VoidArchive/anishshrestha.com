@@ -3,14 +3,14 @@
 </script>
 
 <section class="section-card">
-	<div class="flex justify-start mb-4">
+	<div class="mb-4 flex justify-start">
 		<img src="/bird-logo.svg" alt="Anish's Logo" width="32" height="58" class="" />
 	</div>
 	<div class="profile-name">ANISH SHRESTHA</div>
 	<div class="profile-title">
-		<Building2 size={16} class="inline text-primary-red" /> Software Engineer
+		<Building2 size={16} class="text-primary-red inline" /> Software Engineer
 	</div>
 	<div class="profile-title">
-		<MapPin size={16} class="inline text-primary-red" /> Nepal
+		<MapPin size={16} class="text-primary-red inline" /> Nepal
 	</div>
-</section> 
+</section>

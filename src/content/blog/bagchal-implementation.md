@@ -17,22 +17,22 @@ The game has two phases (placement/movement) and asymmetric rules. Svelte 5's `$
 
 ```typescript
 let gameState = $state<GameState>({
-  board: initialBoard,
-  turn: 'GOAT',
-  phase: 'PLACEMENT',
-  goatsPlaced: 0,
-  goatsCaptured: 0,
-  selectedPieceId: null,
-  positionHistory: [],
-  positionCounts: new Map()
+	board: initialBoard,
+	turn: 'GOAT',
+	phase: 'PLACEMENT',
+	goatsPlaced: 0,
+	goatsCaptured: 0,
+	selectedPieceId: null,
+	positionHistory: [],
+	positionCounts: new Map()
 });
 
 // Cached tiger move calculation
 let tigerMoveResult = $derived.by(() => {
-  if (gameState.turn === 'TIGER' && gameState.selectedPieceId !== null) {
-    return calculateValidTigerMoves(gameState, gameState.selectedPieceId, adjacency, points);
-  }
-  return { destinations: [], captures: [] };
+	if (gameState.turn === 'TIGER' && gameState.selectedPieceId !== null) {
+		return calculateValidTigerMoves(gameState, gameState.selectedPieceId, adjacency, points);
+	}
+	return { destinations: [], captures: [] };
 });
 ```
 
@@ -50,7 +50,7 @@ export function generateLines(points: Point[], size: number = 5): Line[] {
       // Horizontal/vertical always connect
       const right = getPoint(x + 1, y);
       if (right) lines.push({...});
-      
+
       // Diagonals only on intersection points
       if ((x + y) % 2 === 0) {
         const diag1 = getPoint(x + 1, y + 1);
@@ -79,25 +79,29 @@ The AI uses minimax with alpha-beta pruning, but the evaluation function is wher
 
 ```typescript
 export class PositionEvaluator {
-  private static readonly WEIGHTS = {
-    GOAT_CAPTURED: 200,
-    TIGER_MOBILITY: 6,
-    GOAT_CONNECTIVITY: 8,
-    TIGER_COORDINATION: 20,
-    CAPTURE_THREAT: 40,
-  };
+	private static readonly WEIGHTS = {
+		GOAT_CAPTURED: 200,
+		TIGER_MOBILITY: 6,
+		GOAT_CONNECTIVITY: 8,
+		TIGER_COORDINATION: 20,
+		CAPTURE_THREAT: 40
+	};
 
-  static evaluatePosition(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
-    let score = state.goatsCaptured * this.WEIGHTS.GOAT_CAPTURED;
-    
-    if (state.phase === 'PLACEMENT') {
-      score += this.evaluatePlacementPhase(state, adjacency, points);
-    } else {
-      score += this.evaluateMovementPhase(state, adjacency, points);
-    }
-    
-    return score;
-  }
+	static evaluatePosition(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
+		let score = state.goatsCaptured * this.WEIGHTS.GOAT_CAPTURED;
+
+		if (state.phase === 'PLACEMENT') {
+			score += this.evaluatePlacementPhase(state, adjacency, points);
+		} else {
+			score += this.evaluateMovementPhase(state, adjacency, points);
+		}
+
+		return score;
+	}
 }
 ```
 
@@ -129,7 +133,7 @@ Originally had a 1138-line monolithic AI file. Refactored into focused modules:
 
 - `computerPlayer.ts` - Main interface with difficulty levels
 - `gameEvaluator.ts` - Minimax search with caching
-- `evaluation.ts` - Position evaluation heuristics  
+- `evaluation.ts` - Position evaluation heuristics
 - `moveGeneration.ts` - Valid move calculation
 - `moveOrdering.ts` - Move prioritization for better pruning
 
@@ -137,15 +141,22 @@ Each module handles one concern. The computer player just orchestrates:
 
 ```typescript
 export class ComputerPlayer {
-  constructor(difficulty: 'easy' | 'medium' | 'hard' = 'medium') {
-    const depths = { easy: 3, medium: 5, hard: 7 };
-    this.evaluator = new GameEvaluator(depths[difficulty]);
-  }
+	constructor(difficulty: 'easy' | 'medium' | 'hard' = 'medium') {
+		const depths = { easy: 3, medium: 5, hard: 7 };
+		this.evaluator = new GameEvaluator(depths[difficulty]);
+	}
 
-  getBestMove(state: GameState, adjacency: Map<number, number[]>, points: Point[]): Move | null {
-    return this.evaluator.minimax(state, this.maxDepth, -Infinity, Infinity, 
-                                  state.turn === 'TIGER', adjacency, points)[1];
-  }
+	getBestMove(state: GameState, adjacency: Map<number, number[]>, points: Point[]): Move | null {
+		return this.evaluator.minimax(
+			state,
+			this.maxDepth,
+			-Infinity,
+			Infinity,
+			state.turn === 'TIGER',
+			adjacency,
+			points
+		)[1];
+	}
 }
 ```
 
@@ -166,4 +177,4 @@ Traditional games have nuanced rules that don't map cleanly to typical game algo
 
 Graph-based board representation was the right choice over trying to hack a grid system. The adjacency map approach generalizes to other traditional board games too.
 
-You can **[play it here](/bagchal)** or check the source on GitHub. 
+You can **[play it here](/bagchal)** or check the source on GitHub.

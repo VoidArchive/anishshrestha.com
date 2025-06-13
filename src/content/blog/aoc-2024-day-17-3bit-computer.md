@@ -7,14 +7,15 @@ published: true
 tags: ['adventofcode', 'quine', 'go']
 ---
 
-# Advent of Code 2024 — Day 17 
+# Advent of Code 2024 — Day 17
+
 ## The 3-Bit Computer: A Feynman Explanation
 
-> *If you can't explain it to a six-year-old, you probably haven't bribed them with enough cookies.* — (Totally) Richard Feynman
+> _If you can't explain it to a six-year-old, you probably haven't bribed them with enough cookies._ — (Totally) Richard Feynman
 
-Welcome to Day 17 of Advent of Code 2024, where Santa decided that a normal CPU was too *mainstream* and instead handed us a glorified toaster with three registers. In this post we'll:
+Welcome to Day 17 of Advent of Code 2024, where Santa decided that a normal CPU was too _mainstream_ and instead handed us a glorified toaster with three registers. In this post we'll:
 
-1. Build that 3-bit computer in Go 
+1. Build that 3-bit computer in Go
 2. Make it do back-flips (a.k.a execute instructions)
 3. Coerce it into printing its **own source code** — the programming equivalent of taking a selfie in the bathroom mirror.
 
@@ -40,10 +41,10 @@ type Computer struct {
 
 Think of it like this:
 
-* **A, B, C** – three breakfast cereal boxes you shove numbers into.
-* **program** – a TODO list written on the fridge.
-* **ip** – the magnet pointing at the current line on that list.
-* **output** – the notes you stick on Twitter afterwards.
+- **A, B, C** – three breakfast cereal boxes you shove numbers into.
+- **program** – a TODO list written on the fridge.
+- **ip** – the magnet pointing at the current line on that list.
+- **output** – the notes you stick on Twitter afterwards.
 
 ---
 
@@ -59,16 +60,16 @@ Each instruction is a pair: `[opcode, operand]`. There are only eight opcodes (0
     </svg>
 </summary>
 
-| Opcode | Mnemonic | What It Does |
-| ------ | -------- | ------------ |
-| 0 | adv | Divide A by 2^operand (a.k.a A >>= operand) |
-| 1 | bxl | B = B XOR operand |
-| 2 | bst | B = value(operand) & 0b111 (keep 3 bits) |
-| 3 | jnz | If A ≠ 0 jump to operand |
-| 4 | bxc | B = B XOR C (operand ignored, sorry operand) |
-| 5 | out | Push value(operand) & 0b111 to output |
-| 6 | bdv | Same as opcode 0 but for B |
-| 7 | cdv | Same again but for C |
+| Opcode | Mnemonic | What It Does                                 |
+| ------ | -------- | -------------------------------------------- |
+| 0      | adv      | Divide A by 2^operand (a.k.a A >>= operand)  |
+| 1      | bxl      | B = B XOR operand                            |
+| 2      | bst      | B = value(operand) & 0b111 (keep 3 bits)     |
+| 3      | jnz      | If A ≠ 0 jump to operand                     |
+| 4      | bxc      | B = B XOR C (operand ignored, sorry operand) |
+| 5      | out      | Push value(operand) & 0b111 to output        |
+| 6      | bdv      | Same as opcode 0 but for B                   |
+| 7      | cdv      | Same again but for C                         |
 
 </details>
 
@@ -163,11 +164,11 @@ Repeat until either the program ends or the ancient prophecy triggers.
 
 ## Part 2: The **Quine** Quest 🪞
 
-A *quine* is a program that prints itself. Basically, narcissism as code. The puzzle asks: *What starting value for register A makes our 3-bit diva recite its own opcodes?*
+A _quine_ is a program that prints itself. Basically, narcissism as code. The puzzle asks: _What starting value for register A makes our 3-bit diva recite its own opcodes?_
 
 ### The Backwards Brainstorm
 
-Key observation: every lap through the loop chops **A**'s *last three bits* off (thanks to that division by 8). Those three bits *also* influence what gets printed. So the output is generated from right to left, one 3-bit chunk at a time. Solution: work in reverse.
+Key observation: every lap through the loop chops **A**'s _last three bits_ off (thanks to that division by 8). Those three bits _also_ influence what gets printed. So the output is generated from right to left, one 3-bit chunk at a time. Solution: work in reverse.
 
 ```go
 type candidate int // (for semantic smugness)
@@ -198,7 +199,7 @@ func findQuineValue(program []int) int {
 }
 ```
 
-The algorithm is basically: *grow a number from right to left while gate-checking at each step*. Kinda like Wordle but for binary and with less rage-quitting.
+The algorithm is basically: _grow a number from right to left while gate-checking at each step_. Kinda like Wordle but for binary and with less rage-quitting.
 
 ---
 
@@ -216,11 +217,11 @@ After a few iterations you'll find the holy grail value for **A**. Spoiler: it's
 
 ## TL;DR
 
-* 3-bit computer = tiny, adorable, and disturbingly capable of self-reflection.
-* Eight opcodes is plenty when you're clever (or sadistic).
-* Working **backwards** with bit-chunks avoids the brutish search space.
-* Every quine is a mirror. Try not to stare too long, or you'll start seeing Segmentation Faults.
+- 3-bit computer = tiny, adorable, and disturbingly capable of self-reflection.
+- Eight opcodes is plenty when you're clever (or sadistic).
+- Working **backwards** with bit-chunks avoids the brutish search space.
+- Every quine is a mirror. Try not to stare too long, or you'll start seeing Segmentation Faults.
 
 ---
 
-*PS: All mistakes are my compiler's fault.* 
+_PS: All mistakes are my compiler's fault._

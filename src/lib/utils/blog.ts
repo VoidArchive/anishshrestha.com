@@ -23,13 +23,16 @@ interface BlogModule {
  * Get all blog posts from the content directory
  */
 export async function getBlogPosts(): Promise<BlogPost[]> {
-	const modules = import.meta.glob('../../content/blog/*.md') as Record<string, () => Promise<BlogModule>>;
+	const modules = import.meta.glob('../../content/blog/*.md') as Record<
+		string,
+		() => Promise<BlogModule>
+	>;
 	const posts: BlogPost[] = [];
 
 	for (const path in modules) {
 		const mod = await modules[path]();
 		const slug = path.split('/').pop()?.replace('.md', '') || '';
-		
+
 		if (mod?.metadata?.published) {
 			posts.push({
 				slug,
@@ -53,9 +56,12 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 	try {
 		// Use relative import with proper path
-		const modules = import.meta.glob('../../content/blog/*.md') as Record<string, () => Promise<BlogModule>>;
+		const modules = import.meta.glob('../../content/blog/*.md') as Record<
+			string,
+			() => Promise<BlogModule>
+		>;
 		const postPath = `../../content/blog/${slug}.md`;
-		
+
 		if (modules[postPath]) {
 			const post = await modules[postPath]();
 			return {
@@ -64,7 +70,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 				content: post.default
 			};
 		}
-		
+
 		return null;
 	} catch (error) {
 		console.error(`Error loading blog post ${slug}:`, error);
@@ -82,4 +88,4 @@ export function formatDate(dateString: string): string {
 		month: 'long',
 		day: 'numeric'
 	});
-} 
+}

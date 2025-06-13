@@ -11,13 +11,12 @@ interface SitemapPage {
 export async function GET() {
 	const posts = await getBlogPosts();
 	const baseUrl = 'https://anishshrestha.com';
-	
+
 	const staticPages: SitemapPage[] = [
 		{ url: '', priority: '1.0', changefreq: 'weekly' },
 		{ url: '/projects', priority: '0.9', changefreq: 'monthly' },
 		{ url: '/blog', priority: '0.8', changefreq: 'weekly' },
-		{ url: '/resume', priority: '0.7', changefreq: 'monthly' },
-		{ url: '/bagchal', priority: '0.6', changefreq: 'monthly' }
+		{ url: '/games', priority: '0.6', changefreq: 'monthly' }
 	];
 
 	const blogPosts: SitemapPage[] = posts.map((post: BlogPost) => ({
@@ -31,13 +30,17 @@ export async function GET() {
 
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages.map(page => `
+${allPages
+	.map(
+		(page) => `
 	<url>
 		<loc>${baseUrl}${page.url}</loc>
 		<priority>${page.priority}</priority>
 		<changefreq>${page.changefreq}</changefreq>
 		${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ''}
-	</url>`).join('')}
+	</url>`
+	)
+	.join('')}
 </urlset>`;
 
 	return new Response(sitemap, {
@@ -46,4 +49,4 @@ ${allPages.map(page => `
 			'Cache-Control': 'max-age=3600'
 		}
 	});
-} 
+}

@@ -12,23 +12,33 @@
 
 <section class="section-card">
 	<h2 class="section-title">
-		<Rss size={20} class="inline text-primary-red" /> Latest Posts
+		<Rss size={20} class="text-primary-red inline" /> Latest Posts
 	</h2>
 	<div class="flex flex-col gap-6">
 		{#if posts.length > 0}
 			{#each posts as post}
-				<a href="/blog/{post.slug}" class="block bg-bg-primary border border-border p-4 transition-all duration-300 hover:border-primary-red no-underline">
+				<a
+					href="/blog/{post.slug}"
+					class="bg-bg-primary border-border hover:border-primary-red block border p-4 no-underline transition-all duration-300"
+				>
 					<article>
 						<div class="mb-2">
-							<time class="text-text-secondary text-xs font-mono">{formatDate(post.date)}</time>
+							<time class="text-text-secondary font-mono text-xs">{formatDate(post.date)}</time>
 						</div>
 						<h3 class="mb-2">
-							<span class="text-text-primary text-base font-semibold transition-colors duration-300 hover:text-primary-red">{post.title}</span>
+							<span
+								class="text-text-primary hover:text-primary-red text-base font-semibold transition-colors duration-300"
+								>{post.title}</span
+							>
 						</h3>
-						<p class="text-text-secondary text-sm leading-relaxed mb-3 line-clamp-2">{post.description}</p>
-						<div class="flex gap-1 flex-wrap">
+						<p class="text-text-secondary mb-3 line-clamp-2 text-sm leading-relaxed">
+							{post.description}
+						</p>
+						<div class="flex flex-wrap gap-1">
 							{#each post.tags.slice(0, 3) as tag}
-								<span class="bg-bg-secondary text-white text-xs px-1.5 py-0.5 border border-border">{tag}</span>
+								<span class="bg-bg-secondary border-border border px-1.5 py-0.5 text-xs text-white"
+									>{tag}</span
+								>
 							{/each}
 						</div>
 					</article>
@@ -41,10 +51,7 @@
 		{/if}
 	</div>
 
-	<a
-		href="/blog"
-		class="btn flex items-center gap-1 w-max mt-4 ml-auto"
-	>
+	<a href="/blog" class="btn mt-4 ml-auto flex w-max items-center gap-1">
 		<span>View all posts</span>
 		<ArrowRight size={14} />
 	</a>
@@ -58,4 +65,4 @@
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
-</style> 
+</style>

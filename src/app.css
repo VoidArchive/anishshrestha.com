@@ -1,6 +1,5 @@
 /* Import Fira Code font */
 
-
 /* Import Gruvbox Dark theme for code highlighting */
 @import 'prism-themes/themes/prism-gruvbox-dark.css';
 
@@ -14,13 +13,13 @@
 	--color-text-secondary: #b3b3b3;
 	--color-primary-red: #c92a2a;
 	--color-border: #333333;
-	
+
 	--font-family-mono: 'Fira Code', monospace;
 }
 
 /* Base body styles */
 body {
-	@apply bg-bg-primary text-text-primary font-mono leading-relaxed min-h-screen;
+	@apply bg-bg-primary text-text-primary min-h-screen font-mono leading-relaxed;
 }
 
 /* Global link styles */
@@ -38,7 +37,7 @@ ul {
 }
 
 li {
-	@apply mb-2 text-text-secondary transition-all duration-300;
+	@apply text-text-secondary mb-2 transition-all duration-300;
 }
 
 /* Custom scrollbar */
@@ -60,21 +59,21 @@ li {
 
 /* Base card styles */
 .section-card {
-	@apply bg-bg-secondary border border-border p-6 mb-6 relative overflow-hidden transition-all duration-300 shadow-lg;
+	@apply bg-bg-secondary border-border relative mb-6 overflow-hidden border p-6 shadow-lg transition-all duration-300;
 }
 
 .section-card:hover {
-	@apply -translate-y-0.5 border-primary-red;
+	@apply border-primary-red -translate-y-0.5;
 	box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
 }
 
 .section-title {
-	@apply text-primary-red text-xl font-semibold mb-4 pb-2 border-b border-border relative;
+	@apply text-text-primary border-border relative mb-4 border-b pb-2 text-xl font-semibold;
 }
 
 .section-title::after {
 	content: '';
-	@apply absolute -bottom-px left-0 h-px bg-primary-red transition-all duration-300 w-0;
+	@apply bg-primary-red absolute -bottom-px left-0 h-px w-0 transition-all duration-300;
 }
 
 .section-card:hover .section-title::after {
@@ -83,16 +82,16 @@ li {
 
 /* Container and layout */
 .container {
-	@apply max-w-6xl mx-auto px-4;
+	@apply mx-auto max-w-6xl px-4;
 }
 
 .main-grid {
-	@apply grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 mt-8 opacity-100;
+	@apply mt-8 grid grid-cols-1 gap-8 opacity-100 lg:grid-cols-[1fr_2fr];
 }
 
 /* Button styles */
 .btn {
-	@apply bg-transparent border border-border text-text-primary px-4 py-2 font-mono text-sm cursor-pointer transition-all duration-300 relative overflow-hidden;
+	@apply border-border text-text-primary relative cursor-pointer overflow-hidden border bg-transparent px-4 py-2 font-mono text-sm transition-all duration-300;
 	outline: none; /* Remove focus outline */
 }
 
@@ -102,7 +101,7 @@ li {
 
 .btn::before {
 	content: '';
-	@apply absolute top-0 -left-full w-full h-full transition-all duration-500;
+	@apply absolute top-0 -left-full h-full w-full transition-all duration-500;
 	background: linear-gradient(90deg, transparent, rgba(201, 42, 42, 0.1), transparent);
 }
 
@@ -116,7 +115,7 @@ li {
 
 /* Placeholder boxes */
 .placeholder-box {
-	@apply bg-bg-primary border border-border h-32 mb-4 flex items-center justify-center text-text-secondary text-sm transition-all duration-300 relative;
+	@apply bg-bg-primary border-border text-text-secondary relative mb-4 flex h-32 items-center justify-center border text-sm transition-all duration-300;
 }
 
 .placeholder-box:hover {
@@ -126,20 +125,19 @@ li {
 
 /* Profile section styles */
 .profile-name {
-	@apply text-2xl font-bold text-text-primary mb-1 tracking-wide;
+	@apply text-text-primary mb-1 text-2xl font-bold tracking-wide;
 }
 
 .profile-title {
-	@apply text-text-primary text-base mb-1;
+	@apply text-text-primary mb-1 text-base;
 }
-
 
 /* Focus and selection styles */
 button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-	@apply outline-2 outline-primary-red outline-offset-2;
+	@apply outline-primary-red outline-2 outline-offset-2;
 }
 
 /* Remove focus outlines for game buttons */
@@ -192,10 +190,9 @@ select:focus {
 
 /* Markdown content tweaks */
 
-
-
 /* Bold / strong text */
-strong, b {
+strong,
+b {
 	color: var(--color-primary-red);
 	font-weight: 700;
 }
@@ -219,13 +216,13 @@ ol li::marker {
 
 /* Blockquotes */
 blockquote {
-	@apply border-l-4 border-primary-red pl-4 italic text-text-secondary my-6;
+	@apply border-primary-red text-text-secondary my-6 border-l-4 pl-4 italic;
 	display: block;
 }
 
 /* Details / summary */
 details summary {
-	@apply cursor-pointer inline-flex items-center gap-2 text-text-secondary hover:text-primary-red transition-colors duration-300 list-none;
+	@apply text-text-secondary hover:text-primary-red inline-flex cursor-pointer list-none items-center gap-2 transition-colors duration-300;
 }
 
 details summary::-webkit-details-marker {
@@ -234,11 +231,12 @@ details summary::-webkit-details-marker {
 
 /* Table styling */
 table {
-	@apply w-full border border-border my-6 text-left;
+	@apply border-border my-6 w-full border text-left;
 }
 
-th, td {
-	@apply px-4 py-2 border-b border-border;
+th,
+td {
+	@apply border-border border-b px-4 py-2;
 }
 
 th {
