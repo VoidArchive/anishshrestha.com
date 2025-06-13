@@ -137,7 +137,7 @@
 		margin: 2.5rem 0 1rem 0;
 		padding-bottom: 0.5rem;
 		border-bottom: 1px solid #333333;
-		font-family: system-ui, -apple-system, sans-serif;
+		font-family: var(--font-family-mono), system-ui, -apple-system, sans-serif;
 	}
 
 	

@@ -1,6 +1,6 @@
 import type { GameState, Point } from '../bagchal';
-import type { Move, EvaluationWeights, StrategicPositions } from './types';
-import { checkIfTigersAreTrapped, getBoardPositionHash, checkForDraw } from '../bagchal';
+import type { EvaluationWeights, StrategicPositions } from './types';
+import { checkIfTigersAreTrapped } from '../bagchal';
 import { MoveGenerator } from './moveGeneration';
 
 /**
@@ -19,7 +19,7 @@ export class PositionEvaluator {
 		TIGER_COORDINATION: 20,
 		CENTRALIZATION: 15,
 		TEMPO: 25,
-		CAPTURE_THREAT: 40,
+		CAPTURE_THREAT: 40
 	};
 
 	// Strategic positions
@@ -33,13 +33,17 @@ export class PositionEvaluator {
 	 * Evaluates the current position and returns a score
 	 * Positive scores favor tigers, negative scores favor goats
 	 */
-	static evaluatePosition(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	static evaluatePosition(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		// Check for terminal states first
 		if (state.winner === 'TIGER') {
-			return this.WEIGHTS.ENDGAME;
+			return PositionEvaluator.WEIGHTS.ENDGAME;
 		}
 		if (state.winner === 'GOAT') {
-			return -this.WEIGHTS.ENDGAME;
+			return -PositionEvaluator.WEIGHTS.ENDGAME;
 		}
 		if (state.winner === 'DRAW') {
 			return 0;
@@ -48,13 +52,13 @@ export class PositionEvaluator {
 		let score = 0;
 
 		// Base score from captured goats
-		score += state.goatsCaptured * this.WEIGHTS.GOAT_CAPTURED;
+		score += state.goatsCaptured * PositionEvaluator.WEIGHTS.GOAT_CAPTURED;
 
 		// Phase-specific evaluation
 		if (state.phase === 'PLACEMENT') {
-			score += this.evaluatePlacementPhase(state, adjacency, points);
+			score += PositionEvaluator.evaluatePlacementPhase(state, adjacency, points);
 		} else {
-			score += this.evaluateMovementPhase(state, adjacency, points);
+			score += PositionEvaluator.evaluateMovementPhase(state, adjacency, points);
 		}
 
 		return score;
@@ -63,33 +67,39 @@ export class PositionEvaluator {
 	/**
 	 * Evaluation specific to placement phase
 	 */
-	private static evaluatePlacementPhase(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static evaluatePlacementPhase(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		let score = 0;
 
 		// Tiger mobility during placement
 		const tigerMoves = MoveGenerator.getTigerMoves(state, adjacency, points);
-		score += tigerMoves.length * this.WEIGHTS.TIGER_MOBILITY;
+		score += tigerMoves.length * PositionEvaluator.WEIGHTS.TIGER_MOBILITY;
 
 		// Strategic position control
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'GOAT') {
-				if (this.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
-					score -= this.WEIGHTS.POSITION_CONTROL * 1.5;
+				if (PositionEvaluator.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
+					score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL * 1.5;
 				}
-				if (this.POSITIONS.CENTER_POSITIONS.has(i)) {
-					score -= this.WEIGHTS.POSITION_CONTROL * 2;
+				if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
+					score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL * 2;
 				}
 			} else if (state.board[i] === 'TIGER') {
-				if (this.POSITIONS.CENTER_POSITIONS.has(i)) {
-					score += this.WEIGHTS.POSITION_CONTROL * 1.5;
+				if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
+					score += PositionEvaluator.WEIGHTS.POSITION_CONTROL * 1.5;
 				}
 			}
 		}
 
 		// Enhanced goat strategy evaluation
-		score -= this.evaluateGoatConnectivity(state, adjacency) * this.WEIGHTS.GOAT_CONNECTIVITY;
-		score -= this.evaluateGoatTrapFormation(state, adjacency, points) * 0.8;
-		score -= this.evaluateGoatDefensiveCoordination(state, adjacency) * 0.6;
+		score -=
+			PositionEvaluator.evaluateGoatConnectivity(state, adjacency) *
+			PositionEvaluator.WEIGHTS.GOAT_CONNECTIVITY;
+		score -= PositionEvaluator.evaluateGoatTrapFormation(state, adjacency, points) * 0.8;
+		score -= PositionEvaluator.evaluateGoatDefensiveCoordination(state, adjacency) * 0.6;
 
 		// Progress penalty for tigers
 		const goatProgress = state.goatsPlaced / 20.0;
@@ -101,58 +111,67 @@ export class PositionEvaluator {
 	/**
 	 * Evaluation specific to movement phase
 	 */
-	private static evaluateMovementPhase(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static evaluateMovementPhase(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		let score = 0;
 
 		// Tiger moves analysis
 		const tigerMoves = MoveGenerator.getTigerMoves(state, adjacency, points);
-		const captureMoves = tigerMoves.filter(m => m.moveType === 'CAPTURE');
-		
+		const captureMoves = tigerMoves.filter((m) => m.moveType === 'CAPTURE');
+
 		// Tiger mobility (but heavily favor captures)
-		score += (tigerMoves.length - captureMoves.length) * this.WEIGHTS.TIGER_MOBILITY;
-		score += captureMoves.length * this.WEIGHTS.CAPTURE_THREAT;
+		score += (tigerMoves.length - captureMoves.length) * PositionEvaluator.WEIGHTS.TIGER_MOBILITY;
+		score += captureMoves.length * PositionEvaluator.WEIGHTS.CAPTURE_THREAT;
 
 		// Goat mobility (fewer goat moves is better for tigers)
 		const goatMoves = MoveGenerator.getGoatMoves(state, adjacency);
-		score -= goatMoves.length * this.WEIGHTS.GOAT_MOBILITY;
+		score -= goatMoves.length * PositionEvaluator.WEIGHTS.GOAT_MOBILITY;
 
 		// Check if tigers are getting trapped
 		if (checkIfTigersAreTrapped(state, adjacency, points)) {
-			score -= this.WEIGHTS.ENDGAME;
+			score -= PositionEvaluator.WEIGHTS.ENDGAME;
 		}
 
 		// Individual tiger trap evaluation
-		const trapCount = this.countTrappedTigers(state, adjacency, points);
-		score -= trapCount * this.WEIGHTS.TIGER_TRAPPED;
+		const trapCount = PositionEvaluator.countTrappedTigers(state, adjacency, points);
+		score -= trapCount * PositionEvaluator.WEIGHTS.TIGER_TRAPPED;
 
 		// Enhanced strategic position control
-		score += this.evaluatePositionalControl(state);
+		score += PositionEvaluator.evaluatePositionalControl(state);
 
 		// Sophisticated goat strategy evaluation
-		score -= this.evaluateGoatConnectivity(state, adjacency) * this.WEIGHTS.GOAT_CONNECTIVITY;
-		score -= this.evaluateGoatTrapFormation(state, adjacency, points) * 1.2;
-		score -= this.evaluateGoatDefensiveCoordination(state, adjacency) * 1.0;
-		score -= this.evaluateGoatSacrificeStrategy(state, adjacency, points) * 0.5;
+		score -=
+			PositionEvaluator.evaluateGoatConnectivity(state, adjacency) *
+			PositionEvaluator.WEIGHTS.GOAT_CONNECTIVITY;
+		score -= PositionEvaluator.evaluateGoatTrapFormation(state, adjacency, points) * 1.2;
+		score -= PositionEvaluator.evaluateGoatDefensiveCoordination(state, adjacency) * 1.0;
+		score -= PositionEvaluator.evaluateGoatSacrificeStrategy(state, adjacency, points) * 0.5;
 
 		// Tiger coordination
-		score += this.evaluateTigerCoordination(state, adjacency) * this.WEIGHTS.TIGER_COORDINATION;
+		score +=
+			PositionEvaluator.evaluateTigerCoordination(state, adjacency) *
+			PositionEvaluator.WEIGHTS.TIGER_COORDINATION;
 
 		// Progressive aggression
 		const totalGoats = 20 - state.goatsCaptured;
-		
+
+		// Late game: maximum aggression
 		if (totalGoats <= 12) {
 			// Late game: maximum aggression
-			score += captureMoves.length * this.WEIGHTS.TEMPO;
-			
+			score += captureMoves.length * PositionEvaluator.WEIGHTS.TEMPO;
+
 			if (captureMoves.length >= 2) {
 				score += 50 * captureMoves.length;
 			}
 		}
-		
+
 		// Endgame: extreme aggression
 		if (totalGoats <= 8) {
 			score += captureMoves.length * 100;
-			
+
 			if (captureMoves.length === 0 && tigerMoves.length > 0) {
 				score -= 30;
 			}
@@ -166,141 +185,167 @@ export class PositionEvaluator {
 	 */
 	private static evaluatePositionalControl(state: GameState): number {
 		let score = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
-			if (this.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
+			if (PositionEvaluator.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
 				if (state.board[i] === 'TIGER') {
-					score += this.WEIGHTS.POSITION_CONTROL;
+					score += PositionEvaluator.WEIGHTS.POSITION_CONTROL;
 				} else if (state.board[i] === 'GOAT') {
-					score -= this.WEIGHTS.POSITION_CONTROL;
+					score -= PositionEvaluator.WEIGHTS.POSITION_CONTROL;
 				}
 			}
-			
-			if (this.POSITIONS.CENTER_POSITIONS.has(i)) {
+
+			if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(i)) {
 				if (state.board[i] === 'TIGER') {
-					score += this.WEIGHTS.CENTRALIZATION;
+					score += PositionEvaluator.WEIGHTS.CENTRALIZATION;
 				} else if (state.board[i] === 'GOAT') {
-					score -= this.WEIGHTS.CENTRALIZATION * 1.5;
+					score -= PositionEvaluator.WEIGHTS.CENTRALIZATION * 1.5;
 				}
 			}
 		}
-		
+
 		return score;
 	}
 
 	/**
 	 * Evaluate goat connectivity
 	 */
-	private static evaluateGoatConnectivity(state: GameState, adjacency: Map<number, number[]>): number {
+	private static evaluateGoatConnectivity(
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		let connectivity = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'GOAT') {
 				const neighbors = adjacency.get(i) || [];
-				const goatNeighbors = neighbors.filter(n => state.board[n] === 'GOAT').length;
+				const goatNeighbors = neighbors.filter((n) => state.board[n] === 'GOAT').length;
 				connectivity += goatNeighbors;
 			}
 		}
-		
+
 		return connectivity;
 	}
 
 	/**
 	 * Advanced goat trap formation analysis
 	 */
-	private static evaluateGoatTrapFormation(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static evaluateGoatTrapFormation(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		let trapScore = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'TIGER') {
 				const tigerMoves = MoveGenerator.getTigerMovesForPosition(i, state, adjacency, points);
 				const tigerMobility = tigerMoves.length;
-				
+
 				if (tigerMobility <= 2) {
 					trapScore += 100;
 				} else if (tigerMobility <= 4) {
 					trapScore += 50;
 				}
-				
-				const blockingPositions = this.getBlockingPositions(i, state, adjacency);
+
+				const blockingPositions = PositionEvaluator.getBlockingPositions(i, state, adjacency);
 				trapScore += blockingPositions * 25;
 			}
 		}
-		
+
 		return trapScore;
 	}
 
 	/**
 	 * Evaluate defensive coordination
 	 */
-	private static evaluateGoatDefensiveCoordination(state: GameState, adjacency: Map<number, number[]>): number {
+	private static evaluateGoatDefensiveCoordination(
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		let coordinationScore = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'GOAT') {
-				const defensiveValue = this.calculateDefensiveValue(i, state, adjacency);
+				const defensiveValue = PositionEvaluator.calculateDefensiveValue(i, state, adjacency);
 				coordinationScore += defensiveValue;
-				
-				if (this.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
-					const protectionValue = this.calculateProtectionValue(i, state, adjacency);
+
+				if (PositionEvaluator.POSITIONS.STRATEGIC_POSITIONS.has(i)) {
+					const protectionValue = PositionEvaluator.calculateProtectionValue(i, state, adjacency);
 					coordinationScore += protectionValue * 2;
 				}
 			}
 		}
-		
+
 		return coordinationScore;
 	}
 
 	/**
 	 * Evaluate sacrifice opportunities
 	 */
-	private static evaluateGoatSacrificeStrategy(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static evaluateGoatSacrificeStrategy(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		let sacrificeScore = 0;
-		
-		const goatCount = state.board.filter(piece => piece === 'GOAT').length;
+
+		const goatCount = state.board.filter((piece) => piece === 'GOAT').length;
 		if (goatCount <= 12) return 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'GOAT') {
-				const potentialTrapValue = this.calculatePostCaptureAdvantage(i, state, adjacency, points);
+				const potentialTrapValue = PositionEvaluator.calculatePostCaptureAdvantage(
+					i,
+					state,
+					adjacency,
+					points
+				);
 				if (potentialTrapValue > 100) {
 					sacrificeScore += potentialTrapValue * 0.3;
 				}
 			}
 		}
-		
+
 		return sacrificeScore;
 	}
 
 	/**
 	 * Evaluate tiger coordination
 	 */
-	private static evaluateTigerCoordination(state: GameState, adjacency: Map<number, number[]>): number {
+	private static evaluateTigerCoordination(
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		let coordination = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'TIGER') {
 				const neighbors = adjacency.get(i) || [];
-				
+
 				for (const neighbor of neighbors) {
 					if (state.board[neighbor] === 'GOAT') {
 						const goatNeighbors = adjacency.get(neighbor) || [];
-						const supportingTigers = goatNeighbors.filter(n => 
-							n !== i && state.board[n] === 'TIGER'
+						const supportingTigers = goatNeighbors.filter(
+							(n) => n !== i && state.board[n] === 'TIGER'
 						).length;
 						coordination += supportingTigers;
 					}
 				}
 			}
 		}
-		
+
 		return coordination;
 	}
 
 	/**
 	 * Count trapped tigers
 	 */
-	private static countTrappedTigers(state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static countTrappedTigers(
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		let trappedCount = 0;
 
 		for (let i = 0; i < state.board.length; i++) {
@@ -316,67 +361,96 @@ export class PositionEvaluator {
 	}
 
 	// Helper methods
-	private static getBlockingPositions(tigerPos: number, state: GameState, adjacency: Map<number, number[]>): number {
+	private static getBlockingPositions(
+		tigerPos: number,
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		const neighbors = adjacency.get(tigerPos) || [];
-		return neighbors.filter(n => state.board[n] === 'GOAT').length;
+		return neighbors.filter((n) => state.board[n] === 'GOAT').length;
 	}
 
-	private static calculateDefensiveValue(goatPos: number, state: GameState, adjacency: Map<number, number[]>): number {
+	private static calculateDefensiveValue(
+		goatPos: number,
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		const neighbors = adjacency.get(goatPos) || [];
 		let defensiveValue = 0;
-		
+
 		for (const neighbor of neighbors) {
 			if (state.board[neighbor] === 'TIGER') {
 				defensiveValue += 15;
 			} else if (state.board[neighbor] === null) {
 				const secondLevelNeighbors = adjacency.get(neighbor) || [];
-				const nearbyTigers = secondLevelNeighbors.filter(pos => state.board[pos] === 'TIGER').length;
+				const nearbyTigers = secondLevelNeighbors.filter(
+					(pos) => state.board[pos] === 'TIGER'
+				).length;
 				defensiveValue += nearbyTigers * 5;
 			}
 		}
-		
+
 		return defensiveValue;
 	}
 
-	private static calculateProtectionValue(pos: number, state: GameState, adjacency: Map<number, number[]>): number {
+	private static calculateProtectionValue(
+		pos: number,
+		state: GameState,
+		adjacency: Map<number, number[]>
+	): number {
 		const neighbors = adjacency.get(pos) || [];
 		let protectionValue = 0;
-		
-		const supportingGoats = neighbors.filter(n => state.board[n] === 'GOAT').length;
+
+		const supportingGoats = neighbors.filter((n) => state.board[n] === 'GOAT').length;
 		protectionValue += supportingGoats * 8;
-		
-		if (this.POSITIONS.CENTER_POSITIONS.has(pos)) {
+
+		if (PositionEvaluator.POSITIONS.CENTER_POSITIONS.has(pos)) {
 			protectionValue += 20;
 		}
-		
+
 		return protectionValue;
 	}
 
-	private static calculatePostCaptureAdvantage(goatPos: number, state: GameState, adjacency: Map<number, number[]>, points: Point[]): number {
+	private static calculatePostCaptureAdvantage(
+		goatPos: number,
+		state: GameState,
+		adjacency: Map<number, number[]>,
+		points: Point[]
+	): number {
 		const testState = {
 			...state,
 			board: [...state.board],
 			goatsCaptured: state.goatsCaptured + 1
 		};
 		testState.board[goatPos] = null;
-		
+
 		let advantageScore = 0;
-		
+
 		for (let i = 0; i < state.board.length; i++) {
 			if (state.board[i] === 'TIGER') {
-				const originalMobility = MoveGenerator.getTigerMovesForPosition(i, state, adjacency, points).length;
-				const newMobility = MoveGenerator.getTigerMovesForPosition(i, testState, adjacency, points).length;
-				
+				const originalMobility = MoveGenerator.getTigerMovesForPosition(
+					i,
+					state,
+					adjacency,
+					points
+				).length;
+				const newMobility = MoveGenerator.getTigerMovesForPosition(
+					i,
+					testState,
+					adjacency,
+					points
+				).length;
+
 				if (newMobility < originalMobility) {
 					advantageScore += (originalMobility - newMobility) * 30;
 				}
-				
+
 				if (newMobility === 0) {
 					advantageScore += 200;
 				}
 			}
 		}
-		
+
 		return advantageScore;
 	}
-} 
+}

@@ -142,6 +142,13 @@
 	
 	let aiAnimationPath = $derived(getAiAnimationPath());
 	
+	// Handle keyboard events for accessibility
+	function handleKeyDown(event: KeyboardEvent, id: number) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			handlePointClick(id);
+		}
+	}
 
 </script>
 
@@ -233,7 +240,6 @@
 				{/if}
 				
 				<!-- Tiger piece icon -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<image
 					href="/icons/tiger.svg"
 					width="7%"
@@ -246,6 +252,7 @@
 					role="button"
 					aria-label={`Tiger at position ${id}`}
 					onclick={() => handlePointClick(id)}
+					onkeydown={(e) => handleKeyDown(e, id)}
 				/>
 			</g>
 		{:else if piece === 'GOAT'}
@@ -271,7 +278,6 @@
 				{/if}
 				
 				<!-- Goat piece icon -->
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<image
 					href="/icons/goat.svg"
 					width="7%"
@@ -284,6 +290,7 @@
 					role="button"
 					aria-label={`Goat at position ${id}`}
 					onclick={() => handlePointClick(id)}
+					onkeydown={(e) => handleKeyDown(e, id)}
 				/>
 			</g>
 		{:else}
@@ -310,6 +317,7 @@
 						role="button"
 						tabindex="0"
 						onclick={() => handlePointClick(id)}
+						onkeydown={(e) => handleKeyDown(e, id)}
 					/>
 					<!-- Larger invisible clickable area -->
 					<circle
@@ -319,6 +327,10 @@
 						fill="transparent"
 						class="cursor-pointer"
 						onclick={() => handlePointClick(id)}
+						onkeydown={(e) => handleKeyDown(e, id)}
+						tabindex="0"
+						role="button"
+						aria-label={`Click area for position ${id}`}
 					/>
 				{:else}
 					<!-- Regular empty point using theme's secondary black -->
@@ -334,6 +346,7 @@
 						role="button"
 						tabindex="0"
 						onclick={() => handlePointClick(id)}
+						onkeydown={(e) => handleKeyDown(e, id)}
 					/>
 				{/if}
 			</g>
@@ -382,7 +395,7 @@
 
 <style>
 	/* Remove focus outline from clickable game pieces */
-	text[role="button"]:focus,
+	image[role="button"]:focus,
 	circle[role="button"]:focus {
 		outline: none;
 	}
