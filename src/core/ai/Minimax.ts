@@ -13,7 +13,6 @@ export interface MinimaxOptions {
   tableSize?: number;
   /**
    * A stable hashing function for game states. If omitted, JSON.stringify is used.
-   * Provide your own to improve performance and avoid collisions.
    */
   stateHash?<S>(state: S): string;
 }

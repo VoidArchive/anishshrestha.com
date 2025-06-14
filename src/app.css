@@ -10,7 +10,7 @@
 @theme {
 	--color-bg-primary: #1e1e1e;
 	--color-bg-secondary: #212121;
-	--color-text-primary: #f8f8f8;
+	--color-text-primary: #b3b3b3;
 	--color-text-secondary: #b3b3b3;
 	--color-primary-red: #c92a2a;
 	--color-border: #333333;
@@ -21,6 +21,13 @@
 /* Base body styles */
 body {
 	@apply bg-bg-primary text-text-primary min-h-screen font-mono leading-relaxed;
+	font-size: 14px;
+}
+
+@media (min-width: 768px) {
+	body {
+		font-size: 16px;
+	}
 }
 
 /* Global link styles */
@@ -56,7 +63,8 @@ ul {
 
 /* Base card styles */
 .section-card {
-	@apply bg-bg-secondary border-border relative mb-4 overflow-hidden border p-4 shadow-lg transition-all duration-300 sm:mb-6 sm:p-6;
+	@apply bg-bg-secondary border-border relative mb-3 overflow-hidden border p-3 shadow-lg transition-all duration-300 sm:mb-4 sm:p-4 md:mb-6 md:p-6;
+	
 }
 
 .section-card:hover {
@@ -65,7 +73,7 @@ ul {
 }
 
 .section-title {
-	@apply text-text-primary border-border relative mb-4 border-b pb-2 text-xl font-semibold;
+	@apply text-text-primary border-border relative mb-3 border-b pb-2 text-lg font-semibold md:mb-4 md:text-xl;
 }
 
 .section-title::after {
@@ -79,11 +87,11 @@ ul {
 
 /* Container and layout */
 .container {
-	@apply mx-auto max-w-6xl px-4;
+	@apply mx-auto max-w-6xl px-4 md:px-6 lg:px-8;
 }
 
 .main-grid {
-	@apply mt-8 grid grid-cols-1 gap-8 opacity-100 lg:grid-cols-[1fr_2fr];
+	@apply mt-4 grid grid-cols-1 gap-4 opacity-100 md:mt-8 md:gap-8 lg:grid-cols-[1fr_2fr];
 }
 
 /* Button styles */
@@ -122,11 +130,11 @@ ul {
 
 /* Profile section styles */
 .profile-name {
-	@apply text-text-primary mb-1 text-2xl font-bold tracking-wide;
+	@apply text-text-primary mb-1 text-xl font-bold tracking-wide md:text-2xl;
 }
 
 .profile-title {
-	@apply text-text-primary mb-1 text-base;
+	@apply text-text-primary mb-1 text-sm md:text-base;
 }
 
 /* Focus and selection styles */

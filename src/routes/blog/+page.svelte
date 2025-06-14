@@ -25,9 +25,9 @@
 
 <main class="container">
 	<div class="mx-auto max-w-4xl py-8">
-		<header class="mb-12 border-b pb-8 text-center" style="border-color: var(--color-border);">
-			<h1 class="mb-4 text-4xl lg:text-4xl" style="color: var(--color-primary-red);">Blog</h1>
-			<p class="text-lg" style="color: var(--color-text-secondary);">
+		<header class="mb-8 border-b pb-4 text-center md:mb-12 md:pb-8" style="border-color: var(--color-border);">
+			<h1 class="mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl" style="color: var(--color-primary-red);">Blog</h1>
+			<p class="text-base md:text-lg" style="color: var(--color-text-secondary);">
 				Technical deep-dives and thoughts on software engineering
 			</p>
 		</header>
@@ -76,17 +76,21 @@
 		color: inherit;
 		background-color: var(--color-bg-secondary);
 		border: 1px solid var(--color-border);
-		padding: 1.25rem;
-		box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);
+		padding: 1rem;
 		transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-		/* Removed translateZ - we will no longer force GPU */
 		will-change: box-shadow, border-color;
 		position: relative;
 	}
 
+	@media (min-width: 768px) {
+		.blog-card {
+			padding: 1.25rem;
+		}
+	}
+
 	.blog-card:hover {
 		border-color: var(--color-primary-red);
-		box-shadow: 0 0 0 0 rgba(0,0,0,0);
+		box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);
 	}
 
 	.blog-content {
@@ -129,12 +133,18 @@
 	}
 
 	.blog-title-text {
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		font-weight: 600;
 		color: var(--color-text-primary);
 		margin: 0 0 0.5rem 0;
 		line-height: 1.3;
 		transition: color 0.3s ease;
+	}
+
+	@media (min-width: 768px) {
+		.blog-title-text {
+			font-size: 1.5rem;
+		}
 	}
 
 	.blog-description {
@@ -143,6 +153,4 @@
 		line-height: 1.5;
 		font-size: 0.95rem;
 	}
-
-	/* Removed decorative pseudo-element and title color change to avoid layout/antialiasing shifts */
 </style>

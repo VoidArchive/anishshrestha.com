@@ -38,7 +38,7 @@
 	</h2>
 	<div class="space-y-4">
 		<p class="text-text-primary leading-relaxed">
-			Software engineer in Kathmandu. I write Go & Python.
+			Hi, I am Anish. I am a backend engineer from Kathmandu.
 		</p>
 		<p class="text-text-primary leading-relaxed">
 			Currently building production services at Global Square, turning specifications into scalable

@@ -4,18 +4,18 @@
 
 <section class="section-card">
 	<h2 class="section-title flex items-center gap-2">
-		<Code size={20} class="inline" /> Tech Stack
+		<Code size={20} class="inline text-primary-red" /> Tech Stack
 	</h2>
 
 	<div class="space-y-4">
 		<div>
-			<h3 class="text-primary-red mb-2 text-sm font-semibold">Backend</h3>
+			<h3 class="text-primary mb-2 text-sm font-semibold">Backend</h3>
 			<div class="space-y-1">
 				<div
 					class="hover:border-primary-red hover:text-text-primary flex items-center border-b border-transparent py-1 transition-all duration-300"
 				>
 					<span class="flex items-center gap-2">
-						<Zap size={16} class="text-primary-red" />
+						<Code size={16} class="text-primary-red" />
 						Go
 					</span>
 				</div>
@@ -23,7 +23,7 @@
 					class="hover:border-primary-red hover:text-text-primary flex items-center border-b border-transparent py-1 transition-all duration-300"
 				>
 					<span class="flex items-center gap-2">
-						<Code size={16} class="text-primary-red" />
+						<Zap size={16} class="text-primary-red" />
 						Python
 					</span>
 				</div>
@@ -39,7 +39,7 @@
 		</div>
 
 		<div>
-			<h3 class="text-primary-red mb-2 text-sm font-semibold">Frontend</h3>
+			<h3 class="text-primary mb-2 text-sm font-semibold">Frontend</h3>
 			<div class="space-y-1">
 				<div
 					class="hover:border-primary-red hover:text-text-primary flex items-center border-b border-transparent py-1 transition-all duration-300"

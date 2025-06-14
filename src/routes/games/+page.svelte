@@ -22,9 +22,9 @@
 
 <main class="container">
 	<div class="mx-auto max-w-4xl py-8">
-		<header class="border-border mb-12 border-b pb-8 text-center">
-			<h1 class="text-primary-red mb-4 text-4xl lg:text-4xl">Games</h1>
-			<p class="text-text-secondary text-lg">Relax, play & experiment with my small web games.</p>
+		<header class="border-border mb-8 border-b pb-4 text-center md:mb-12 md:pb-8">
+			<h1 class="text-primary-red mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl">Games</h1>
+			<p class="text-text-secondary text-base md:text-lg">Relax, play & experiment with my small web games.</p>
 		</header>
 
 		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

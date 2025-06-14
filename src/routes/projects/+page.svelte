@@ -74,9 +74,9 @@
 </svelte:head>
 
 <main class="container">
-	<header class="border-border mb-12 border-b p-8 text-center">
-		<h1 class="text-primary-red mb-4 text-4xl lg:text-4xl">Projects</h1>
-		<p class="text-text-secondary text-lg">
+	<header class="border-border mb-8 border-b p-4 text-center md:mb-12 md:p-8">
+		<h1 class="text-primary-red mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl">Projects</h1>
+		<p class="text-text-secondary text-base md:text-lg">
 			A curated selection of things I've hacked together recently.
 		</p>
 	</header>

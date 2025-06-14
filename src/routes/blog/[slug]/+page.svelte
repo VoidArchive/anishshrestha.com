@@ -143,7 +143,8 @@
 	}
 
 	.post-content :global(p) {
-		margin-bottom: 1.5rem;
+		margin-bottom: 1.8rem;
+		font-family: var(--font-family-sans);
 		color: var(--color-text-secondary);
 	}
 

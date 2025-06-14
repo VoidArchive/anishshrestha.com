@@ -11,52 +11,54 @@ const lines = generateLines(points);
 const adjacency = buildAdjacencyMap(points, lines);
 
 function cloneState(state: GameState): GameState {
-	// Efficient shallow cloning instead of expensive JSON methods
-	return {
-		board: [...state.board],
-		turn: state.turn,
-		phase: state.phase,
-		goatsPlaced: state.goatsPlaced,
-		goatsCaptured: state.goatsCaptured,
-		winner: state.winner,
-		selectedPieceId: state.selectedPieceId,
-		validMoves: [...state.validMoves],
-		message: state.message,
-		positionHistory: [...state.positionHistory],
-		positionCounts: new Map(state.positionCounts),
-		mode: state.mode
-	};
+  // Efficient shallow cloning instead of expensive JSON methods
+  return {
+    board: [...state.board],
+    turn: state.turn,
+    phase: state.phase,
+    goatsPlaced: state.goatsPlaced,
+    goatsCaptured: state.goatsCaptured,
+    winner: state.winner,
+    selectedPieceId: state.selectedPieceId,
+    validMoves: [...state.validMoves],
+    message: state.message,
+    positionHistory: [...state.positionHistory],
+    positionCounts: new Map(state.positionCounts),
+    movesWithoutCapture: state.movesWithoutCapture,
+    mode: state.mode
+  };
 }
 
 export const BagchalEngine: BaseEngine<BagchalMove, GameState> = {
-	initialState(): GameState {
-		return {
-			board: makeInitialBoard(),
-			turn: 'GOAT',
-			phase: 'PLACEMENT',
-			goatsPlaced: 0,
-			goatsCaptured: 0,
-			winner: null,
-			selectedPieceId: null,
-			validMoves: [],
-			message: '',
-			positionHistory: [],
-			positionCounts: new Map(),
-			mode: 'CLASSIC'
-		};
-	},
+  initialState(): GameState {
+    return {
+      board: makeInitialBoard(),
+      turn: 'GOAT',
+      phase: 'PLACEMENT',
+      goatsPlaced: 0,
+      goatsCaptured: 0,
+      winner: null,
+      selectedPieceId: null,
+      validMoves: [],
+      message: '',
+      positionHistory: [],
+      positionCounts: new Map(),
+      movesWithoutCapture: 0,
+      mode: 'CLASSIC'
+    };
+  },
 
-	validMoves(state: GameState): BagchalMove[] {
-		return MoveGenerator.getValidMoves(state, adjacency, points);
-	},
+  validMoves(state: GameState): BagchalMove[] {
+    return MoveGenerator.getValidMoves(state, adjacency, points);
+  },
 
-	applyMove(state: GameState, move: BagchalMove): GameState {
-		const newState = cloneState(state);
-		executeMove(newState, move.from ?? 0, move.to, move.jumpedGoatId ?? null, adjacency, points);
-		return newState;
-	},
+  applyMove(state: GameState, move: BagchalMove): GameState {
+    const newState = cloneState(state);
+    executeMove(newState, move.from ?? 0, move.to, move.jumpedGoatId ?? null, adjacency, points);
+    return newState;
+  },
 
-	evaluate(state: GameState): number {
-		return PositionEvaluator.evaluatePosition(state, adjacency, points);
-	}
+  evaluate(state: GameState): number {
+    return PositionEvaluator.evaluatePosition(state, adjacency, points);
+  }
 };

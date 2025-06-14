@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	import { onNavigate, afterNavigate } from '$app/navigation';
+	import { onNavigate } from '$app/navigation';
 	import Header from '$lib/components/Header.svelte';
-	import { addCopyButtons } from '$lib/utils/copyCode';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
 
@@ -16,14 +16,6 @@
 				await navigation.complete;
 			});
 		});
-	});
-
-	// Add copy buttons to all code blocks after navigation
-	afterNavigate(() => {
-		// Wait for the DOM to be fully ready, especially for MDsvex content
-		setTimeout(() => {
-			addCopyButtons();
-		}, 200);
 	});
 </script>
 
@@ -103,3 +95,5 @@
 <Header />
 
 {@render children()}
+
+<Footer />

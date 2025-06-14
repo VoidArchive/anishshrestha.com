@@ -3,20 +3,20 @@ import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const config = {
-	preprocess: [
-		vitePreprocess(),
-		mdsvex({
-			extensions: ['.md']
-		})
-	],
-	kit: {
-		adapter: adapter(),
-		alias: {
-			$core: 'src/core',
-			$games: 'src/games'
-		}
-	},
-	extensions: ['.svelte', '.svx', '.md']
+  preprocess: [
+    vitePreprocess(),
+    mdsvex({
+      extensions: ['.md']
+    })
+  ],
+  kit: {
+    adapter: adapter(),
+    alias: {
+      $core: 'src/core',
+      $games: 'src/games'
+    }
+  },
+  extensions: ['.svelte', '.svx', '.md']
 };
 
 export default config;
