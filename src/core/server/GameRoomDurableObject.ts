@@ -131,7 +131,10 @@ export class GameRoomDurableObject extends DurableObject {
 
     try {
       const webSocketPair = new WebSocketPair();
-      const [client, server] = Object.values(webSocketPair);
+      const [client, server] = Object.values(webSocketPair) as [WebSocket, WebSocket];
+
+      // Accept immediately to complete the WebSocket handshake before returning
+      (server as any).accept();
 
       // Handle the connection asynchronously but don't await it
       this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
@@ -148,8 +151,7 @@ export class GameRoomDurableObject extends DurableObject {
 
   private async handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
     try {
-      // Accept the WebSocket connection first
-      (webSocket as any).accept();
+      // Socket already accepted in handleWebSocketUpgrade
       this.sessions.set(webSocket, playerId);
 
       // Set up event listeners immediately after accepting
