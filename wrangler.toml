@@ -6,16 +6,17 @@ assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
 
 # D1 Database for multiplayer game persistence
 [[d1_databases]]
-binding = "DB"
-database_name = "bagchal-reforged"
-database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
+  binding = "DB"
+  database_name = "bagchal-reforged"
+  database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
+  migrations_dir = "./database"
 
-# Durable Objects for real-time game state management (disabled for now)
-# [[durable_objects.bindings]]
-# name = "GAME_ROOMS"
-# class_name = "GameRoomDurableObject"
+# Durable Objects for real-time game state management
+[[durable_objects]]
+  name = "GAME_ROOMS"
+  class_name = "GameRoomDurableObject"
 
-# Durable Objects migrations (disabled for now)
-# [[migrations]]
-# tag = "v1"
-# new_sqlite_classes = [ "GameRoomDurableObject" ]
+# Durable Objects migrations
+[[migrations]]
+  tag = "v1"
+  new_classes = [ "GameRoomDurableObject" ]
