@@ -213,6 +213,14 @@ export class GameRoomDurableObject extends DurableObject {
           
           this.gameState.message = 'Both players connected! Goats place first.';
           console.log(`Guest player ${playerId} joined with role ${guestRole}`);
+          
+          // Broadcast updated state to all players when guest joins
+          this.broadcast({
+            type: 'GAME_STATE',
+            timestamp: Date.now(),
+            playerId: 'system',
+            gameState: this.gameState
+          });
         } else {
           // Spectator joins
           this.gameState.players[playerId] = {
@@ -296,8 +304,14 @@ export class GameRoomDurableObject extends DurableObject {
       return;
     }
 
+    console.log(`🎮 Processing move from player ${message.playerId}`);
+    console.log(`🎯 Current turn: ${this.gameState.turn}, Current player: ${this.gameState.currentPlayerId}`);
+    console.log(`🎭 Player role: ${this.gameState.players[message.playerId]?.role}`);
+    console.log(`📋 Move:`, message.move);
+
     // Validate it's the player's turn and move legality using shared rules
     if (this.gameState.currentPlayerId !== message.playerId) {
+      console.log(`❌ Turn validation failed: expected ${this.gameState.currentPlayerId}, got ${message.playerId}`);
       this.sendError(message.playerId, 'Not your turn');
       return;
     }
