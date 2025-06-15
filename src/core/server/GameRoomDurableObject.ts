@@ -174,17 +174,20 @@ export class GameRoomDurableObject extends DurableObject {
         }
       }
 
+      // If still no in-memory state, bootstrap a new one using DB player name if available
       if (!this.gameState) {
-        this.initializeGameState(roomCode, playerId);
+        const hostName = (await this.fetchPlayerName(playerId)) ?? 'Host Player';
+        this.initializeGameState(roomCode, playerId, hostName);
       }
 
-      // If new player not registered yet, assign role
+      // If new player not registered yet, assign role – use DB name when possible
       if (this.gameState && !this.gameState.players[playerId]) {
+        const joinedName = (await this.fetchPlayerName(playerId)) ?? 'Guest Player';
         if (!this.gameState.guestPlayerId) {
           this.gameState.guestPlayerId = playerId;
           this.gameState.players[playerId] = {
             id: playerId,
-            name: 'Guest Player',
+            name: joinedName,
             role: 'TIGER',
             connected: true,
             lastSeen: Date.now()
@@ -194,7 +197,7 @@ export class GameRoomDurableObject extends DurableObject {
           // Spectator joins
           this.gameState.players[playerId] = {
             id: playerId,
-            name: 'Spectator',
+            name: joinedName,
             role: 'SPECTATOR' as any,
             connected: true,
             lastSeen: Date.now()
@@ -284,9 +287,13 @@ export class GameRoomDurableObject extends DurableObject {
 
     const ackId: string | undefined = message.ackId;
     try {
-      const move: GameMove = message.move;
-      const newGameState = JSON.parse(JSON.stringify(this.gameState)); // Deep clone
+      // Use structuredClone so that Map & Date objects are preserved
+      // (Cloudflare workers runtime supports structuredClone)
+      const newGameState: MultiplayerGameState = (globalThis as any).structuredClone
+        ? (structuredClone(this.gameState) as MultiplayerGameState)
+        : JSON.parse(JSON.stringify(this.gameState));
 
+      const move: GameMove = message.move;
       if (move.moveType === 'PLACEMENT') {
         // Validate placement
         if (newGameState.phase !== 'PLACEMENT' || newGameState.turn !== 'GOAT') {
@@ -363,7 +370,7 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private initializeGameState(roomCode: string, hostPlayerId: string) {
+  private initializeGameState(roomCode: string, hostPlayerId: string, hostName: string) {
     // Create initial Reforged game state
     this.gameState = {
       // Base game state
@@ -385,7 +392,6 @@ export class GameRoomDurableObject extends DurableObject {
       positionCounts: new Map(),
       mode: 'REFORGED',
       movesWithoutCapture: 0,
-      
       // Multiplayer specific
       roomId: this.roomId,
       roomCode,
@@ -398,13 +404,13 @@ export class GameRoomDurableObject extends DurableObject {
       players: {
         [hostPlayerId]: {
           id: hostPlayerId,
-          name: 'Host Player',
+          name: hostName,
           role: 'GOAT',
           connected: true,
           lastSeen: Date.now()
         }
       }
-    };
+    } as MultiplayerGameState;
   }
 
   private generateRoomCode(): string {
@@ -541,5 +547,22 @@ export class GameRoomDurableObject extends DurableObject {
         }
       }
     });
+  }
+
+  // -------------------------------------------------------------------------
+  // Helper: fetch player name from the Players table (best-effort)
+  // -------------------------------------------------------------------------
+  private async fetchPlayerName(playerId: string): Promise<string | undefined> {
+    try {
+      if (!this.db) return undefined;
+      const row = (await this.db
+        .prepare('SELECT name FROM players WHERE id = ?1' as string)
+        .bind(playerId)
+        .first()) as { name?: string } | undefined;
+      return row?.name;
+    } catch (err) {
+      console.error('Failed to fetch player name', err);
+      return undefined;
+    }
   }
 } 
