@@ -24,3 +24,16 @@ assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
 
 # Local dev environment stub for adapter-cloudflare
 [env.dev]
+
+[env.production]
+  main = ".svelte-kit/cloudflare/_worker.js"
+  [env.production.d1_databases]
+    binding = "DB"
+    database_name = "bagchal-reforged"
+    database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
+    migrations_dir = "./database"
+  [env.production.durable_objects]
+    bindings = [ { name = "GAME_ROOMS", class_name = "GameRoomDurableObject" } ]
+  [[env.production.migrations]]
+    tag = "v1"
+    new_sqlite_classes = [ "GameRoomDurableObject" ]
