@@ -15,6 +15,12 @@ export interface MinimaxOptions {
    * A stable hashing function for game states. If omitted, JSON.stringify is used.
    */
   stateHash?<S>(state: S): string;
+  /**
+   * Optional move ordering function to improve alpha-beta pruning.
+   * Receives the list of legal moves for a node and should return them in the
+   * desired visiting order.
+   */
+  orderMoves?: (moves: unknown[], state: unknown, maximizing: boolean) => unknown[];
 }
 
 interface TTEntry {
@@ -39,6 +45,7 @@ export class Minimax<M = unknown, S = unknown> {
   private readonly tableSize: number;
   private readonly tt = new Map<string, TTEntry>();
   private readonly hashFn: (state: S) => string;
+  private readonly orderMovesFn?: (moves: M[], state: S, maximizing: boolean) => M[];
 
   constructor(
     private readonly engine: BaseEngine<M, S>,
@@ -48,6 +55,9 @@ export class Minimax<M = unknown, S = unknown> {
     this.useTT = options.useTranspositionTable ?? true;
     this.tableSize = options.tableSize ?? 30_000;
     this.hashFn = options.stateHash ?? ((state) => JSON.stringify(state));
+    if (options.orderMoves) {
+      this.orderMovesFn = options.orderMoves as (moves: M[], state: S, maximizing: boolean) => M[];
+    }
   }
 
   /** Clear the transposition table (useful between games). */
@@ -92,7 +102,8 @@ export class Minimax<M = unknown, S = unknown> {
       }
     }
 
-    const moves = this.engine.validMoves(state);
+    const movesRaw = this.engine.validMoves(state);
+    const moves = this.orderMovesFn ? this.orderMovesFn(movesRaw as M[], state, maximising) : movesRaw;
     if (moves.length === 0) {
       // No legal moves — usually a loss or draw. Let evaluation function decide.
       return [this.staticEval(state), null];

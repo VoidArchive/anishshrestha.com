@@ -1,6 +1,7 @@
 import type { GameState, Point } from '$games/bagchal/rules';
 import type { Move } from './types';
 import { MoveGenerator } from './moveGeneration.js';
+import { PositionEvaluator } from './evaluation.js';
 
 /**
  * Simplified move ordering to improve alpha-beta pruning efficiency for Bagchal.
@@ -12,7 +13,7 @@ export class MoveOrderer {
   private static readonly CROSS_POSITIONS = new Set([6, 8, 16, 18]);
 
   /**
-   * Orders moves for optimal alpha-beta pruning with safety-first approach
+   * Orders moves for optimal alpha-beta pruning with tactical sacrifice awareness
    */
   static orderMoves(
     moves: Move[],
@@ -39,30 +40,35 @@ export class MoveOrderer {
   private static calculateTigerMoveScore(move: Move): number {
     let score = 0;
 
-    // MASSIVELY prioritize captures - this is how tigers win
+    // Rule #1: Captures are everything - tigers win by capturing 5 goats
     if (move.moveType === 'CAPTURE') {
-      score += 5000; // Increased from 2000 to 5000
+      score += 10000; // Massively prioritize any capture
 
-      // Extra bonus for captures that lead to more captures
-      if (this.CENTER_POSITIONS.has(move.to)) score += 500;
-      if (this.STRATEGIC_POSITIONS.has(move.to)) score += 300;
+      // Bonus for capturing from strong positions (sets up more captures)
+      if (this.CENTER_POSITIONS.has(move.to)) score += 1000;
+      if (this.STRATEGIC_POSITIONS.has(move.to)) score += 500;
+
+      return score; // Don't dilute capture priority with other bonuses
     }
 
-    // Strategic positioning for creating threats
+    // Rule #2: Create capture threats (key to tiger strategy)
     if (move.moveType === 'MOVEMENT') {
-      // Much higher rewards for aggressive positioning
-      if (this.CENTER_POSITIONS.has(move.to)) score += 600; // Doubled
-      if (this.STRATEGIC_POSITIONS.has(move.to)) score += 400; // Almost tripled
-      if (this.CROSS_POSITIONS.has(move.to)) score += 250; // More than doubled
+      // Center control creates maximum threats
+      if (this.CENTER_POSITIONS.has(move.to)) score += 800;
+      
+      // Strategic positions (corners + edge midpoints) are strong
+      if (this.STRATEGIC_POSITIONS.has(move.to)) score += 400;
+      
+      // Cross positions provide good mobility
+      if (this.CROSS_POSITIONS.has(move.to)) score += 200;
 
-      // Bonus for moving away from corners (corners are passive)
-      if (move.from !== null) {
-        const isFromCorner = [0, 4, 20, 24].includes(move.from);
-        if (isFromCorner) score += 200; // Big bonus for leaving corners
+      // Mild bonus for leaving passive corner positions (reduced to avoid early mass exodus)
+      if (move.from !== null && [0, 4, 20, 24].includes(move.from)) {
+        score += 50;
       }
 
-      // Basic movement bonus
-      score += 100; // Doubled from 50
+      // Base movement value
+      score += 100;
     }
 
     return score;
@@ -77,23 +83,23 @@ export class MoveOrderer {
   ): number {
     let score = 0;
 
-    // SAFETY FIRST: In CLASSIC mode, heavily penalize suicide moves
+    // UPDATED: Use tactical sacrifice evaluation instead of blanket safety penalty
     if (state.mode === 'CLASSIC' && state.turn === 'GOAT') {
-      // Create a test state to check if this move would be suicidal
+      // Create a test state to check if this move would be capturable
       const testState = { ...state, board: [...state.board] };
 
       if (move.moveType === 'PLACEMENT') {
         testState.board[move.to] = 'GOAT';
         // Check if this placement would be immediately capturable
         if (MoveGenerator.wouldBeImmediatelyCaptured(move.to, testState, adjacency, points)) {
-          score -= 10000; // Massive penalty - move to end of list
+          score -= 8000; // Heavy penalty for capturable moves
         }
       } else if (move.moveType === 'MOVEMENT' && move.from !== null) {
         testState.board[move.from] = null;
         testState.board[move.to] = 'GOAT';
         // Check if this movement would be immediately capturable
         if (MoveGenerator.wouldBeImmediatelyCaptured(move.to, testState, adjacency, points)) {
-          score -= 10000; // Massive penalty - move to end of list
+          score -= 8000; // Heavy penalty for capturable moves
         }
       }
     }

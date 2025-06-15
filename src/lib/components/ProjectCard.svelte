@@ -13,7 +13,7 @@
 		{title}
 	</h2>
 
-	<p class="text-text-secondary mb-4">{description}</p>
+	<p class="text-text-muted mb-4">{description}</p>
 
 	{#if tech.length}
 		<div class="mb-4 flex flex-wrap gap-2">

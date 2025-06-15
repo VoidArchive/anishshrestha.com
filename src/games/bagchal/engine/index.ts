@@ -54,7 +54,33 @@ export const BagchalEngine: BaseEngine<BagchalMove, GameState> = {
 
   applyMove(state: GameState, move: BagchalMove): GameState {
     const newState = cloneState(state);
-    executeMove(newState, move.from ?? 0, move.to, move.jumpedGoatId ?? null, adjacency, points);
+
+    // Handle goat placement separately – executeMove is only for movements/captures
+    if (move.moveType === 'PLACEMENT') {
+      // Place goat on the board
+      newState.board[move.to] = 'GOAT';
+      newState.goatsPlaced++;
+
+      // Transition to movement phase when all goats are placed
+      if (newState.goatsPlaced >= 20) {
+        newState.phase = 'MOVEMENT';
+      }
+
+      // Swap turn to tigers after a successful placement
+      newState.turn = 'TIGER';
+
+      return newState;
+    }
+
+    // For MOVEMENT and CAPTURE use the existing rule helper
+    executeMove(
+      newState,
+      move.from ?? 0,
+      move.to,
+      move.jumpedGoatId ?? null,
+      adjacency,
+      points
+    );
     return newState;
   },
 

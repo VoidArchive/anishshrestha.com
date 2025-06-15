@@ -49,27 +49,25 @@
 			} else {
 				// Player lost - rate based on how well they fought
 				if (playerSide === 'GOAT') {
-					// Goats lost, so tigers captured 5. Rate based on game length
 					if (totalMoves >= 50) {
-						performance = 'Good'; // Put up a long fight
+						performance = 'Good';
 					} else if (totalMoves >= 30) {
-						performance = 'Fair'; // Decent resistance
+						performance = 'Fair';
 					} else {
-						performance = 'Bad'; // Quick defeat
+						performance = 'Bad';
 					}
 				} else {
-					// Tigers lost (goats trapped them) - rate based on captures made
 					if (gameState.goatsCaptured >= 3) {
-						performance = 'Good'; // Got close to winning
+						performance = 'Good';
 					} else if (gameState.goatsCaptured >= 1) {
-						performance = 'Fair'; // Made some progress
+						performance = 'Fair';
 					} else {
-						performance = 'Bad'; // No captures
+						performance = 'Bad';
 					}
 				}
 			}
 		} else if (isDraw) {
-			performance = 'Draw'; // Special case for draws
+			performance = 'Draw';
 		}
 
 		return {
@@ -85,6 +83,8 @@
 
 	// Animation state
 	let modalVisible = $state(false);
+	let stats = $derived(gameStats());
+	let playerWon = $derived(stats?.playerWon ?? null);
 
 	// Show modal with animation when winner is determined
 	$effect(() => {
@@ -106,32 +106,67 @@
 			setTimeout(onSwitchSides, 200);
 		}
 	}
+
+	function handleChangeMode() {
+		if (onChangeMode) {
+			modalVisible = false;
+			setTimeout(onChangeMode, 200);
+		}
+	}
+
+	// Get performance color classes
+	function getPerformanceColor(performance: string): string {
+		switch (performance.toLowerCase()) {
+			case 'excellent': return 'text-green-500';
+			case 'good': return 'text-yellow-500';
+			case 'fair': return 'text-orange-500';
+			case 'bad': return 'text-red-500';
+			case 'draw': return 'text-gray-500';
+			default: return 'text-text';
+		}
+	}
 </script>
 
 {#if gameState.winner}
-	<div class="modal-overlay" class:visible={modalVisible}>
-		<div class="modal-card" class:visible={modalVisible}>
+	<!-- Modal Overlay -->
+	<div 
+		class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4
+			{modalVisible ? 'opacity-100' : 'opacity-0'}
+			transition-opacity duration-300"
+	>
+		<!-- Modal Card -->
+		<div 
+			class="bg-bg-primary border-2 border-border max-w-md w-full max-h-[80vh] overflow-y-auto
+				{modalVisible ? 'translate-y-0 scale-100' : 'translate-y-5 scale-95'}
+				transition-all duration-300 ease-out
+				shadow-[0_8px_0_rgba(201,42,42,0.2),0_12px_20px_rgba(0,0,0,0.3)]"
+		>
 			<!-- Winner Announcement -->
-			<div class="winner-section">
-				<div class="winner-icon">
+			<div class="text-center p-8 pb-4 border-b border-border">
+				<!-- Winner Icon with bounce animation -->
+				<div class="mb-4 animate-bounce">
 					{#if gameState.winner === 'DRAW'}
-						🤝
+						<div class="text-5xl">🤝</div>
 					{:else if gameState.winner === 'TIGER'}
-						<img src="/icons/tiger.svg" alt="Tiger" class="winner-img" />
+						<img src="/icons/tiger.svg" alt="Tiger" class="w-12 h-12 inline-block" />
 					{:else}
-						<img src="/icons/goat.svg" alt="Goat" class="winner-img" />
+						<img src="/icons/goat.svg" alt="Goat" class="w-12 h-12 inline-block" />
 					{/if}
 				</div>
-				<h2 class="winner-title">
+
+				<!-- Winner Title -->
+				<h2 class="text-2xl font-bold text-text mb-2 uppercase tracking-wide">
 					{#if gameState.winner === 'DRAW'}
 						It's a Draw!
-					{:else if isPlayingComputer && gameStats()}
-						{gameStats()?.playerWon ? 'Victory!' : 'Defeat!'}
+					{:else if isPlayingComputer && playerWon !== null}
+						{playerWon ? 'Victory!' : 'Defeat!'}
 					{:else}
 						{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
 					{/if}
 				</h2>
-				<p class="winner-subtitle">
+
+				<!-- Winner Subtitle -->
+				<p class="text-text-muted text-sm">
 					{#if gameState.winner === 'DRAW'}
 						Position repeated too many times!
 					{:else if gameState.winner === 'TIGER'}
@@ -143,28 +178,51 @@
 			</div>
 
 			<!-- Game Statistics -->
-			{#if gameStats()}
-				{@const stats = gameStats()}
-				<div class="stats-section">
-					<h3 class="stats-title">Game Summary</h3>
-					<div class="stats-grid">
-						<div class="stat-item">
-							<span class="stat-label">Total Moves</span>
-							<span class="stat-value">{stats?.totalMoves}</span>
+			{#if stats}
+				<div class="p-6 border-b border-border">
+					<h3 class="text-base font-semibold text-text mb-4 uppercase tracking-wider">
+						Game Summary
+					</h3>
+					
+					<div class="grid grid-cols-2 gap-4">
+						<!-- Total Moves -->
+						<div class="flex flex-col items-center text-center">
+							<span class="text-xs text-text-muted mb-1 uppercase tracking-wider">
+								Total Moves
+							</span>
+							<span class="text-xl font-bold text-text">
+								{stats.totalMoves}
+							</span>
 						</div>
-						<div class="stat-item">
-							<span class="stat-label">Goats Captured</span>
-							<span class="stat-value">{stats?.goatsCaptured}</span>
+
+						<!-- Goats Captured -->
+						<div class="flex flex-col items-center text-center">
+							<span class="text-xs text-text-muted mb-1 uppercase tracking-wider">
+								Goats Captured
+							</span>
+							<span class="text-xl font-bold text-text">
+								{stats.goatsCaptured}
+							</span>
 						</div>
+
 						{#if isPlayingComputer}
-							<div class="stat-item">
-								<span class="stat-label">Your Moves</span>
-								<span class="stat-value">{stats?.playerMoves}</span>
+							<!-- Your Moves -->
+							<div class="flex flex-col items-center text-center">
+								<span class="text-xs text-text-muted mb-1 uppercase tracking-wider">
+									Your Moves
+								</span>
+								<span class="text-xl font-bold text-text">
+									{stats.playerMoves}
+								</span>
 							</div>
-							<div class="stat-item">
-								<span class="stat-label">Performance</span>
-								<span class="stat-value performance {stats?.performance.toLowerCase()}">
-									{stats?.performance}
+
+							<!-- Performance -->
+							<div class="flex flex-col items-center text-center">
+								<span class="text-xs text-text-muted mb-1 uppercase tracking-wider">
+									Performance
+								</span>
+								<span class="text-base font-bold uppercase tracking-wider {getPerformanceColor(stats.performance)}">
+									{stats.performance}
 								</span>
 							</div>
 						{/if}
@@ -173,237 +231,44 @@
 			{/if}
 
 			<!-- Action Buttons -->
-			<div class="actions-section">
-				<button class="action-btn primary" onclick={handlePlayAgain}> Play Again </button>
+			<div class="p-6 flex flex-col gap-3">
+				<button 
+					onclick={handlePlayAgain}
+					class="w-full px-6 py-3 text-sm font-semibold uppercase tracking-wider
+						bg-primary border border-primary text-white
+						hover:bg-red-700 hover:border-red-700
+						active:translate-y-px
+						transition-all duration-200"
+				>
+					Play Again
+				</button>
 
 				{#if isPlayingComputer && onSwitchSides}
-					<button class="action-btn secondary" onclick={handleSwitchSides}> Switch Sides </button>
+					<button 
+						onclick={handleSwitchSides}
+						class="w-full px-6 py-3 text-sm font-semibold uppercase tracking-wider
+							bg-bg-secondary border border-border text-text
+							hover:border-primary hover:text-text
+							active:translate-y-px
+							transition-all duration-200"
+					>
+						Switch Sides
+					</button>
 				{/if}
 
 				{#if isPlayingComputer && onChangeMode}
-					<button class="action-btn secondary" onclick={onChangeMode}> Change Mode </button>
+					<button 
+						onclick={handleChangeMode}
+						class="w-full px-6 py-3 text-sm font-semibold uppercase tracking-wider
+							bg-bg-secondary border border-border text-text
+							hover:border-primary hover:text-text
+							active:translate-y-px
+							transition-all duration-200"
+					>
+						Change Mode
+					</button>
 				{/if}
 			</div>
 		</div>
 	</div>
 {/if}
-
-<style>
-	.modal-overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: rgba(0, 0, 0, 0.7);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 1000;
-		opacity: 0;
-		transition: opacity 0.3s ease;
-		backdrop-filter: blur(4px);
-	}
-
-	.modal-overlay.visible {
-		opacity: 1;
-	}
-
-	.modal-card {
-		background: var(--color-bg-primary);
-		border: 2px solid var(--color-border);
-		max-width: 400px;
-		width: 90%;
-		max-height: 80vh;
-		overflow-y: auto;
-		position: relative;
-		transform: translateY(20px) scale(0.95);
-		transition: all 0.3s ease;
-
-		/* Sharp, angular shadow */
-		box-shadow:
-			0 8px 0 rgba(201, 42, 42, 0.2),
-			0 12px 20px rgba(0, 0, 0, 0.3);
-	}
-
-	.modal-card.visible {
-		transform: translateY(0) scale(1);
-	}
-
-	.winner-section {
-		text-align: center;
-		padding: 2rem 2rem 1rem;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.winner-icon {
-		margin-bottom: 1rem;
-		animation: bounce 0.6s ease;
-	}
-
-	.winner-img {
-		width: 3rem;
-		height: 3rem;
-		display: inline-block;
-	}
-
-	@keyframes bounce {
-		0%,
-		60%,
-		100% {
-			transform: translateY(0);
-		}
-		30% {
-			transform: translateY(-10px);
-		}
-	}
-
-	.winner-title {
-		font-size: 1.5rem;
-		font-weight: bold;
-		color: var(--color-text-primary);
-		margin: 0 0 0.5rem;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-	}
-
-	.winner-subtitle {
-		color: var(--color-text-secondary);
-		margin: 0;
-		font-size: 0.9rem;
-	}
-
-	.stats-section {
-		padding: 1.5rem 2rem;
-		border-bottom: 1px solid var(--color-border);
-	}
-
-	.stats-title {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--color-text-primary);
-		margin: 0 0 1rem;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-	}
-
-	.stat-item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-	}
-
-	.stat-label {
-		font-size: 0.75rem;
-		color: var(--color-text-secondary);
-		margin-bottom: 0.25rem;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-	}
-
-	.stat-value {
-		font-size: 1.25rem;
-		font-weight: bold;
-		color: var(--color-text-primary);
-	}
-
-	.stat-value.performance {
-		font-size: 1rem;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-	}
-
-	.stat-value.performance.excellent {
-		color: #10b981; /* Green */
-	}
-
-	.stat-value.performance.good {
-		color: #f59e0b; /* Amber */
-	}
-
-	.stat-value.performance.fair {
-		color: #f97316; /* Orange */
-	}
-
-	.stat-value.performance.bad {
-		color: #ef4444; /* Red */
-	}
-
-	.stat-value.performance.draw {
-		color: #6b7280; /* Gray */
-	}
-
-	.actions-section {
-		padding: 1.5rem 2rem 2rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.action-btn {
-		padding: 0.75rem 1.5rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		border: 1px solid var(--color-border);
-		background: var(--color-bg-secondary);
-		color: var(--color-text-primary);
-		cursor: pointer;
-		transition: all 0.2s ease;
-		width: 100%;
-	}
-
-	.action-btn:hover {
-		border-color: var(--color-primary-red);
-		color: var(--color-text-primary);
-	}
-
-	.action-btn.primary {
-		background: var(--color-primary-red);
-		border-color: var(--color-primary-red);
-		color: white;
-	}
-
-	.action-btn.primary:hover {
-		background: #b91c1c;
-		border-color: #b91c1c;
-	}
-
-	.action-btn:active {
-		transform: translateY(1px);
-	}
-
-	/* Responsive design */
-	@media (max-width: 480px) {
-		.modal-card {
-			width: 95%;
-			margin: 1rem;
-		}
-
-		.winner-section {
-			padding: 1.5rem 1.5rem 1rem;
-		}
-
-		.stats-section,
-		.actions-section {
-			padding-left: 1.5rem;
-			padding-right: 1.5rem;
-		}
-
-		.winner-icon {
-			font-size: 2.5rem;
-		}
-
-		.winner-title {
-			font-size: 1.25rem;
-		}
-	}
-</style>

@@ -105,23 +105,6 @@ export function buildAdjacencyMap(points: Point[], lines: Line[]): Map<number, n
   return map;
 }
 
-// Optimized: Create coordinate map for O(1) lookups
-export function buildCoordinateMap(points: Point[]): Map<string, Point> {
-  const map = new Map<string, Point>();
-  points.forEach((point) => {
-    map.set(`${point.x},${point.y}`, point);
-  });
-  return map;
-}
-
-export function findPointByCoords(
-  coordMap: Map<string, Point>,
-  x: number,
-  y: number
-): Point | undefined {
-  return coordMap.get(`${x},${y}`);
-}
-
 // Calculate valid tiger moves and captures
 export function calculateValidTigerMoves(
   state: GameState,

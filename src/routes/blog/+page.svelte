@@ -1,8 +1,12 @@
 <script lang="ts">
+	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
 	import { formatDate } from '$lib/utils/blog';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	// Collect unique tags for sidebar display
+	const tags: string[] = Array.from(new Set(data.posts.flatMap((p) => p.tags)));
 </script>
 
 <svelte:head>
@@ -23,43 +27,51 @@
 	<meta property="og:url" content="https://anishshrestha.com/blog" />
 </svelte:head>
 
-<main class="container">
-	<div class="mx-auto max-w-4xl py-8">
-		<header class="mb-8 border-b pb-4 text-center md:mb-12 md:pb-8" style="border-color: var(--color-border);">
-			<h1 class="mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl" style="color: var(--color-primary-red);">Blog</h1>
-			<p class="text-base md:text-lg" style="color: var(--color-text-secondary);">
-				Technical deep-dives and thoughts on software engineering
-			</p>
-		</header>
+<main class="container py-8">
+	<TwoColumnShell leftGap="gap-2">
+		<svelte:fragment slot="left">
+			<section class="section-card p-4">
+				<h3 class="section-title mb-4 text-lg">Tags</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each tags as tag}
+						<span class="badge cursor-pointer select-none">{tag}/</span>
+					{/each}
+				</div>
+			</section>
+		</svelte:fragment>
 
-		{#if data.posts.length > 0}
-			<div class="blog-posts-container">
-				{#each data.posts as post}
-					<a href="/blog/{post.slug}" class="blog-card">
-						<article class="blog-content">
-							<div class="blog-meta">
-								<time class="blog-date">{formatDate(post.date)}</time>
-								<div class="blog-tags">
-									{#each post.tags as tag}
-										<span class="blog-tag">{tag}</span>
-									{/each}
+		<div class="mx-auto max-w-4xl">
+			
+
+			{#if data.posts.length > 0}
+				<div class="blog-posts-container">
+					{#each data.posts as post}
+						<a href="/blog/{post.slug}" class="blog-card">
+							<article class="blog-content">
+								<div class="blog-meta">
+									<time class="blog-date">{formatDate(post.date)}</time>
+									<div class="blog-tags">
+										{#each post.tags as tag}
+											<span class="blog-tag">{tag}</span>
+										{/each}
+									</div>
 								</div>
-							</div>
-							
-							<!-- Decorative separator removed to prevent layout shift -->
+								
+								<!-- Decorative separator removed to prevent layout shift -->
 
-							<h2 class="blog-title-text">{post.title}</h2>
-							<p class="blog-description">{post.description}</p>
-						</article>
-					</a>
-				{/each}
-			</div>
-		{:else}
-			<div class="py-8 text-center" style="color: var(--color-text-secondary);">
+								<h2 class="blog-title-text">{post.title}</h2>
+								<p class="blog-description">{post.description}</p>
+							</article>
+						</a>
+					{/each}
+				</div>
+			{:else}
+						<div class="py-8 text-center text-text-muted">
 				<p>No blog posts found. Check back soon!</p>
 			</div>
-		{/if}
-	</div>
+			{/if}
+		</div>
+	</TwoColumnShell>
 </main>
 
 <style>
@@ -89,7 +101,7 @@
 	}
 
 	.blog-card:hover {
-		border-color: var(--color-primary-red);
+		border-color: var(--color-primary);
 		box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);
 	}
 
@@ -111,7 +123,7 @@
 	.blog-date {
 		font-family: var(--font-family-mono);
 		font-size: 0.875rem;
-		color: var(--color-text-secondary);
+		color: var(--color-text-muted);
 		margin: 0;
 		line-height: 1.4;
 	}
@@ -124,7 +136,7 @@
 
 	.blog-tag {
 		background-color: var(--color-bg-primary);
-		color: var(--color-text-primary);
+		color: var(--color-text);
 		border: 1px solid var(--color-border);
 		padding: 0.25rem 0.5rem;
 		font-size: 0.75rem;
@@ -135,7 +147,7 @@
 	.blog-title-text {
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: var(--color-text-primary);
+		color: var(--color-text);
 		margin: 0 0 0.5rem 0;
 		line-height: 1.3;
 		transition: color 0.3s ease;
@@ -148,7 +160,7 @@
 	}
 
 	.blog-description {
-		color: var(--color-text-secondary);
+		color: var(--color-text-muted);
 		margin: 0;
 		line-height: 1.5;
 		font-size: 0.95rem;

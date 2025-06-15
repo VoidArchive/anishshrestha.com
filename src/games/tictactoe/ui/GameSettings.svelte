@@ -31,7 +31,7 @@
 	<div class="space-y-3">
 		<!-- Opponent -->
 		<div class="flex items-center justify-between">
-			<span class="text-text-secondary">Opponent:</span>
+			<span class="text-text-muted">Opponent:</span>
 			<div class="mode-buttons">
 				<button
 					class="mode-btn"
@@ -52,7 +52,7 @@
 
 		<!-- Side selection -->
 		<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
-			<span class="text-text-secondary">Play as:</span>
+			<span class="text-text-muted">Play as:</span>
 			<div class="mode-buttons">
 				<button
 					class="mode-btn"

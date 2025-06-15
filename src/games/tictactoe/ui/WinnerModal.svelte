@@ -31,7 +31,7 @@
 			</section>
 
 			<section class="actions-section">
-				<button class="action-btn primary" on:click={handlePlayAgain}>Play Again</button>
+				<button class="action-btn primary" onclick={handlePlayAgain}>Play Again</button>
 			</section>
 		</div>
 	</div>

@@ -34,24 +34,23 @@
 
 <section class="section-card">
 	<h2 class="section-title">
-		<User size={20} class="text-primary-red inline" /> About Me
+		<User size={20} class="text-primary inline" /> About Me
 	</h2>
 	<div class="space-y-4">
-		<p class="text-text-primary leading-relaxed">
+		<p class="text-text leading-relaxed">
 			Hi, I am Anish. I am a backend engineer from Kathmandu.
 		</p>
-		<p class="text-text-primary leading-relaxed">
-			Currently building production services at Global Square, turning specifications into scalable
-			systems.
+		<p class="text-text leading-relaxed">
+			Currently building production services at <a href="https://www.globalsquareit.com" class="font-bold">Global Square.</a>
 		</p>
-		<p class="text-text-primary leading-relaxed">
-			Previously built ERP systems focusing on accounting and invoicing modules, plus e-commerce
-			platforms.
+		<p class="text-text leading-relaxed">
+			Previously built ERP systems focusing on accounting and invoicing modules, integrating it with
+			e-commerce platforms.
 		</p>
-		<p class="text-text-primary leading-relaxed">
+		<p class="text-text leading-relaxed">
 			Spare hours: Calisthenics, NEPSE portfolio management, hiking around Nepal
 		</p>
-		<p class="text-text-secondary italic">
+		<p class="text-text-muted italic">
 			<span
 				bind:this={vimText}
 				class="vim-easter-egg"

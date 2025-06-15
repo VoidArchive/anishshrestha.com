@@ -10,17 +10,18 @@
 @theme {
 	--color-bg-primary: #1e1e1e;
 	--color-bg-secondary: #212121;
-	--color-text-primary: #b3b3b3;
-	--color-text-secondary: #b3b3b3;
-	--color-primary-red: #c92a2a;
+	--color-text: #b3b3b3;
+	--color-text-muted: #888888;
+	--color-primary: #c92a2a;
 	--color-border: #333333;
 
 	--font-family-mono: 'Fira Code', monospace;
+	--font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 /* Base body styles */
 body {
-	@apply bg-bg-primary text-text-primary min-h-screen font-mono leading-relaxed;
+	@apply bg-bg-primary text-text min-h-screen font-mono leading-relaxed;
 	font-size: 14px;
 }
 
@@ -32,11 +33,11 @@ body {
 
 /* Global link styles */
 a {
-	@apply text-text-primary no-underline transition-all duration-300;
+	@apply text-text no-underline transition-all duration-300;
 }
 
 a:hover {
-	@apply text-primary-red;
+	@apply text-primary;
 }
 
 /* List reset */
@@ -58,7 +59,7 @@ ul {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	@apply bg-primary-red;
+	@apply bg-primary;
 }
 
 /* Base card styles */
@@ -68,17 +69,17 @@ ul {
 }
 
 .section-card:hover {
-	@apply border-primary-red;
+	@apply border-primary;
 	box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
 }
 
 .section-title {
-	@apply text-text-primary border-border relative mb-3 border-b pb-2 text-lg font-semibold md:mb-4 md:text-xl;
+	@apply text-text border-border relative mb-3 border-b pb-2 text-lg font-semibold md:mb-4 md:text-xl;
 }
 
 .section-title::after {
 	content: '';
-	@apply bg-primary-red absolute -bottom-px left-0 h-px w-0 transition-all duration-300;
+	@apply bg-primary absolute -bottom-px left-0 h-px w-0 transition-all duration-300;
 }
 
 .section-card:hover .section-title::after {
@@ -96,7 +97,7 @@ ul {
 
 /* Button styles */
 .btn {
-	@apply border-border text-text-primary relative cursor-pointer overflow-hidden border bg-transparent px-4 py-2 font-mono text-sm transition-all duration-300;
+	@apply border-border text-text relative cursor-pointer overflow-hidden border bg-transparent px-4 py-2 font-mono text-sm transition-all duration-300;
 	outline: none; /* Remove focus outline */
 }
 
@@ -115,26 +116,26 @@ ul {
 }
 
 .btn:hover {
-	@apply border-primary-red text-primary-red;
+	@apply border-primary text-primary;
 }
 
 /* Placeholder boxes */
 .placeholder-box {
-	@apply bg-bg-primary border-border text-text-secondary relative mb-4 flex h-32 items-center justify-center border text-sm transition-all duration-300;
+	@apply bg-bg-primary border-border text-text-muted relative mb-4 flex h-32 items-center justify-center border text-sm transition-all duration-300;
 }
 
 .placeholder-box:hover {
-	@apply border-primary-red text-primary-red;
+	@apply border-primary text-primary;
 	background-color: rgba(201, 42, 42, 0.05);
 }
 
 /* Profile section styles */
 .profile-name {
-	@apply text-text-primary mb-1 text-xl font-bold tracking-wide md:text-2xl;
+	@apply text-text mb-1 text-xl font-bold tracking-wide md:text-2xl;
 }
 
 .profile-title {
-	@apply text-text-primary mb-1 text-sm md:text-base;
+	@apply text-text mb-1 text-sm md:text-base;
 }
 
 /* Focus and selection styles */
@@ -142,7 +143,7 @@ button:focus,
 input:focus,
 textarea:focus,
 select:focus {
-	@apply outline-primary-red outline-2 outline-offset-2;
+	@apply outline-primary outline-2 outline-offset-2;
 }
 
 /* Remove focus outlines for game buttons */
@@ -152,7 +153,7 @@ select:focus {
 }
 
 ::selection {
-	@apply bg-primary-red text-text-primary;
+	@apply bg-primary text-text;
 }
 
 /* Copy button styles for code blocks */
@@ -198,7 +199,7 @@ select:focus {
 /* Bold / strong text */
 strong,
 b {
-	color: var(--color-primary-red);
+	color: var(--color-primary);
 	font-weight: 700;
 }
 
@@ -215,13 +216,13 @@ ol {
 
 /* Blockquotes */
 blockquote {
-	@apply border-primary-red text-text-secondary my-6 border-l-4 pl-4 italic;
+	@apply border-primary text-text-muted my-6 border-l-4 pl-4 italic;
 	display: block;
 }
 
 /* Details / summary */
 details summary {
-	@apply text-text-secondary hover:text-primary-red inline-flex cursor-pointer list-none items-center gap-2 transition-colors duration-300;
+	@apply text-text-muted hover:text-primary inline-flex cursor-pointer list-none items-center gap-2 transition-colors duration-300;
 }
 
 details summary::-webkit-details-marker {
@@ -239,7 +240,7 @@ td {
 }
 
 th {
-	@apply bg-bg-secondary text-text-primary font-semibold;
+	@apply bg-bg-secondary text-text font-semibold;
 }
 
 tr:last-child td {

@@ -8,14 +8,14 @@
 
 <div class="section-card">
 	<h2 class="section-title">Move History</h2>
-	<div class="max-h-40 overflow-y-auto sm:max-h-none sm:overflow-visible">
+	<div class="max-h-40 overflow-y-auto">
 		{#if moveHistory.length === 0}
-			<p class="text-text-secondary text-sm">No moves yet</p>
+			<p class="text-text-muted text-sm">No moves yet</p>
 		{:else}
-			<ul class="space-y-1 text-xs sm:text-sm ">
-				{#each moveHistory as move, index}
-					<li class="text-text-secondary list-none">
-						{index + 1}. {move}
+			<ul class="space-y-1 text-xs sm:text-sm">
+				{#each moveHistory.toReversed() as move, index}
+					<li class="text-text-muted list-none">
+						{moveHistory.length - index}. {move}
 					</li>
 				{/each}
 			</ul>

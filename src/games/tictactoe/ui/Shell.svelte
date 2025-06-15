@@ -3,7 +3,7 @@
 	import TicTacToeBoard from './TicTacToeBoard.svelte';
 	import GameSettings from './GameSettings.svelte';
 	import WinnerModal from './WinnerModal.svelte';
-	import { getBestMove } from '$games/tictactoe/ai';
+	import { getBestMove, resetAI } from '$games/tictactoe/ai';
 
 	// Game options
 	let isPlayingComputer = $state(true);
@@ -24,13 +24,22 @@
 		if (isComputerTurn() && !isComputerThinking && !gameState.winner) {
 			isComputerThinking = true;
 			// small async delay for UX
-			setTimeout(() => {
-				const move = getBestMove(gameState);
-				if (move !== null) {
-					applyPlayerMove(move);
+			const timeoutId = setTimeout(() => {
+				// Double-check conditions in case state changed during timeout
+				if (isComputerTurn() && !gameState.winner) {
+					const move = getBestMove(gameState);
+					if (move !== null) {
+						applyPlayerMove(move);
+					}
 				}
 				isComputerThinking = false;
 			}, 200);
+
+			// Cleanup function to cancel timeout if effect reruns
+			return () => {
+				clearTimeout(timeoutId);
+				isComputerThinking = false;
+			};
 		}
 	});
 
@@ -40,6 +49,12 @@
 
 	function handlePlayerSideChange(side: 'X' | 'O') {
 		playerSide = side;
+		resetAI(); // Clear AI cache when changing sides
+	}
+
+	function handleReset() {
+		resetGame();
+		resetAI(); // Clear AI cache when resetting game
 	}
 </script>
 
@@ -52,14 +67,14 @@
 			<h2 class="section-title">Game Status</h2>
 			<p><strong>Current Turn:</strong> {gameState.turn}</p>
 			{#if isComputerThinking && isComputerTurn() && !gameState.winner}
-				<p class="text-text-secondary text-sm mt-1">AI is thinking…</p>
+				<p class="text-text-muted text-sm mt-1">AI is thinking…</p>
 			{/if}
 		</div>
 
 		<!-- Controls -->
 		<div class="section-card">
 			<h2 class="section-title">Controls</h2>
-			<button class="btn w-full" on:click={resetGame}>Reset Game</button>
+			<button class="btn w-full" onclick={handleReset}>Reset Game</button>
 		</div>
 
 		<!-- Game Settings -->
@@ -68,7 +83,7 @@
 			playerSide={playerSide}
 			onGameModeChange={handleGameModeChange}
 			onPlayerSideChange={handlePlayerSideChange}
-			onReset={resetGame}
+			onReset={handleReset}
 		/>
 	</aside>
 
@@ -93,7 +108,7 @@
 </div>
 
 <!-- Winner modal -->
-<WinnerModal {gameState} onPlayAgain={resetGame} />
+<WinnerModal {gameState} onPlayAgain={handleReset} />
 
 <style>
 	/* Board well styling copied from Bagchal for a consistent look */

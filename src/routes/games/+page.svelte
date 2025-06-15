@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
 	// Simple list of games – can be replaced with fetched data later
 	const games = [
 		{
@@ -20,31 +21,38 @@
 	<title>Games | anishshrestha.com</title>
 </svelte:head>
 
-<main class="container">
-	<div class="mx-auto max-w-4xl py-8">
-		<header class="border-border mb-8 border-b pb-4 text-center md:mb-12 md:pb-8">
-			<h1 class="text-primary-red mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl">Games</h1>
-			<p class="text-text-secondary text-base md:text-lg">Relax, play & experiment with my small web games.</p>
-		</header>
+<main class="container py-8">
+	<TwoColumnShell leftGap="gap-2">
+		<svelte:fragment slot="left">
+			<!-- Sidebar filters -->
+			<section class="section-card p-4">
+				<h3 class="section-title mb-4 text-lg">Filters</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each ['Puzzle','Strategy','Arcade','Multiplayer'] as genre}
+						<span class="badge cursor-pointer select-none">{genre}/</span>
+					{/each}
+				</div>
+			</section>
+		</svelte:fragment>
 
-		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+		<!-- Main column -->
+		<div class="flex flex-col">
 			{#each games as game (game.slug)}
-				<section class="section-card p-3 sm:p-4 flex flex-col gap-3 rounded-none">
-					<div class="flex items-center gap-3">
-						{#if game.icon}
-							<img src={game.icon} alt={game.name} class="h-10 w-10" />
-						{/if}
-						<h2 class="section-title m-0 flex-1 text-xl">{game.name}</h2>
-					</div>
-					<p class="text-text-secondary flex-1 text-sm leading-relaxed">{game.description}</p>
-
-					<div class="mt-auto">
-						<a href={`/games/${game.slug}`} class="btn inline-flex items-center gap-2">
+				<section class="section-card p-3 sm:p-4 flex flex-row justify-between items-start rounded-none gap-4">
+					<!-- Text content -->
+					<div class="flex flex-col gap-2 flex-1">
+						<h2 class="section-title m-0 text-xl">{game.name}</h2>
+						<p class="text-text-muted text-sm leading-relaxed">{game.description}</p>
+						<a href={`/games/${game.slug}`} class="btn inline-flex w-max items-center gap-2 mt-1">
 							<span>Play</span>
 						</a>
 					</div>
+					<!-- Icon -->
+					{#if game.icon}
+						<img src={game.icon} alt={game.name} class="h-16 w-16 flex-shrink-0" />
+					{/if}
 				</section>
 			{/each}
 		</div>
-	</div>
+	</TwoColumnShell>
 </main>

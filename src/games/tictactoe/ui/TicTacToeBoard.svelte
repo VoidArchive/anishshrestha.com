@@ -18,7 +18,7 @@
 		{#each gameState.board as cell, index}
 			<button
 				class="cell"
-				on:click={() => handleCellClick(index)}
+				onclick={() => handleCellClick(index)}
 				disabled={!!cell || !!gameState.winner}
 			>
 				{#if cell === 'X'}

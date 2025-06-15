@@ -5,7 +5,7 @@
 
 <section class="section-card">
 	<h2 class="section-title flex items-center gap-2">
-		<FolderGit size={20} class="text-primary-red inline" /> Featured Projects
+		<FolderGit size={20} class="text-primary inline" /> Featured Projects
 	</h2>
 	<div class="flex flex-col gap-6">
 		<MiniProjectCard

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
 
 	const projects = [
 		{
@@ -53,6 +54,9 @@
 		}
 		
 	];
+
+	// Collect unique tech tags for sidebar
+	const techTags: string[] = Array.from(new Set(projects.flatMap((p) => p.tech)));
 </script>
 
 <svelte:head>
@@ -73,17 +77,25 @@
 	<meta property="og:url" content="https://anishshrestha.com/projects" />
 </svelte:head>
 
-<main class="container">
-	<header class="border-border mb-8 border-b p-4 text-center md:mb-12 md:p-8">
-		<h1 class="text-primary-red mb-2 text-2xl md:mb-4 md:text-4xl lg:text-4xl">Projects</h1>
-		<p class="text-text-secondary text-base md:text-lg">
-			A curated selection of things I've hacked together recently.
-		</p>
-	</header>
+<main class="container py-8">
+	<TwoColumnShell leftGap="gap-2">
+		<svelte:fragment slot="left">
+			<section class="section-card p-4">
+				<h3 class="section-title mb-4 text-lg">Tech</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each techTags as tag}
+						<span class="badge cursor-pointer select-none">{tag}/</span>
+					{/each}
+				</div>
+			</section>
+		</svelte:fragment>
 
-	<section class="grid grid-cols-1 gap-6 pb-16 md:grid-cols-2">
-		{#each projects as p (p.title)}
-			<ProjectCard title={p.title} description={p.description} tech={p.tech} repo={p.repo} demo={p.demo} />
-		{/each}
-	</section>
+		<div class="w-full">
+			<section class="flex flex-col gap-4 pb-16">
+				{#each projects as p (p.title)}
+					<ProjectCard title={p.title} description={p.description} tech={p.tech} repo={p.repo} demo={p.demo} />
+				{/each}
+			</section>
+		</div>
+	</TwoColumnShell>
 </main>

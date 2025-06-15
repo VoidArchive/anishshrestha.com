@@ -126,7 +126,7 @@
 	.post-content {
 		line-height: 1.8;
 		color: var(--color-text-secondary);
-		font-family: var(--font-family-mono);
+		font-family: var(--font-family-sans);
 	}
 
 	/* Markdown styles within post-content only */
@@ -144,6 +144,8 @@
 
 	.post-content :global(p) {
 		margin-bottom: 1.8rem;
+		line-height: 1.8;
+		font-size: 1.2rem;
 		font-family: var(--font-family-sans);
 		color: var(--color-text-secondary);
 	}
@@ -158,6 +160,7 @@
 		margin-bottom: 0.5rem;
 		color: var(--color-text-secondary);
 		transition: color 0.3s ease;
+		font-family: var(--font-family-sans);
 	}
 
 	/* Bullet / number marker colour */
@@ -208,6 +211,7 @@
 		margin-bottom: 0;
 		color: var(--color-text-secondary);
 		font-style: italic;
+		font-family: var(--font-family-sans);
 	}
 
 	.post-content :global(strong) {

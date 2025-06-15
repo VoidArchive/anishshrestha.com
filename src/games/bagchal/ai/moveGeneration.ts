@@ -1,5 +1,6 @@
 import type { GameState, Point } from '$games/bagchal/rules';
 import type { Move } from './types';
+import { PositionEvaluator } from './evaluation.js';
 
 export class MoveGenerator {
   static getValidMoves(
@@ -15,11 +16,11 @@ export class MoveGenerator {
           if (state.board[i] === null) {
             const move: Move = { from: null, to: i, moveType: 'PLACEMENT' };
 
-            // CRITICAL FIX: In CLASSIC mode, filter out suicide placement moves
+            // Skip moves that would be immediately captured
             if (state.mode === 'CLASSIC') {
               const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(i, state, adjacency, points);
               if (wouldBeCaptured) {
-                continue; // Skip this move - it's a suicide move
+                continue; // Skip capturable moves
               }
             }
 
@@ -46,11 +47,11 @@ export class MoveGenerator {
           if (state.board[neighbor] === null) {
             const move: Move = { from: i, to: neighbor, moveType: 'MOVEMENT' };
 
-            // CRITICAL FIX: In CLASSIC mode, filter out suicide movement moves
-            if (state.mode === 'CLASSIC') {
+            // Skip moves that would be immediately captured
+            if (state.mode === 'CLASSIC' && points) {
               const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(neighbor, state, adjacency, points);
               if (wouldBeCaptured) {
-                continue; // Skip this move - it's a suicide move
+                continue; // Skip capturable moves
               }
             }
 

@@ -2,6 +2,7 @@
 export { PositionEvaluator } from './evaluation.js';
 export { MoveGenerator } from './moveGeneration.js';
 export { MoveOrderer } from './moveOrdering.js';
+export { OpeningBook } from './openingBook.js';
 
 export type { Move, EvaluationWeights, StrategicPositions, TranspositionEntry } from './types';
 

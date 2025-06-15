@@ -12,26 +12,26 @@
 
 <section class="section-card">
 	<h2 class="section-title">
-		<Rss size={20} class="text-primary-red inline" /> Latest Posts
+		<Rss size={20} class="text-primary inline" /> Latest Posts
 	</h2>
 	<div class="flex flex-col gap-6">
 		{#if posts.length > 0}
 			{#each posts as post}
 				<a
 					href="/blog/{post.slug}"
-					class="bg-bg-primary border-border hover:border-primary-red block border p-4 no-underline transition-all duration-300"
+					class="bg-bg-primary border-border hover:border-primary block border p-4 no-underline transition-all duration-300"
 				>
 					<article>
 						<div class="mb-2">
-							<time class="text-text-secondary font-mono text-xs">{formatDate(post.date)}</time>
+							<time class="text-text-muted font-mono text-xs">{formatDate(post.date)}</time>
 						</div>
 						<h3 class="mb-2">
 							<span
-								class="text-text-primary hover:text-primary-red text-base font-semibold transition-colors duration-300"
+								class="text-text hover:text-primary text-base font-semibold transition-colors duration-300"
 								>{post.title}</span
 							>
 						</h3>
-						<p class="text-text-secondary mb-3 line-clamp-2 text-sm leading-relaxed">
+						<p class="text-text-muted mb-3 line-clamp-2 text-sm leading-relaxed">
 							{post.description}
 						</p>
 						<div class="flex flex-wrap gap-1">
