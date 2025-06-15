@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { goto } from '$app/navigation';
   
   // Import existing Bagchal components
@@ -177,7 +177,7 @@
         </p>
         
         <div class="mb-6">
-          <a href="/games/bagchal" class="btn">← Back to Classic Mode</a>
+          <a href="/games/bagchal" class="px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200">← Back to Classic Mode</a>
         </div>
       </div>
 
@@ -248,7 +248,7 @@
 
       <!-- Multiplayer-specific controls -->
       <div class="mt-6 text-center">
-        <button onclick={leaveGame} class="btn btn-secondary">
+        <button onclick={leaveGame} class="px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-red-100 text-red-700 hover:bg-red-200">
           Leave Game
         </button>
       </div>
@@ -269,12 +269,4 @@
   </section>
 </ErrorBoundary>
 
-<style>
-  .btn {
-    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200;
-  }
-
-  .btn-secondary {
-    @apply bg-red-100 text-red-700 hover:bg-red-200;
-  }
-</style> 
+ 

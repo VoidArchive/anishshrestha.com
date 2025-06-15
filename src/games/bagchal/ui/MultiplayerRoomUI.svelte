@@ -28,7 +28,6 @@
     connectionStatus = status;
     
     if (status === 'connected' && currentView === 'waiting') {
-      // Game is ready to start
       const state = multiplayerHandler?.getCurrentState();
       if (state?.gameState) {
         onGameStart?.(state.gameState);
@@ -38,7 +37,6 @@
 
   // Handle game state updates
   function handleGameStateUpdate(gameState: any) {
-    // Pass updated game state to parent
     onGameStart?.(gameState);
   }
 
@@ -115,18 +113,15 @@
   async function copyRoomCode() {
     try {
       await navigator.clipboard.writeText(createdRoomCode);
-      // Could add a toast notification here
     } catch (error) {
       console.error('Failed to copy room code:', error);
     }
   }
 
-  // Format room code with proper spacing
   function formatRoomCode(code: string): string {
     return code.replace(/-/g, ' - ');
   }
 
-  // Get connection status display
   function getConnectionStatusText(status: ConnectionStatus): string {
     switch (status) {
       case 'connecting': return 'Connecting...';
@@ -137,7 +132,6 @@
     }
   }
 
-  // Get connection status color class
   function getConnectionStatusClass(status: ConnectionStatus): string {
     switch (status) {
       case 'connected': return 'text-green-600';
@@ -149,7 +143,6 @@
   }
 </script>
 
-<!-- Multiplayer Handler (headless component) -->
 <MultiplayerHandler 
   bind:this={multiplayerHandler}
   gameMode="REFORGED"
@@ -158,18 +151,14 @@
   onError={handleError}
 />
 
-<!-- Multiplayer Room UI -->
-<div class="multiplayer-room-ui max-w-md mx-auto">
-  
+<div class="max-w-md mx-auto">
   {#if currentView === 'menu'}
-    <!-- Main Menu -->
-    <div class="section-card p-6">
-      <h2 class="section-title text-2xl mb-6 text-center">Multiplayer Bagchal</h2>
-      <p class="text-text-muted text-center mb-6">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Multiplayer Bagchal</h2>
+      <p class="text-gray-600 text-center mb-6">
         Play Bagchal Reforged with a friend online
       </p>
 
-      <!-- Player Name Input -->
       <div class="mb-6">
         <label for="playerName" class="block text-sm font-medium mb-2">Your Name</label>
         <input 
@@ -177,17 +166,16 @@
           type="text" 
           bind:value={playerName}
           placeholder="Enter your name"
-          class="input w-full"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           maxlength="20"
         />
       </div>
 
-      <!-- Action Buttons -->
       <div class="space-y-3">
         <button 
           onclick={createRoom}
           disabled={!playerName.trim() || isCreatingRoom}
-          class="btn btn-primary w-full"
+          class="w-full px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isCreatingRoom ? 'Creating Room...' : 'Create New Room'}
         </button>
@@ -195,7 +183,7 @@
         <button 
           onclick={() => currentView = 'join'}
           disabled={!playerName.trim()}
-          class="btn w-full"
+          class="w-full px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Join Existing Room
         </button>
@@ -209,14 +197,12 @@
     </div>
 
   {:else if currentView === 'join'}
-    <!-- Join Room -->
-    <div class="section-card p-6">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
       <div class="flex items-center mb-6">
-        <button onclick={goBack} class="btn btn-sm mr-3">← Back</button>
-        <h2 class="section-title text-xl">Join Room</h2>
+        <button onclick={goBack} class="px-2 py-1 text-sm rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200 mr-3">← Back</button>
+        <h2 class="text-xl font-bold text-gray-900">Join Room</h2>
       </div>
 
-      <!-- Room Code Input -->
       <div class="mb-6">
         <label for="roomCode" class="block text-sm font-medium mb-2">Room Code</label>
         <input 
@@ -224,20 +210,18 @@
           type="text" 
           bind:value={roomCodeInput}
           placeholder="BRAVE-TIGER-123"
-          class="input w-full font-mono text-center uppercase"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-center uppercase"
           maxlength="20"
-          style="letter-spacing: 0.1em;"
         />
-        <p class="text-xs text-text-muted mt-1">
+        <p class="text-xs text-gray-600 mt-1">
           Enter the room code shared by your opponent
         </p>
       </div>
 
-      <!-- Join Button -->
       <button 
         onclick={joinRoom}
         disabled={!roomCodeInput.trim() || isJoiningRoom}
-        class="btn btn-primary w-full"
+        class="w-full px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isJoiningRoom ? 'Joining Room...' : 'Join Room'}
       </button>
@@ -250,21 +234,19 @@
     </div>
 
   {:else if currentView === 'waiting'}
-    <!-- Waiting Room -->
-    <div class="section-card p-6">
-      <h2 class="section-title text-xl mb-4 text-center">Room Created</h2>
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-4 text-center">Room Created</h2>
 
       {#if createdRoomCode}
-        <!-- Room Code Display -->
         <div class="bg-gray-50 border-2 border-gray-200 rounded-lg p-4 mb-6">
-          <p class="text-sm text-text-muted mb-2 text-center">Share this room code:</p>
+          <p class="text-sm text-gray-600 mb-2 text-center">Share this room code:</p>
           <div class="flex items-center justify-center gap-2">
             <span class="font-mono text-2xl font-bold text-center tracking-wider">
               {formatRoomCode(createdRoomCode)}
             </span>
             <button 
               onclick={copyRoomCode}
-              class="btn btn-sm"
+              class="px-2 py-1 text-sm rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200"
               title="Copy room code"
             >
               📋
@@ -273,7 +255,6 @@
         </div>
       {/if}
 
-      <!-- Connection Status -->
       <div class="text-center mb-6">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100">
           <div class="w-2 h-2 rounded-full {connectionStatus === 'connected' ? 'bg-green-500' : connectionStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'}"></div>
@@ -283,29 +264,26 @@
         </div>
       </div>
 
-      <!-- Waiting Message -->
-      <div class="text-center text-text-muted mb-6">
+      <div class="text-center text-gray-600 mb-6">
         <p class="mb-2">Waiting for opponent to join...</p>
         <div class="animate-bounce text-2xl">⏳</div>
       </div>
 
-      <!-- Cancel Button -->
-      <button onclick={goBack} class="btn w-full">
+      <button onclick={goBack} class="w-full px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-gray-100 text-gray-900 hover:bg-gray-200">
         Cancel Game
       </button>
     </div>
 
   {:else if currentView === 'error'}
-    <!-- Error State -->
-    <div class="section-card p-6">
-      <h2 class="section-title text-xl mb-4 text-center text-red-600">Connection Error</h2>
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h2 class="text-xl font-bold text-red-600 mb-4 text-center">Connection Error</h2>
       
       <div class="text-center mb-6">
         <div class="text-6xl mb-4">❌</div>
-        <p class="text-text-muted">{errorMessage}</p>
+        <p class="text-gray-600">{errorMessage}</p>
       </div>
 
-      <button onclick={goBack} class="btn btn-primary w-full">
+      <button onclick={goBack} class="w-full px-4 py-2 rounded-md font-medium transition-colors duration-200 bg-blue-600 text-white hover:bg-blue-700">
         Try Again
       </button>
     </div>
