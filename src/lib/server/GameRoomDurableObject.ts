@@ -189,19 +189,21 @@ export class GameRoomDurableObject {
       this.gameState = newGameState;
 
       // Broadcast updated state
-      this.broadcast({
-        type: 'GAME_STATE',
-        timestamp: Date.now(),
-        playerId: 'system',
-        gameState: this.gameState!
-      });
+      if (this.gameState) {
+        this.broadcast({
+          type: 'GAME_STATE',
+          timestamp: Date.now(),
+          playerId: 'system',
+          gameState: this.gameState
+        });
+      }
 
-      if (this.gameState!.winner) {
+      if (this.gameState && this.gameState.winner) {
         this.broadcast({
           type: 'GAME_END',
           timestamp: Date.now(),
           playerId: 'system',
-          winner: this.gameState!.winner,
+          winner: this.gameState.winner,
           reason: 'win'
         });
       }
@@ -263,7 +265,11 @@ export class GameRoomDurableObject {
   }
 
   private getPlayerIdByRole(role: 'GOAT' | 'TIGER'): string {
-    for (const [playerId, player] of Object.entries(this.gameState!.players)) {
+    if (!this.gameState) {
+      throw new Error('Game state not initialized');
+    }
+    
+    for (const [playerId, player] of Object.entries(this.gameState.players)) {
       if (player.role === role) {
         return playerId;
       }
