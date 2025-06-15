@@ -8,15 +8,16 @@
   
   // Import multiplayer components
   import MultiplayerRoomUI from '$games/bagchal/ui/MultiplayerRoomUI.svelte';
+  import { WebSocketClient, type MultiplayerGameState } from '$core/multiplayer';
   
   // Import game logic
   import { points, lines } from '$games/bagchal/store.svelte';
-  import type { MultiplayerGameState } from '$games/bagchal/types/multiplayer';
 
   // Game state - simplified to only handle multiplayer
   let gameState: MultiplayerGameState | null = $state(null);
   let isInGame = $state(false);
   let errorMessage = $state('');
+  let wsClient: WebSocketClient | null = $state(null);
 
   // Player info from multiplayer
   let currentPlayerId: string | null = $state(null);
@@ -26,8 +27,9 @@
   );
 
   // Handle successful game start
-  function handleGameStart(state: MultiplayerGameState) {
+  function handleGameStart(state: MultiplayerGameState, client: WebSocketClient) {
     gameState = state;
+    wsClient = client;
     isInGame = true;
     
     // Extract player info from the game state
@@ -74,8 +76,15 @@
       }
     }
 
-    // TODO: Send move to multiplayer handler
-    console.log('Move:', { from: fromId, to: pointId, jumpedGoatId, moveType });
+    // Send move to WebSocket server
+    if (wsClient) {
+      wsClient.sendMove({
+        from: fromId,
+        to: pointId,
+        jumpedGoatId,
+        moveType
+      });
+    }
   }
 
   // Leave game and return to classic mode

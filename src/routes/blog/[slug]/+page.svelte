@@ -146,7 +146,7 @@
 		margin-bottom: 1.8rem;
 		line-height: 1.8;
 		font-size: 1.2rem;
-		font-family: var(--font-family-sans);
+		font-family: var(--font-family-mono);
 		color: var(--color-text-secondary);
 	}
 

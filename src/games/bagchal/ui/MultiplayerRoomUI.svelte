@@ -1,13 +1,16 @@
 <script lang="ts">
-  import type { MultiplayerGameState } from '../types/multiplayer';
+  import { WebSocketClient, type ConnectionStatus, type MultiplayerGameState } from '$core/multiplayer';
 
   interface Props {
-    onGameStart: (state: MultiplayerGameState) => void;
+    onGameStart: (state: MultiplayerGameState, client: WebSocketClient) => void;
     onError: (error: string) => void;
     onClose?: () => void;
   }
 
   let { onGameStart, onError, onClose }: Props = $props();
+
+  // WebSocket client
+  let wsClient: WebSocketClient | null = null;
 
   // UI State
   let currentView = $state<'menu' | 'create' | 'join' | 'waiting' | 'connecting'>('menu');
@@ -19,7 +22,7 @@
 
   // Room state
   let currentRoom = $state<any>(null);
-  let connectionStatus = $state<'disconnected' | 'connecting' | 'connected'>('disconnected');
+  let connectionStatus = $state<ConnectionStatus>('disconnected');
 
   function resetForm() {
     playerName = '';
@@ -119,47 +122,30 @@
     connectionStatus = 'connecting';
     
     try {
-      // Simulate connection - in real implementation, this would be WebSocket
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      connectionStatus = 'connected';
-      
-      // Simulate game state - in real implementation, this would come from WebSocket
-      const mockGameState: MultiplayerGameState = {
-        board: Array(25).fill(null),
-        turn: 'GOAT',
-        phase: 'PLACEMENT',
-        goatsPlaced: 0,
-        goatsCaptured: 0,
-        winner: null,
-        selectedPieceId: null,
-        validMoves: [],
-        message: 'Game started! Place your goats.',
-        positionHistory: [],
-        positionCounts: new Map(),
-        mode: 'REFORGED',
-        movesWithoutCapture: 0,
-        roomId: code,
-        roomCode: code,
-        hostPlayerId: 'player1',
-        guestPlayerId: 'player2',
-        currentPlayerId: 'player1',
-        isHost: true,
-        connectionStatus: 'connected',
-        lastSyncTimestamp: Date.now(),
-        players: {
-          player1: {
-            id: 'player1',
-            name: playerName,
-            role: 'GOAT',
-            connected: true,
-            lastSeen: Date.now()
-          }
+      // Create WebSocket client
+      wsClient = new WebSocketClient({
+        onGameStateUpdate: (gameState) => {
+          onGameStart(gameState, wsClient!);
+          showModal = false;
+        },
+        onConnectionStatusChange: (status) => {
+          connectionStatus = status;
+        },
+        onError: (error) => {
+          errorMessage = error;
+          onError(error);
         }
-      };
+      });
+
+      // Generate unique player ID
+      const playerId = `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
-      onGameStart(mockGameState);
-      showModal = false;
+      // Connect to the room
+      const success = await wsClient.connect(code, playerId);
+      
+      if (!success) {
+        throw new Error('Failed to establish connection');
+      }
       
     } catch (error) {
       connectionStatus = 'disconnected';

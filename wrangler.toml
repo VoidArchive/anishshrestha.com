@@ -10,12 +10,12 @@ binding = "DB"
 database_name = "bagchal-reforged"
 database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
 
-# Durable Objects for real-time game state management (placeholder for future implementation)
+# Durable Objects for real-time game state management (disabled for now)
 # [[durable_objects.bindings]]
 # name = "GAME_ROOMS"
 # class_name = "GameRoomDurableObject"
 
-# Durable Objects migrations (placeholder for future implementation)
+# Durable Objects migrations (disabled for now)
 # [[migrations]]
 # tag = "v1"
-# new_classes = [ "GameRoomDurableObject" ]
+# new_sqlite_classes = [ "GameRoomDurableObject" ]

@@ -7,8 +7,6 @@ published: true
 tags: ['ai', 'game-dev', 'sveltekit', 'minimax', 'typescript']
 ---
 
-# Implementing Minimax AI for Bagchal: Asymmetric Game Tree Search
-
 ## The Rule
 
 Bagchal is a traditional Nepali board game played on a 5×5 grid with 25 intersection points connected by orthogonal and diagonal lines. The game features two distinct phases and asymmetric gameplay between two players: one controlling four tigers and another controlling twenty goats. During the placement phase, the tiger player begins with four tigers positioned at the four corners of the board, while the goat player places their twenty goats one by one on any empty intersection. Tigers can move to adjacent intersections during this phase, and critically, they can capture goats by jumping over them to an empty adjacent space—similar to checkers but in any direction along the connecting lines.

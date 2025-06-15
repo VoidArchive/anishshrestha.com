@@ -67,7 +67,7 @@ Personal portfolio and blog built with SvelteKit.
 - [ ] Implement dark/light theme toggle
 - [ ] Add search functionality for blog posts
 - [ ] Build RSS feed for blog
-- [ ] Add analytics (privacy-focused)
+- [x] Add analytics (privacy-focused)
 
 #### **Technical Improvements**
 - [ ] Optimize images and add lazy loading
