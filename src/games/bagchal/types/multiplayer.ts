@@ -130,6 +130,7 @@ export interface JoinRoomRequest {
 
 export interface JoinRoomResponse {
   roomId: string;
+  roomCode: string;
   playerId: string;
   role: 'GOAT' | 'TIGER';
   authToken: string;

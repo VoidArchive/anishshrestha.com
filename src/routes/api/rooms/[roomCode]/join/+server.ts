@@ -118,6 +118,7 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
 
       const response: JoinRoomResponse = {
         roomId: room.id,
+        roomCode: roomCode,
         playerId,
         role: 'TIGER',
         authToken,
