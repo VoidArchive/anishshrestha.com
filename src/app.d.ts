@@ -1,5 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
+import type { GameRoomDurableObject } from '$lib/server/GameRoomDurableObject';
+
 declare global {
 	namespace App {
 		// interface Error {}
@@ -18,5 +20,8 @@ declare global {
 		}
 	}
 }
+
+// Export for Cloudflare Pages
+export { GameRoomDurableObject } from '$lib/server/GameRoomDurableObject';
 
 export {};

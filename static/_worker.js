@@ -1,29 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-
-const projectRoot = process.cwd();
-const workerPath = path.join(projectRoot, '.svelte-kit/cloudflare/_worker.js');
-
-console.log('🔧 Injecting Durable Objects into worker...');
-
-// Check if worker file exists
-if (!fs.existsSync(workerPath)) {
-  console.error('❌ Worker file not found:', workerPath);
-  process.exit(1);
-}
-
-// Read the worker file
-let workerContent = fs.readFileSync(workerPath, 'utf8');
-
-// Durable Object class definition
-const durableObjectCode = `
-
-// Durable Object for multiplayer game rooms
+// Simple Durable Object implementation for Cloudflare Pages
 export class GameRoomDurableObject extends DurableObject {
   constructor(state, env) {
     super(state, env);
-    this.state = state;
-    this.env = env;
     this.sessions = new Map();
     this.gameState = null;
     this.roomId = state.id.toString();
@@ -169,10 +147,12 @@ export class GameRoomDurableObject extends DurableObject {
         newGameState.turn = 'TIGER';
         newGameState.currentPlayerId = this.getPlayerIdByRole('TIGER');
       } else {
-        newGameState.board[move.from] = null;
+        if (move.from !== undefined) {
+          newGameState.board[move.from] = null;
+        }
         newGameState.board[move.to] = newGameState.turn;
         
-        if (move.jumpedGoatId !== null) {
+        if (move.jumpedGoatId !== null && move.jumpedGoatId !== undefined) {
           newGameState.board[move.jumpedGoatId] = null;
           newGameState.goatsCaptured++;
         }
@@ -253,7 +233,7 @@ export class GameRoomDurableObject extends DurableObject {
     const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
     const animal = animals[Math.floor(Math.random() * animals.length)];
     
-    return \`\${adj}-\${animal}-\${numbers}\`;
+    return `${adj}-${animal}-${numbers}`;
   }
 
   getPlayerIdByRole(role) {
@@ -266,7 +246,7 @@ export class GameRoomDurableObject extends DurableObject {
         return playerId;
       }
     }
-    throw new Error(\`No player found with role \${role}\`);
+    throw new Error(`No player found with role ${role}`);
   }
 
   async handleGetState() {
@@ -315,12 +295,12 @@ export class GameRoomDurableObject extends DurableObject {
       code
     });
   }
-}`;
+}
 
-// Simply append the Durable Object to the worker
-const finalWorkerContent = workerContent + durableObjectCode;
-
-// Write the modified worker
-fs.writeFileSync(workerPath, finalWorkerContent);
-
-console.log('✅ Successfully injected Durable Objects into worker'); 
+// Default export for Cloudflare Pages
+export default {
+  async fetch(request, env, ctx) {
+    // Handle other requests normally
+    return new Response('Not found', { status: 404 });
+  }
+}; 

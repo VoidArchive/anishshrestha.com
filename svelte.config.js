@@ -10,7 +10,13 @@ const config = {
     })
   ],
   kit: {
-    adapter: adapter(),
+    adapter: adapter({
+      platformProxy: {
+        environment: 'dev',
+        persist: false,
+        configPath: 'wrangler.toml'
+      }
+    }),
     alias: {
       $core: 'src/core',
       $games: 'src/games'

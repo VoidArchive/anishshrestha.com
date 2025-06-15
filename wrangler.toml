@@ -13,4 +13,8 @@ database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
 [[durable_objects.bindings]]
 name = "GAME_ROOMS"
 class_name = "GameRoomDurableObject"
-script_name = "anish"
+
+# Durable Objects migrations
+[[migrations]]
+tag = "v1"
+new_classes = [ "GameRoomDurableObject" ]
