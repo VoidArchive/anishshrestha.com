@@ -137,8 +137,8 @@
         }
       });
 
-      // Generate unique player ID
-      const playerId = `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Use the playerId returned from the room creation / join response if available
+      const playerId: string = currentRoom?.playerId ?? `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
       // Connect to the room
       const success = await wsClient.connect(code, playerId);

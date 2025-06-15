@@ -32,9 +32,19 @@
     wsClient = client;
     isInGame = true;
     
-    // Extract player info from the game state
-    currentPlayerId = state.hostPlayerId; // Simplified for now
-    playerRole = state.players[currentPlayerId]?.role || 'GOAT';
+    // Extract player info from the WebSocket client itself to correctly map role
+    currentPlayerId = client.getPlayerId();
+    if (!currentPlayerId) {
+      console.warn('Unable to determine local playerId from WebSocket client');
+    }
+
+    if (currentPlayerId && state.players[currentPlayerId]) {
+      playerRole = state.players[currentPlayerId].role;
+    } else {
+      // Fallback to original logic if for some reason the ID is not found
+      // (should not happen, but prevents UI breakage)
+      playerRole = state.players[state.hostPlayerId]?.role || 'GOAT';
+    }
     errorMessage = '';
   }
 

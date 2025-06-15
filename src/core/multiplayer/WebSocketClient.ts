@@ -161,4 +161,8 @@ export class WebSocketClient {
   getStatus(): ConnectionStatus {
     return this.status;
   }
+
+  getPlayerId(): string | null {
+    return this.playerId;
+  }
 } 
