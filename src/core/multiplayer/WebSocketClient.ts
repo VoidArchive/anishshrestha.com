@@ -15,10 +15,26 @@ export class WebSocketClient {
   private authToken: string | undefined;
   private status: ConnectionStatus = 'disconnected';
   private reconnectAttempts = 0;
-  private maxReconnectAttempts = 5;
-  private reconnectDelay = 1000;
+  /**
+   * Maximum reconnect attempts. Set to `Infinity` for unlimited attempts. This can
+   * be overridden via the constructor options in the future if needed.
+   */
+  private maxReconnectAttempts = Infinity;
+
+  /**
+   * Base delay (ms) for reconnect exponential backoff. The actual delay is
+   *   delay = baseDelay * 2 ** attempts  + jitter
+   * where jitter is 0–baseDelay to prevent reconnection storms.
+   */
+  private baseReconnectDelay = 1000;
   private pingInterval: number | null = null;
   private shouldReconnect = true;
+
+  /**
+   * Outgoing messages that haven't been acknowledged by the server yet.
+   * We store their raw JSON so we can replay them verbatim after a reconnect.
+   */
+  private pending: any[] = [];
 
   constructor(private options: WebSocketClientOptions) {}
 
@@ -53,6 +69,11 @@ export class WebSocketClient {
         this.setStatus('connected');
         this.reconnectAttempts = 0;
         this.startPingInterval();
+
+        // Flush any pending optimistic messages that haven't been ACKed yet
+        for (const pendingMsg of this.pending) {
+          this.ws!.send(JSON.stringify(pendingMsg));
+        }
       };
 
       this.ws.onmessage = (event) => {
@@ -82,12 +103,15 @@ export class WebSocketClient {
 
   sendMove(move: any) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const message: WebSocketMessage = {
+      const ackId = crypto.randomUUID();
+      const message: any = {
         type: 'GAME_MOVE',
         timestamp: Date.now(),
         playerId: this.playerId!,
-        move
+        move,
+        ackId
       };
+      this.pending.push(message);
       this.ws.send(JSON.stringify(message));
     }
   }
@@ -104,7 +128,7 @@ export class WebSocketClient {
 
   private handleMessage(data: string) {
     try {
-      const message: WebSocketMessage = JSON.parse(data);
+      const message: any = JSON.parse(data);
       
       switch (message.type) {
         case 'GAME_STATE':
@@ -121,12 +145,22 @@ export class WebSocketClient {
           // Heartbeat response - connection is alive
           break;
           
+        case 'ACK':
+          if (message.ackId) {
+            this.handleAck(message.ackId);
+          }
+          break;
+          
         default:
           console.warn('Unknown message type:', message.type);
       }
     } catch (error) {
       console.error('Failed to parse message:', error);
     }
+  }
+
+  private handleAck(ackId: string) {
+    this.pending = this.pending.filter((m) => m.ackId !== ackId);
   }
 
   private setStatus(status: ConnectionStatus) {
@@ -162,10 +196,15 @@ export class WebSocketClient {
     if (this.reconnectAttempts < this.maxReconnectAttempts && this.roomId && this.playerId) {
       this.reconnectAttempts++;
       this.setStatus('reconnecting');
-      
+
+      // Calculate exponential backoff with jitter
+      const expDelay = this.baseReconnectDelay * 2 ** (this.reconnectAttempts - 1);
+      const jitter = Math.random() * this.baseReconnectDelay;
+      const delay = Math.min(expDelay + jitter, 30000); // Cap at 30s
+
       setTimeout(() => {
         this.connect(this.roomId!, this.playerId!, this.authToken);
-      }, this.reconnectDelay * this.reconnectAttempts);
+      }, delay);
     }
   }
 

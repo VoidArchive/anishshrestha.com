@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { onMount as onMountInstance } from 'svelte';
+  import { onMount as onMountInstance, onDestroy } from 'svelte';
   
   // Import existing Bagchal components
   import GameBoard from '$games/bagchal/ui/GameBoard.svelte';
@@ -132,6 +132,25 @@
   onMountInstance(() => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     __setWsClientGetter(() => wsClient);
+
+    // Also register beforeunload handler directly here (runs only in browser)
+    const beforeUnload = () => {
+      wsClient?.disconnect();
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', beforeUnload);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('beforeunload', beforeUnload);
+      }
+    };
+  });
+
+  // Ensure that we close the socket when the component is destroyed (i.e., route changes)
+  onDestroy(() => {
+    wsClient?.disconnect();
   });
 </script>
 
@@ -211,32 +230,23 @@
   </section>
 </ErrorBoundary>
 
-<!-- Lifecycle hooks – ensure we *always* close the socket when the user leaves
-     the page (navigation, tab close, etc.) to prevent zombie sessions in the
-     Durable Object. -->
-<script lang="ts" context="module">
-  import { onDestroy, onMount } from 'svelte';
+<script lang="ts" module>
   import type { WebSocketClient as MultiplayerWebSocketClient } from '$core/multiplayer';
 
   // Getter that the instance script will register so that the module context
-  // can access the current `wsClient` value without a direct import cycle.
+  // can access the current `wsClient` value without creating a circular import.
   let _getWsClient: () => MultiplayerWebSocketClient | null = () => null;
 
   export function __setWsClientGetter(fn: () => MultiplayerWebSocketClient | null) {
     _getWsClient = fn;
   }
 
-  onMount(() => {
-    const beforeUnload = () => {
-      _getWsClient()?.disconnect();
-    };
-    window.addEventListener('beforeunload', beforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', beforeUnload);
-    };
-  });
-
-  onDestroy(() => {
+  /**
+   * SvelteKit navigation lifecycle – runs on client-side page transitions.
+   * The `beforeNavigate` hook lets us disconnect the socket when the user
+   * navigates away, preventing zombie sessions.
+   */
+  export function beforeNavigate() {
     _getWsClient()?.disconnect();
-  });
+  }
 </script>

@@ -43,7 +43,7 @@ import type {
   PlayerInfo,
   GameMoveMessage
 } from '../../games/bagchal/types/multiplayer';
-import { executeMove, generatePoints, generateLines, buildAdjacencyMap } from '../../games/bagchal/rules';
+import { executeMove, generatePoints, generateLines, buildAdjacencyMap, validateMove } from '../../games/bagchal/rules';
 import { verifyToken } from '../../lib/utils/auth';
 
 // Runtime stub: during Node prerender the global DurableObject doesn't exist.
@@ -67,6 +67,14 @@ export class GameRoomDurableObject extends DurableObject {
   private roomId: string;
   private stateStorage: DurableObjectStorage;
   private envVars: any;
+  private db: any;
+  private durableState: DurableObjectState;
+  /**
+   * Tracks the version returned from the last successful write to D1. This is used for
+   * optimistic-concurrency control when multiple isolates of the same Durable Object
+   * are spawned (e.g. during redeploys) and attempt to persist state simultaneously.
+   */
+  private lastPersistedVersion = 0;
   
   // Pre-computed game constants
   private points = generatePoints();
@@ -77,7 +85,9 @@ export class GameRoomDurableObject extends DurableObject {
     super(state, env);
     this.roomId = state.id.toString();
     this.stateStorage = state.storage;
+    this.durableState = state;
     this.envVars = env;
+    this.db = env.DB; // D1 binding injected via Wrangler
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -251,12 +261,25 @@ export class GameRoomDurableObject extends DurableObject {
       return;
     }
 
-    // Validate it's the player's turn
+    // Validate it's the player's turn and move legality using shared rules
     if (this.gameState.currentPlayerId !== message.playerId) {
       this.sendError(message.playerId, 'Not your turn');
       return;
     }
 
+    // Full rules validation (pure, no mutations)
+    const { valid, reason } = validateMove(
+      this.gameState,
+      message.move,
+      this.adjacency,
+      this.points
+    );
+    if (!valid) {
+      this.sendError(message.playerId, reason || 'Illegal move');
+      return;
+    }
+
+    const ackId: string | undefined = message.ackId;
     try {
       const move: GameMove = message.move;
       const newGameState = JSON.parse(JSON.stringify(this.gameState)); // Deep clone
@@ -315,19 +338,21 @@ export class GameRoomDurableObject extends DurableObject {
         });
       }
 
-      // Check for game end
-      if (this.gameState && this.gameState.winner) {
-        this.broadcast({
-          type: 'GAME_END',
+      // Send ACK back to mover so client can flush optimistic queue
+      if (ackId) {
+        this.sendToPlayer(message.playerId, {
+          type: 'ACK',
           timestamp: Date.now(),
           playerId: 'system',
-          winner: this.gameState.winner,
-          reason: 'win'
-        });
+          ackId
+        } as any);
       }
 
-      // Persist to Durable Object storage (fire-and-forget)
-      this.stateStorage.put('gameState', this.gameState).catch((err) => console.error('Failed to persist game state', err));
+      // Atomically persist to D1 (fire-and-forget; DO will retry on failure via waitUntil)
+      this.persistState().catch((err) => console.error('Failed to persist game state', err));
+
+      // Also keep a copy in Durable Object storage for fast cold-start
+      this.stateStorage.put('gameState', this.gameState).catch((e) => console.error('storage.put failed', e));
 
     } catch (error) {
       console.error('Error executing move:', error);
@@ -448,6 +473,70 @@ export class GameRoomDurableObject extends DurableObject {
       playerId: 'system',
       error,
       code
+    });
+  }
+
+  /**
+   * Persist latest state into D1 with optimistic concurrency control.
+   * The schema is
+   * CREATE TABLE IF NOT EXISTS room_state (
+   *   id TEXT PRIMARY KEY,
+   *   blob TEXT NOT NULL,
+   *   version INTEGER NOT NULL DEFAULT 0
+   * );
+   */
+  private async persistState() {
+    if (!this.gameState) return;
+
+    const blob = JSON.stringify(this.gameState);
+    const id = this.roomId;
+
+    // Ensure only one persist runs at a time inside this DO instance
+    await this.durableState.blockConcurrencyWhile(async () => {
+      let attempt = 0;
+      const MAX_ATTEMPTS = 5;
+      let currentVersion = this.lastPersistedVersion;
+
+      while (attempt < MAX_ATTEMPTS) {
+        attempt++;
+        try {
+          // INSERT a new row if it does not exist yet – otherwise UPDATE using optimistic concurrency
+          const info = (await this.db
+            .prepare(
+              `INSERT INTO room_state (id, blob, version)
+               VALUES (?1, ?2, 1)
+               ON CONFLICT(id) DO UPDATE SET
+                 blob   = excluded.blob,
+                 version = CASE WHEN room_state.version = ?3 THEN room_state.version + 1 ELSE room_state.version END
+               RETURNING version` as string
+            )
+            .bind(id, blob, currentVersion)
+            .first()) as { version?: number } | undefined;
+
+          const newVersion = info?.version ?? null;
+
+          // If `version` did not advance, a concurrent writer beat us – reload & retry
+          if (newVersion === null || newVersion === currentVersion) {
+            // fetch existing version
+            const existing = (await this.db
+              .prepare(`SELECT version FROM room_state WHERE id = ?1` as string)
+              .bind(id)
+              .first()) as { version?: number } | undefined;
+            currentVersion = existing?.version ?? 0;
+            await new Promise((r) => setTimeout(r, 25 * attempt)); // brief backoff
+            continue;
+          }
+
+          // Success – store latest version & exit loop
+          this.lastPersistedVersion = newVersion;
+          console.log('State persisted – version', newVersion);
+          break;
+        } catch (err) {
+          console.error('persistState attempt failed', err);
+          if (attempt >= MAX_ATTEMPTS) throw err;
+          await new Promise((r) => setTimeout(r, 50 * attempt)); // exponential backoff
+        }
+      }
     });
   }
 } 
