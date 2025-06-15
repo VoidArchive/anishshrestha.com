@@ -133,7 +133,8 @@ export class GameRoomDurableObject extends DurableObject {
       const webSocketPair = new WebSocketPair();
       const [client, server] = Object.values(webSocketPair);
 
-      await this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
+      // Handle the connection asynchronously but don't await it
+      this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
       
       return new Response(null, {
         status: 101,
@@ -147,8 +148,23 @@ export class GameRoomDurableObject extends DurableObject {
 
   private async handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
     try {
+      // Accept the WebSocket connection first
       (webSocket as any).accept();
       this.sessions.set(webSocket, playerId);
+
+      // Set up event listeners immediately after accepting
+      webSocket.addEventListener('message', (event: MessageEvent) => {
+        this.handleWebSocketMessage(webSocket, playerId, event.data);
+      });
+
+      webSocket.addEventListener('close', () => {
+        this.handleWebSocketClose(webSocket, playerId);
+      });
+
+      webSocket.addEventListener('error', (error: Event) => {
+        console.error('WebSocket error in Durable Object:', error);
+        this.handleWebSocketClose(webSocket, playerId);
+      });
 
       // Load persisted state if exists, else initialize
       if (!this.gameState) {
@@ -195,19 +211,6 @@ export class GameRoomDurableObject extends DurableObject {
           gameState: this.gameState
         });
       }
-
-      webSocket.addEventListener('message', (event: MessageEvent) => {
-        this.handleWebSocketMessage(webSocket, playerId, event.data);
-      });
-
-      webSocket.addEventListener('close', () => {
-        this.handleWebSocketClose(webSocket, playerId);
-      });
-
-      webSocket.addEventListener('error', (error: Event) => {
-        console.error('WebSocket error:', error);
-        this.handleWebSocketClose(webSocket, playerId);
-      });
 
     } catch (error) {
       console.error('WebSocket connection error:', error);

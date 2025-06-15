@@ -25,9 +25,12 @@ export const GET: RequestHandler = async ({ params, url, request, platform }) =>
     durableObjectUrl.searchParams.set('roomCode', roomCode);
     if (token) durableObjectUrl.searchParams.set('token', token);
 
+    // Create a new request with proper WebSocket upgrade headers
+    const upgradeHeaders = new Headers(request.headers);
+    
     return await roomObject.fetch(durableObjectUrl.toString(), {
       method: 'GET',
-      headers: request.headers
+      headers: upgradeHeaders
     });
   } catch (error) {
     console.error('WebSocket upgrade failed:', error);
