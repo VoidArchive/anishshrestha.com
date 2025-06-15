@@ -4,7 +4,7 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { JoinRoomRequest, JoinRoomResponse } from '../../../../../games/bagchal/types/multiplayer';
 import { generateId, isValidRoomCode } from '../../../../../lib/utils/multiplayer';
-import { ensureSchema } from '../../../../../lib/server/db';
+import { ensureSchema } from '$core/server';
 
 export const POST: RequestHandler = async ({ params, request, platform }) => {
   try {

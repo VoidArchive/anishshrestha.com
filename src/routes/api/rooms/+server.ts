@@ -9,7 +9,7 @@ import type {
   JoinRoomResponse 
 } from '../../../games/bagchal/types/multiplayer';
 import { generateId, generateRoomCode } from '../../../lib/utils/multiplayer';
-import { ensureSchema } from '../../../lib/server/db';
+import { ensureSchema } from '$core/server';
 // import { sanitizePlayerName, sanitizeGameState } from '../../../lib/utils/security';
 
 // Create a new game room
