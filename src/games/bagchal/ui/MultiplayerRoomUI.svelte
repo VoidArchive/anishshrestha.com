@@ -56,6 +56,8 @@
     errorMessage = '';
 
     try {
+      console.log('Creating room for player:', playerName.trim());
+      
       const response = await fetch('/api/rooms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,11 +67,21 @@
         })
       });
 
+      console.log('Room creation response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Failed to create room');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Room creation failed:', response.status, errorData);
+        throw new Error(errorData.error || 'Failed to create room');
       }
 
       const room = await response.json();
+      console.log('Room created successfully:', room);
+      
+      if (!room.roomCode) {
+        throw new Error('No room code returned from server');
+      }
+      
       currentRoom = room;
       currentView = 'waiting';
       
@@ -77,7 +89,7 @@
       connectToRoom(room.roomCode);
       
     } catch (error) {
-      errorMessage = 'Failed to create room. Please try again.';
+      errorMessage = error instanceof Error ? error.message : 'Failed to create room. Please try again.';
       console.error('Create room error:', error);
     } finally {
       isLoading = false;
@@ -120,6 +132,13 @@
   }
 
   async function connectToRoom(code: string) {
+    console.log('Connecting to room:', code);
+    
+    if (!code) {
+      errorMessage = 'Invalid room code';
+      return;
+    }
+    
     connectionStatus = 'connecting';
     
     try {
@@ -142,6 +161,8 @@
       const playerId: string = currentRoom?.playerId ?? `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const authToken: string | undefined = currentRoom?.authToken;
       
+      console.log('Connecting with:', { code, playerId: playerId.substring(0, 8) + '...', hasToken: !!authToken });
+      
       // Connect to the room
       const success = await wsClient.connect(code, playerId, authToken);
       
@@ -151,7 +172,7 @@
       
     } catch (error) {
       connectionStatus = 'disconnected';
-      errorMessage = 'Failed to connect to room. Please try again.';
+      errorMessage = error instanceof Error ? error.message : 'Failed to connect to room. Please try again.';
       console.error('Connection error:', error);
     }
   }

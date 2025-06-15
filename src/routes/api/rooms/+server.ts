@@ -99,9 +99,9 @@ export const POST: RequestHandler = async ({ request, platform }) => {
     };
 
     await db.prepare(`
-      INSERT INTO game_sessions (id, room_id, game_state, started_at)
-      VALUES (?, ?, ?, ?)
-    `).bind(sessionId, roomId, JSON.stringify(initialGameState), now).run();
+      INSERT INTO game_sessions (id, room_id, game_state, started_at, updated_at)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(sessionId, roomId, JSON.stringify(initialGameState), now, now).run();
 
     const secret = (platform?.env as any)?.JWT_SECRET as string | undefined;
     if (!secret) {
