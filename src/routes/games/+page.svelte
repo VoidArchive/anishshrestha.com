@@ -3,16 +3,25 @@
 	// Simple list of games – can be replaced with fetched data later
 	const games = [
 		{
-			name: 'Bagchal',
-			description: 'Play the traditional Nepali tiger-goat strategy game.',
+			name: 'Bagchal Classic',
+			description: 'Play the traditional Nepali tiger-goat strategy game against AI.',
 			slug: 'bagchal',
-			icon: '/icons/tiger.svg'
+			icon: '/icons/tiger.svg',
+			mode: 'Single Player'
+		},
+		{
+			name: 'Bagchal Reforged',
+			description: 'Play Bagchal online with friends in real-time multiplayer.',
+			slug: 'bagchal/reforged',
+			icon: '/icons/tiger.svg',
+			mode: 'Multiplayer'
 		},
 		{
 			name: 'Tic Tac Toe',
 			description: 'Play the classic Tic Tac Toe game.',
 			slug: 'tictactoe',
-			icon: '/icons/hash.svg'
+			icon: '/icons/hash.svg',
+			mode: 'Single Player'
 		}
 	];
 </script>
@@ -41,7 +50,14 @@
 				<section class="section-card p-3 sm:p-4 flex flex-row justify-between items-start rounded-none gap-4">
 					<!-- Text content -->
 					<div class="flex flex-col gap-2 flex-1">
-						<h2 class="section-title m-0 text-xl">{game.name}</h2>
+						<div class="flex items-center gap-2">
+							<h2 class="section-title m-0 text-xl">{game.name}</h2>
+							{#if game.mode}
+								<span class="badge text-xs px-2 py-1 rounded-full {game.mode === 'Multiplayer' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+									{game.mode}
+								</span>
+							{/if}
+						</div>
 						<p class="text-text-muted text-sm leading-relaxed">{game.description}</p>
 						<a href={`/games/${game.slug}`} class="btn inline-flex w-max items-center gap-2 mt-1">
 							<span>Play</span>

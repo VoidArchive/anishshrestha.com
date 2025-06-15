@@ -6,7 +6,16 @@ declare global {
 		// interface Locals {}
 		// interface PageData {}
 		// interface PageState {}
-		// interface Platform {}
+		interface Platform {
+			env: {
+				DB: D1Database;
+				GAME_ROOMS: DurableObjectNamespace;
+			};
+			context: {
+				waitUntil(promise: Promise<any>): void;
+			};
+			caches: CacheStorage;
+		}
 	}
 }
 

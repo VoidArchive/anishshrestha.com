@@ -2,3 +2,15 @@ name              = "anish"
 compatibility_date = "2025-06-10"
 main              = ".svelte-kit/cloudflare/_worker.js"
 assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
+
+# D1 Database for multiplayer game persistence
+[[d1_databases]]
+binding = "DB"
+database_name = "bagchal-reforged"
+database_id = "236b0602-b9ee-4af9-95ec-315fcabbd12f"
+
+# Durable Objects for real-time game state management
+[[durable_objects.bindings]]
+name = "GAME_ROOMS"
+class_name = "GameRoomDurableObject"
+script_name = "anish"
