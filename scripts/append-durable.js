@@ -28,8 +28,8 @@ async function main() {
 
   const bundledCode = outputFiles[0].text;
 
-  // Append the bundled code and re-export to the worker
-  appendFileSync(workerFile, `\n// ---- Durable Object Bundle ----\n${bundledCode}\n// Re-export for Wrangler binding\nexport { GameRoomDurableObject };\n`);
+  // Append the bundled code directly (it already contains the export)
+  appendFileSync(workerFile, `\n// ---- Durable Object Bundle ----\n${bundledCode}\n`);
 
   console.log('✅ Injected GameRoomDurableObject into worker bundle');
 }
