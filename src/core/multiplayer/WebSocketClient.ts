@@ -104,12 +104,20 @@ export class WebSocketClient {
 
       this.ws.onclose = (event) => {
         clearTimeout(connectionTimeout);
-        console.log('WebSocket closed:', event.code, event.reason);
+        console.log('🔴 WebSocket closed:', event.code, event.reason);
+        console.log('🔍 Close event details:', {
+          code: event.code,
+          reason: event.reason,
+          wasClean: event.wasClean,
+          shouldReconnect: this.shouldReconnect
+        });
+        
         this.setStatus('disconnected');
         this.stopPingInterval();
         
-        // Only attempt reconnect if it wasn't a normal closure
-        if (event.code !== 1000 && event.code !== 1001) {
+        // Attempt reconnect for any abnormal closure
+        if (event.code !== 1000 && event.code !== 1001 && this.shouldReconnect) {
+          console.log('🔄 Abnormal closure detected, attempting reconnect...');
           this.attemptReconnect();
         }
       };
@@ -147,8 +155,23 @@ export class WebSocketClient {
     });
     
     if (!this.ws) {
-      console.error('❌ No WebSocket object');
-      this.options.onError('No WebSocket connection');
+      console.error('❌ No WebSocket object - attempting to reconnect');
+      // Try to reconnect immediately
+      if (this.roomId && this.playerId) {
+        console.log('🔄 Reconnecting before sending move...');
+        this.connect(this.roomId, this.playerId, this.authToken).then((success) => {
+          if (success) {
+            console.log('✅ Reconnected! Retrying move...');
+            // Retry the move after successful reconnection
+            setTimeout(() => this.sendMove(move), 100);
+          } else {
+            console.error('❌ Reconnection failed');
+            this.options.onError('Failed to reconnect');
+          }
+        });
+      } else {
+        this.options.onError('No WebSocket connection');
+      }
       return;
     }
     
@@ -246,16 +269,16 @@ export class WebSocketClient {
           timestamp: Date.now(),
           playerId: this.playerId!
         };
-        console.log('Sending ping to keep connection alive');
+        console.log('🏓 Sending ping to keep connection alive');
         this.ws.send(JSON.stringify(pingMessage));
       } else {
-        console.warn('Cannot send ping - WebSocket not open, state:', this.ws?.readyState);
+        console.warn('⚠️ Cannot send ping - WebSocket not open, state:', this.ws?.readyState);
         if (this.ws && this.ws.readyState === WebSocket.CLOSED) {
           this.stopPingInterval();
           this.attemptReconnect();
         }
       }
-    }, 30000); // Ping every 30 seconds
+    }, 15000); // Ping every 15 seconds (reduced from 30)
   }
 
   private stopPingInterval() {
