@@ -1,9 +1,24 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
+import { verifyToken } from '../../../../../lib/utils/auth';
 
 export const POST: RequestHandler = async ({ params, request, platform }) => {
   const { roomCode } = params;
-  const { playerId } = await request.json();
+  const { playerId, authToken } = await request.json();
+
+  if (!authToken) {
+    return json({ error: 'Missing auth token' }, { status: 400 });
+  }
+
+  const secret = (platform?.env as any)?.JWT_SECRET as string | undefined;
+  if (!secret) {
+    return json({ error: 'Server misconfiguration' }, { status: 500 });
+  }
+
+  const verified = await verifyToken(authToken, secret);
+  if (!verified || verified.playerId !== playerId || verified.roomCode !== roomCode) {
+    return json({ error: 'Invalid auth token' }, { status: 401 });
+  }
 
   if (!playerId) {
     return json({ error: 'Player ID is required' }, { status: 400 });
@@ -19,12 +34,13 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
     const roomObject = platform.env.GAME_ROOMS.get(roomId);
 
     // Create WebSocket URL for this specific room
-    const websocketUrl = `${new URL(request.url).origin}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}&roomCode=${encodeURIComponent(roomCode)}`;
+    const websocketUrl = `${new URL(request.url).origin}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}&roomCode=${encodeURIComponent(roomCode)}&token=${encodeURIComponent(authToken)}`;
 
     return json({
       websocketUrl,
       roomCode,
-      playerId
+      playerId,
+      authToken
     });
   } catch (error) {
     console.error('Failed to create WebSocket connection:', error);

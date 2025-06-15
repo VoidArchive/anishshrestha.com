@@ -44,6 +44,7 @@ import type {
   GameMoveMessage
 } from '../../games/bagchal/types/multiplayer';
 import { executeMove, generatePoints, generateLines, buildAdjacencyMap } from '../../games/bagchal/rules';
+import { verifyToken } from '../../lib/utils/auth';
 
 // Runtime stub: during Node prerender the global DurableObject doesn't exist.
 // Define a no-op base class so that the `extends DurableObject` below doesn't throw.
@@ -64,6 +65,8 @@ export class GameRoomDurableObject extends DurableObject {
   private sessions: Map<WebSocket, string> = new Map();
   private gameState: MultiplayerGameState | null = null;
   private roomId: string;
+  private stateStorage: DurableObjectStorage;
+  private envVars: any;
   
   // Pre-computed game constants
   private points = generatePoints();
@@ -73,6 +76,8 @@ export class GameRoomDurableObject extends DurableObject {
   constructor(state: DurableObjectState, env: any) {
     super(state, env);
     this.roomId = state.id.toString();
+    this.stateStorage = state.storage;
+    this.envVars = env;
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -93,7 +98,23 @@ export class GameRoomDurableObject extends DurableObject {
     const url = new URL(request.url);
     const playerId = url.searchParams.get('playerId');
     const roomCode: string = url.searchParams.get('roomCode') || this.roomId;
+    const token = url.searchParams.get('token');
     
+    // Verify auth token
+    if (!token) {
+      return new Response('Missing token', { status: 401 });
+    }
+
+    const secret = (this.envVars as any)?.JWT_SECRET as string | undefined;
+    if (!secret) {
+      return new Response('Server misconfiguration', { status: 500 });
+    }
+
+    const verified = await verifyToken(token, secret);
+    if (!verified || verified.playerId !== playerId || verified.roomCode !== roomCode) {
+      return new Response('Invalid token', { status: 403 });
+    }
+
     if (!playerId) {
       return new Response('Missing playerId', { status: 400 });
     }
@@ -102,7 +123,7 @@ export class GameRoomDurableObject extends DurableObject {
       const webSocketPair = new WebSocketPair();
       const [client, server] = Object.values(webSocketPair);
 
-      this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
+      await this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
       
       return new Response(null, {
         status: 101,
@@ -114,12 +135,19 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
+  private async handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
     try {
       (webSocket as any).accept();
       this.sessions.set(webSocket, playerId);
 
-      // Initialize game state if needed
+      // Load persisted state if exists, else initialize
+      if (!this.gameState) {
+        const persisted = await this.stateStorage.get<MultiplayerGameState>('gameState');
+        if (persisted) {
+          this.gameState = persisted;
+        }
+      }
+
       if (!this.gameState) {
         this.initializeGameState(roomCode, playerId);
       }
@@ -232,31 +260,45 @@ export class GameRoomDurableObject extends DurableObject {
     try {
       const move: GameMove = message.move;
       const newGameState = JSON.parse(JSON.stringify(this.gameState)); // Deep clone
-      
+
       if (move.moveType === 'PLACEMENT') {
-        // Handle goat placement
+        // Validate placement
+        if (newGameState.phase !== 'PLACEMENT' || newGameState.turn !== 'GOAT') {
+          this.sendError(message.playerId, 'Invalid placement phase');
+          return;
+        }
+        if (newGameState.board[move.to] !== null) {
+          this.sendError(message.playerId, 'Position occupied');
+          return;
+        }
         newGameState.board[move.to] = 'GOAT';
         newGameState.goatsPlaced++;
-        
         if (newGameState.goatsPlaced >= 20) {
           newGameState.phase = 'MOVEMENT';
         }
-        
         newGameState.turn = 'TIGER';
         newGameState.currentPlayerId = this.getPlayerIdByRole('TIGER');
       } else {
-        // Handle movement/capture - simplified logic
-        if (move.from !== undefined) {
-          newGameState.board[move.from] = null;
+        // Use shared executeMove for movement/capture validation & update
+        if (move.from === undefined || move.from === null) {
+          this.sendError(message.playerId, 'Missing from');
+          return;
         }
-        newGameState.board[move.to] = newGameState.turn;
-        
-        if (move.jumpedGoatId !== null && move.jumpedGoatId !== undefined) {
-          newGameState.board[move.jumpedGoatId] = null;
-          newGameState.goatsCaptured++;
+        try {
+          executeMove(
+            newGameState,
+            move.from,
+            move.to,
+            move.jumpedGoatId ?? null,
+            this.adjacency,
+            this.points
+          );
+        } catch (err) {
+          console.error('Move execution failed', err);
+          this.sendError(message.playerId, 'Illegal move');
+          return;
         }
-        
-        newGameState.turn = newGameState.turn === 'GOAT' ? 'TIGER' : 'GOAT';
+        // currentPlayerId already adjusted inside executeMove via turn switch
         newGameState.currentPlayerId = this.getPlayerIdByRole(newGameState.turn);
       }
 
@@ -283,6 +325,9 @@ export class GameRoomDurableObject extends DurableObject {
           reason: 'win'
         });
       }
+
+      // Persist to Durable Object storage (fire-and-forget)
+      this.stateStorage.put('gameState', this.gameState).catch((err) => console.error('Failed to persist game state', err));
 
     } catch (error) {
       console.error('Error executing move:', error);

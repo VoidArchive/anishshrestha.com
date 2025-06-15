@@ -1,5 +1,6 @@
 <script lang="ts">
   import { WebSocketClient, type ConnectionStatus, type MultiplayerGameState } from '$core/multiplayer';
+  import { onDestroy, onMount } from 'svelte';
 
   interface Props {
     onGameStart: (state: MultiplayerGameState, client: WebSocketClient) => void;
@@ -139,9 +140,10 @@
 
       // Use the playerId returned from the room creation / join response if available
       const playerId: string = currentRoom?.playerId ?? `player_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const authToken: string | undefined = currentRoom?.authToken;
       
       // Connect to the room
-      const success = await wsClient.connect(code, playerId);
+      const success = await wsClient.connect(code, playerId, authToken);
       
       if (!success) {
         throw new Error('Failed to establish connection');
@@ -157,7 +159,24 @@
   function closeModal() {
     showModal = false;
     onClose?.();
+    if (wsClient) {
+      wsClient.disconnect();
+      wsClient = null;
+    }
   }
+
+  // Ensure we always clean up the socket if the user leaves the lobby modal
+  onMount(() => {
+    const beforeUnload = () => wsClient?.disconnect();
+    window.addEventListener('beforeunload', beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
+  });
+
+  onDestroy(() => {
+    wsClient?.disconnect();
+  });
 </script>
 
 {#if showModal}

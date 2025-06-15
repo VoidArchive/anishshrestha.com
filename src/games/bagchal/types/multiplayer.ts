@@ -120,6 +120,7 @@ export interface CreateRoomResponse {
   roomCode: string;
   playerId: string;
   role: 'GOAT' | 'TIGER';
+  authToken: string;
 }
 
 export interface JoinRoomRequest {
@@ -131,6 +132,7 @@ export interface JoinRoomResponse {
   roomId: string;
   playerId: string;
   role: 'GOAT' | 'TIGER';
+  authToken: string;
   gameState: MultiplayerGameState;
 }
 

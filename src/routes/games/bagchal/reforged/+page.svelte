@@ -1,15 +1,15 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { onMount as onMountInstance } from 'svelte';
   
   // Import existing Bagchal components
   import GameBoard from '$games/bagchal/ui/GameBoard.svelte';
-  import GameSidebar from '$games/bagchal/ui/GameSidebar.svelte';
   import ErrorBoundary from '$lib/components/ErrorBoundary.svelte';
   
   // Import multiplayer components
   import MultiplayerRoomUI from '$games/bagchal/ui/MultiplayerRoomUI.svelte';
   import { WebSocketClient, type MultiplayerGameState } from '$core/multiplayer';
-  
+
   // Import game logic
   import { points, lines } from '$games/bagchal/store.svelte';
 
@@ -18,10 +18,18 @@
   let isInGame = $state(false);
   let errorMessage = $state('');
   let wsClient: WebSocketClient | null = $state(null);
+  // Local UI-only selection state so we never mutate the gameState directly
+  let selectedPieceId: number | null = null;
 
   // Player info from multiplayer
   let currentPlayerId: string | null = $state(null);
   let playerRole: 'GOAT' | 'TIGER' | null = $state(null);
+  let playerName: string = $derived(gameState && currentPlayerId ? (gameState as MultiplayerGameState).players[currentPlayerId]?.name ?? '' : '');
+  let opponentName: string = $derived(gameState && currentPlayerId ? (() => {
+    const opp = Object.values((gameState as MultiplayerGameState).players).find((p: any) => p.id !== currentPlayerId);
+    return opp?.name ?? 'Waiting...';
+  })() : '');
+  let currentTurnName: string = $derived(gameState ? (gameState as MultiplayerGameState).players[(gameState as MultiplayerGameState).currentPlayerId]?.name ?? '' : '');
   let isMyTurn = $derived(
     gameState && currentPlayerId && (gameState as MultiplayerGameState).currentPlayerId === currentPlayerId
   );
@@ -60,8 +68,9 @@
       return;
     }
 
-    // Simple move logic for demonstration
-    // In real implementation, this would validate moves and send to server
+    // Use component-scoped selectedPieceId to keep track of which piece the
+    // player has clicked to move. This never touches the trusted gameState
+    // coming from the server.
     let moveType: 'PLACEMENT' | 'MOVEMENT' | 'CAPTURE' = 'PLACEMENT';
     let fromId: number | null = null;
     let jumpedGoatId: number | null = null;
@@ -73,14 +82,14 @@
       moveType = 'PLACEMENT';
     } else {
       // Movement phase
-      if (gameState.selectedPieceId !== null) {
-        fromId = gameState.selectedPieceId;
+      if (selectedPieceId !== null) {
+        fromId = selectedPieceId;
         moveType = 'MOVEMENT';
-        gameState.selectedPieceId = null;
+        selectedPieceId = null;
       } else {
         // Selecting a piece
         if (gameState.board[pointId] === gameState.turn) {
-          gameState.selectedPieceId = pointId;
+          selectedPieceId = pointId;
           return;
         }
       }
@@ -103,6 +112,13 @@
     gameState = null;
     currentPlayerId = null;
     playerRole = null;
+
+    // Gracefully close the WebSocket connection so that the server can clean
+    // up session state immediately.
+    if (wsClient) {
+      wsClient.disconnect();
+      wsClient = null;
+    }
     goto('/games/bagchal');
   }
 
@@ -112,39 +128,11 @@
     return []; // TODO: Implement proper move validation
   }
 
-  // Get player name for sidebar
-  function getPlayerName(role: 'GOAT' | 'TIGER'): string {
-    if (!gameState) return 'Unknown';
-    
-    for (const player of Object.values(gameState.players)) {
-      if (player.role === role) {
-        return player.name;
-      }
-    }
-    
-    return role;
-  }
-
-  // Disabled functions for multiplayer (no reset, undo, etc.)
-  function mockReset() {
-    console.log('Reset not available in multiplayer');
-  }
-
-  function mockUndo() {
-    console.log('Undo not available in multiplayer');
-  }
-
-  function mockGameModeChange() {
-    console.log('Mode change handled by room selection');
-  }
-
-  function mockPlayerSideChange() {
-    console.log('Player side determined by room');
-  }
-
-  function mockModeChange() {
-    console.log('Mode is always Reforged in multiplayer');
-  }
+  // Provide wsClient getter to module-level lifecycle handlers
+  onMountInstance(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    __setWsClientGetter(() => wsClient);
+  });
 </script>
 
 <svelte:head>
@@ -189,15 +177,17 @@
         <div class="flex items-center justify-center gap-4 text-sm text-text-muted">
           <span>Room: <span class="font-mono text-primary">{gameState.roomCode}</span></span>
           <span>•</span>
-          <span>You are: <span class="text-text">{playerRole}</span></span>
+          <span>You: <span class="text-text">{playerName}</span> ({playerRole})</span>
+          <span>•</span>
+          <span>Opponent: <span class="text-text">{opponentName}</span></span>
           <span>•</span>
           <span class={isMyTurn ? 'text-primary font-medium' : ''}>
-            {isMyTurn ? 'Your Turn' : `${gameState.turn}'s Turn`}
+            {isMyTurn ? 'Your Turn' : `${currentTurnName}'s Turn`}
           </span>
         </div>
       </div>
 
-      <div class="flex flex-col gap-4 lg:grid lg:h-full lg:grid-cols-[350px_1fr] lg:gap-8">
+      <div class="flex flex-col items-center gap-4">
         <GameBoard
           {points}
           {lines}
@@ -208,20 +198,6 @@
           isPlayingComputer={false}
           playerSide={playerRole || 'GOAT'}
           moveHistory={[]}
-        />
-        
-        <GameSidebar
-          gameState={gameState}
-          isPlayingComputer={false}
-          playerSide={playerRole || 'GOAT'}
-          gameMode="REFORGED"
-          isComputerThinking={false}
-          canUndo={false}
-          onReset={mockReset}
-          onGameModeChange={mockGameModeChange}
-          onPlayerSideChange={mockPlayerSideChange}
-          onModeChange={mockModeChange}
-          onUndo={mockUndo}
         />
       </div>
 
@@ -235,4 +211,32 @@
   </section>
 </ErrorBoundary>
 
- 
+<!-- Lifecycle hooks – ensure we *always* close the socket when the user leaves
+     the page (navigation, tab close, etc.) to prevent zombie sessions in the
+     Durable Object. -->
+<script lang="ts" context="module">
+  import { onDestroy, onMount } from 'svelte';
+  import type { WebSocketClient as MultiplayerWebSocketClient } from '$core/multiplayer';
+
+  // Getter that the instance script will register so that the module context
+  // can access the current `wsClient` value without a direct import cycle.
+  let _getWsClient: () => MultiplayerWebSocketClient | null = () => null;
+
+  export function __setWsClientGetter(fn: () => MultiplayerWebSocketClient | null) {
+    _getWsClient = fn;
+  }
+
+  onMount(() => {
+    const beforeUnload = () => {
+      _getWsClient()?.disconnect();
+    };
+    window.addEventListener('beforeunload', beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
+  });
+
+  onDestroy(() => {
+    _getWsClient()?.disconnect();
+  });
+</script>

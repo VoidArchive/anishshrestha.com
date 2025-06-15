@@ -10,16 +10,23 @@ import type {
 } from '../../../games/bagchal/types/multiplayer';
 import { generateId, generateRoomCode } from '../../../lib/utils/multiplayer';
 import { ensureSchema } from '$core/server';
+import { generateToken } from '../../../lib/utils/auth';
+import { sanitizeText } from '../../../lib/utils/security';
+import { generateCorrelationId, log } from '../../../lib/utils/logger';
 // import { sanitizePlayerName, sanitizeGameState } from '../../../lib/utils/security';
 
 // Create a new game room
 export const POST: RequestHandler = async ({ request, platform }) => {
+  const correlationId = generateCorrelationId();
   try {
     const body: CreateRoomRequest = await request.json();
-    const { playerName, gameMode, allowSpectators = false } = body;
+    let { playerName, gameMode, allowSpectators = false } = body;
+
+    playerName = sanitizeText(playerName);
 
     if (!playerName || !gameMode) {
-      return error(400, 'Missing required fields');
+      log('error', 'Missing required fields', correlationId);
+      return json({ error: 'Missing required fields', code: 'ERR_VALIDATION', correlationId }, { status: 400, headers: { 'x-correlation-id': correlationId } });
     }
 
     if (gameMode !== 'REFORGED') {
@@ -28,7 +35,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
     const db = platform?.env?.DB;
     if (!db) {
-      return error(500, 'Database not available');
+      log('error', 'Database not available', correlationId);
+      return json({ error: 'Database not available', code: 'ERR_DB', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
     }
 
     // Ensure tables exist (no-op after first run)
@@ -95,18 +103,28 @@ export const POST: RequestHandler = async ({ request, platform }) => {
       VALUES (?, ?, ?, ?)
     `).bind(sessionId, roomId, JSON.stringify(initialGameState), now).run();
 
+    const secret = (platform?.env as any)?.JWT_SECRET as string | undefined;
+    if (!secret) {
+      log('error', 'JWT_SECRET missing', correlationId);
+      return json({ error: 'Server misconfiguration', code: 'ERR_CONFIG', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
+    }
+
+    const authToken = await generateToken(roomCode, playerId, secret);
+
     const response: CreateRoomResponse = {
       roomId,
       roomCode,
       playerId,
-      role: 'GOAT'
+      role: 'GOAT',
+      authToken
     };
 
-    return json(response);
+    log('info', 'Room created', correlationId, { roomId });
+    return json(response, { headers: { 'x-correlation-id': correlationId } });
 
   } catch (err) {
-    console.error('Error creating room:', err);
-    return error(500, 'Failed to create room');
+    log('error', 'Failed to create room', correlationId, { err: String(err) });
+    return json({ error: 'Failed to create room', code: 'ERR_UNEXPECTED', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
   }
 };
 

@@ -4,25 +4,34 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { JoinRoomRequest, JoinRoomResponse } from '../../../../../games/bagchal/types/multiplayer';
 import { generateId, isValidRoomCode } from '../../../../../lib/utils/multiplayer';
+import { sanitizeText } from '../../../../../lib/utils/security';
 import { ensureSchema } from '$core/server';
+import { generateToken } from '../../../../../lib/utils/auth';
+import { generateCorrelationId, log } from '../../../../../lib/utils/logger';
 
 export const POST: RequestHandler = async ({ params, request, platform }) => {
+  const correlationId = generateCorrelationId();
   try {
     const { roomCode } = params;
     const body: JoinRoomRequest = await request.json();
-    const { playerName } = body;
+    let { playerName } = body;
+
+    playerName = sanitizeText(playerName);
 
     if (!roomCode || !playerName) {
-      return error(400, 'Missing roomCode or playerName');
+      log('error', 'Missing roomCode or playerName', correlationId);
+      return json({ error: 'Missing roomCode or playerName', code: 'ERR_VALIDATION', correlationId }, { status: 400, headers: { 'x-correlation-id': correlationId } });
     }
 
     if (!isValidRoomCode(roomCode)) {
-      return error(400, 'Invalid room code format');
+      log('error', 'Invalid room code format', correlationId);
+      return json({ error: 'Invalid room code format', code: 'ERR_VALIDATION', correlationId }, { status: 400, headers: { 'x-correlation-id': correlationId } });
     }
 
     const db = platform?.env?.DB;
     if (!db) {
-      return error(500, 'Database not available');
+      log('error', 'Database not available', correlationId);
+      return json({ error: 'Database not available', code: 'ERR_DB', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
     }
 
     // Ensure tables exist
@@ -35,19 +44,22 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
     `).bind(roomCode).first();
 
     if (!room) {
-      return error(404, 'Room not found or no longer accepting players');
+      log('error', 'Room not found', correlationId);
+      return json({ error: 'Room not found or no longer accepting players', code: 'ERR_NOT_FOUND', correlationId }, { status: 404, headers: { 'x-correlation-id': correlationId } });
     }
 
     // Check if room has expired
     if (room.expires_at < Date.now()) {
+      log('info', 'Room expired', correlationId);
       await db.prepare('UPDATE game_rooms SET status = "ABANDONED" WHERE id = ?')
         .bind(room.id).run();
-      return error(404, 'Room has expired');
+      return json({ error: 'Room has expired', code: 'ERR_EXPIRED', correlationId }, { status: 404, headers: { 'x-correlation-id': correlationId } });
     }
 
     // Check if room already has a guest
     if (room.guest_player_id) {
-      return error(409, 'Room is already full');
+      log('error', 'Room full', correlationId);
+      return json({ error: 'Room is already full', code: 'ERR_ROOM_FULL', correlationId }, { status: 409, headers: { 'x-correlation-id': correlationId } });
     }
 
     const playerId = generateId();
@@ -95,20 +107,32 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
         WHERE id = ?
       `).bind(JSON.stringify(gameState), now, session.id).run();
 
+      // Generate auth token
+      const secret = (platform?.env as any)?.JWT_SECRET as string | undefined;
+      if (!secret) {
+        log('error', 'JWT_SECRET missing', correlationId);
+        return json({ error: 'Server misconfiguration', code: 'ERR_CONFIG', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
+      }
+
+      const authToken = await generateToken(roomCode, playerId, secret);
+
       const response: JoinRoomResponse = {
         roomId: room.id,
         playerId,
         role: 'TIGER',
+        authToken,
         gameState
       };
 
-      return json(response);
+      log('info', 'Player joined room', correlationId, { roomId: room.id, playerId });
+      return json(response, { headers: { 'x-correlation-id': correlationId } });
     } else {
-      return error(500, 'Game session not found');
+      log('error', 'Game session not found', correlationId);
+      return json({ error: 'Game session not found', code: 'ERR_NOT_FOUND', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
     }
 
   } catch (err) {
-    console.error('Error joining room:', err);
-    return error(500, 'Failed to join room');
+    log('error', 'Failed to join room', correlationId, { err: String(err) });
+    return json({ error: 'Failed to join room', code: 'ERR_UNEXPECTED', correlationId }, { status: 500, headers: { 'x-correlation-id': correlationId } });
   }
 }; 

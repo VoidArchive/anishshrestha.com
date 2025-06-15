@@ -3,6 +3,7 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async ({ params, url, request, platform }) => {
   const { roomCode } = params;
   const playerId = url.searchParams.get('playerId');
+  const token = url.searchParams.get('token');
 
   if (!playerId) {
     return new Response('Missing playerId parameter', { status: 400 });
@@ -20,8 +21,9 @@ export const GET: RequestHandler = async ({ params, url, request, platform }) =>
     // Forward the WebSocket upgrade request to the Durable Object
     const durableObjectUrl = new URL(request.url);
     durableObjectUrl.pathname = '/websocket';
-    durableObjectUrl.searchParams.set('playerId', playerId);
+    durableObjectUrl.searchParams.set('playerId', playerId!);
     durableObjectUrl.searchParams.set('roomCode', roomCode);
+    if (token) durableObjectUrl.searchParams.set('token', token);
 
     return await roomObject.fetch(durableObjectUrl.toString(), {
       method: 'GET',

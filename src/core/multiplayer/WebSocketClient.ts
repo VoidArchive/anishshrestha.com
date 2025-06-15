@@ -12,17 +12,23 @@ export class WebSocketClient {
   private ws: WebSocket | null = null;
   private roomId: string | null = null;
   private playerId: string | null = null;
+  private authToken: string | undefined;
   private status: ConnectionStatus = 'disconnected';
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
   private pingInterval: number | null = null;
+  private shouldReconnect = true;
 
   constructor(private options: WebSocketClientOptions) {}
 
-  async connect(roomId: string, playerId: string): Promise<boolean> {
+  async connect(roomId: string, playerId: string, authToken?: string): Promise<boolean> {
+    // Treat this as a new connection request; enable automatic reconnection
+    // until an explicit `disconnect()` happens again.
+    this.shouldReconnect = true;
     this.roomId = roomId;
     this.playerId = playerId;
+    this.authToken = authToken;
     
     try {
       this.setStatus('connecting');
@@ -31,7 +37,7 @@ export class WebSocketClient {
       const response = await fetch(`/api/rooms/${roomId}/websocket`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId })
+        body: JSON.stringify({ playerId, authToken })
       });
 
       if (!response.ok) {
@@ -87,6 +93,7 @@ export class WebSocketClient {
   }
 
   disconnect() {
+    this.shouldReconnect = false;
     this.stopPingInterval();
     if (this.ws) {
       this.ws.close();
@@ -148,12 +155,16 @@ export class WebSocketClient {
   }
 
   private attemptReconnect() {
+    if (!this.shouldReconnect) {
+      return;
+    }
+
     if (this.reconnectAttempts < this.maxReconnectAttempts && this.roomId && this.playerId) {
       this.reconnectAttempts++;
       this.setStatus('reconnecting');
       
       setTimeout(() => {
-        this.connect(this.roomId!, this.playerId!);
+        this.connect(this.roomId!, this.playerId!, this.authToken);
       }, this.reconnectDelay * this.reconnectAttempts);
     }
   }
