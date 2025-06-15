@@ -109,7 +109,7 @@ export class GameRoomDurableObject {
       
       switch (message.type) {
         case 'GAME_MOVE':
-          this.handleGameMove(message as GameMoveMessage);
+          this.handleGameMove(message);
           break;
           
         case 'PING':
@@ -138,9 +138,15 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleGameMove(message: GameMoveMessage) {
+  private handleGameMove(message: any) {
     if (!this.gameState) {
       this.sendError(message.playerId, 'Game not initialized');
+      return;
+    }
+
+    // Validate message has required fields
+    if (!message.move || !message.playerId) {
+      this.sendError(message.playerId, 'Invalid move message');
       return;
     }
 
