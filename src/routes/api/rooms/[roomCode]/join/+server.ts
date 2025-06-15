@@ -4,6 +4,7 @@ import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { JoinRoomRequest, JoinRoomResponse } from '../../../../../games/bagchal/types/multiplayer';
 import { generateId, isValidRoomCode } from '../../../../../lib/utils/multiplayer';
+import { ensureSchema } from '../../../../../lib/server/db';
 
 export const POST: RequestHandler = async ({ params, request, platform }) => {
   try {
@@ -23,6 +24,9 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
     if (!db) {
       return error(500, 'Database not available');
     }
+
+    // Ensure tables exist
+    await ensureSchema(db);
 
     // Find the room
     const room = await db.prepare(`
