@@ -179,21 +179,33 @@ export class GameRoomDurableObject extends DurableObject {
       // If still no in-memory state, bootstrap a new one using DB player name if available
       if (!this.gameState) {
         const hostName = (await this.fetchPlayerName(playerId)) ?? 'Host Player';
-        this.initializeGameState(roomCode, playerId, hostName);
+        this.initializeGameState(roomCode, playerId, hostName, 'GOAT'); // Default to GOAT for backward compatibility
       }
 
       // If new player not registered yet, assign role – use DB name when possible
       if (this.gameState && !this.gameState.players[playerId]) {
         const joinedName = (await this.fetchPlayerName(playerId)) ?? 'Guest Player';
         if (!this.gameState.guestPlayerId) {
+          // Determine guest role (opposite of host)
+          const hostPlayer = Object.values(this.gameState.players)[0];
+          const hostRole = hostPlayer?.role || 'GOAT';
+          const guestRole = hostRole === 'GOAT' ? 'TIGER' : 'GOAT';
+          
           this.gameState.guestPlayerId = playerId;
           this.gameState.players[playerId] = {
             id: playerId,
             name: joinedName,
-            role: 'TIGER',
+            role: guestRole,
             connected: true,
             lastSeen: Date.now()
           } as PlayerInfo;
+          
+          // Set currentPlayerId to the GOAT player (who places first)
+          const goatPlayer = Object.values(this.gameState.players).find(p => p.role === 'GOAT');
+          if (goatPlayer) {
+            this.gameState.currentPlayerId = goatPlayer.id;
+          }
+          
           this.gameState.message = 'Both players connected! Goats place first.';
         } else {
           // Spectator joins
@@ -297,22 +309,38 @@ export class GameRoomDurableObject extends DurableObject {
 
       const move: GameMove = message.move;
       if (move.moveType === 'PLACEMENT') {
-        // Validate placement
-        if (newGameState.phase !== 'PLACEMENT' || newGameState.turn !== 'GOAT') {
-          this.sendError(message.playerId, 'Invalid placement phase');
+        // Validate placement - only GOATs can place and only during placement phase
+        if (newGameState.phase !== 'PLACEMENT') {
+          this.sendError(message.playerId, 'Not in placement phase');
           return;
         }
+        
+        // Verify the player making the move actually has the GOAT role
+        const player = newGameState.players[message.playerId];
+        if (!player || player.role !== 'GOAT') {
+          this.sendError(message.playerId, 'Only goat players can place pieces');
+          return;
+        }
+        
         if (newGameState.board[move.to] !== null) {
           this.sendError(message.playerId, 'Position occupied');
           return;
         }
+        
         newGameState.board[move.to] = 'GOAT';
         newGameState.goatsPlaced++;
+        
+        // Transition to movement phase when all goats are placed
         if (newGameState.goatsPlaced >= 20) {
           newGameState.phase = 'MOVEMENT';
+          // After all goats placed, tigers move first in movement phase
+          newGameState.turn = 'TIGER';
+          newGameState.currentPlayerId = this.getPlayerIdByRole('TIGER');
+        } else {
+          // During placement, goats continue placing (don't switch turns)
+          newGameState.turn = 'GOAT';
+          newGameState.currentPlayerId = this.getPlayerIdByRole('GOAT');
         }
-        newGameState.turn = 'TIGER';
-        newGameState.currentPlayerId = this.getPlayerIdByRole('TIGER');
       } else {
         // Use shared executeMove for movement/capture validation & update
         if (move.from === undefined || move.from === null) {
@@ -372,7 +400,7 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private initializeGameState(roomCode: string, hostPlayerId: string, hostName: string) {
+  private initializeGameState(roomCode: string, hostPlayerId: string, hostName: string, hostRole: 'GOAT' | 'TIGER') {
     // Create initial Reforged game state
     this.gameState = {
       // Base game state
@@ -382,7 +410,7 @@ export class GameRoomDurableObject extends DurableObject {
         [0, 4, 20, 24].forEach((idx) => (b[idx] = 'TIGER'));
         return b;
       })(),
-      turn: 'GOAT',
+      turn: 'GOAT', // GOATs always start placement phase
       phase: 'PLACEMENT',
       goatsPlaced: 0,
       goatsCaptured: 0,
@@ -399,7 +427,8 @@ export class GameRoomDurableObject extends DurableObject {
       roomCode,
       hostPlayerId: hostPlayerId,
       guestPlayerId: null,
-      currentPlayerId: hostPlayerId,
+      // Set currentPlayerId to GOAT player if host is GOAT, otherwise will be set when guest joins
+      currentPlayerId: hostRole === 'GOAT' ? hostPlayerId : hostPlayerId, // Fallback to host for now
       isHost: true,
       connectionStatus: 'connected',
       lastSyncTimestamp: Date.now(),
@@ -407,7 +436,7 @@ export class GameRoomDurableObject extends DurableObject {
         [hostPlayerId]: {
           id: hostPlayerId,
           name: hostName,
-          role: 'GOAT',
+          role: hostRole,
           connected: true,
           lastSeen: Date.now()
         }

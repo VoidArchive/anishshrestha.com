@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   const correlationId = generateCorrelationId();
   try {
     const body: CreateRoomRequest = await request.json();
-    let { playerName, gameMode, allowSpectators = false } = body;
+    let { playerName, gameMode, hostRole = 'GOAT', allowSpectators = false } = body;
 
     playerName = sanitizeText(playerName);
 
@@ -31,6 +31,12 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
     if (gameMode !== 'REFORGED') {
       return error(400, 'Only REFORGED mode is supported for multiplayer');
+    }
+
+    // Validate hostRole
+    if (hostRole && !['GOAT', 'TIGER'].includes(hostRole)) {
+      log('error', 'Invalid host role', correlationId);
+      return json({ error: 'Invalid host role', code: 'ERR_VALIDATION', correlationId }, { status: 400, headers: { 'x-correlation-id': correlationId } });
     }
 
     const db = platform?.env?.DB;
@@ -64,9 +70,14 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
     // Create initial game session
     const sessionId = generateId();
+    
+    // Determine who starts first - GOATs always place first regardless of host role
+    const initialTurn = 'GOAT';
+    const currentPlayerId = hostRole === 'GOAT' ? playerId : null; // Will be set when guest joins if host is TIGER
+    
     const initialGameState = {
       board: Array(25).fill(null),
-      turn: 'GOAT',
+      turn: initialTurn,
       phase: 'PLACEMENT',
       goatsPlaced: 0,
       goatsCaptured: 0,
@@ -83,7 +94,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
       roomCode,
       hostPlayerId: playerId,
       guestPlayerId: null,
-      currentPlayerId: playerId,
+      currentPlayerId: currentPlayerId || playerId, // Fallback to host for now
       isHost: true,
       connectionStatus: 'connected',
       lastSyncTimestamp: now,
@@ -91,7 +102,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
         [playerId]: {
           id: playerId,
           name: playerName,
-          role: 'GOAT',
+          role: hostRole, // Use the selected role
           connected: true,
           lastSeen: now
         }
@@ -115,11 +126,11 @@ export const POST: RequestHandler = async ({ request, platform }) => {
       roomId,
       roomCode,
       playerId,
-      role: 'GOAT',
+      role: hostRole,
       authToken
     };
 
-    log('info', 'Room created', correlationId, { roomId });
+    log('info', 'Room created', correlationId, { roomId, hostRole });
     return json(response, { headers: { 'x-correlation-id': correlationId } });
 
   } catch (err) {

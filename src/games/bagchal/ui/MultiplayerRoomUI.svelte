@@ -17,6 +17,7 @@
   let currentView = $state<'menu' | 'create' | 'join' | 'waiting' | 'connecting'>('menu');
   let playerName = $state('');
   let roomCode = $state('');
+  let selectedRole = $state<'GOAT' | 'TIGER'>('GOAT'); // Default to GOAT
   let errorMessage = $state('');
   let isLoading = $state(false);
   let showModal = $state(true);
@@ -28,6 +29,7 @@
   function resetForm() {
     playerName = '';
     roomCode = '';
+    selectedRole = 'GOAT';
     errorMessage = '';
     isLoading = false;
   }
@@ -56,14 +58,15 @@
     errorMessage = '';
 
     try {
-      console.log('Creating room for player:', playerName.trim());
+      console.log('Creating room for player:', playerName.trim(), 'with role:', selectedRole);
       
       const response = await fetch('/api/rooms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           playerName: playerName.trim(),
-          gameMode: 'REFORGED'
+          gameMode: 'REFORGED',
+          hostRole: selectedRole
         })
       });
 
@@ -256,6 +259,24 @@
                   class="w-full px-3 py-2 border border-border bg-bg-primary text-text focus:outline-none focus:border-primary"
                   disabled={isLoading}
                 />
+              </div>
+              
+              <div>
+                <label for="create-role" class="block text-sm font-medium text-text mb-2">
+                  Choose Your Role
+                </label>
+                <select
+                  id="create-role"
+                  bind:value={selectedRole}
+                  class="w-full px-3 py-2 border border-border bg-bg-primary text-text focus:outline-none focus:border-primary"
+                  disabled={isLoading}
+                >
+                  <option value="GOAT">GOAT (Places pieces first)</option>
+                  <option value="TIGER">TIGER (Moves first after placement)</option>
+                </select>
+                <p class="text-xs text-text-muted mt-1">
+                  {selectedRole === 'GOAT' ? 'You will place 20 goat pieces, then move them to trap tigers.' : 'You start with 4 tigers and capture goats by jumping over them.'}
+                </p>
               </div>
               
               <button

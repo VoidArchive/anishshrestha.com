@@ -112,6 +112,7 @@ export type WebSocketMessage =
 export interface CreateRoomRequest {
   playerName: string;
   gameMode: 'REFORGED';
+  hostRole?: 'GOAT' | 'TIGER'; // Host can choose their preferred role
   allowSpectators?: boolean;
 }
 

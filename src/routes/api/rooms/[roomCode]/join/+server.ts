@@ -86,15 +86,26 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
     if (session) {
       const gameState = JSON.parse(session.game_state);
       
+      // Determine guest role (opposite of host)
+      const hostPlayer = Object.values(gameState.players)[0] as any;
+      const hostRole = hostPlayer?.role || 'GOAT';
+      const guestRole = hostRole === 'GOAT' ? 'TIGER' : 'GOAT';
+      
       // Add guest player
       gameState.guestPlayerId = playerId;
       gameState.players[playerId] = {
         id: playerId,
         name: playerName,
-        role: 'TIGER',
+        role: guestRole,
         connected: true,
         lastSeen: now
       };
+      
+      // Set currentPlayerId to the GOAT player (who moves first in placement phase)
+      const goatPlayer = Object.values(gameState.players).find((p: any) => p.role === 'GOAT') as any;
+      if (goatPlayer?.id) {
+        gameState.currentPlayerId = goatPlayer.id;
+      }
       
       // Update game message
       gameState.message = 'Both players connected! Goats place first.';
@@ -120,12 +131,12 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
         roomId: room.id,
         roomCode: roomCode,
         playerId,
-        role: 'TIGER',
+        role: guestRole,
         authToken,
         gameState
       };
 
-      log('info', 'Player joined room', correlationId, { roomId: room.id, playerId });
+      log('info', 'Player joined room', correlationId, { roomId: room.id, playerId, guestRole });
       return json(response, { headers: { 'x-correlation-id': correlationId } });
     } else {
       log('error', 'Game session not found', correlationId);

@@ -64,7 +64,13 @@
 
   // Handle point clicks (moves) - simplified for multiplayer
   function handlePointClick(pointId: number) {
+    console.log('Point clicked:', pointId);
+    console.log('Game state:', gameState);
+    console.log('Current player ID:', currentPlayerId);
+    console.log('Is my turn:', isMyTurn);
+    
     if (!gameState || !isMyTurn) {
+      console.log('Cannot move: gameState =', !!gameState, 'isMyTurn =', isMyTurn);
       return;
     }
 
@@ -77,19 +83,23 @@
 
     if (gameState.phase === 'PLACEMENT' && gameState.turn === 'GOAT') {
       if (gameState.board[pointId] !== null) {
+        console.log('Cannot place: position occupied');
         return; // Can't place on occupied position
       }
       moveType = 'PLACEMENT';
+      console.log('Attempting goat placement at position:', pointId);
     } else {
       // Movement phase
       if (selectedPieceId !== null) {
         fromId = selectedPieceId;
         moveType = 'MOVEMENT';
         selectedPieceId = null;
+        console.log('Attempting movement from', fromId, 'to', pointId);
       } else {
         // Selecting a piece
         if (gameState.board[pointId] === gameState.turn) {
           selectedPieceId = pointId;
+          console.log('Selected piece at position:', pointId);
           return;
         }
       }
@@ -97,12 +107,16 @@
 
     // Send move to WebSocket server
     if (wsClient) {
-      wsClient.sendMove({
+      const move = {
         from: fromId,
         to: pointId,
         jumpedGoatId,
         moveType
-      });
+      };
+      console.log('Sending move to server:', move);
+      wsClient.sendMove(move);
+    } else {
+      console.error('WebSocket client not available');
     }
   }
 

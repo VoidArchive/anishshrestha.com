@@ -111,17 +111,43 @@ export class WebSocketClient {
   }
 
   sendMove(move: any) {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      const ackId = crypto.randomUUID();
-      const message: any = {
-        type: 'GAME_MOVE',
-        timestamp: Date.now(),
-        playerId: this.playerId!,
-        move,
-        ackId
-      };
-      this.pending.push(message);
+    if (!this.playerId) {
+      console.error('Cannot send move: playerId not set');
+      this.options.onError('Player ID not available');
+      return;
+    }
+    
+    if (!this.ws) {
+      console.error('Cannot send move: WebSocket not connected');
+      this.options.onError('Not connected to game server');
+      return;
+    }
+    
+    if (this.ws.readyState !== WebSocket.OPEN) {
+      console.error('Cannot send move: WebSocket not open, state:', this.ws.readyState);
+      this.options.onError('Connection not ready');
+      return;
+    }
+    
+    const ackId = crypto.randomUUID();
+    const message: any = {
+      type: 'GAME_MOVE',
+      timestamp: Date.now(),
+      playerId: this.playerId,
+      move,
+      ackId
+    };
+    
+    console.log('Sending move:', message);
+    this.pending.push(message);
+    
+    try {
       this.ws.send(JSON.stringify(message));
+    } catch (error) {
+      console.error('Failed to send move message:', error);
+      this.options.onError('Failed to send move');
+      // Remove from pending since it failed to send
+      this.pending = this.pending.filter(m => m.ackId !== ackId);
     }
   }
 
@@ -199,6 +225,7 @@ export class WebSocketClient {
 
   private attemptReconnect() {
     if (!this.shouldReconnect) {
+      console.log('Reconnection disabled, not attempting reconnect');
       return;
     }
 
@@ -211,9 +238,20 @@ export class WebSocketClient {
       const jitter = Math.random() * this.baseReconnectDelay;
       const delay = Math.min(expDelay + jitter, 30000); // Cap at 30s
 
+      console.log(`Attempting reconnect ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${Math.round(delay)}ms`);
+
       setTimeout(() => {
-        this.connect(this.roomId!, this.playerId!, this.authToken);
+        if (this.shouldReconnect && this.status !== 'connected') {
+          console.log('Executing reconnection attempt');
+          this.connect(this.roomId!, this.playerId!, this.authToken);
+        } else {
+          console.log('Skipping reconnection - already connected or disabled');
+        }
       }, delay);
+    } else {
+      console.log('Max reconnection attempts reached or missing connection info');
+      this.setStatus('error');
+      this.options.onError('Failed to reconnect to game server');
     }
   }
 
