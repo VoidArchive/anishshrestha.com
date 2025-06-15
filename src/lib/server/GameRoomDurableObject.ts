@@ -27,7 +27,7 @@ export class GameRoomDurableObject {
     this.roomId = state.id.toString();
   }
 
-  async fetch(request: Request): Promise<Response> {
+  async fetch(request) {
     const url = new URL(request.url);
     
     if (url.pathname === '/websocket') {
@@ -41,7 +41,7 @@ export class GameRoomDurableObject {
     return new Response('Not found', { status: 404 });
   }
 
-  private async handleWebSocketUpgrade(request: Request): Promise<Response> {
+  private async handleWebSocketUpgrade(request) {
     const url = new URL(request.url);
     const playerId = url.searchParams.get('playerId');
     
@@ -65,7 +65,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketConnection(webSocket: any, playerId: string) {
+  private handleWebSocketConnection(webSocket, playerId) {
     try {
       webSocket.accept();
       this.sessions.set(webSocket, playerId);
@@ -103,7 +103,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketMessage(webSocket: any, playerId: string, data: string) {
+  private handleWebSocketMessage(webSocket, playerId, data) {
     try {
       const message: WebSocketMessage = JSON.parse(data);
       
@@ -129,7 +129,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketClose(webSocket: any, playerId: string) {
+  private handleWebSocketClose(webSocket, playerId) {
     this.sessions.delete(webSocket);
     
     if (this.gameState && this.gameState.players[playerId]) {
@@ -214,7 +214,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private async initializeGameState(hostPlayerId: string) {
+  private async initializeGameState(hostPlayerId) {
     // Create initial Reforged game state
     this.gameState = {
       // Base game state
@@ -253,7 +253,7 @@ export class GameRoomDurableObject {
     };
   }
 
-  private generateRoomCode(): string {
+  private generateRoomCode() {
     const adjectives = ['BRAVE', 'SWIFT', 'CLEVER', 'MIGHTY', 'WILD'];
     const animals = ['TIGER', 'GOAT', 'EAGLE', 'WOLF', 'BEAR'];
     const numbers = Math.floor(Math.random() * 999) + 1;
@@ -264,7 +264,7 @@ export class GameRoomDurableObject {
     return `${adj}-${animal}-${numbers}`;
   }
 
-  private getPlayerIdByRole(role: 'GOAT' | 'TIGER'): string {
+  private getPlayerIdByRole(role) {
     if (!this.gameState) {
       throw new Error('Game state not initialized');
     }
