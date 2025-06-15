@@ -27,7 +27,7 @@ export class GameRoomDurableObject {
     this.roomId = state.id.toString();
   }
 
-  async fetch(request) {
+  async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     
     if (url.pathname === '/websocket') {
@@ -41,7 +41,7 @@ export class GameRoomDurableObject {
     return new Response('Not found', { status: 404 });
   }
 
-  private async handleWebSocketUpgrade(request) {
+  private async handleWebSocketUpgrade(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const playerId = url.searchParams.get('playerId');
     
@@ -65,7 +65,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketConnection(webSocket, playerId) {
+  private handleWebSocketConnection(webSocket: any, playerId: string) {
     try {
       webSocket.accept();
       this.sessions.set(webSocket, playerId);
@@ -103,7 +103,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketMessage(webSocket, playerId, data) {
+  private handleWebSocketMessage(webSocket: any, playerId: string, data: string) {
     try {
       const message: WebSocketMessage = JSON.parse(data);
       
@@ -129,7 +129,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private handleWebSocketClose(webSocket, playerId) {
+  private handleWebSocketClose(webSocket: any, playerId: string) {
     this.sessions.delete(webSocket);
     
     if (this.gameState && this.gameState.players[playerId]) {
@@ -214,7 +214,7 @@ export class GameRoomDurableObject {
     }
   }
 
-  private async initializeGameState(hostPlayerId) {
+  private async initializeGameState(hostPlayerId: string) {
     // Create initial Reforged game state
     this.gameState = {
       // Base game state
@@ -264,7 +264,7 @@ export class GameRoomDurableObject {
     return `${adj}-${animal}-${numbers}`;
   }
 
-  private getPlayerIdByRole(role) {
+  private getPlayerIdByRole(role: 'GOAT' | 'TIGER'): string {
     if (!this.gameState) {
       throw new Error('Game state not initialized');
     }
