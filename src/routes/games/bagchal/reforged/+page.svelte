@@ -190,25 +190,23 @@
       {/if}
 
     {:else if gameState}
-      <!-- Active Multiplayer Game -->
-      <div class="mb-4 text-center">
-        <h1 class="text-2xl font-bold mb-2 text-text">Bagchal Reforged</h1>
-        <div class="flex items-center justify-center gap-4 text-sm text-text-muted">
-          <span>Room: <span class="font-mono text-primary">{gameState.roomCode}</span></span>
-          <span>•</span>
-          <span>You: <span class="text-text">{playerName}</span> ({playerRole})</span>
-          <span>•</span>
-          <span>Opponent: <span class="text-text">{opponentName}</span></span>
-          <span>•</span>
-          <span class={isMyTurn ? 'text-primary font-medium' : ''}>
-            {isMyTurn ? 'Your Turn' : `${currentTurnName}'s Turn`}
-          </span>
-        </div>
-      </div>
-
-      <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
-        <!-- Status sidebar -->
-        <aside class="lg:w-72 space-y-4">
+     
+      <!-- Use the same layout structure as classic for consistent board sizing -->
+      <div class="flex flex-col gap-4 lg:grid lg:h-full lg:grid-cols-[350px_1fr] lg:gap-8">
+        <GameBoard
+          {points}
+          {lines}
+          gameState={gameState}
+          validMoves={getValidMoves()}
+          handlePointClick={handlePointClick}
+          isComputerThinking={false}
+          isPlayingComputer={false}
+          playerSide={playerRole || 'GOAT'}
+          moveHistory={[]}
+        />
+        
+        <!-- Status sidebar - moved to right to match classic layout -->
+        <aside class="space-y-4">
           <div class="section-card">
             <h2 class="section-title mb-2">Game Status</h2>
             <ul class="text-sm leading-6 space-y-1">
@@ -224,21 +222,6 @@
             </button>
           </div>
         </aside>
-
-        <!-- Board container -->
-        <div class="flex-1 flex justify-center">
-          <GameBoard
-            {points}
-            {lines}
-            gameState={gameState}
-            validMoves={getValidMoves()}
-            handlePointClick={handlePointClick}
-            isComputerThinking={false}
-            isPlayingComputer={false}
-            playerSide={playerRole || 'GOAT'}
-            moveHistory={[]}
-          />
-        </div>
       </div>
     {/if}
   </section>

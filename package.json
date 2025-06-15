@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
+    "dev:preview": "npm run build && npm run preview",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -12,7 +13,7 @@
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint .",
     "build": "vite build && node scripts/append-durable.js",
-    "deploy": "wrangler deploy --config wrangler.toml",
+    "deploy": "npm run build && npx wrangler deploy",
     "test": "node --loader ts-node/esm tests/WebSocketClient.test.ts"
   },
   "devDependencies": {
