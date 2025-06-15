@@ -1,13 +1,7 @@
-#!/usr/bin/env node
-
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, '..');
-
-// Paths
+const projectRoot = process.cwd();
 const workerPath = path.join(projectRoot, '.svelte-kit/cloudflare/_worker.js');
 
 console.log('🔧 Injecting Durable Objects into worker...');
@@ -21,10 +15,11 @@ if (!fs.existsSync(workerPath)) {
 // Read the worker file
 let workerContent = fs.readFileSync(workerPath, 'utf8');
 
-// Create a hand-written JavaScript implementation of the Durable Object
+// Durable Object class definition
 const durableObjectCode = `
+
 // Durable Object for multiplayer game rooms
-class GameRoomDurableObject extends DurableObject {
+export class GameRoomDurableObject extends DurableObject {
   constructor(state, env) {
     super(state, env);
     this.state = state;
@@ -77,12 +72,10 @@ class GameRoomDurableObject extends DurableObject {
       webSocket.accept();
       this.sessions.set(webSocket, playerId);
 
-      // Initialize game state if needed
       if (!this.gameState) {
         this.initializeGameState(playerId);
       }
 
-      // Send current game state
       if (this.gameState) {
         this.sendToPlayer(playerId, {
           type: 'GAME_STATE',
@@ -151,13 +144,11 @@ class GameRoomDurableObject extends DurableObject {
       return;
     }
 
-    // Validate message has required fields
     if (!message.move || !message.playerId) {
       this.sendError(message.playerId, 'Invalid move message');
       return;
     }
 
-    // Validate it's the player's turn
     if (this.gameState.currentPlayerId !== message.playerId) {
       this.sendError(message.playerId, 'Not your turn');
       return;
@@ -168,7 +159,6 @@ class GameRoomDurableObject extends DurableObject {
       const newGameState = JSON.parse(JSON.stringify(this.gameState));
       
       if (move.moveType === 'PLACEMENT') {
-        // Handle goat placement
         newGameState.board[move.to] = 'GOAT';
         newGameState.goatsPlaced++;
         
@@ -179,7 +169,6 @@ class GameRoomDurableObject extends DurableObject {
         newGameState.turn = 'TIGER';
         newGameState.currentPlayerId = this.getPlayerIdByRole('TIGER');
       } else {
-        // Handle movement/capture - simplified for now
         newGameState.board[move.from] = null;
         newGameState.board[move.to] = newGameState.turn;
         
@@ -195,7 +184,6 @@ class GameRoomDurableObject extends DurableObject {
       newGameState.lastSyncTimestamp = Date.now();
       this.gameState = newGameState;
 
-      // Broadcast updated state
       if (this.gameState) {
         this.broadcast({
           type: 'GAME_STATE',
@@ -327,17 +315,12 @@ class GameRoomDurableObject extends DurableObject {
       code
     });
   }
-}
+}`;
 
-// Export the Durable Object class
-export { GameRoomDurableObject };
-`;
+// Simply append the Durable Object to the worker
+const finalWorkerContent = workerContent + durableObjectCode;
 
-// Append the Durable Object to the worker
-const modifiedWorkerContent = workerContent + '\n' + durableObjectCode;
+// Write the modified worker
+fs.writeFileSync(workerPath, finalWorkerContent);
 
-// Write the modified worker back
-fs.writeFileSync(workerPath, modifiedWorkerContent);
-
-console.log('✅ Successfully injected GameRoomDurableObject into worker');
-console.log('📁 Modified file:', workerPath); 
+console.log('✅ Successfully injected Durable Objects into worker'); 
