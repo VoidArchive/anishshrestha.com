@@ -93,6 +93,7 @@ export class WebSocketClient {
 
         // Flush any pending optimistic messages that haven't been ACKed yet
         for (const pendingMsg of this.pending) {
+          console.log('Replaying pending message:', pendingMsg);
           this.ws!.send(JSON.stringify(pendingMsg));
         }
       };
@@ -130,42 +131,29 @@ export class WebSocketClient {
   }
 
   sendMove(move: any) {
-    console.log('sendMove called with:', move);
-    console.log('WebSocket state:', {
+    console.log('🎮 sendMove called with:', move);
+    console.log('🔌 WebSocket state:', {
       playerId: this.playerId,
-      ws: !!this.ws,
+      hasWebSocket: !!this.ws,
       readyState: this.ws?.readyState,
       status: this.status,
-      shouldReconnect: this.shouldReconnect
+      isOpen: this.ws?.readyState === WebSocket.OPEN
     });
     
+    // Simple validation
     if (!this.playerId) {
-      console.error('Cannot send move: playerId not set');
+      console.error('❌ No playerId');
       this.options.onError('Player ID not available');
       return;
     }
     
-    if (!this.ws) {
-      console.error('Cannot send move: WebSocket not connected');
-      this.options.onError('Not connected to game server');
-      // Try to reconnect if we should
-      if (this.shouldReconnect && this.roomId) {
-        console.log('Attempting to reconnect before sending move...');
-        this.connect(this.roomId, this.playerId, this.authToken);
-      }
-      return;
-    }
-    
-    if (this.ws.readyState !== WebSocket.OPEN) {
-      console.error('Cannot send move: WebSocket not open, state:', this.ws.readyState);
-      console.error('WebSocket ready states: CONNECTING=0, OPEN=1, CLOSING=2, CLOSED=3');
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      console.error('❌ WebSocket not ready:', {
+        hasWs: !!this.ws,
+        state: this.ws?.readyState,
+        OPEN: WebSocket.OPEN
+      });
       this.options.onError('Connection not ready');
-      
-      // If closed, try to reconnect
-      if (this.ws.readyState === WebSocket.CLOSED && this.shouldReconnect && this.roomId) {
-        console.log('WebSocket is closed, attempting to reconnect...');
-        this.connect(this.roomId, this.playerId, this.authToken);
-      }
       return;
     }
     
@@ -178,16 +166,15 @@ export class WebSocketClient {
       ackId
     };
     
-    console.log('Sending move to server:', message);
+    console.log('📤 Sending move to server:', message);
     this.pending.push(message);
     
     try {
       this.ws.send(JSON.stringify(message));
-      console.log('Move sent successfully');
+      console.log('✅ Move sent successfully');
     } catch (error) {
-      console.error('Failed to send move message:', error);
+      console.error('❌ Failed to send move:', error);
       this.options.onError('Failed to send move');
-      // Remove from pending since it failed to send
       this.pending = this.pending.filter(m => m.ackId !== ackId);
     }
   }
@@ -205,33 +192,37 @@ export class WebSocketClient {
   private handleMessage(data: string) {
     try {
       const message: any = JSON.parse(data);
+      console.log('📨 Received message:', message.type, message);
       
       switch (message.type) {
         case 'GAME_STATE':
+          console.log('🎮 Game state update received');
           if (message.gameState) {
             this.options.onGameStateUpdate(message.gameState);
           }
           break;
           
         case 'ERROR':
+          console.log('❌ Server error:', message.error);
           this.options.onError(message.error || 'Unknown error');
           break;
           
         case 'PONG':
-          // Heartbeat response - connection is alive
+          console.log('🏓 Pong received');
           break;
           
         case 'ACK':
+          console.log('✅ ACK received:', message.ackId);
           if (message.ackId) {
             this.handleAck(message.ackId);
           }
           break;
           
         default:
-          console.warn('Unknown message type:', message.type);
+          console.warn('❓ Unknown message type:', message.type);
       }
     } catch (error) {
-      console.error('Failed to parse message:', error);
+      console.error('❌ Failed to parse message:', error);
     }
   }
 
