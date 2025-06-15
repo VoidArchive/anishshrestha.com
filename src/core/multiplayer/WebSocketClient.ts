@@ -74,7 +74,19 @@ export class WebSocketClient {
       // Connect to the Durable Object WebSocket
       this.ws = new WebSocket(websocketUrl);
       
+      // Add a connection timeout
+      const connectionTimeout = setTimeout(() => {
+        if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+          console.error('WebSocket connection timeout');
+          this.ws.close();
+          this.setStatus('error');
+          this.options.onError('Connection timeout');
+        }
+      }, 10000); // 10 second timeout
+      
       this.ws.onopen = () => {
+        clearTimeout(connectionTimeout);
+        console.log('WebSocket connected successfully');
         this.setStatus('connected');
         this.reconnectAttempts = 0;
         this.startPingInterval();
@@ -89,13 +101,20 @@ export class WebSocketClient {
         this.handleMessage(event.data);
       };
 
-      this.ws.onclose = () => {
+      this.ws.onclose = (event) => {
+        clearTimeout(connectionTimeout);
+        console.log('WebSocket closed:', event.code, event.reason);
         this.setStatus('disconnected');
         this.stopPingInterval();
-        this.attemptReconnect();
+        
+        // Only attempt reconnect if it wasn't a normal closure
+        if (event.code !== 1000 && event.code !== 1001) {
+          this.attemptReconnect();
+        }
       };
 
       this.ws.onerror = (error) => {
+        clearTimeout(connectionTimeout);
         console.error('WebSocket error:', error);
         this.setStatus('error');
         this.options.onError('Connection error occurred');
@@ -111,6 +130,15 @@ export class WebSocketClient {
   }
 
   sendMove(move: any) {
+    console.log('sendMove called with:', move);
+    console.log('WebSocket state:', {
+      playerId: this.playerId,
+      ws: !!this.ws,
+      readyState: this.ws?.readyState,
+      status: this.status,
+      shouldReconnect: this.shouldReconnect
+    });
+    
     if (!this.playerId) {
       console.error('Cannot send move: playerId not set');
       this.options.onError('Player ID not available');
@@ -120,12 +148,24 @@ export class WebSocketClient {
     if (!this.ws) {
       console.error('Cannot send move: WebSocket not connected');
       this.options.onError('Not connected to game server');
+      // Try to reconnect if we should
+      if (this.shouldReconnect && this.roomId) {
+        console.log('Attempting to reconnect before sending move...');
+        this.connect(this.roomId, this.playerId, this.authToken);
+      }
       return;
     }
     
     if (this.ws.readyState !== WebSocket.OPEN) {
       console.error('Cannot send move: WebSocket not open, state:', this.ws.readyState);
+      console.error('WebSocket ready states: CONNECTING=0, OPEN=1, CLOSING=2, CLOSED=3');
       this.options.onError('Connection not ready');
+      
+      // If closed, try to reconnect
+      if (this.ws.readyState === WebSocket.CLOSED && this.shouldReconnect && this.roomId) {
+        console.log('WebSocket is closed, attempting to reconnect...');
+        this.connect(this.roomId, this.playerId, this.authToken);
+      }
       return;
     }
     
@@ -138,11 +178,12 @@ export class WebSocketClient {
       ackId
     };
     
-    console.log('Sending move:', message);
+    console.log('Sending move to server:', message);
     this.pending.push(message);
     
     try {
       this.ws.send(JSON.stringify(message));
+      console.log('Move sent successfully');
     } catch (error) {
       console.error('Failed to send move message:', error);
       this.options.onError('Failed to send move');
@@ -211,7 +252,14 @@ export class WebSocketClient {
           timestamp: Date.now(),
           playerId: this.playerId!
         };
+        console.log('Sending ping to keep connection alive');
         this.ws.send(JSON.stringify(pingMessage));
+      } else {
+        console.warn('Cannot send ping - WebSocket not open, state:', this.ws?.readyState);
+        if (this.ws && this.ws.readyState === WebSocket.CLOSED) {
+          this.stopPingInterval();
+          this.attemptReconnect();
+        }
       }
     }, 30000); // Ping every 30 seconds
   }

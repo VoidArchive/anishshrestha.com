@@ -153,18 +153,21 @@ export class GameRoomDurableObject extends DurableObject {
     try {
       // Socket already accepted in handleWebSocketUpgrade
       this.sessions.set(webSocket, playerId);
+      console.log(`WebSocket connection established for player ${playerId} in room ${roomCode}`);
 
       // Set up event listeners immediately after accepting
       webSocket.addEventListener('message', (event: MessageEvent) => {
+        console.log(`Received message from player ${playerId}:`, event.data);
         this.handleWebSocketMessage(webSocket, playerId, event.data);
       });
 
-      webSocket.addEventListener('close', () => {
+      webSocket.addEventListener('close', (event: CloseEvent) => {
+        console.log(`WebSocket closed for player ${playerId}:`, event.code, event.reason);
         this.handleWebSocketClose(webSocket, playerId);
       });
 
       webSocket.addEventListener('error', (error: Event) => {
-        console.error('WebSocket error in Durable Object:', error);
+        console.error(`WebSocket error for player ${playerId}:`, error);
         this.handleWebSocketClose(webSocket, playerId);
       });
 
@@ -173,6 +176,7 @@ export class GameRoomDurableObject extends DurableObject {
         const persisted = await this.stateStorage.get<MultiplayerGameState>('gameState');
         if (persisted) {
           this.gameState = persisted;
+          console.log(`Loaded persisted game state for room ${roomCode}`);
         }
       }
 
@@ -180,6 +184,7 @@ export class GameRoomDurableObject extends DurableObject {
       if (!this.gameState) {
         const hostName = (await this.fetchPlayerName(playerId)) ?? 'Host Player';
         this.initializeGameState(roomCode, playerId, hostName, 'GOAT'); // Default to GOAT for backward compatibility
+        console.log(`Initialized new game state for room ${roomCode} with host ${playerId}`);
       }
 
       // If new player not registered yet, assign role – use DB name when possible
@@ -207,6 +212,7 @@ export class GameRoomDurableObject extends DurableObject {
           }
           
           this.gameState.message = 'Both players connected! Goats place first.';
+          console.log(`Guest player ${playerId} joined with role ${guestRole}`);
         } else {
           // Spectator joins
           this.gameState.players[playerId] = {
@@ -216,21 +222,30 @@ export class GameRoomDurableObject extends DurableObject {
             connected: true,
             lastSeen: Date.now()
           } as any;
+          console.log(`Spectator ${playerId} joined`);
         }
       }
 
       // Send current game state
       if (this.gameState) {
-        this.sendToPlayer(playerId, {
-          type: 'GAME_STATE',
+        const stateMessage = {
+          type: 'GAME_STATE' as const,
           timestamp: Date.now(),
           playerId: 'system',
           gameState: this.gameState
-        });
+        };
+        console.log(`Sending initial game state to player ${playerId}`);
+        this.sendToPlayer(playerId, stateMessage);
       }
 
     } catch (error) {
-      console.error('WebSocket connection error:', error);
+      console.error(`WebSocket connection error for player ${playerId}:`, error);
+      // Send error message to client if possible
+      try {
+        this.sendError(playerId, 'Connection setup failed');
+      } catch (sendError) {
+        console.error('Failed to send error message:', sendError);
+      }
     }
   }
 

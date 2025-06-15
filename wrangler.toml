@@ -30,7 +30,8 @@ assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
 
 # Environment variables (set these in your Cloudflare dashboard)
 [vars]
-JWT_SECRET = "your-jwt-secret-key-here-change-this-in-production"
+# JWT_SECRET should be set in Cloudflare dashboard for security
+# JWT_SECRET = "your-jwt-secret-key-here-change-this-in-production"
 
 [observability.logs]
 enabled = true
