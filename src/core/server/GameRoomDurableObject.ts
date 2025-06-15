@@ -133,11 +133,8 @@ export class GameRoomDurableObject extends DurableObject {
       const webSocketPair = new WebSocketPair();
       const [client, server] = Object.values(webSocketPair) as [WebSocket, WebSocket];
 
-      // Accept immediately to complete the WebSocket handshake before returning
-      (server as any).accept();
-
-      // Handle the connection asynchronously but don't await it
-      this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
+      // FIXED: Accept after setting up connection handlers
+      await this.setupWebSocketConnection(server as WebSocket, playerId as string, roomCode);
       
       return new Response(null, {
         status: 101,
@@ -149,111 +146,99 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private async handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
+  private async setupWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
     try {
-      // Socket already accepted in handleWebSocketUpgrade
-      this.sessions.set(webSocket, playerId);
-      console.log(`WebSocket connection established for player ${playerId} in room ${roomCode}`);
+      console.log(`🔌 Setting up WebSocket for player ${playerId} in room ${roomCode}`);
 
-      // Set up event listeners immediately after accepting
+      // Set up event listeners BEFORE accepting
       webSocket.addEventListener('message', (event: MessageEvent) => {
-        console.log(`Received message from player ${playerId}:`, event.data);
-        this.handleWebSocketMessage(webSocket, playerId, event.data);
+        console.log(`📨 Received message from player ${playerId}:`, JSON.parse(event.data).type);
+        try {
+          this.handleWebSocketMessage(webSocket, playerId, event.data);
+        } catch (error) {
+          console.error(`❌ Error handling message from ${playerId}:`, error);
+          this.sendError(playerId, 'Message processing failed');
+        }
       });
 
       webSocket.addEventListener('close', (event: CloseEvent) => {
-        console.log(`WebSocket closed for player ${playerId}:`, event.code, event.reason);
+        console.log(`🔴 WebSocket closed for player ${playerId}:`, event.code, event.reason);
         this.handleWebSocketClose(webSocket, playerId);
       });
 
       webSocket.addEventListener('error', (error: Event) => {
-        console.error(`WebSocket error for player ${playerId}:`, error);
-        this.handleWebSocketClose(webSocket, playerId);
+        console.error(`❌ WebSocket error for player ${playerId}:`, error);
       });
 
-      // Load persisted state if exists, else initialize
+      // NOW accept the WebSocket after listeners are set up
+      (webSocket as any).accept();
+      
+      // Register the session
+      this.sessions.set(webSocket, playerId);
+      console.log(`✅ WebSocket connection established for player ${playerId}`);
+
+      // Load or initialize game state
       if (!this.gameState) {
         const persisted = await this.stateStorage.get<MultiplayerGameState>('gameState');
         if (persisted) {
           this.gameState = persisted;
-          console.log(`Loaded persisted game state for room ${roomCode}`);
+          console.log(`📁 Loaded persisted game state for room ${roomCode}`);
         }
       }
 
-      // If still no in-memory state, bootstrap a new one using DB player name if available
+      // Initialize game state if needed
       if (!this.gameState) {
         const hostName = (await this.fetchPlayerName(playerId)) ?? 'Host Player';
-        this.initializeGameState(roomCode, playerId, hostName, 'GOAT'); // Default to GOAT for backward compatibility
-        console.log(`Initialized new game state for room ${roomCode} with host ${playerId}`);
+        this.initializeGameState(roomCode, playerId, hostName, 'GOAT');
+        console.log(`🎮 Initialized new game state for room ${roomCode}`);
       }
 
-      // If new player not registered yet, assign role – use DB name when possible
+      // Add player if not already in game
       if (this.gameState && !this.gameState.players[playerId]) {
         const joinedName = (await this.fetchPlayerName(playerId)) ?? 'Guest Player';
-        if (!this.gameState.guestPlayerId) {
-          // Determine guest role (opposite of host)
-          const hostPlayer = Object.values(this.gameState.players)[0];
-          const hostRole = hostPlayer?.role || 'GOAT';
-          const guestRole = hostRole === 'GOAT' ? 'TIGER' : 'GOAT';
-          
+        const availableRoles = Object.values(this.gameState.players).map(p => p.role);
+        const assignedRole = availableRoles.includes('GOAT' as any) ? 'TIGER' : 'GOAT';
+        
+        this.gameState.players[playerId] = {
+          id: playerId,
+          name: joinedName,
+          role: assignedRole as 'GOAT' | 'TIGER',
+          connected: true,
+          lastSeen: Date.now()
+        };
+
+        // Set guest player ID and update current player if needed
+        if (assignedRole === 'TIGER') {
           this.gameState.guestPlayerId = playerId;
-          this.gameState.players[playerId] = {
-            id: playerId,
-            name: joinedName,
-            role: guestRole,
-            connected: true,
-            lastSeen: Date.now()
-          } as PlayerInfo;
-          
-          // Set currentPlayerId to the GOAT player (who places first)
-          const goatPlayer = Object.values(this.gameState.players).find(p => p.role === 'GOAT');
-          if (goatPlayer) {
-            this.gameState.currentPlayerId = goatPlayer.id;
-          }
-          
-          this.gameState.message = 'Both players connected! Goats place first.';
-          console.log(`Guest player ${playerId} joined with role ${guestRole}`);
-          
-          // Broadcast updated state to all players when guest joins
-          this.broadcast({
-            type: 'GAME_STATE',
-            timestamp: Date.now(),
-            playerId: 'system',
-            gameState: this.gameState
-          });
-        } else {
-          // Spectator joins
-          this.gameState.players[playerId] = {
-            id: playerId,
-            name: joinedName,
-            role: 'SPECTATOR' as any,
-            connected: true,
-            lastSeen: Date.now()
-          } as any;
-          console.log(`Spectator ${playerId} joined`);
         }
+        
+        // Update current player ID to match current turn
+        this.gameState.currentPlayerId = this.getPlayerIdByRole(this.gameState.turn);
+        this.gameState.lastSyncTimestamp = Date.now();
+        
+        console.log(`👤 Player ${playerId} joined as ${assignedRole}`);
       }
 
-      // Send current game state
+      // Send current game state to the connecting player
       if (this.gameState) {
-        const stateMessage = {
-          type: 'GAME_STATE' as const,
+        this.sendToPlayer(playerId, {
+          type: 'GAME_STATE',
           timestamp: Date.now(),
           playerId: 'system',
           gameState: this.gameState
-        };
-        console.log(`Sending initial game state to player ${playerId}`);
-        this.sendToPlayer(playerId, stateMessage);
+        });
+      }
+
+      // Persist the updated state
+      if (this.gameState) {
+        this.stateStorage.put('gameState', this.gameState).catch((e) => 
+          console.error('Failed to persist state:', e)
+        );
       }
 
     } catch (error) {
-      console.error(`WebSocket connection error for player ${playerId}:`, error);
-      // Send error message to client if possible
-      try {
-        this.sendError(playerId, 'Connection setup failed');
-      } catch (sendError) {
-        console.error('Failed to send error message:', sendError);
-      }
+      console.error(`❌ WebSocket connection setup failed for player ${playerId}:`, error);
+      throw error;
     }
   }
 
@@ -328,7 +313,6 @@ export class GameRoomDurableObject extends DurableObject {
       return;
     }
 
-    const ackId: string | undefined = message.ackId;
     try {
       // Use structuredClone so that Map & Date objects are preserved
       // (Cloudflare workers runtime supports structuredClone)
@@ -407,15 +391,7 @@ export class GameRoomDurableObject extends DurableObject {
         });
       }
 
-      // Send ACK back to mover so client can flush optimistic queue
-      if (ackId) {
-        this.sendToPlayer(message.playerId, {
-          type: 'ACK',
-          timestamp: Date.now(),
-          playerId: 'system',
-          ackId
-        } as any);
-      }
+      // ACK system removed for simplicity
 
       // Atomically persist to D1 (fire-and-forget; DO will retry on failure via waitUntil)
       this.persistState().catch((err) => console.error('Failed to persist game state', err));
