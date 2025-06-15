@@ -18,7 +18,7 @@
   // Game state
   let gameState: MultiplayerGameState | null = $state(null);
   let isInGame = $state(false);
-  let multiplayerHandler: MultiplayerHandler;
+  let multiplayerHandler: MultiplayerHandler = $state() as any;
   let errorMessage = $state('');
 
   // Player info from multiplayer

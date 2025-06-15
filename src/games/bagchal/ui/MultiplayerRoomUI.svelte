@@ -294,32 +294,4 @@
   .multiplayer-room-ui {
     min-height: 400px;
   }
-
-  .input {
-    @apply px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
-  }
-
-  .btn {
-    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700 disabled:hover:bg-blue-600;
-  }
-
-  .btn:not(.btn-primary) {
-    @apply bg-gray-100 text-gray-900 hover:bg-gray-200 disabled:hover:bg-gray-100;
-  }
-
-  .btn-sm {
-    @apply px-2 py-1 text-sm;
-  }
-
-  .section-card {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm;
-  }
-
-  .section-title {
-    @apply font-bold text-gray-900;
-  }
 </style> 
