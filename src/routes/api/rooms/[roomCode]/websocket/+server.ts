@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
     const roomObject = platform.env.GAME_ROOMS.get(roomId);
 
     // Create WebSocket URL for this specific room
-    const websocketUrl = `${new URL(request.url).origin}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}`;
+    const websocketUrl = `${new URL(request.url).origin}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}&roomCode=${encodeURIComponent(roomCode)}`;
 
     return json({
       websocketUrl,

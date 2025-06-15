@@ -92,6 +92,7 @@ export class GameRoomDurableObject extends DurableObject {
   private async handleWebSocketUpgrade(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const playerId = url.searchParams.get('playerId');
+    const roomCode: string = url.searchParams.get('roomCode') || this.roomId;
     
     if (!playerId) {
       return new Response('Missing playerId', { status: 400 });
@@ -101,7 +102,7 @@ export class GameRoomDurableObject extends DurableObject {
       const webSocketPair = new WebSocketPair();
       const [client, server] = Object.values(webSocketPair);
 
-      this.handleWebSocketConnection(server as WebSocket, playerId);
+      this.handleWebSocketConnection(server as WebSocket, playerId as string, roomCode);
       
       return new Response(null, {
         status: 101,
@@ -113,14 +114,38 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private handleWebSocketConnection(webSocket: WebSocket, playerId: string) {
+  private handleWebSocketConnection(webSocket: WebSocket, playerId: string, roomCode: string) {
     try {
       (webSocket as any).accept();
       this.sessions.set(webSocket, playerId);
 
       // Initialize game state if needed
       if (!this.gameState) {
-        this.initializeGameState(playerId);
+        this.initializeGameState(roomCode, playerId);
+      }
+
+      // If new player not registered yet, assign role
+      if (this.gameState && !this.gameState.players[playerId]) {
+        if (!this.gameState.guestPlayerId) {
+          this.gameState.guestPlayerId = playerId;
+          this.gameState.players[playerId] = {
+            id: playerId,
+            name: 'Guest Player',
+            role: 'TIGER',
+            connected: true,
+            lastSeen: Date.now()
+          } as PlayerInfo;
+          this.gameState.message = 'Both players connected! Goats place first.';
+        } else {
+          // Spectator joins
+          this.gameState.players[playerId] = {
+            id: playerId,
+            name: 'Spectator',
+            role: 'SPECTATOR' as any,
+            connected: true,
+            lastSeen: Date.now()
+          } as any;
+        }
       }
 
       // Send current game state
@@ -265,11 +290,16 @@ export class GameRoomDurableObject extends DurableObject {
     }
   }
 
-  private initializeGameState(hostPlayerId: string) {
+  private initializeGameState(roomCode: string, hostPlayerId: string) {
     // Create initial Reforged game state
     this.gameState = {
       // Base game state
-      board: Array(25).fill(null),
+      board: (() => {
+        const b = Array(25).fill(null);
+        // Place tigers at the four corners (0, 4, 20, 24)
+        [0, 4, 20, 24].forEach((idx) => (b[idx] = 'TIGER'));
+        return b;
+      })(),
       turn: 'GOAT',
       phase: 'PLACEMENT',
       goatsPlaced: 0,
@@ -285,7 +315,7 @@ export class GameRoomDurableObject extends DurableObject {
       
       // Multiplayer specific
       roomId: this.roomId,
-      roomCode: this.generateRoomCode(),
+      roomCode,
       hostPlayerId: hostPlayerId,
       guestPlayerId: null,
       currentPlayerId: hostPlayerId,

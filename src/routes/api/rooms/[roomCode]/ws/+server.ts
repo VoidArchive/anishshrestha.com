@@ -21,6 +21,7 @@ export const GET: RequestHandler = async ({ params, url, request, platform }) =>
     const durableObjectUrl = new URL(request.url);
     durableObjectUrl.pathname = '/websocket';
     durableObjectUrl.searchParams.set('playerId', playerId);
+    durableObjectUrl.searchParams.set('roomCode', roomCode);
 
     return await roomObject.fetch(durableObjectUrl.toString(), {
       method: 'GET',
