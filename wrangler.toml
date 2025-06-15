@@ -12,11 +12,15 @@ assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
   migrations_dir = "./database"
 
 # Durable Objects for real-time game state management
-[[durable_objects]]
-  name = "GAME_ROOMS"
-  class_name = "GameRoomDurableObject"
+[durable_objects]
+  bindings = [
+    { name = "GAME_ROOMS", class_name = "GameRoomDurableObject" }
+  ]
 
 # Durable Objects migrations
 [[migrations]]
   tag = "v1"
   new_classes = [ "GameRoomDurableObject" ]
+
+# Local dev environment stub for adapter-cloudflare
+[env.dev]

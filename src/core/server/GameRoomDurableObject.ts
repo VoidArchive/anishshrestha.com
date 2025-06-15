@@ -45,6 +45,13 @@ import type {
 } from '../../games/bagchal/types/multiplayer';
 import { executeMove, generatePoints, generateLines, buildAdjacencyMap } from '../../games/bagchal/rules';
 
+// Runtime stub: during Node prerender the global DurableObject doesn't exist.
+// Define a no-op base class so that the `extends DurableObject` below doesn't throw.
+if (typeof (globalThis as any).DurableObject === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
+  (globalThis as any).DurableObject = class { constructor(..._args: any[]) {} };
+}
+
 // Simplified game logic since we can't import complex modules in DO
 interface GameMove {
   from?: number;
