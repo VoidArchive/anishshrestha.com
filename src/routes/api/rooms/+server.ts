@@ -9,6 +9,7 @@ import type {
   JoinRoomResponse 
 } from '../../../games/bagchal/types/multiplayer';
 import { generateId, generateRoomCode } from '../../../lib/utils/multiplayer';
+// import { sanitizePlayerName, sanitizeGameState } from '../../../lib/utils/security';
 
 // Create a new game room
 export const POST: RequestHandler = async ({ request, platform }) => {

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { page } from '$app/state';
   import { goto } from '$app/navigation';
   
   // Import existing Bagchal components
@@ -27,7 +25,7 @@
   let currentPlayerId: string | null = $state(null);
   let playerRole: 'GOAT' | 'TIGER' | null = $state(null);
   let isMyTurn = $derived(
-    gameState && currentPlayerId && gameState.currentPlayerId === currentPlayerId
+    gameState && currentPlayerId && (gameState as MultiplayerGameState).currentPlayerId === currentPlayerId
   );
 
   // Handle successful game start

@@ -187,15 +187,15 @@ export class GameRoomDurableObject {
         type: 'GAME_STATE',
         timestamp: Date.now(),
         playerId: 'system',
-        gameState: this.gameState
+        gameState: this.gameState!
       });
 
-      if (this.gameState.winner) {
+      if (this.gameState!.winner) {
         this.broadcast({
           type: 'GAME_END',
           timestamp: Date.now(),
           playerId: 'system',
-          winner: this.gameState.winner,
+          winner: this.gameState!.winner,
           reason: 'win'
         });
       }
