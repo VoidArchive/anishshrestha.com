@@ -214,7 +214,7 @@
 		<!-- Recessed Game Board Container -->
 		<div class="flex flex-1 flex-col items-center justify-center p-2 sm:p-4 lg:p-6">
 			<!-- Carved Board Well -->
-			<div class="board-well">
+			<div class="board-well lg:max-w-[640px] xl:max-w-[700px]">
 				<div class="board-inner" class:thinking={isComputerThinking && isComputerTurn}>
 					<div class="board-wrapper">
 						<!-- SVG Board Container -->

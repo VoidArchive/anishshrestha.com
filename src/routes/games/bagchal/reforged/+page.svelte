@@ -206,25 +206,39 @@
         </div>
       </div>
 
-      <div class="flex flex-col items-center gap-4">
-        <GameBoard
-          {points}
-          {lines}
-          gameState={gameState}
-          validMoves={getValidMoves()}
-          handlePointClick={handlePointClick}
-          isComputerThinking={false}
-          isPlayingComputer={false}
-          playerSide={playerRole || 'GOAT'}
-          moveHistory={[]}
-        />
-      </div>
+      <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
+        <!-- Status sidebar -->
+        <aside class="lg:w-72 space-y-4">
+          <div class="section-card">
+            <h2 class="section-title mb-2">Game Status</h2>
+            <ul class="text-sm leading-6 space-y-1">
+              <li class="flex justify-between"><span>Room</span><span class="font-mono text-primary">{gameState.roomCode}</span></li>
+              <li class="flex justify-between"><span>You</span><span>{playerName} ({playerRole})</span></li>
+              <li class="flex justify-between"><span>Opponent</span><span>{opponentName}</span></li>
+              <li class={`flex justify-between ${isMyTurn ? 'text-primary font-semibold' : ''}`}>
+                <span>Turn</span><span>{isMyTurn ? 'Your turn' : `${currentTurnName}'s turn`}</span>
+              </li>
+            </ul>
+            <button onclick={leaveGame} class="btn w-full mt-4 border-primary text-primary hover:bg-primary hover:text-bg-primary">
+              Leave Game
+            </button>
+          </div>
+        </aside>
 
-      <!-- Multiplayer-specific controls -->
-      <div class="mt-6 text-center">
-        <button onclick={leaveGame} class="btn border-primary text-primary hover:bg-primary hover:text-bg-primary">
-          Leave Game
-        </button>
+        <!-- Board container -->
+        <div class="flex-1 flex justify-center">
+          <GameBoard
+            {points}
+            {lines}
+            gameState={gameState}
+            validMoves={getValidMoves()}
+            handlePointClick={handlePointClick}
+            isComputerThinking={false}
+            isPlayingComputer={false}
+            playerSide={playerRole || 'GOAT'}
+            moveHistory={[]}
+          />
+        </div>
       </div>
     {/if}
   </section>
