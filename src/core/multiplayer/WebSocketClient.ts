@@ -132,30 +132,33 @@ export class WebSocketClient {
 
   sendMove(move: any) {
     console.log('🎮 sendMove called with:', move);
-    console.log('🔌 WebSocket state:', {
-      playerId: this.playerId,
-      hasWebSocket: !!this.ws,
-      readyState: this.ws?.readyState,
-      status: this.status,
-      isOpen: this.ws?.readyState === WebSocket.OPEN
-    });
     
-    // Simple validation
     if (!this.playerId) {
       console.error('❌ No playerId');
       this.options.onError('Player ID not available');
       return;
     }
     
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      console.error('❌ WebSocket not ready:', {
-        hasWs: !!this.ws,
-        state: this.ws?.readyState,
-        OPEN: WebSocket.OPEN
-      });
-      this.options.onError('Connection not ready');
+    console.log('🔌 WebSocket check:', {
+      hasWs: !!this.ws,
+      readyState: this.ws?.readyState,
+      OPEN: WebSocket.OPEN,
+      isActuallyOpen: this.ws?.readyState === WebSocket.OPEN
+    });
+    
+    if (!this.ws) {
+      console.error('❌ No WebSocket object');
+      this.options.onError('No WebSocket connection');
       return;
     }
+    
+    if (this.ws.readyState !== WebSocket.OPEN) {
+      console.error('❌ WebSocket not open. State:', this.ws.readyState, 'Expected:', WebSocket.OPEN);
+      this.options.onError('WebSocket not open');
+      return;
+    }
+    
+    console.log('✅ WebSocket is ready, sending move!');
     
     const ackId = crypto.randomUUID();
     const message: any = {
