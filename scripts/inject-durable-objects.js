@@ -24,8 +24,9 @@ let workerContent = fs.readFileSync(workerPath, 'utf8');
 // Create a hand-written JavaScript implementation of the Durable Object
 const durableObjectCode = `
 // Durable Object for multiplayer game rooms
-class GameRoomDurableObject {
+class GameRoomDurableObject extends DurableObject {
   constructor(state, env) {
+    super(state, env);
     this.state = state;
     this.env = env;
     this.sessions = new Map();

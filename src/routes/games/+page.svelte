@@ -13,7 +13,7 @@
 			name: 'Bagchal Reforged',
 			description: 'Play Bagchal online with friends in real-time multiplayer.',
 			slug: 'bagchal/reforged',
-			icon: '/icons/tiger.svg',
+			icon: '/icons/goat.svg',
 			mode: 'Multiplayer'
 		},
 		{
