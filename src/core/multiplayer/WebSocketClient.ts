@@ -57,10 +57,19 @@ export class WebSocketClient {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get WebSocket URL');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('WebSocket URL request failed:', response.status, errorData);
+        throw new Error(`Failed to get WebSocket URL: ${errorData.error || response.statusText}`);
       }
 
-      const { websocketUrl } = await response.json();
+      const data = await response.json();
+      const { websocketUrl } = data;
+      
+      if (!websocketUrl) {
+        throw new Error('No WebSocket URL returned from server');
+      }
+      
+      console.log('Connecting to WebSocket:', websocketUrl);
       
       // Connect to the Durable Object WebSocket
       this.ws = new WebSocket(websocketUrl);

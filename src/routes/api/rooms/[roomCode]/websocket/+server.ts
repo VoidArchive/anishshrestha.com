@@ -35,8 +35,9 @@ export const POST: RequestHandler = async ({ params, request, platform }) => {
 
     // Create WebSocket URL for this specific room (must start with ws:// or wss://)
     const requestUrl = new URL(request.url);
-    const wsOrigin = `${requestUrl.protocol === 'https:' ? 'wss:' : 'ws:'}//${requestUrl.host}`;
-    const websocketUrl = `${wsOrigin}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}&roomCode=${encodeURIComponent(roomCode)}&token=${encodeURIComponent(authToken)}`;
+    // For production, always use wss:// (secure WebSocket)
+    const protocol = requestUrl.protocol === 'https:' || requestUrl.hostname !== 'localhost' ? 'wss:' : 'ws:';
+    const websocketUrl = `${protocol}//${requestUrl.host}/api/rooms/${roomCode}/ws?playerId=${encodeURIComponent(playerId)}&roomCode=${encodeURIComponent(roomCode)}&token=${encodeURIComponent(authToken)}`;
 
     return json({
       websocketUrl,
