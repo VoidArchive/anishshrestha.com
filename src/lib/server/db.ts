@@ -28,6 +28,7 @@ export async function ensureSchema(db: any) {
       game_state TEXT NOT NULL,
       move_count INTEGER DEFAULT 0,
       started_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
       ended_at INTEGER,
       winner TEXT,
       ended_reason TEXT,
@@ -48,4 +49,15 @@ export async function ensureSchema(db: any) {
     db.prepare(`CREATE INDEX IF NOT EXISTS idx_rooms_status ON game_rooms(status);`),
     db.prepare(`CREATE INDEX IF NOT EXISTS idx_rooms_code ON game_rooms(room_code);`)
   ]);
+
+  // If ensureSchema ran before we added updated_at, patch table
+  try {
+    const info = await db.prepare(`PRAGMA table_info(game_sessions);`).all();
+    const hasUpdatedAt = info?.results?.some((c: any) => c.name === 'updated_at');
+    if (!hasUpdatedAt) {
+      await db.prepare(`ALTER TABLE game_sessions ADD COLUMN updated_at INTEGER;`).run();
+    }
+  } catch (_err) {
+    // Ignore – ALTER may fail on some SQLite variants if column exists
+  }
 } 
