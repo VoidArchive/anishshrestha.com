@@ -317,7 +317,7 @@ class GameRoomDurableObject {
     }
   }
 
-  sendError(playerId, error, code) {
+  sendError(playerId, error, code = null) {
     this.sendToPlayer(playerId, {
       type: 'ERROR',
       timestamp: Date.now(),
