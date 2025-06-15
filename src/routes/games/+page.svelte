@@ -47,13 +47,13 @@
 		<!-- Main column -->
 		<div class="flex flex-col">
 			{#each games as game (game.slug)}
-				<section class="section-card p-3 sm:p-4 flex flex-row justify-between items-start rounded-none gap-4">
+				<section class="section-card p-3 sm:p-4 flex flex-row justify-between items-start gap-4">
 					<!-- Text content -->
 					<div class="flex flex-col gap-2 flex-1">
 						<div class="flex items-center gap-2">
 							<h2 class="section-title m-0 text-xl">{game.name}</h2>
 							{#if game.mode}
-								<span class="badge text-xs px-2 py-1 rounded-full {game.mode === 'Multiplayer' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+								<span class="badge text-xs px-2 py-1 {game.mode === 'Multiplayer' ? 'bg-primary/20 text-primary border border-primary' : 'bg-bg-primary text-text-muted border border-border'}">
 									{game.mode}
 								</span>
 							{/if}
