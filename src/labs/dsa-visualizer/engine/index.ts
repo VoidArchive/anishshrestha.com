@@ -41,8 +41,7 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 			currentStep: 0,
 			totalSteps: 0,
 			isAnimating: false,
-			animationSpeed: 100, // Updated default speed
-			turboMode: false,
+			animationSpeed: 100,
 			completed: false,
 
 			// Statistics
@@ -155,7 +154,7 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 				try {
 					const plainStart: [number, number] = [state.start[0], state.start[1]];
 					const plainEnd: [number, number] = [state.end[0], state.end[1]];
-					
+
 					// Generate all steps for now (to fix current issues)
 					// TODO: Implement true incremental generation later
 					this.animationSteps = PathfindingAlgorithms.generateSteps(
@@ -164,10 +163,9 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 						plainStart,
 						plainEnd
 					);
-					
+
 					// Clear generator since we have all steps
 					this.stepGenerator = null;
-					
 				} catch (error) {
 					console.error('Error initializing pathfinding stream:', error);
 					this.animationSteps = [
@@ -317,13 +315,13 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 
 	getStepAt(index: number): AnimationStep | null {
 		if (index < 0) return null;
-		
+
 		// For streaming: aggressively load more batches if needed
 		while (this.stepGenerator && index >= this.animationSteps.length - 5) {
 			const loadedBatch = this.loadNextBatch();
 			if (!loadedBatch) break; // No more batches available
 		}
-		
+
 		if (index >= this.animationSteps.length) return null;
 		return this.animationSteps[index];
 	}
@@ -332,17 +330,22 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 	private getBatchSize(algorithm: PathfindingAlgorithm): number {
 		// Algorithm-specific batch sizes for optimal performance
 		switch (algorithm) {
-			case 'A_STAR': return 30; // A* is efficient, larger batches
-			case 'BFS': return 25;    // BFS explores systematically
-			case 'DIJKSTRA': return 20; // Dijkstra processes many nodes
-			case 'DFS': return 15;    // DFS can be unpredictable, smaller batches
-			default: return 20;
+			case 'A_STAR':
+				return 30; // A* is efficient, larger batches
+			case 'BFS':
+				return 25; // BFS explores systematically
+			case 'DIJKSTRA':
+				return 20; // Dijkstra processes many nodes
+			case 'DFS':
+				return 15; // DFS can be unpredictable, smaller batches
+			default:
+				return 20;
 		}
 	}
 
 	private loadNextBatch(): boolean {
 		if (!this.stepGenerator || this.isGenerating) return false;
-		
+
 		this.isGenerating = true;
 		try {
 			const result = this.stepGenerator.next();

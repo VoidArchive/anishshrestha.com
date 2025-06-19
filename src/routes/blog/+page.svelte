@@ -49,9 +49,9 @@
 									<h2 class="blog-title">{post.title}</h2>
 									<time class="blog-date">{formatDate(post.date)}</time>
 								</div>
-								
+
 								<p class="blog-description">{post.description}</p>
-								
+
 								<div class="blog-footer">
 									<div class="blog-tags">
 										{#each post.tags as tag}
@@ -61,7 +61,7 @@
 											<span class="blog-tag interactive-tag">Interactive</span>
 										{/if}
 									</div>
-									
+
 									{#if post.relatedLab}
 										<p class="lab-preview">
 											Try live demo: <strong>{post.relatedLab.name}</strong>
@@ -191,7 +191,7 @@
 		.blog-title {
 			font-size: 1.25rem;
 		}
-		
+
 		.blog-description {
 			font-size: 0.95rem;
 		}

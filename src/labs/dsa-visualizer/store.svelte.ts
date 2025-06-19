@@ -66,13 +66,12 @@ export function resetVisualization() {
 	newState.algorithm = dsaState.algorithm;
 	newState.arraySize = dsaState.arraySize;
 	newState.animationSpeed = dsaState.animationSpeed;
-	newState.turboMode = dsaState.turboMode;
 
 	// Generate appropriate data for current mode
 	if (newState.mode === 'SORTING') {
 		newState.array = engine.generateRandomArray(newState.arraySize, 10, 100);
 	} else {
-		// Use optimized grid size for better performance  
+		// Use optimized grid size for better performance
 		const gridSize = { width: 25, height: 15 };
 		newState.grid = engine.createEmptyGrid(gridSize.width, gridSize.height);
 		newState.gridSize = gridSize;
@@ -95,7 +94,7 @@ export function resetVisualization() {
 	dsaState.totalSteps = newState.totalSteps;
 	dsaState.isAnimating = newState.isAnimating;
 	dsaState.animationSpeed = newState.animationSpeed;
-	dsaState.turboMode = newState.turboMode;
+
 	dsaState.completed = newState.completed;
 	dsaState.comparisons = newState.comparisons;
 	dsaState.swaps = newState.swaps;
@@ -231,13 +230,6 @@ export function setAnimationSpeed(speed: number) {
 }
 
 /**
- * Toggles turbo mode for faster algorithm visualization
- */
-export function setTurboMode(enabled: boolean) {
-	dsaState.turboMode = enabled;
-}
-
-/**
  * Skips to the end of the algorithm animation
  */
 export function skipToEnd() {
@@ -330,7 +322,6 @@ export function stepForward() {
 
 	const step = engine.getStepAt(dsaState.currentStep);
 
-
 	if (step) {
 		// Apply step state updates
 		if (step.state) {
@@ -417,99 +408,96 @@ function runNextStep() {
 	// Progress to next step
 	dsaState.currentStep++;
 
-		// Handle instant mode (0ms delay) with performance safeguards
-		if (dsaState.animationSpeed === 0) {
-			// Run steps in batches to prevent browser hanging
-			const BATCH_SIZE = 50;
-			let batchCount = 0;
+	// Handle instant mode (0ms delay) with performance safeguards
+	if (dsaState.animationSpeed === 0) {
+		// Run steps in batches to prevent browser hanging
+		const BATCH_SIZE = 50;
+		let batchCount = 0;
 
-			// For fixed algorithms
-			if (dsaState.totalSteps > 0) {
-				while (dsaState.currentStep < dsaState.totalSteps && batchCount < BATCH_SIZE) {
-					const nextStep = engine.getStepAt(dsaState.currentStep);
-					if (nextStep) {
-						if (nextStep.state) {
-							applyStepState(nextStep.state);
-						}
-						if (nextStep.move.type === 'COMPARE' || nextStep.move.type === 'HIGHLIGHT') {
-							applyMove(nextStep.move);
-						}
-						dsaState.currentStep++;
-						batchCount++;
-					} else {
-						break;
+		// For fixed algorithms
+		if (dsaState.totalSteps > 0) {
+			while (dsaState.currentStep < dsaState.totalSteps && batchCount < BATCH_SIZE) {
+				const nextStep = engine.getStepAt(dsaState.currentStep);
+				if (nextStep) {
+					if (nextStep.state) {
+						applyStepState(nextStep.state);
 					}
-				}
-			} else {
-				// For streaming algorithms, process available steps
-				while (batchCount < BATCH_SIZE) {
-					const nextStep = engine.getStepAt(dsaState.currentStep);
-					if (nextStep) {
-						if (nextStep.state) {
-							applyStepState(nextStep.state);
-						}
-						if (nextStep.move.type === 'COMPARE' || nextStep.move.type === 'HIGHLIGHT') {
-							applyMove(nextStep.move);
-						}
-						dsaState.currentStep++;
-						batchCount++;
-					} else if (engine.isStreamComplete()) {
-						// Stream is done
-						dsaState.completed = true;
-						dsaState.isAnimating = false;
-						dsaState.totalSteps = engine.getLoadedSteps();
-						break;
-					} else {
-						// Wait for more data
-						break;
+					if (nextStep.move.type === 'COMPARE' || nextStep.move.type === 'HIGHLIGHT') {
+						applyMove(nextStep.move);
 					}
+					dsaState.currentStep++;
+					batchCount++;
+				} else {
+					break;
 				}
 			}
-
-			// Check completion and continue
-			if ((dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps) ||
-				(dsaState.totalSteps === -1 && engine.isStreamComplete())) {
-				dsaState.completed = true;
-				dsaState.isAnimating = false;
-				dsaState.comparing = [];
-				if (dsaState.totalSteps === -1) {
+		} else {
+			// For streaming algorithms, process available steps
+			while (batchCount < BATCH_SIZE) {
+				const nextStep = engine.getStepAt(dsaState.currentStep);
+				if (nextStep) {
+					if (nextStep.state) {
+						applyStepState(nextStep.state);
+					}
+					if (nextStep.move.type === 'COMPARE' || nextStep.move.type === 'HIGHLIGHT') {
+						applyMove(nextStep.move);
+					}
+					dsaState.currentStep++;
+					batchCount++;
+				} else if (engine.isStreamComplete()) {
+					// Stream is done
+					dsaState.completed = true;
+					dsaState.isAnimating = false;
 					dsaState.totalSteps = engine.getLoadedSteps();
+					break;
+				} else {
+					// Wait for more data
+					break;
 				}
-			} else {
-				// Continue with next batch after yielding to browser
-				animationTimeoutId = setTimeout(() => {
-					runNextStep();
-				}, 0);
 			}
-			return;
 		}
 
-		// Check completion for both fixed and streaming algorithms
-		const isCompleted = (dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps) ||
-						  (dsaState.totalSteps === -1 && engine.isStreamComplete());
-
-		if (isCompleted) {
+		// Check completion and continue
+		if (
+			(dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps) ||
+			(dsaState.totalSteps === -1 && engine.isStreamComplete())
+		) {
 			dsaState.completed = true;
 			dsaState.isAnimating = false;
 			dsaState.comparing = [];
 			if (dsaState.totalSteps === -1) {
-				dsaState.totalSteps = engine.getLoadedSteps(); // Update for final UI state
+				dsaState.totalSteps = engine.getLoadedSteps();
 			}
 		} else {
-			// Handle turbo mode - skip non-key steps
-			let delay = dsaState.animationSpeed;
-			if (dsaState.turboMode && step && !step.isKeyStep) {
-				delay = Math.min(delay / 4, 10); // Much faster for non-key steps
-			}
-
-			// Minimum delay to prevent browser hangs
-			delay = Math.max(delay, 1);
-
-			// Schedule next step
+			// Continue with next batch after yielding to browser
 			animationTimeoutId = setTimeout(() => {
 				runNextStep();
-			}, delay);
+			}, 0);
 		}
+		return;
+	}
+
+	// Check completion for both fixed and streaming algorithms
+	const isCompleted =
+		(dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps) ||
+		(dsaState.totalSteps === -1 && engine.isStreamComplete());
+
+	if (isCompleted) {
+		dsaState.completed = true;
+		dsaState.isAnimating = false;
+		dsaState.comparing = [];
+		if (dsaState.totalSteps === -1) {
+			dsaState.totalSteps = engine.getLoadedSteps(); // Update for final UI state
+		}
+	} else {
+		// Use configured animation speed
+		let delay = Math.max(dsaState.animationSpeed, 1); // Minimum delay to prevent browser hangs
+
+		// Schedule next step
+		animationTimeoutId = setTimeout(() => {
+			runNextStep();
+		}, delay);
+	}
 }
 
 /**

@@ -29,7 +29,6 @@ interface AnimationStep {
 	move: DSAMove; // The fundamental operation
 	description: string;
 	state: Partial<VisualizationState>; // Visual state changes
-	isKeyStep?: boolean; // For turbo mode optimization
 }
 
 interface DSAMove {
@@ -54,8 +53,7 @@ steps.push({
 		array: [...arr], // New array copy
 		comparing: [],
 		swaps: steps.filter((s) => s.move.type === 'SWAP').length + 1
-	},
-	isKeyStep: true
+	}
 });
 ```
 
@@ -92,7 +90,7 @@ private static bubbleSort(arr: number[]): AnimationStep[] {
                         comparing: [],
                         swaps: steps.filter(s => s.move.type === 'SWAP').length + 1
                     },
-                    isKeyStep: true // Mark swaps as key steps for turbo mode
+
                 });
             }
         }
@@ -321,28 +319,6 @@ The Manhattan distance heuristic ensures A\* finds optimal paths while providing
 
 ## Performance Optimization Strategies
 
-### Turbo Mode Implementation
-
-For educational purposes, seeing every comparison in bubble sort is valuable. For practical demonstration with large arrays, it becomes tedious. I implemented "turbo mode" that skips to key steps:
-
-```typescript
-interface AnimationStep {
-	move: DSAMove;
-	description: string;
-	state: Partial<VisualizationState>;
-	isKeyStep?: boolean; // Mark important steps for turbo mode
-}
-
-// In the animation engine
-function getTurboSteps(allSteps: AnimationStep[]): AnimationStep[] {
-	return allSteps.filter(
-		(step) => step.isKeyStep || step.move.type === 'STEP_COMPLETE' || step.move.type === 'SWAP'
-	);
-}
-```
-
-This allows users to see the essential algorithm behavior without sitting through hundreds of comparison steps.
-
 ### Animation Timing Optimization
 
 Managing animation timing across different algorithms required careful performance tuning:
@@ -433,7 +409,7 @@ This ensures the visualization remains readable across different array sizes and
 
 ## Educational Design Decisions
 
-> **Fun Developer Fact**: All those statistics you see in the UI—comparisons, swaps, steps, operation counts—were originally `console.log()` debug statements! I had so many debugging variables scattered throughout my code to track what was happening during algorithm execution that instead of deleting them, I just turned them into a proper stats card UI. Sometimes the best features come from refusing to clean up your debugging mess! 
+> **Fun Developer Fact**: All those statistics you see in the UI—comparisons, swaps, steps, operation counts—were originally `console.log()` debug statements! I had so many debugging variables scattered throughout my code to track what was happening during algorithm execution that instead of deleting them, I just turned them into a proper stats card UI. Sometimes the best features come from refusing to clean up your debugging mess!
 
 ### Algorithm Complexity Display
 

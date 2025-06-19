@@ -69,7 +69,7 @@ Uses consistent button styling and clear visual feedback for current state.
 		<div class="button-row" style="gap: var(--space-2);">
 			<button
 				class="btn control-btn primary"
-				on:click={toggleSimulation}
+				onclick={toggleSimulation}
 				aria-label={stats.isRunning ? 'Pause simulation' : 'Start simulation'}
 			>
 				{#if stats.isRunning}
@@ -83,7 +83,7 @@ Uses consistent button styling and clear visual feedback for current state.
 
 			<button
 				class="btn control-btn"
-				on:click={stepGeneration}
+				onclick={stepGeneration}
 				disabled={stats.isRunning}
 				aria-label="Step one generation"
 			>
@@ -99,7 +99,7 @@ Uses consistent button styling and clear visual feedback for current state.
 		<select
 			class="speed-select"
 			value={stats.speed}
-			on:change={handleSpeedChange}
+			onchange={handleSpeedChange}
 			disabled={stats.isRunning}
 		>
 			<option value={SimulationSpeed.VERY_SLOW}>Very Slow (1s)</option>
@@ -113,24 +113,35 @@ Uses consistent button styling and clear visual feedback for current state.
 	<!-- Grid Controls -->
 	<div class="control-group">
 		<h4 class="control-group-title">Grid</h4>
-		<div class="button-row" style="gap: var(--space-2);">
-			<button class="btn control-btn" on:click={clearGrid} aria-label="Clear all cells">
-				<Square size={16} />
-				Clear
+		<div class="grid-controls">
+			<button
+				class="btn control-btn"
+				onclick={handleRandomize}
+				aria-label="Fill with random cells"
+				title="Generate random starting pattern"
+			>
+				<Shuffle size={16} />
+				Randomize
 			</button>
 
 			<button
-				class="btn control-btn"
-				on:click={handleRandomize}
-				aria-label="Fill with random cells"
+				class="btn control-btn clear-btn"
+				onclick={clearGrid}
+				aria-label="Clear all cells"
+				title="Remove all living cells"
 			>
-				<Shuffle size={16} />
-				Random
+				<Square size={16} />
+				Clear Grid
 			</button>
 
-			<button class="btn control-btn" on:click={resetSimulation} aria-label="Reset simulation">
+			<button
+				class="btn control-btn reset-btn"
+				onclick={resetSimulation}
+				aria-label="Reset simulation"
+				title="Reset generation counter and stats"
+			>
 				<RotateCcw size={16} />
-				Reset
+				Reset All
 			</button>
 		</div>
 	</div>
@@ -142,7 +153,7 @@ Uses consistent button styling and clear visual feedback for current state.
 			<input
 				type="checkbox"
 				checked={simulationState.wrapEdges}
-				on:change={toggleWrapEdges}
+				onchange={toggleWrapEdges}
 				class="checkbox-input"
 			/>
 			<span class="checkbox-text">Wrap edges (toroidal)</span>
@@ -255,6 +266,34 @@ Uses consistent button styling and clear visual feedback for current state.
 	.checkbox-text {
 		font-family: var(--font-family-mono);
 		user-select: none;
+	}
+
+	.grid-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+	}
+
+	.clear-btn {
+		background: rgba(148, 163, 184, 0.1);
+		border-color: rgba(148, 163, 184, 0.3);
+		color: #94a3b8;
+	}
+
+	.clear-btn:hover:not(:disabled) {
+		background: rgba(148, 163, 184, 0.2);
+		border-color: #94a3b8;
+	}
+
+	.reset-btn {
+		background: rgba(239, 68, 68, 0.1);
+		border-color: rgba(239, 68, 68, 0.3);
+		color: #ef4444;
+	}
+
+	.reset-btn:hover:not(:disabled) {
+		background: rgba(239, 68, 68, 0.2);
+		border-color: #ef4444;
 	}
 
 	/* Mobile responsive */

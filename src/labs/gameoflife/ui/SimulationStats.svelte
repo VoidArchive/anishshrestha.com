@@ -214,7 +214,9 @@ generation count, birth/death rates, and other relevant metrics.
 		border-radius: 4px;
 		opacity: 0;
 		visibility: hidden;
-		transition: opacity 0.3s ease, visibility 0.3s ease;
+		transition:
+			opacity 0.3s ease,
+			visibility 0.3s ease;
 	}
 
 	.speed-info.visible {

@@ -36,7 +36,7 @@ export class SortingAlgorithms {
 				steps.push({
 					move: { type: 'COMPARE', indices: [j, j + 1] },
 					description: `Comparing elements at positions ${j} and ${j + 1}`,
-					state: { 
+					state: {
 						comparing: [j, j + 1],
 						comparisons: comparisonCount
 					}
@@ -54,8 +54,7 @@ export class SortingAlgorithms {
 							comparing: [],
 							swaps: swapCount,
 							comparisons: comparisonCount
-						},
-						isKeyStep: true // Mark swaps as key steps for turbo mode
+						}
 					});
 				}
 			}
@@ -104,7 +103,7 @@ export class SortingAlgorithms {
 				steps.push({
 					move: { type: 'COMPARE', indices: [minIdx, j] },
 					description: `Comparing elements at positions ${minIdx} and ${j}`,
-					state: { 
+					state: {
 						comparing: [minIdx, j],
 						comparisons: comparisonCount
 					}
@@ -126,8 +125,7 @@ export class SortingAlgorithms {
 						comparing: [],
 						swaps: swapCount,
 						comparisons: comparisonCount
-					},
-					isKeyStep: true
+					}
 				});
 			} else {
 				// CRITICAL FIX: Add step for when no swap is needed
@@ -243,9 +241,9 @@ export class SortingAlgorithms {
 	}
 
 	private static quickSort(
-		arr: number[], 
-		low: number, 
-		high: number, 
+		arr: number[],
+		low: number,
+		high: number,
 		globalState: { swapCount: number; comparisonCount: number }
 	): AnimationStep[] {
 		const steps: AnimationStep[] = [];
@@ -262,8 +260,7 @@ export class SortingAlgorithms {
 					comparing: [],
 					swaps: globalState.swapCount,
 					comparisons: globalState.comparisonCount
-				},
-				isKeyStep: true // Mark pivot placement as key step
+				}
 			});
 
 			steps.push(...this.quickSort(arr, low, pivotIndex - 1, globalState));
@@ -294,7 +291,7 @@ export class SortingAlgorithms {
 			steps.push({
 				move: { type: 'COMPARE', indices: [j, high] },
 				description: `Comparing ${arr[j]} with pivot ${pivot}`,
-				state: { 
+				state: {
 					comparing: [j, high],
 					comparisons: globalState.comparisonCount
 				}
@@ -312,8 +309,7 @@ export class SortingAlgorithms {
 							array: [...arr],
 							swaps: globalState.swapCount,
 							comparisons: globalState.comparisonCount
-						},
-						isKeyStep: true // Mark swaps as key steps for turbo mode
+						}
 					});
 				}
 			}
@@ -329,8 +325,7 @@ export class SortingAlgorithms {
 				comparing: [],
 				swaps: globalState.swapCount,
 				comparisons: globalState.comparisonCount
-			},
-			isKeyStep: true // Mark pivot placement as key step
+			}
 		});
 
 		return { pivotIndex: i + 1, partitionSteps: steps };
@@ -426,8 +421,7 @@ export class SortingAlgorithms {
 				state: {
 					array: [...arr],
 					comparing: []
-				},
-				isKeyStep: true // Mark SET_VALUE as key step for turbo mode
+				}
 			});
 
 			k++;
@@ -480,8 +474,7 @@ export class SortingAlgorithms {
 					swaps: globalState.swapCount,
 					comparisons: globalState.comparisonCount,
 					sorted: Array.from({ length: n - i }, (_, k) => n - k - 1)
-				},
-				isKeyStep: true
+				}
 			});
 
 			steps.push(...this.heapify(arr, i, 0, globalState));
@@ -503,9 +496,9 @@ export class SortingAlgorithms {
 	}
 
 	private static heapify(
-		arr: number[], 
-		n: number, 
-		i: number, 
+		arr: number[],
+		n: number,
+		i: number,
 		globalState: { swapCount: number; comparisonCount: number }
 	): AnimationStep[] {
 		const steps: AnimationStep[] = [];
@@ -518,7 +511,7 @@ export class SortingAlgorithms {
 			steps.push({
 				move: { type: 'COMPARE', indices: [left, largest] },
 				description: `Comparing left child ${arr[left]} with parent ${arr[largest]}`,
-				state: { 
+				state: {
 					comparing: [left, largest],
 					comparisons: globalState.comparisonCount
 				}
@@ -534,7 +527,7 @@ export class SortingAlgorithms {
 			steps.push({
 				move: { type: 'COMPARE', indices: [right, largest] },
 				description: `Comparing right child ${arr[right]} with largest ${arr[largest]}`,
-				state: { 
+				state: {
 					comparing: [right, largest],
 					comparisons: globalState.comparisonCount
 				}
@@ -556,8 +549,7 @@ export class SortingAlgorithms {
 					comparing: [],
 					swaps: globalState.swapCount,
 					comparisons: globalState.comparisonCount
-				},
-				isKeyStep: true
+				}
 			});
 
 			steps.push(...this.heapify(arr, n, largest, globalState));

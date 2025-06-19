@@ -38,7 +38,7 @@
 			case 403:
 				return {
 					title: 'Access Forbidden',
-					message: 'You don\'t have permission to access this resource.',
+					message: "You don't have permission to access this resource.",
 					suggestion: 'Please check your credentials or contact support.',
 					icon: AlertTriangle,
 					color: '#f59e0b'
@@ -79,7 +79,7 @@
 		const subject = `Error Report: ${errorStatus} - ${errorDetails.title}`;
 		const body = `Error Details:\n- Status: ${errorStatus}\n- Message: ${errorMessage}\n- URL: ${page.url.pathname}\n- User Agent: ${typeof window !== 'undefined' ? navigator.userAgent : 'N/A'}`;
 		const mailtoLink = `mailto:your-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-		
+
 		if (typeof window !== 'undefined') {
 			window.location.href = mailtoLink;
 		}

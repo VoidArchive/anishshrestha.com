@@ -46,7 +46,7 @@ class PriorityQueue<T> {
 		while (index > 0) {
 			const parentIndex = Math.floor((index - 1) / 2);
 			if (this.compare(this.items[index], this.items[parentIndex]) >= 0) break;
-			
+
 			[this.items[index], this.items[parentIndex]] = [this.items[parentIndex], this.items[index]];
 			index = parentIndex;
 		}
@@ -58,11 +58,17 @@ class PriorityQueue<T> {
 			const leftChild = 2 * index + 1;
 			const rightChild = 2 * index + 2;
 
-			if (leftChild < this.items.length && this.compare(this.items[leftChild], this.items[minIndex]) < 0) {
+			if (
+				leftChild < this.items.length &&
+				this.compare(this.items[leftChild], this.items[minIndex]) < 0
+			) {
 				minIndex = leftChild;
 			}
 
-			if (rightChild < this.items.length && this.compare(this.items[rightChild], this.items[minIndex]) < 0) {
+			if (
+				rightChild < this.items.length &&
+				this.compare(this.items[rightChild], this.items[minIndex]) < 0
+			) {
 				minIndex = rightChild;
 			}
 
@@ -117,7 +123,7 @@ export class PathfindingAlgorithms {
 		// TODO: For true lazy loading, this should generate steps incrementally
 		// For now, we generate all steps but yield them in batches for better UX
 		const allSteps = this.generateSteps(grid, algorithm, start, end);
-		
+
 		for (let i = 0; i < allSteps.length; i += batchSize) {
 			yield allSteps.slice(i, i + batchSize);
 		}
@@ -133,10 +139,13 @@ export class PathfindingAlgorithms {
 		end: [number, number]
 	): AnimationStep[] {
 		// Input validation
-		if (!this.isValidCoordinate(grid, start[0], start[1]) || !this.isValidCoordinate(grid, end[0], end[1])) {
+		if (
+			!this.isValidCoordinate(grid, start[0], start[1]) ||
+			!this.isValidCoordinate(grid, end[0], end[1])
+		) {
 			return [this.createErrorStep('Invalid start or end coordinates')];
 		}
-		
+
 		if (grid[start[1]][start[0]].isWall || grid[end[1]][end[0]].isWall) {
 			return [this.createErrorStep('Start or end point is on a wall')];
 		}
@@ -144,19 +153,20 @@ export class PathfindingAlgorithms {
 		const steps: AnimationStep[] = [];
 		const [startX, startY] = start;
 		const [endX, endY] = end;
-		
+
 		// Handle trivial case
 		if (startX === endX && startY === endY) {
-			return [{
-				move: { type: 'SET_PATH', path: [[startX, startY]] },
-				description: 'Start and end are the same point',
-				state: {
-					path: [[startX, startY]],
-					pathLength: 1,
-					completed: true
-				},
-				isKeyStep: true
-			}];
+			return [
+				{
+					move: { type: 'SET_PATH', path: [[startX, startY]] },
+					description: 'Start and end are the same point',
+					state: {
+						path: [[startX, startY]],
+						pathLength: 1,
+						completed: true
+					}
+				}
+			];
 		}
 
 		const visited = new Set<string>();
@@ -170,8 +180,7 @@ export class PathfindingAlgorithms {
 			description: `Starting BFS from (${startX}, ${startY}) to (${endX}, ${endY})`,
 			state: {
 				grid: this.updateGridWithCurrent(grid, startX, startY)
-			},
-			isKeyStep: true
+			}
 		});
 
 		queue.push({ x: startX, y: startY });
@@ -190,8 +199,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: ++nodesVisitedCount
-					},
-					isKeyStep: true
+					}
 				});
 
 				const path = this.reconstructPath(previous, start, end);
@@ -203,8 +211,7 @@ export class PathfindingAlgorithms {
 						path,
 						pathLength: path.length,
 						completed: true
-					},
-					isKeyStep: true
+					}
 				});
 				return steps;
 			}
@@ -217,8 +224,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: ++nodesVisitedCount
-					},
-					isKeyStep: true
+					}
 				});
 			}
 
@@ -226,7 +232,7 @@ export class PathfindingAlgorithms {
 			const neighbors = this.getNeighbors(grid, x, y);
 			for (const [nx, ny] of neighbors) {
 				const key = `${nx},${ny}`;
-				
+
 				if (!visited.has(key) && !grid[ny][nx].isWall) {
 					visited.add(key);
 					previous.set(key, [x, y]);
@@ -240,19 +246,17 @@ export class PathfindingAlgorithms {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'Algorithm terminated (step limit reached)',
-				state: { completed: true },
-				isKeyStep: true
+				state: { completed: true }
 			});
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
-				state: { 
+				state: {
 					completed: true,
 					path: [], // Explicitly set empty path
 					pathLength: 0
-				},
-				isKeyStep: true
+				}
 			});
 		}
 
@@ -268,7 +272,6 @@ export class PathfindingAlgorithms {
 		start: [number, number],
 		end: [number, number]
 	): AnimationStep[] {
-
 		const steps: AnimationStep[] = [];
 		const [startX, startY] = start;
 		const [endX, endY] = end;
@@ -287,18 +290,15 @@ export class PathfindingAlgorithms {
 			description: `Starting DFS from (${startX}, ${startY}) to (${endX}, ${endY})`,
 			state: {
 				grid: this.updateGridWithCurrent(grid, startX, startY)
-			},
-			isKeyStep: true
+			}
 		});
 
 		while (stack.length > 0 && steps.length < MAX_ANIMATION_STEPS) {
 			const current = stack.pop()!;
 			const { x, y } = current;
 
-
 			// Check if we reached the end
 			if (x === endX && y === endY) {
-
 				// Still add visit step for the end node
 				steps.push({
 					move: { type: 'VISIT_NODE', position: [x, y] },
@@ -306,8 +306,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
-					},
-					isKeyStep: true
+					}
 				});
 
 				const path = this.reconstructPath(previous, start, end);
@@ -319,8 +318,7 @@ export class PathfindingAlgorithms {
 						path,
 						pathLength: path.length,
 						completed: true
-					},
-					isKeyStep: true
+					}
 				});
 				break;
 			}
@@ -333,8 +331,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
-					},
-					isKeyStep: true
+					}
 				});
 			}
 
@@ -357,19 +354,17 @@ export class PathfindingAlgorithms {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'Algorithm terminated (step limit reached)',
-				state: { completed: true },
-				isKeyStep: true
+				state: { completed: true }
 			});
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
-				state: { 
+				state: {
 					completed: true,
 					path: [], // Explicitly set empty path
 					pathLength: 0
-				},
-				isKeyStep: true
+				}
 			});
 		}
 
@@ -386,10 +381,13 @@ export class PathfindingAlgorithms {
 		end: [number, number]
 	): AnimationStep[] {
 		// Input validation
-		if (!this.isValidCoordinate(grid, start[0], start[1]) || !this.isValidCoordinate(grid, end[0], end[1])) {
+		if (
+			!this.isValidCoordinate(grid, start[0], start[1]) ||
+			!this.isValidCoordinate(grid, end[0], end[1])
+		) {
 			return [this.createErrorStep('Invalid start or end coordinates')];
 		}
-		
+
 		if (grid[start[1]][start[0]].isWall || grid[end[1]][end[0]].isWall) {
 			return [this.createErrorStep('Start or end point is on a wall')];
 		}
@@ -397,26 +395,30 @@ export class PathfindingAlgorithms {
 		const steps: AnimationStep[] = [];
 		const [startX, startY] = start;
 		const [endX, endY] = end;
-		
+
 		// Handle trivial case
 		if (startX === endX && startY === endY) {
-			return [{
-				move: { type: 'SET_PATH', path: [[startX, startY]] },
-				description: 'Start and end are the same point',
-				state: {
-					path: [[startX, startY]],
-					pathLength: 1,
-					completed: true
-				},
-				isKeyStep: true
-			}];
+			return [
+				{
+					move: { type: 'SET_PATH', path: [[startX, startY]] },
+					description: 'Start and end are the same point',
+					state: {
+						path: [[startX, startY]],
+						pathLength: 1,
+						completed: true
+					}
+				}
+			];
 		}
 
 		const distances = new Map<string, number>();
 		const previous = new Map<string, [number, number] | null>();
-		const priorityQueue = new PriorityQueue<{key: string, x: number, y: number, distance: number}>(
-			(a, b) => a.distance - b.distance
-		);
+		const priorityQueue = new PriorityQueue<{
+			key: string;
+			x: number;
+			y: number;
+			distance: number;
+		}>((a, b) => a.distance - b.distance);
 		const visited = new Set<string>();
 		let nodesVisitedCount = 0;
 
@@ -427,7 +429,7 @@ export class PathfindingAlgorithms {
 				const distance = x === startX && y === startY ? 0 : Infinity;
 				distances.set(key, distance);
 				previous.set(key, null);
-				
+
 				if (!grid[y][x].isWall) {
 					priorityQueue.enqueue({ key, x, y, distance });
 				}
@@ -440,8 +442,7 @@ export class PathfindingAlgorithms {
 			description: `Starting Dijkstra from (${startX}, ${startY}) to (${endX}, ${endY})`,
 			state: {
 				grid: this.updateGridWithCurrent(grid, startX, startY)
-			},
-			isKeyStep: true
+			}
 		});
 
 		while (!priorityQueue.isEmpty() && steps.length < MAX_ANIMATION_STEPS) {
@@ -461,8 +462,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: ++nodesVisitedCount
-					},
-					isKeyStep: true
+					}
 				});
 
 				const path = this.reconstructPath(previous, start, end);
@@ -474,8 +474,7 @@ export class PathfindingAlgorithms {
 						path,
 						pathLength: path.length,
 						completed: true
-					},
-					isKeyStep: true
+					}
 				});
 				return steps;
 			}
@@ -488,8 +487,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: ++nodesVisitedCount
-					},
-					isKeyStep: true
+					}
 				});
 			}
 
@@ -500,7 +498,7 @@ export class PathfindingAlgorithms {
 				if (!visited.has(neighborKey) && !grid[ny][nx].isWall) {
 					const newDistance = currentDistance + 1; // All edges have weight 1
 					const oldDistance = distances.get(neighborKey)!;
-					
+
 					if (newDistance < oldDistance) {
 						distances.set(neighborKey, newDistance);
 						previous.set(neighborKey, [x, y]);
@@ -522,7 +520,7 @@ export class PathfindingAlgorithms {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
-				state: { 
+				state: {
 					completed: true,
 					path: [], // Explicitly set empty path
 					pathLength: 0
@@ -588,8 +586,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
-					},
-					isKeyStep: true
+					}
 				});
 
 				const path = this.reconstructPath(previous, start, end);
@@ -601,8 +598,7 @@ export class PathfindingAlgorithms {
 						path,
 						pathLength: path.length,
 						completed: true
-					},
-					isKeyStep: true
+					}
 				});
 				break;
 			}
@@ -615,8 +611,7 @@ export class PathfindingAlgorithms {
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
-					},
-					isKeyStep: true
+					}
 				});
 			}
 
@@ -654,7 +649,7 @@ export class PathfindingAlgorithms {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
-				state: { 
+				state: {
 					completed: true,
 					path: [], // Explicitly set empty path
 					pathLength: 0
@@ -792,8 +787,7 @@ export class PathfindingAlgorithms {
 		return {
 			move: { type: 'STEP_COMPLETE' },
 			description: message,
-			state: { completed: true },
-			isKeyStep: true
+			state: { completed: true }
 		};
 	}
 }

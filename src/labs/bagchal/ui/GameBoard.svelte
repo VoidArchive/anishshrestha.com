@@ -46,7 +46,7 @@
 		if (previousPhase === 'PLACEMENT' && gameState.phase === 'MOVEMENT') {
 			showPhaseTransition = true;
 			phaseTransitionVisible = true;
-			
+
 			// Hide the notification after 3 seconds
 			setTimeout(() => {
 				phaseTransitionVisible = false;
@@ -325,7 +325,7 @@
 		opacity: 0;
 		transform: translateY(-10px) scale(0.95);
 		transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-		box-shadow: 
+		box-shadow:
 			0 4px 15px rgba(201, 42, 42, 0.1),
 			inset 0 1px 0 rgba(255, 255, 255, 0.05);
 	}

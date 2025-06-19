@@ -14,7 +14,7 @@ that emphasize project descriptions and technology stacks.
 		{
 			name: 'DSA Visualizer',
 			description:
-				'Interactive visualization of sorting algorithms and pathfinding with step-by-step animations, speed controls, and turbo mode for learning data structures.',
+				'Interactive visualization of sorting algorithms and pathfinding with step-by-step animations, speed controls, and detailed statistics for learning data structures.',
 			slug: 'dsa-visualizer',
 			tech: ['SvelteKit', 'TypeScript', 'Algorithms', 'Visualization'],
 			icon: 'barchart'

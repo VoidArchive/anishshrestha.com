@@ -13,7 +13,6 @@ Features consolidated controls in sidebar and main content area with statistics.
 		setMode,
 		setArraySize,
 		setAnimationSpeed,
-		setTurboMode,
 		skipToEnd,
 		shuffleArray,
 		clearWalls,
@@ -70,12 +69,10 @@ Features consolidated controls in sidebar and main content area with statistics.
 							completed={dsaState.completed}
 							currentStep={dsaState.currentStep}
 							totalSteps={dsaState.totalSteps}
-							turboMode={dsaState.turboMode}
 							onModeChange={setMode}
 							onAlgorithmChange={setAlgorithm}
 							onArraySizeChange={setArraySize}
 							onAnimationSpeedChange={setAnimationSpeed}
-							onToggleTurbo={setTurboMode}
 							onSkipToEnd={skipToEnd}
 							onStart={startAnimation}
 							onPause={pauseAnimation}

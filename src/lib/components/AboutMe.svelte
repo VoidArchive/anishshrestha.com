@@ -48,7 +48,7 @@ Enhanced with better readability and subtle visual improvements.
 		<!-- Introduction -->
 		<div class="intro-section">
 			<p class="intro-text">
-				Hi, I'm Anish. I'm a backend engineer from Nepal who loves building things that work.
+				Hi, I'm Anish. I'm a backend engineer from Nepal who loves building things on the internet.
 			</p>
 		</div>
 
@@ -76,18 +76,6 @@ Enhanced with better readability and subtle visual improvements.
 			</p>
 		</div>
 
-		<!-- Personal interests
-		<div class="interests-section">
-			<div class="interests-header">
-				<MapPin size={16} class="text-primary" />
-				<span class="interests-label">When not coding</span>
-			</div>
-			<div class="interests-list">
-				<span class="interest-item">Calisthenics</span>
-				<span class="interest-item">Hiking Nepal</span>
-			</div>
-		</div> -->
-
 		<!-- Vim easter egg -->
 		<div class="vim-section">
 			<p class="vim-container">
@@ -100,7 +88,7 @@ Enhanced with better readability and subtle visual improvements.
 					role="button"
 					tabindex="0"
 				>
-					I use vim btw.
+					The internet can still be fun.
 				</span>
 				<span class="vim-hint">← try hovering</span>
 			</p>
@@ -141,15 +129,13 @@ Enhanced with better readability and subtle visual improvements.
 		gap: var(--space-2);
 	}
 
-	.work-header,
-	.interests-header {
+	.work-header {
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
 	}
 
-	.work-label,
-	.interests-label {
+	.work-label {
 		color: var(--color-text);
 		font-weight: 600;
 		font-size: 0.875rem;
@@ -175,43 +161,6 @@ Enhanced with better readability and subtle visual improvements.
 	.company-link:hover {
 		border-bottom-color: var(--color-primary);
 		color: #ef4444;
-	}
-
-	.interests-section {
-		background: rgba(201, 42, 42, 0.05);
-		border: 1px solid rgba(201, 42, 42, 0.1);
-		padding: var(--space-3);
-		border-radius: 4px;
-		transition: all 0.3s ease;
-	}
-
-	.interests-section:hover {
-		background: rgba(201, 42, 42, 0.08);
-		border-color: rgba(201, 42, 42, 0.2);
-	}
-
-	.interests-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-3);
-		margin-top: var(--space-2);
-	}
-
-	.interest-item {
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-		font-family: var(--font-family-mono);
-		background: var(--color-bg-primary);
-		padding: var(--space-1) var(--space-2);
-		border: 1px solid var(--color-border);
-		border-radius: 2px;
-		transition: all 0.2s ease;
-	}
-
-	.interest-item:hover {
-		color: var(--color-text);
-		border-color: var(--color-primary);
-		transform: translateY(-1px);
 	}
 
 	.vim-section {
@@ -262,11 +211,6 @@ Enhanced with better readability and subtle visual improvements.
 	@media (max-width: 768px) {
 		.about-content {
 			gap: var(--space-3);
-		}
-
-		.interests-list {
-			flex-direction: column;
-			gap: var(--space-2);
 		}
 
 		.vim-container {

@@ -32,8 +32,6 @@ in logical groupings for better UX and consistency.
 		onClearWalls: () => void;
 		onReset: () => void;
 		onSkipToEnd?: () => void;
-		onToggleTurbo?: (enabled: boolean) => void;
-		turboMode?: boolean;
 	}
 
 	let {
@@ -57,9 +55,7 @@ in logical groupings for better UX and consistency.
 		onShuffle,
 		onClearWalls,
 		onReset,
-		onSkipToEnd,
-		onToggleTurbo,
-		turboMode = false
+		onSkipToEnd
 	}: Props = $props();
 
 	const sortingAlgorithms: { value: SortingAlgorithm; label: string }[] = [
@@ -108,11 +104,6 @@ in logical groupings for better UX and consistency.
 		onAnimationSpeedChange(parseInt(target.value));
 	}
 
-	function handleTurboToggle(event: Event) {
-		const target = event.target as HTMLInputElement;
-		onToggleTurbo?.(target.checked);
-	}
-
 	function toggleSimulation() {
 		if (isAnimating) {
 			onPause();
@@ -136,59 +127,59 @@ in logical groupings for better UX and consistency.
 	<!-- Simulation Controls -->
 	<div class="control-group">
 		<h4 class="control-group-title">Simulation</h4>
-		<div class="button-row" style="gap: var(--space-2);">
+		<div class="simulation-controls">
+			<!-- Primary Play/Pause Button -->
 			<button
 				class="btn control-btn primary"
 				onclick={toggleSimulation}
-				aria-label={isAnimating
-					? 'Pause simulation'
-					: completed
-						? 'Reset simulation'
-						: 'Start simulation'}
+				aria-label={isAnimating ? 'Pause simulation' : completed ? 'Restart' : 'Start simulation'}
 			>
 				{#if isAnimating}
 					<Pause size={16} />
 					Pause
 				{:else if completed}
 					<RotateCcw size={16} />
-					Reset
+					Restart
 				{:else}
 					<Play size={16} />
 					Play
 				{/if}
 			</button>
 
-			<button
-				class="btn control-btn"
-				onclick={onStepForward}
-				disabled={isAnimating || completed || totalSteps === 0}
-				aria-label="Step forward"
-			>
-				<SkipForward size={16} />
-				Step
-			</button>
-
-			{#if currentStep > 0}
+			<!-- Step Controls -->
+			<div class="step-controls">
 				<button
-					class="btn control-btn"
+					class="btn control-btn step-btn"
 					onclick={onStepBackward}
-					disabled={isAnimating}
+					disabled={isAnimating || currentStep === 0}
 					aria-label="Step backward"
+					title="Previous step"
 				>
-					<SkipBack size={16} />
-					Back
+					<SkipBack size={14} />
 				</button>
-			{/if}
 
-			{#if onSkipToEnd && totalSteps > 0 && !completed}
+				<span class="step-indicator">{currentStep}/{totalSteps}</span>
+
 				<button
-					class="btn control-btn secondary"
-					onclick={handleSkipToEnd}
-					disabled={isAnimating}
-					aria-label="Skip to end"
+					class="btn control-btn step-btn"
+					onclick={onStepForward}
+					disabled={isAnimating || completed || totalSteps === 0}
+					aria-label="Step forward"
+					title="Next step"
 				>
-					<Square size={16} />
-					Skip
+					<SkipForward size={14} />
+				</button>
+			</div>
+
+			<!-- Quick Actions -->
+			{#if onSkipToEnd && totalSteps > 0 && !completed && !isAnimating}
+				<button
+					class="btn control-btn skip-btn"
+					onclick={handleSkipToEnd}
+					aria-label="Skip to end"
+					title="Jump to final result"
+				>
+					Skip to End
 				</button>
 			{/if}
 		</div>
@@ -282,57 +273,46 @@ in logical groupings for better UX and consistency.
 					{/each}
 				</select>
 			</div>
-
-			<!-- Turbo Mode Toggle -->
-			{#if onToggleTurbo}
-				<div class="setting-item">
-					<label class="setting-label turbo-toggle">
-						<input
-							type="checkbox"
-							class="turbo-checkbox"
-							checked={turboMode}
-							onchange={handleTurboToggle}
-							disabled={isAnimating}
-						/>
-						<span class="turbo-text">Turbo Mode</span>
-						<span class="turbo-description">Skip intermediate steps</span>
-					</label>
-				</div>
-			{/if}
 		</div>
 	</div>
 
-	<!-- Grid Controls -->
+	<!-- Data Controls -->
 	<div class="control-group">
-		<h4 class="control-group-title">
-			{mode === 'SORTING' ? 'Array' : 'Grid'} Controls
-		</h4>
-		<div class="button-row" style="gap: var(--space-2);">
+		<h4 class="control-group-title">Data</h4>
+		<div class="data-controls">
+			<button
+				class="btn control-btn"
+				onclick={onShuffle}
+				disabled={isAnimating}
+				aria-label={mode === 'SORTING' ? 'Shuffle array' : 'Add random walls'}
+				title={mode === 'SORTING' ? 'Generate new random array' : 'Add random walls to grid'}
+			>
+				<Shuffle size={16} />
+				{mode === 'SORTING' ? 'Shuffle' : 'Random Walls'}
+			</button>
+
 			{#if mode === 'PATHFINDING'}
 				<button
 					class="btn control-btn"
 					onclick={onClearWalls}
 					disabled={isAnimating}
 					aria-label="Clear all walls"
+					title="Remove all walls from grid"
 				>
 					<Square size={16} />
-					Clear
+					Clear Walls
 				</button>
 			{/if}
 
 			<button
-				class="btn control-btn"
-				onclick={onShuffle}
+				class="btn control-btn reset-btn"
+				onclick={onReset}
 				disabled={isAnimating}
-				aria-label={mode === 'SORTING' ? 'Shuffle array' : 'Random walls'}
+				aria-label="Reset everything"
+				title="Reset to initial state"
 			>
-				<Shuffle size={16} />
-				{mode === 'SORTING' ? 'Shuffle' : 'Random'}
-			</button>
-
-			<button class="btn control-btn" onclick={onReset} disabled={isAnimating} aria-label="Reset">
 				<RotateCcw size={16} />
-				Reset
+				Reset All
 			</button>
 		</div>
 	</div>
@@ -366,6 +346,39 @@ in logical groupings for better UX and consistency.
 		flex-wrap: wrap;
 	}
 
+	/* New Simulation Controls Layout */
+	.simulation-controls {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.step-controls {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		background: var(--color-bg-primary);
+		border: 1px solid var(--color-border);
+		border-radius: 4px;
+		padding: var(--space-1);
+	}
+
+	.step-indicator {
+		font-family: var(--font-family-mono);
+		font-size: 0.75rem;
+		color: var(--color-text-muted);
+		min-width: 35px;
+		text-align: center;
+		font-weight: 600;
+	}
+
+	.data-controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+	}
+
 	.control-btn {
 		display: flex;
 		align-items: center;
@@ -373,6 +386,35 @@ in logical groupings for better UX and consistency.
 		font-size: 0.875rem;
 		padding: var(--space-2) var(--space-3);
 		white-space: nowrap;
+	}
+
+	.step-btn {
+		padding: var(--space-1) var(--space-2);
+		background: transparent;
+		border: none;
+		border-radius: 2px;
+	}
+
+	.step-btn:hover:not(:disabled) {
+		background: var(--color-bg-secondary);
+	}
+
+	.skip-btn {
+		background: var(--color-bg-secondary);
+		border: 1px solid var(--color-border);
+		font-size: 0.75rem;
+		padding: var(--space-1) var(--space-2);
+	}
+
+	.reset-btn {
+		background: rgba(239, 68, 68, 0.1);
+		border-color: rgba(239, 68, 68, 0.3);
+		color: #ef4444;
+	}
+
+	.reset-btn:hover:not(:disabled) {
+		background: rgba(239, 68, 68, 0.2);
+		border-color: #ef4444;
 	}
 
 	.control-btn.primary {
@@ -640,34 +682,10 @@ in logical groupings for better UX and consistency.
 		transform: none;
 	}
 
-	/* Turbo Mode Styles */
-	.turbo-toggle {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		cursor: pointer;
-		flex-direction: row !important;
-		justify-content: flex-start !important;
-	}
-
-	.turbo-checkbox {
-		margin: 0;
-		cursor: pointer;
-	}
-
-	.turbo-text {
-		font-weight: 600;
-		color: var(--color-text-primary);
-	}
-
-	.turbo-description {
-		font-size: 0.75rem;
-		color: var(--color-text-secondary);
-		margin-left: auto;
-	}
-
-	.turbo-toggle:has(.turbo-checkbox:disabled) {
-		opacity: 0.6;
-		cursor: not-allowed;
+	/* Mobile responsive */
+	@media (max-width: 768px) {
+		.control-panel {
+			gap: var(--space-2);
+		}
 	}
 </style>

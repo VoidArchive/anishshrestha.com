@@ -49,7 +49,7 @@ Responsive design with proper click handling and space utilization.
 		if (node.isPath) return 'cell-path';
 		if (node.isCurrent) return 'cell-current exploring'; // Enhanced current state
 		if (node.isFrontier) return 'cell-frontier pulsing'; // Enhanced frontier
-		if (node.isVisited) return 'cell-visited'; 
+		if (node.isVisited) return 'cell-visited';
 
 		return 'cell-empty';
 	}
@@ -60,7 +60,7 @@ Responsive design with proper click handling and space utilization.
 		if (!node) return '';
 
 		let classes = [];
-		
+
 		// Add distance-based coloring for Dijkstra
 		if (state.algorithm === 'DIJKSTRA' && node.distance !== Infinity && node.isVisited) {
 			const normalizedDistance = Math.min(node.distance / 20, 1); // Normalize to 0-1
@@ -576,28 +576,40 @@ Responsive design with proper click handling and space utilization.
 
 	/* Algorithm-specific visualizations */
 	/* Dijkstra distance-based coloring */
-	.distance-0 { background-color: #dbeafe !important; } /* Very close - light blue */
-	.distance-1 { background-color: #bfdbfe !important; } /* Close - medium blue */
-	.distance-2 { background-color: #93c5fd !important; } /* Medium - blue */
-	.distance-3 { background-color: #60a5fa !important; } /* Far - darker blue */
-	.distance-4 { background-color: #3b82f6 !important; } /* Very far - dark blue */
-	.distance-5 { background-color: #1d4ed8 !important; } /* Furthest - very dark blue */
+	.distance-0 {
+		background-color: #dbeafe !important;
+	} /* Very close - light blue */
+	.distance-1 {
+		background-color: #bfdbfe !important;
+	} /* Close - medium blue */
+	.distance-2 {
+		background-color: #93c5fd !important;
+	} /* Medium - blue */
+	.distance-3 {
+		background-color: #60a5fa !important;
+	} /* Far - darker blue */
+	.distance-4 {
+		background-color: #3b82f6 !important;
+	} /* Very far - dark blue */
+	.distance-5 {
+		background-color: #1d4ed8 !important;
+	} /* Furthest - very dark blue */
 
 	/* A* f-score based coloring */
-	.fscore-0 { 
-		background: linear-gradient(45deg, #dbeafe, #e0e7ff) !important; 
+	.fscore-0 {
+		background: linear-gradient(45deg, #dbeafe, #e0e7ff) !important;
 		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
-	.fscore-1 { 
-		background: linear-gradient(45deg, #bfdbfe, #c7d2fe) !important; 
+	.fscore-1 {
+		background: linear-gradient(45deg, #bfdbfe, #c7d2fe) !important;
 		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
-	.fscore-2 { 
-		background: linear-gradient(45deg, #93c5fd, #a5b4fc) !important; 
+	.fscore-2 {
+		background: linear-gradient(45deg, #93c5fd, #a5b4fc) !important;
 		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
-	.fscore-3 { 
-		background: linear-gradient(45deg, #60a5fa, #818cf8) !important; 
+	.fscore-3 {
+		background: linear-gradient(45deg, #60a5fa, #818cf8) !important;
 		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
 

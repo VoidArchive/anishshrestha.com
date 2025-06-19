@@ -1,127 +1,136 @@
 # anishshrestha.com
 
-> Personal portfolio and interactive coding lab built with **SvelteKit 5** and **Tailwind CSS 4**
+A personal portfolio and interactive coding laboratory built to explore the boundaries of web development and algorithm implementation.
 
-A modern, minimalist portfolio showcasing interactive algorithms, game AI implementations, and technical writing. Built with cutting-edge web technologies and deployed on Cloudflare Pages.
+## Why I Built This
 
-## 🎮 Interactive Labs
+This project exists as a playground for experimentation—to see how much I can build, learn, and push the limits of modern web technologies. It's my sandbox for exploring complex algorithms, game AI, visualization techniques, and creative coding challenges.
 
-### [Bagchal Reforged](src/labs/bagchal)
-Traditional Nepali board game with sophisticated AI opponent
-- **Minimax algorithm** with alpha-beta pruning
-- **Opening book** for strategic early game
-- **Move ordering** and position evaluation
-- **Drag & drop** + click interactions
-- **Phase transition animations**
+Every lab, every algorithm, and every interaction represents a learning opportunity. From implementing minimax algorithms to building custom animation engines, this portfolio is a testament to curiosity-driven development and the joy of solving interesting problems.
 
-### [DSA Visualizer](src/labs/dsa-visualizer)
-Real-time algorithm visualization engine
-- **Pathfinding**: A*, Dijkstra, BFS, DFS
-- **Sorting**: Bubble, Quick, Merge, Heap sort
-- **Custom animation engine** with state management
-- **Interactive grid** for algorithm exploration
+## Features
 
-### [Conway's Game of Life](src/labs/gameoflife)
-Cellular automaton with pattern library
-- **Optimized simulation** with configurable rules
-- **Pattern presets**: Gliders, oscillators, spaceships
-- **Real-time statistics** and generation tracking
-- **Responsive grid** with zoom and pan
+### Interactive Algorithm Labs
 
-### [Tic-Tac-Toe](src/labs/tictactoe)
-Classic game with unbeatable AI
-- **Minimax implementation** using core engine
-- **Multiple difficulty levels**
-- **Clean game state management**
+- **Bagchal**: Traditional Nepali board game with AI opponent using minimax algorithm and opening books
+- **DSA Visualizer**: Real-time visualization of sorting algorithms (Bubble, Quick, Merge, Heap) and pathfinding (A\*, Dijkstra, BFS, DFS)
+- **Conway's Game of Life**: Cellular automaton simulation with pattern library and real-time statistics
+- **Tic-Tac-Toe**: Classic game with unbeatable AI implementation
 
-## 🏗️ Architecture
+### Technical Architecture
 
-### Core Engine System
-Abstracted game engine architecture enabling rapid game development:
+- **Modular Game Engine**: Abstracted BaseEngine system for rapid game development
+- **Reusable AI Framework**: Minimax implementations with alpha-beta pruning
+- **Custom Animation Engine**: State management system for algorithm visualization
+- **Component Architecture**: Clean, maintainable Svelte 5 components
 
-```typescript
-interface BaseEngine<Move, State> {
-  initialState(): State;
-  validMoves(state: State): Move[];
-  applyMove(state: State, move: Move): State;
-  evaluate(state: State): number;
-}
-```
+### Development Stack
 
-### AI Framework
-Reusable AI components across all games:
-- **Minimax with alpha-beta pruning**
-- **Position evaluation functions**
-- **Move ordering and caching**
-- **Difficulty scaling**
+- **SvelteKit 5** with Server-Side Rendering
+- **TypeScript** for type safety throughout
+- **Tailwind CSS 4** for consistent styling
+- **Cloudflare Workers** deployment
+- **MDsveX** for technical blog integration
 
-### Component Architecture
-- **Modular design** - Each component under 200 lines
-- **Svelte 5 runes** for reactive state management
-- **TypeScript** for type safety
-- **Tailwind 4** for consistent styling
+## Disclaimer
 
-## 📝 Technical Blog
+These labs are experimental projects built for learning and exploration. While I strive for quality, you may encounter bugs, performance issues, or unexpected behavior. This is part of the experimentation process.
 
-Current articles covering deep technical concepts:
+If you find any issues or have suggestions for improvements, please feel free to:
+- **Message me directly** through any of the contact links below
+- **Create an issue** on the GitHub repository
+- **Submit a pull request** with fixes or enhancements
 
-- **[Building Conway's Game of Life in Svelte](src/content/blog/building-conways-game-of-life-svelte.md)** - Animation engine and optimization
-- **[DSA Visualizer Animation Engine](src/content/blog/building-dsa-visualizer-animation-engine.md)** - Algorithm visualization architecture  
-- **[Bagchal Reforged: AI Chess for Tigers](src/content/blog/bagchal-reforged-ai-chess-tigers.md)** - Game AI and cultural gaming
-- **[AoC 2024 Day 17: 3-Bit Computer](src/content/blog/aoc-2024-day-17-3bit-computer.md)** - Assembly simulation
-- **[Cloudflare WARP on Arch Linux](src/content/blog/cloudflare-warp-arch-linux.md)** - Network configuration
+Your feedback helps make these experiments better for everyone.
 
-## 🛠️ Tech Stack
+## Todo
 
-### Frontend
-- **SvelteKit 5** - Meta-framework with SSR
-- **Svelte 5** - Component framework with runes
-- **TypeScript** - Type safety and developer experience
-- **Tailwind CSS 4** - Utility-first styling
-- **MDsveX** - Markdown with Svelte components
+### Performance Optimizations
 
-### Deployment
-- **Cloudflare Workers** - Edge deployment with SvelteKit adapter
-- **Wrangler** - Development and deployment tooling
-- **Custom domain** - anishshrestha.com with production environment
+- [ ] Implement Web Workers for heavy algorithm computations
+- [ ] Add progressive loading for large datasets
+- [ ] Optimize animation performance with requestAnimationFrame batching
+- [ ] Add service worker for offline functionality
 
-### Development
-- **Vite** - Build tool and dev server
-- **ESLint** + **Prettier** - Code quality
-- **PNPM** - Package management
+### User Experience
 
-## 🚀 Getting Started
+- [ ] Add keyboard shortcuts for all interactive labs
+- [ ] Implement dark/light theme toggle
+- [ ] Add accessibility improvements (ARIA labels, screen reader support)
+- [ ] Create mobile-optimized controls for complex interactions
+
+### Technical Improvements
+
+- [ ] Add comprehensive test suite for algorithms
+- [ ] Implement error boundaries and graceful error handling
+- [ ] Add TypeScript strict mode compliance
+- [ ] Create automated deployment pipeline with testing
+
+## Future Lab Plans
+
+### Algorithm Visualizations
+
+- **Graph Algorithms**: Spanning trees, topological sorting, network flow
+- **Machine Learning**: Neural network visualization, gradient descent animation
+- **Data Structures**: Binary trees, heaps, hash tables with interactive operations
+- **String Algorithms**: Pattern matching, suffix trees, edit distance
+
+### Interactive Games
+
+- **Chess Engine**: Full chess implementation with advanced AI
+- **Maze Generator**: Procedural maze generation with various algorithms
+- **Cellular Automata**: Rule 30, Langton's Ant, and other automaton systems
+- **Physics Simulations**: Particle systems, collision detection, fluid dynamics
+
+### Advanced Features
+
+- **Code Playground**: In-browser code editor for algorithm experimentation
+- **Performance Benchmarking**: Real-time algorithm performance comparison
+- **3D Visualizations**: WebGL-based algorithm animations
+- **Collaborative Features**: Share custom algorithms and visualizations
+
+## Contribution
+
+This is a personal learning project, but I welcome contributions, suggestions, and discussions about algorithms, optimizations, or interesting problems to solve.
+
+### How to Contribute
+
+1. **Fork the repository** and create a feature branch
+2. **Follow the existing code style** (TypeScript, Svelte 5, Tailwind)
+4. **Update documentation** for significant changes
+5. **Submit a pull request** with a clear description
+
+### Areas for Contribution
+
+- Algorithm implementations and optimizations
+- Bug fixes and performance improvements
+- Accessibility enhancements
+- Mobile responsiveness improvements
+- Documentation and code comments
+
+## Getting Started
 
 ```bash
-# Clone and install
+# Clone and install dependencies
 git clone https://github.com/anish-shrestha/anishshrestha.com
 cd anishshrestha.com
 pnpm install
 
-# Development
+# Start development server
 pnpm dev
 
-# Build and deploy
+# Build for production
 pnpm build
+
+# Deploy to Cloudflare Workers
 pnpm deploy
 ```
 
-## 🎯 Design Philosophy
+## Design Attribution
 
-- **Minimalist aesthetics** - Dark theme with red accents
-- **Performance first** - Optimized animations and interactions
-- **Mobile responsive** - Touch-friendly game controls
-- **Accessibility** - Keyboard navigation and screen reader support
-- **Progressive enhancement** - Works without JavaScript
+Feel free to use this portfolio design as inspiration for your own projects. I'd appreciate attribution and would be happy to see how you adapt and improve upon these ideas.
 
-## 📊 Project Stats
-
-- **4 Interactive Labs** - Each with unique algorithms
-- **5 Technical Articles** - Deep-dive explanations
-- **3 AI Implementations** - Minimax variants
-- **15+ Algorithms** - Visualized and interactive
-- **100% TypeScript** - Type-safe codebase
 
 ---
 
-Built with ❤️ by [Anish Shrestha](https://anishshrestha.com) • [GitHub](https://github.com/anish-shrestha) • [LinkedIn](https://linkedin.com/in/anish-shrestha)
+Built by [Anish Shrestha](https://anishshrestha.com) • [GitHub](https://github.com/anish-shrestha) • [LinkedIn](https://linkedin.com/in/anish-shrestha)

@@ -65,7 +65,6 @@ export interface DSAState {
 	totalSteps: number;
 	isAnimating: boolean;
 	animationSpeed: number; // ms between steps
-	turboMode: boolean;
 	completed: boolean;
 
 	// Statistics
@@ -78,6 +77,5 @@ export interface DSAState {
 export interface AnimationStep {
 	move: DSAMove;
 	description: string;
-	state: Partial<DSAState>;
-	isKeyStep?: boolean; // For turbo mode - only show key steps
+	state?: Partial<DSAState>;
 }
