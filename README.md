@@ -37,7 +37,8 @@ Every lab, every algorithm, and every interaction represents a learning opportun
 These labs are experimental projects built for learning and exploration. While I strive for quality, you may encounter bugs, performance issues, or unexpected behavior. This is part of the experimentation process.
 
 If you find any issues or have suggestions for improvements, please feel free to:
-- **Message me directly** through any of the contact links below
+
+- **Message me directly**
 - **Create an issue** on the GitHub repository
 - **Submit a pull request** with fixes or enhancements
 
@@ -89,7 +90,7 @@ Your feedback helps make these experiments better for everyone.
 - **3D Visualizations**: WebGL-based algorithm animations
 - **Collaborative Features**: Share custom algorithms and visualizations
 
-## Contribution
+## Contributing
 
 This is a personal learning project, but I welcome contributions, suggestions, and discussions about algorithms, optimizations, or interesting problems to solve.
 
@@ -97,8 +98,8 @@ This is a personal learning project, but I welcome contributions, suggestions, a
 
 1. **Fork the repository** and create a feature branch
 2. **Follow the existing code style** (TypeScript, Svelte 5, Tailwind)
-4. **Update documentation** for significant changes
-5. **Submit a pull request** with a clear description
+3. **Update documentation** for significant changes
+4. **Submit a pull request** with a clear description
 
 ### Areas for Contribution
 
@@ -129,8 +130,3 @@ pnpm deploy
 ## Design Attribution
 
 Feel free to use this portfolio design as inspiration for your own projects. I'd appreciate attribution and would be happy to see how you adapt and improve upon these ideas.
-
-
----
-
-Built by [Anish Shrestha](https://anishshrestha.com) • [GitHub](https://github.com/anish-shrestha) • [LinkedIn](https://linkedin.com/in/anish-shrestha)
