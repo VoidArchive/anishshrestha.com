@@ -8,7 +8,6 @@ Enhanced with quick actions for immediate engagement and profile stats.
 
 <script lang="ts">
 	import ProfileSection from '$lib/components/ProfileSection.svelte';
-	import ProfileStats from '$lib/components/ProfileStats.svelte';
 	import TechStack from '$lib/components/TechStack.svelte';
 	import Links from '$lib/components/Links.svelte';
 	import AboutMe from '$lib/components/AboutMe.svelte';
@@ -26,7 +25,6 @@ Enhanced with quick actions for immediate engagement and profile stats.
 		<!-- Left Column -->
 		<aside class="flex flex-col">
 			<ProfileSection />
-			<ProfileStats />
 			<QuickActions />
 			<Links />
 			<TechStack />

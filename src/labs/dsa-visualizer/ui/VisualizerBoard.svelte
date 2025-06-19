@@ -42,16 +42,43 @@ Responsive design with proper click handling and space utilization.
 		const node = state.grid[y]?.[x];
 		if (!node) return 'cell-empty';
 
-		// Priority order for visual states
+		// Priority order for visual states (higher priority = rendered on top)
 		if (node.isStart) return 'cell-start';
 		if (node.isEnd) return 'cell-end';
 		if (node.isWall) return 'cell-wall';
 		if (node.isPath) return 'cell-path';
-		if (node.isCurrent) return 'cell-current';
-		if (node.isFrontier) return 'cell-frontier';
-		if (node.isVisited) return 'cell-visited';
+		if (node.isCurrent) return 'cell-current exploring'; // Enhanced current state
+		if (node.isFrontier) return 'cell-frontier pulsing'; // Enhanced frontier
+		if (node.isVisited) return 'cell-visited'; 
 
 		return 'cell-empty';
+	}
+
+	// Get additional CSS classes for enhanced animations
+	function getCellAnimationClass(x: number, y: number): string {
+		const node = state.grid[y]?.[x];
+		if (!node) return '';
+
+		let classes = [];
+		
+		// Add distance-based coloring for Dijkstra
+		if (state.algorithm === 'DIJKSTRA' && node.distance !== Infinity && node.isVisited) {
+			const normalizedDistance = Math.min(node.distance / 20, 1); // Normalize to 0-1
+			classes.push(`distance-${Math.floor(normalizedDistance * 5)}`); // 0-5 distance classes
+		}
+
+		// Add direction-based effects for A*
+		if (state.algorithm === 'A_STAR' && node.fScore !== undefined) {
+			const normalizedFScore = Math.min((node.fScore || 0) / 50, 1);
+			classes.push(`fscore-${Math.floor(normalizedFScore * 3)}`); // 0-3 f-score classes
+		}
+
+		// Add exploration wave effect
+		if (node.isVisited && !node.isPath && !node.isStart && !node.isEnd) {
+			classes.push('wave-effect');
+		}
+
+		return classes.join(' ');
 	}
 
 	// Handle grid cell interactions for pathfinding
@@ -159,7 +186,7 @@ Responsive design with proper click handling and space utilization.
 							{#each state.grid as row, y}
 								{#each row as node, x}
 									<button
-										class="grid-cell {getCellColor(x, y)}"
+										class="grid-cell {getCellColor(x, y)} {getCellAnimationClass(x, y)}"
 										onmousedown={(e) => handleCellMouseDown(x, y, e)}
 										onmouseenter={() => handleCellMouseEnter(x, y)}
 										ondblclick={() => handleCellDoubleClick(x, y)}
@@ -172,11 +199,11 @@ Responsive design with proper click handling and space utilization.
 													: node.isPath
 														? 'Path'
 														: node.isCurrent
-															? 'Current'
+															? `Current (exploring)`
 															: node.isFrontier
-																? 'Frontier'
+																? 'Frontier (queued)'
 																: node.isVisited
-																	? 'Visited'
+																	? `Visited${node.distance !== Infinity ? ` (d:${node.distance})` : ''}`
 																	: 'Empty'}"
 									></button>
 								{/each}
@@ -466,6 +493,21 @@ Responsive design with proper click handling and space utilization.
 		animation: current-pulse 0.8s ease-in-out infinite alternate;
 	}
 
+	/* Enhanced current state with exploring animation */
+	.cell-current.exploring {
+		background: linear-gradient(45deg, #fef08a, #f59e0b);
+		box-shadow: 
+			0 0 8px rgba(254, 240, 138, 0.8),
+			0 0 16px rgba(245, 158, 11, 0.4);
+		animation: exploring-pulse 1s ease-in-out infinite;
+	}
+
+	/* Enhanced frontier with pulsing animation */
+	.cell-frontier.pulsing {
+		background: linear-gradient(135deg, #c7d2fe, #818cf8);
+		animation: frontier-wave 1.5s ease-in-out infinite;
+	}
+
 	/* Animations for better UX */
 	@keyframes frontier-pulse {
 		from {
@@ -484,6 +526,91 @@ Responsive design with proper click handling and space utilization.
 		to {
 			transform: scale(1.05);
 			box-shadow: 0 0 8px rgba(254, 240, 138, 0.8);
+		}
+	}
+
+	/* Enhanced exploring animation */
+	@keyframes exploring-pulse {
+		0% {
+			transform: scale(1);
+			box-shadow: 
+				0 0 8px rgba(254, 240, 138, 0.8),
+				0 0 16px rgba(245, 158, 11, 0.4);
+		}
+		50% {
+			transform: scale(1.15);
+			box-shadow: 
+				0 0 12px rgba(254, 240, 138, 1),
+				0 0 24px rgba(245, 158, 11, 0.6);
+		}
+		100% {
+			transform: scale(1);
+			box-shadow: 
+				0 0 8px rgba(254, 240, 138, 0.8),
+				0 0 16px rgba(245, 158, 11, 0.4);
+		}
+	}
+
+	/* Enhanced frontier wave animation */
+	@keyframes frontier-wave {
+		0% {
+			background: linear-gradient(135deg, #c7d2fe, #818cf8);
+			transform: scale(1);
+		}
+		50% {
+			background: linear-gradient(135deg, #818cf8, #6366f1);
+			transform: scale(1.08);
+		}
+		100% {
+			background: linear-gradient(135deg, #c7d2fe, #818cf8);
+			transform: scale(1);
+		}
+	}
+
+	/* Wave effect for visited nodes */
+	.wave-effect {
+		animation: wave-ripple 0.6s ease-out;
+	}
+
+	/* Algorithm-specific visualizations */
+	/* Dijkstra distance-based coloring */
+	.distance-0 { background-color: #dbeafe !important; } /* Very close - light blue */
+	.distance-1 { background-color: #bfdbfe !important; } /* Close - medium blue */
+	.distance-2 { background-color: #93c5fd !important; } /* Medium - blue */
+	.distance-3 { background-color: #60a5fa !important; } /* Far - darker blue */
+	.distance-4 { background-color: #3b82f6 !important; } /* Very far - dark blue */
+	.distance-5 { background-color: #1d4ed8 !important; } /* Furthest - very dark blue */
+
+	/* A* f-score based coloring */
+	.fscore-0 { 
+		background: linear-gradient(45deg, #dbeafe, #e0e7ff) !important; 
+		border: 1px solid #c7d2fe;
+	}
+	.fscore-1 { 
+		background: linear-gradient(45deg, #bfdbfe, #c7d2fe) !important; 
+		border: 1px solid #a5b4fc;
+	}
+	.fscore-2 { 
+		background: linear-gradient(45deg, #93c5fd, #a5b4fc) !important; 
+		border: 1px solid #818cf8;
+	}
+	.fscore-3 { 
+		background: linear-gradient(45deg, #60a5fa, #818cf8) !important; 
+		border: 1px solid #6366f1;
+	}
+
+	@keyframes wave-ripple {
+		0% {
+			transform: scale(0.8);
+			opacity: 0.6;
+		}
+		50% {
+			transform: scale(1.1);
+			opacity: 1;
+		}
+		100% {
+			transform: scale(1);
+			opacity: 0.9;
 		}
 	}
 

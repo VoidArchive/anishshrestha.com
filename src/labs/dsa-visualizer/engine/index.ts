@@ -13,6 +13,8 @@ import { PathfindingAlgorithms } from './algorithms/pathfinding';
 
 export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 	private animationSteps: AnimationStep[] = [];
+	private stepGenerator: Generator<AnimationStep[], void, unknown> | null = null;
+	private isGenerating: boolean = false;
 
 	initialState(): DSAState {
 		return {
@@ -25,9 +27,9 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 			comparing: [],
 			sorted: [],
 
-			// Pathfinding state - consistent size to prevent layout shifts
-			grid: this.createEmptyGrid(40, 25),
-			gridSize: { width: 40, height: 25 },
+			// Pathfinding state - optimized size for performance
+			grid: this.createEmptyGrid(25, 15),
+			gridSize: { width: 25, height: 15 },
 			start: null,
 			end: null,
 			visitedNodes: [],
@@ -138,32 +140,40 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 	// Algorithm preparation methods
 	prepareAlgorithm(state: DSAState): DSAState {
 		this.animationSteps = [];
+		this.stepGenerator = null;
+		this.isGenerating = false;
 
-		// For performance: Generate steps lazily for pathfinding algorithms
-		// Only sorting algorithms generate all steps upfront (they're much faster)
 		if (state.mode === 'SORTING') {
+			// Sorting: Generate all steps upfront (fast)
 			this.animationSteps = SortingAlgorithms.generateSteps(
 				state.array,
 				state.algorithm as SortingAlgorithm
 			);
 		} else if (state.mode === 'PATHFINDING') {
-			// Generate pathfinding steps immediately 
+			// Pathfinding: Use streaming generation for instant start
 			if (state.start && state.end) {
 				try {
 					const plainStart: [number, number] = [state.start[0], state.start[1]];
 					const plainEnd: [number, number] = [state.end[0], state.end[1]];
+					
+					// Generate all steps for now (to fix current issues)
+					// TODO: Implement true incremental generation later
 					this.animationSteps = PathfindingAlgorithms.generateSteps(
 						state.grid,
 						state.algorithm as PathfindingAlgorithm,
 						plainStart,
 						plainEnd
 					);
+					
+					// Clear generator since we have all steps
+					this.stepGenerator = null;
+					
 				} catch (error) {
-					console.error('Error generating pathfinding steps:', error);
+					console.error('Error initializing pathfinding stream:', error);
 					this.animationSteps = [
 						{
 							move: { type: 'STEP_COMPLETE' },
-							description: 'Failed to generate pathfinding steps',
+							description: 'Failed to initialize pathfinding',
 							state: { completed: true }
 						}
 					];
@@ -183,7 +193,7 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 		return {
 			...state,
 			currentStep: 0,
-			totalSteps: this.animationSteps.length, // Both sorting and pathfinding now have known lengths
+			totalSteps: this.animationSteps.length, // Always use actual length now
 			isAnimating: true,
 			completed: false,
 			comparisons: 0,
@@ -261,8 +271,8 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 			newState.array = this.generateRandomArray(state.arraySize, 10, 100);
 		} else {
 			newState.algorithm = 'BFS';
-			// Create larger grid for pathfinding (similar to Game of Life)
-			const gridSize = { width: 40, height: 25 };
+			// Create optimized grid for pathfinding
+			const gridSize = { width: 25, height: 15 };
 			newState.grid = this.createEmptyGrid(gridSize.width, gridSize.height);
 			newState.gridSize = gridSize;
 		}
@@ -306,8 +316,51 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 	}
 
 	getStepAt(index: number): AnimationStep | null {
-		if (index < 0 || index >= this.animationSteps.length) return null;
+		if (index < 0) return null;
+		
+		// For streaming: aggressively load more batches if needed
+		while (this.stepGenerator && index >= this.animationSteps.length - 5) {
+			const loadedBatch = this.loadNextBatch();
+			if (!loadedBatch) break; // No more batches available
+		}
+		
+		if (index >= this.animationSteps.length) return null;
 		return this.animationSteps[index];
+	}
+
+	// Batch management methods
+	private getBatchSize(algorithm: PathfindingAlgorithm): number {
+		// Algorithm-specific batch sizes for optimal performance
+		switch (algorithm) {
+			case 'A_STAR': return 30; // A* is efficient, larger batches
+			case 'BFS': return 25;    // BFS explores systematically
+			case 'DIJKSTRA': return 20; // Dijkstra processes many nodes
+			case 'DFS': return 15;    // DFS can be unpredictable, smaller batches
+			default: return 20;
+		}
+	}
+
+	private loadNextBatch(): boolean {
+		if (!this.stepGenerator || this.isGenerating) return false;
+		
+		this.isGenerating = true;
+		try {
+			const result = this.stepGenerator.next();
+			if (!result.done && result.value && result.value.length > 0) {
+				this.animationSteps.push(...result.value);
+				return true; // Successfully loaded batch
+			} else {
+				// Generator finished
+				this.stepGenerator = null;
+				return false;
+			}
+		} catch (error) {
+			console.error('Error loading next batch:', error);
+			this.stepGenerator = null;
+			return false;
+		} finally {
+			this.isGenerating = false;
+		}
 	}
 
 	getStepDescription(state: DSAState): string {
@@ -316,6 +369,16 @@ export class DSAEngine implements BaseEngine<DSAMove, DSAState> {
 	}
 
 	getTotalSteps(): number {
+		return this.animationSteps.length;
+	}
+
+	// Check if streaming is complete
+	isStreamComplete(): boolean {
+		return this.stepGenerator === null;
+	}
+
+	// Get current loaded step count for streaming progress
+	getLoadedSteps(): number {
 		return this.animationSteps.length;
 	}
 }

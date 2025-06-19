@@ -9,8 +9,8 @@ Generates animation steps to visualize the algorithm execution.
 import type { DSAMove, AnimationStep, PathfindingAlgorithm, GridNode } from '../../types';
 
 // Maximum animation steps to prevent browser hangs
-// For 40x25 grid (1000 cells), we need more steps for thorough exploration
-const MAX_ANIMATION_STEPS = 2000;
+// For 25x15 grid (375 cells), optimized for performance
+const MAX_ANIMATION_STEPS = 4000;
 
 /**
  * Simple priority queue implementation for Dijkstra's algorithm
@@ -98,6 +98,28 @@ export class PathfindingAlgorithms {
 				return this.aStar(grid, start, end);
 			default:
 				return steps;
+		}
+	}
+
+	// New streaming API for lazy loading
+	static *generateStepsStream(
+		grid: GridNode[][],
+		algorithm: PathfindingAlgorithm,
+		start: [number, number] | null,
+		end: [number, number] | null,
+		batchSize: number = 20
+	): Generator<AnimationStep[], void, unknown> {
+		if (!start || !end) {
+			return;
+		}
+
+		// Generate all steps first, then yield in batches
+		// TODO: For true lazy loading, this should generate steps incrementally
+		// For now, we generate all steps but yield them in batches for better UX
+		const allSteps = this.generateSteps(grid, algorithm, start, end);
+		
+		for (let i = 0; i < allSteps.length; i += batchSize) {
+			yield allSteps.slice(i, i + batchSize);
 		}
 	}
 
@@ -224,8 +246,12 @@ export class PathfindingAlgorithms {
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
-				description: 'No path found',
-				state: { completed: true },
+				description: 'No path found - Start and end are not connected',
+				state: { 
+					completed: true,
+					path: [], // Explicitly set empty path
+					pathLength: 0
+				},
 				isKeyStep: true
 			});
 		}
@@ -337,8 +363,12 @@ export class PathfindingAlgorithms {
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
-				description: 'No path found',
-				state: { completed: true },
+				description: 'No path found - Start and end are not connected',
+				state: { 
+					completed: true,
+					path: [], // Explicitly set empty path
+					pathLength: 0
+				},
 				isKeyStep: true
 			});
 		}
@@ -491,8 +521,12 @@ export class PathfindingAlgorithms {
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
-				description: 'No path found',
-				state: { completed: true }
+				description: 'No path found - Start and end are not connected',
+				state: { 
+					completed: true,
+					path: [], // Explicitly set empty path
+					pathLength: 0
+				}
 			});
 		}
 
@@ -545,21 +579,19 @@ export class PathfindingAlgorithms {
 			openSet.delete(currentKey);
 			closedSet.add(currentKey);
 
-			// Visit current node
-			if (!(x === startX && y === startY)) {
+			// Check if we reached the end FIRST
+			if (x === endX && y === endY) {
+				// Still add visit step for the end node
 				steps.push({
 					move: { type: 'VISIT_NODE', position: [x, y] },
-					description: `Visiting node (${x}, ${y}) with f-score ${minF.toFixed(1)}`,
+					description: `Found target node at (${x}, ${y}) with f-score ${minF.toFixed(1)}`,
 					state: {
 						grid: this.updateGrid(grid, x, y, 'visited'),
 						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
 					},
 					isKeyStep: true
 				});
-			}
 
-			// Check if we reached the end
-			if (x === endX && y === endY) {
 				const path = this.reconstructPath(previous, start, end);
 				steps.push({
 					move: { type: 'SET_PATH', path },
@@ -573,6 +605,19 @@ export class PathfindingAlgorithms {
 					isKeyStep: true
 				});
 				break;
+			}
+
+			// Visit current node (only for non-start, non-end nodes)
+			if (!(x === startX && y === startY)) {
+				steps.push({
+					move: { type: 'VISIT_NODE', position: [x, y] },
+					description: `Visiting node (${x}, ${y}) with f-score ${minF.toFixed(1)}`,
+					state: {
+						grid: this.updateGrid(grid, x, y, 'visited'),
+						nodesVisited: steps.filter((s) => s.move.type === 'VISIT_NODE').length + 1
+					},
+					isKeyStep: true
+				});
 			}
 
 			// Examine neighbors
@@ -608,8 +653,12 @@ export class PathfindingAlgorithms {
 		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
-				description: 'No path found',
-				state: { completed: true }
+				description: 'No path found - Start and end are not connected',
+				state: { 
+					completed: true,
+					path: [], // Explicitly set empty path
+					pathLength: 0
+				}
 			});
 		}
 

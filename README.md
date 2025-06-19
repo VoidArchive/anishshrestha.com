@@ -1,122 +1,127 @@
-# Portfolio Website
+# anishshrestha.com
 
-Personal portfolio and blog built with SvelteKit.
+> Personal portfolio and interactive coding lab built with **SvelteKit 5** and **Tailwind CSS 4**
 
-## 🎯 ACTION PLAN - PRIORITIZED TODO
+A modern, minimalist portfolio showcasing interactive algorithms, game AI implementations, and technical writing. Built with cutting-edge web technologies and deployed on Cloudflare Pages.
 
-### 🚨 **HIGH PRIORITY** (Fix Immediately)
+## 🎮 Interactive Labs
 
-- [x] Simplified color scheme (removed duplicate `--color-text-primary/secondary`)
-- [x] Pure Tailwind migration (removed all inline styles)
-- [x] Updated all components to use `text-text`, `text-text-muted`, `text-primary`
-- [x] **Break down massive Bagchal components**
-  - [x] Split `BagchalBoard.svelte` (537 lines → <200 each)
-    - [x] `BoardGrid.svelte` - SVG grid and lines
-    - [x] `PieceRenderer.svelte` - Tigers and goats rendering
-    - [x] `MoveHighlight.svelte` - Move indicators and highlights
-    - [x] `BoardInteraction.svelte` - Click handling and validation
-  - [x] Split `Shell.svelte` (422 lines → <200 each)
-    - [x] `GameSidebar.svelte` - Controls and status
-    - [x] `GameBoard.svelte` - Main board container
-    - [x] `GameLogic.svelte` - State management
-  - [x] Split `WinnerModal.svelte` (410 lines → <200)
-    - [x] `ModalContent.svelte` - Winner display content
-    - [x] `GameStats.svelte` - Statistics and replay options
+### [Bagchal Reforged](src/labs/bagchal)
+Traditional Nepali board game with sophisticated AI opponent
+- **Minimax algorithm** with alpha-beta pruning
+- **Opening book** for strategic early game
+- **Move ordering** and position evaluation
+- **Drag & drop** + click interactions
+- **Phase transition animations**
 
-#### **Bug Fixes**
+### [DSA Visualizer](src/labs/dsa-visualizer)
+Real-time algorithm visualization engine
+- **Pathfinding**: A*, Dijkstra, BFS, DFS
+- **Sorting**: Bubble, Quick, Merge, Heap sort
+- **Custom animation engine** with state management
+- **Interactive grid** for algorithm exploration
 
-- [x] **Fix TicTacToe bugs**
-  - [x] Replace deprecated `on:click` with `onclick` (Shell.svelte:62)
-  - [x] Fix direct state mutation in AI (creates immutable copies)
-  - [x] Convert TicTacToe to use BaseEngine for consistency
+### [Conway's Game of Life](src/labs/gameoflife)
+Cellular automaton with pattern library
+- **Optimized simulation** with configurable rules
+- **Pattern presets**: Gliders, oscillators, spaceships
+- **Real-time statistics** and generation tracking
+- **Responsive grid** with zoom and pan
 
-#### **Game Engine Consistency**
+### [Tic-Tac-Toe](src/labs/tictactoe)
+Classic game with unbeatable AI
+- **Minimax implementation** using core engine
+- **Multiple difficulty levels**
+- **Clean game state management**
 
-- [x] **Standardize TicTacToe on BaseEngine**
-  - [x] Create `TicTacToeEngine` implementing `BaseEngine<TicTacToeMove, TicTacToeState>`
-  - [x] Update TicTacToe AI to use Minimax class from `$core`
-  - [x] Ensure consistent patterns across all games
+## 🏗️ Architecture
 
-### ⚠️ **MEDIUM PRIORITY** (Next Sprint)
+### Core Engine System
+Abstracted game engine architecture enabling rapid game development:
 
-#### **Code Duplication & Reusability**
+```typescript
+interface BaseEngine<Move, State> {
+  initialState(): State;
+  validMoves(state: State): Move[];
+  applyMove(state: State, move: Move): State;
+  evaluate(state: State): number;
+}
+```
 
-- [ ] **Create shared game UI patterns**
+### AI Framework
+Reusable AI components across all games:
+- **Minimax with alpha-beta pruning**
+- **Position evaluation functions**
+- **Move ordering and caching**
+- **Difficulty scaling**
 
-  - [ ] `GameModal.svelte` - Base modal for all games
-  - [ ] `GameControls.svelte` - Common control patterns
-  - [ ] `GameStatus.svelte` - Status display component
-  - [ ] `PlayerVsAI.svelte` - Common AI vs human setup
+### Component Architecture
+- **Modular design** - Each component under 200 lines
+- **Svelte 5 runes** for reactive state management
+- **TypeScript** for type safety
+- **Tailwind 4** for consistent styling
 
-- [ ] **Consolidate similar components**
-  - [ ] Merge `ProjectCard.svelte` and `MiniProjectCard.svelte` with variants
-  - [ ] Create shared button and form components
-  - [ ] Standardize modal patterns
+## 📝 Technical Blog
 
-#### **Bagchal Multiplayer Foundation**
+Current articles covering deep technical concepts:
 
-- [ ] **Prepare for Cloudflare D1 + Durable Objects**
-  - [ ] Design multiplayer state schema
-  - [ ] Create database migrations for D1
-  - [ ] Plan Durable Object architecture for real-time games
-  - [ ] Add WebSocket connection handling
+- **[Building Conway's Game of Life in Svelte](src/content/blog/building-conways-game-of-life-svelte.md)** - Animation engine and optimization
+- **[DSA Visualizer Animation Engine](src/content/blog/building-dsa-visualizer-animation-engine.md)** - Algorithm visualization architecture  
+- **[Bagchal Reforged: AI Chess for Tigers](src/content/blog/bagchal-reforged-ai-chess-tigers.md)** - Game AI and cultural gaming
+- **[AoC 2024 Day 17: 3-Bit Computer](src/content/blog/aoc-2024-day-17-3bit-computer.md)** - Assembly simulation
+- **[Cloudflare WARP on Arch Linux](src/content/blog/cloudflare-warp-arch-linux.md)** - Network configuration
 
-### 🔧 **LOW PRIORITY** (Future Enhancements)
+## 🛠️ Tech Stack
 
-#### **Content & Features**
+### Frontend
+- **SvelteKit 5** - Meta-framework with SSR
+- **Svelte 5** - Component framework with runes
+- **TypeScript** - Type safety and developer experience
+- **Tailwind CSS 4** - Utility-first styling
+- **MDsveX** - Markdown with Svelte components
 
-- [ ] Write project descriptions for Bagchal Reforged, Kathmandu Shame Map, Bhetum
-- [x] Add blog posts (technical deep-dives, Nepal tech scene, minimalist dev practices)
-- [ ] Create resume page with downloadable PDF
-- [ ] Implement dark/light theme toggle
-- [ ] Add search functionality for blog posts
-- [ ] Build RSS feed for blog
-- [ ] Add analytics (privacy-focused)
+### Deployment
+- **Cloudflare Workers** - Edge deployment with SvelteKit adapter
+- **Wrangler** - Development and deployment tooling
+- **Custom domain** - anishshrestha.com with production environment
 
-#### **Technical Improvements**
+### Development
+- **Vite** - Build tool and dev server
+- **ESLint** + **Prettier** - Code quality
+- **PNPM** - Package management
 
-- [ ] Optimize images and add lazy loading
-- [ ] Implement proper SEO meta tags
-- [ ] Add sitemap generation
-- [ ] Set up automated testing pipeline
-- [ ] Add component testing for games
-- [ ] Create performance monitoring
+## 🚀 Getting Started
 
-#### **Design & UX**
+```bash
+# Clone and install
+git clone https://github.com/anish-shrestha/anishshrestha.com
+cd anishshrestha.com
+pnpm install
 
-- [ ] Mobile responsiveness improvements
-- [ ] Add subtle animations and hover effects
-- [ ] Create custom 404 page
-- [ ] Improve typography hierarchy
-- [ ] Add loading states for AI thinking
-- [ ] Improve accessibility (ARIA labels, keyboard navigation)
+# Development
+pnpm dev
 
-#### **Game Engine Expansion**
+# Build and deploy
+pnpm build
+pnpm deploy
+```
 
-- [ ] **Add new games to validate engine abstraction**
-  - [ ] Chess (complex piece movement)
-  - [ ] Checkers (jump mechanics like Bagchal)
-  - [ ] Connect Four (gravity-based)
-- [ ] Add replay system for all games
-- [ ] Implement game analysis features
-- [ ] Add difficulty levels for AI
+## 🎯 Design Philosophy
+
+- **Minimalist aesthetics** - Dark theme with red accents
+- **Performance first** - Optimized animations and interactions
+- **Mobile responsive** - Touch-friendly game controls
+- **Accessibility** - Keyboard navigation and screen reader support
+- **Progressive enhancement** - Works without JavaScript
+
+## 📊 Project Stats
+
+- **4 Interactive Labs** - Each with unique algorithms
+- **5 Technical Articles** - Deep-dive explanations
+- **3 AI Implementations** - Minimax variants
+- **15+ Algorithms** - Visualized and interactive
+- **100% TypeScript** - Type-safe codebase
 
 ---
 
-### 📊 **Metrics to Track**
-
-- [ ] Component size (keep under 200 lines)
-- [ ] Build bundle size
-- [ ] Page load performance
-- [ ] Game AI response time
-- [ ] Code duplication percentage
-
-### 🎯 **Success Criteria**
-
-- [x] Modern SvelteKit 5 + Runes usage
-- [x] Clean TypeScript implementation
-- [ ] All components under 200 lines
-- [ ] Consistent game engine patterns
-- [ ] Zero code duplication in UI patterns
-- [ ] Sub-200ms AI response times
-- [ ] Ready for multiplayer architecture
+Built with ❤️ by [Anish Shrestha](https://anishshrestha.com) • [GitHub](https://github.com/anish-shrestha) • [LinkedIn](https://linkedin.com/in/anish-shrestha)
