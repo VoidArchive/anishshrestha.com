@@ -20,7 +20,7 @@
 	// Game settings
 	let isPlayingComputer = $state(true);
 	let playerSide = $state('GOAT');
-	let gameMode: 'CLASSIC' | 'REFORGED' = $state('CLASSIC');
+	let gameMode: 'EASY' | 'HARD' = $state('EASY');
 
 	// Component references
 	let gameLogicHandler: GameLogicHandler | undefined = $state();
@@ -51,7 +51,7 @@
 		playerSide = side;
 	}
 
-	function handleModeChange(newMode: 'CLASSIC' | 'REFORGED') {
+	function handleModeChange(newMode: 'EASY' | 'HARD') {
 		gameMode = newMode;
 		gameState.mode = newMode;
 	}
@@ -134,7 +134,7 @@
 			gameStateHandler?.resetGame();
 		}}
 		onChangeMode={() => {
-			gameMode = gameMode === 'CLASSIC' ? 'REFORGED' : 'CLASSIC';
+			gameMode = gameMode === 'EASY' ? 'HARD' : 'EASY';
 			gameState.mode = gameMode;
 			gameStateHandler?.resetGame();
 		}}

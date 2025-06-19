@@ -5,7 +5,7 @@
 	import type { Move } from '$games/bagchal/ai/types';
 
 	interface Props {
-		gameMode: 'CLASSIC' | 'REFORGED';
+		gameMode: 'EASY' | 'HARD';
 		isPlayingComputer: boolean;
 		playerSide: string;
 		lastUndoTime: number;

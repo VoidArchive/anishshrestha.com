@@ -84,7 +84,7 @@ export class MoveOrderer {
     let score = 0;
 
     // UPDATED: Use tactical sacrifice evaluation instead of blanket safety penalty
-    if (state.mode === 'CLASSIC' && state.turn === 'GOAT') {
+    if (state.mode === 'EASY' && state.turn === 'GOAT') {
       // Create a test state to check if this move would be capturable
       const testState = { ...state, board: [...state.board] };
 

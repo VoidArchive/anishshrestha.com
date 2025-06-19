@@ -5,12 +5,12 @@
 		gameState: GameState;
 		isPlayingComputer: boolean;
 		playerSide: string;
-		gameMode: 'CLASSIC' | 'REFORGED';
+		gameMode: 'EASY' | 'HARD';
 		isComputerThinking: boolean;
 		onReset: () => void;
 		onGameModeChange: (isComputer: boolean) => void;
 		onPlayerSideChange: (side: string) => void;
-		onModeChange: (mode: 'CLASSIC' | 'REFORGED') => void;
+		onModeChange: (mode: 'EASY' | 'HARD') => void;
 		onUndo: () => void;
 		canUndo: boolean;
 	}
@@ -42,10 +42,10 @@
 		onReset(); // Reset the game when switching sides
 	}
 
-	function handleModeChangeLocal(mode: 'CLASSIC' | 'REFORGED') {
+	function handleModeChangeLocal(mode: 'EASY' | 'HARD') {
 		if (mode !== gameMode) {
 			onModeChange(mode);
-			onReset(); // Restart game under new rules
+			onReset(); // Restart game under new difficulty
 		}
 	}
 </script>
@@ -147,24 +147,27 @@
 				</div>
 			</div>
 
-			<!-- Game Rules Selection -->
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Rules:</span>
+			<!-- AI Difficulty Selection (only when playing computer) -->
+			<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
+				<span class="text-text-muted">Difficulty:</span>
 				<div class="mode-buttons">
 					<button
 						class="mode-btn"
-						class:active={gameMode === 'CLASSIC'}
-						onclick={() => handleModeChangeLocal('CLASSIC')}
+						class:active={gameMode === 'EASY'}
+						class:disabled={!isPlayingComputer}
+						onclick={() => handleModeChangeLocal('EASY')}
+						disabled={!isPlayingComputer}
 					>
-						Classic
+						Easy
 					</button>
 					<button
 						class="mode-btn"
-						class:active={gameMode === 'REFORGED'}
-						onclick={() => handleModeChangeLocal('REFORGED')}
-						disabled
+						class:active={gameMode === 'HARD'}
+						class:disabled={!isPlayingComputer}
+						onclick={() => handleModeChangeLocal('HARD')}
+						disabled={!isPlayingComputer}
 					>
-						Reforged
+						Hard
 					</button>
 				</div>
 			</div>

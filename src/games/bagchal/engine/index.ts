@@ -44,7 +44,7 @@ export const BagchalEngine: BaseEngine<BagchalMove, GameState> = {
       positionHistory: [],
       positionCounts: new Map(),
       movesWithoutCapture: 0,
-      mode: 'CLASSIC'
+      mode: 'EASY'
     };
   },
 

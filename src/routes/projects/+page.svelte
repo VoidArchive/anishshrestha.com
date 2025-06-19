@@ -5,7 +5,7 @@
 	const projects = [
 		{
 			title: 'Bagchal – Nepali Strategy Game',
-			description: 'Browser implementation of Bagchal, the traditional Nepali Tigers & Goats board game. Features AI opponent and an upcoming Reforged rule set.',
+			description: 'Browser implementation of Bagchal, the traditional Nepali Tigers & Goats board game. Features AI opponent with Easy and Hard difficulty levels.',
 			tech: ['SvelteKit', 'TypeScript', 'Game', 'AI'],
 			repo: 'https://github.com/VoidArchive/anishshrestha.com/tree/main/src/games/bagchal',
 			demo: '/games/bagchal'

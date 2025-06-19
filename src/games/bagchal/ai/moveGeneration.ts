@@ -16,8 +16,8 @@ export class MoveGenerator {
           if (state.board[i] === null) {
             const move: Move = { from: null, to: i, moveType: 'PLACEMENT' };
 
-            // Skip moves that would be immediately captured
-            if (state.mode === 'CLASSIC') {
+            // Skip moves that would be immediately captured in easy mode
+            if (state.mode === 'EASY') {
               const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(i, state, adjacency, points);
               if (wouldBeCaptured) {
                 continue; // Skip capturable moves
@@ -31,7 +31,7 @@ export class MoveGenerator {
         moves.push(...MoveGenerator.getGoatMoves(state, adjacency, points));
       }
     } else {
-      moves.push(...this.getTigerMoves(state, adjacency, points));
+      moves.push(...MoveGenerator.getTigerMoves(state, adjacency, points));
     }
 
     return moves;
@@ -47,8 +47,8 @@ export class MoveGenerator {
           if (state.board[neighbor] === null) {
             const move: Move = { from: i, to: neighbor, moveType: 'MOVEMENT' };
 
-            // Skip moves that would be immediately captured
-            if (state.mode === 'CLASSIC' && points) {
+            // Skip moves that would be immediately captured in easy mode
+            if (state.mode === 'EASY' && points) {
               const wouldBeCaptured = MoveGenerator.wouldBeImmediatelyCaptured(neighbor, state, adjacency, points);
               if (wouldBeCaptured) {
                 continue; // Skip capturable moves
@@ -167,22 +167,24 @@ export class MoveGenerator {
     position: number,
     state: GameState,
     adjacency: Map<number, number[]>,
-    points?: Point[]
+    points: Point[]
   ): boolean {
-    const neighbors = adjacency.get(position) || [];
+    if (state.mode === 'EASY' && points) {
+      const neighbors = adjacency.get(position) || [];
 
-    for (const neighbor of neighbors) {
-      if (state.board[neighbor] === 'TIGER') {
-        // Check if this tiger can capture the goat at 'position'
-        const goatNeighbors = adjacency.get(position) || [];
+      for (const neighbor of neighbors) {
+        if (state.board[neighbor] === 'TIGER') {
+          // Check if this tiger can capture the goat at 'position'
+          const goatNeighbors = adjacency.get(position) || [];
 
-        for (const landing of goatNeighbors) {
-          if (landing !== neighbor && state.board[landing] === null) {
-            // If points are provided, verify the capture line is geometrically valid
-            if (points && !this.isValidCaptureLine(neighbor, position, landing, points)) {
-              continue;
+          for (const landing of goatNeighbors) {
+            if (landing !== neighbor && state.board[landing] === null) {
+              // If points are provided, verify the capture line is geometrically valid
+              if (!this.isValidCaptureLine(neighbor, position, landing, points)) {
+                continue;
+              }
+              return true; // This goat would be immediately capturable
             }
-            return true; // This goat would be immediately capturable
           }
         }
       }

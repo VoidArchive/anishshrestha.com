@@ -1,7 +1,7 @@
 export type Player = 'GOAT' | 'TIGER';
 export type GamePhase = 'PLACEMENT' | 'MOVEMENT';
 export type PieceType = Player | null;
-export type GameMode = 'CLASSIC' | 'REFORGED';
+export type GameMode = 'EASY' | 'HARD';
 
 export interface Point {
   id: number;
@@ -28,7 +28,7 @@ export interface GameState {
   message: string;
   positionHistory: string[]; // Track board positions for draw detection
   positionCounts: Map<string, number>; // Fast O(1) position counting
-  mode: GameMode; // NEW: classic or reforged
+  mode: GameMode; // Difficulty level: easy or hard
   movesWithoutCapture: number; // Track moves in movement phase without capture for 51-move rule
 }
 

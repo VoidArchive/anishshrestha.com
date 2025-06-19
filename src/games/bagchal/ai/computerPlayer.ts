@@ -15,12 +15,12 @@ export class ComputerPlayer {
   private mode: GameMode;
   private maxDepth: number;
 
-  constructor(mode: GameMode = 'CLASSIC') {
+  constructor(mode: GameMode = 'EASY') {
     this.mode = mode;
-    // Simple, balanced depth for responsive gameplay
+    // Different depths for difficulty levels
     const depthMap: Record<GameMode, number> = {
-      CLASSIC: 6,  // Balanced depth for responsive play
-      REFORGED: 6  // Balanced depth for responsive play
+      EASY: 4,   // Faster, weaker AI for easy mode
+      HARD: 8    // Deeper, stronger AI for hard mode
     };
     this.maxDepth = depthMap[mode];
     this.engine = new Minimax<Move, GameState>(BagchalEngine, {
@@ -144,8 +144,8 @@ export class ComputerPlayer {
   setMode(mode: GameMode): void {
     this.mode = mode;
     const depthMap: Record<GameMode, number> = {
-      CLASSIC: 6,  // Responsive balanced depth
-      REFORGED: 6  // Responsive balanced depth
+      EASY: 4,   // Faster, weaker AI for easy mode  
+      HARD: 8    // Deeper, stronger AI for hard mode
     };
     this.maxDepth = depthMap[mode];
     this.engine = new Minimax<Move, GameState>(BagchalEngine, {
