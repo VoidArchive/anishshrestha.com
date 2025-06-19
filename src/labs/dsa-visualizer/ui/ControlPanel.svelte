@@ -9,7 +9,7 @@ in logical groupings for better UX and consistency.
 <script lang="ts">
 	import { Play, Pause, SkipForward, SkipBack, RotateCcw, Shuffle, Square } from 'lucide-svelte';
 	import type { AlgorithmType, SortingAlgorithm, PathfindingAlgorithm } from '../types';
-	
+
 	interface Props {
 		mode: AlgorithmType;
 		algorithm: SortingAlgorithm | PathfindingAlgorithm;
@@ -35,18 +35,18 @@ in logical groupings for better UX and consistency.
 		onToggleTurbo?: (enabled: boolean) => void;
 		turboMode?: boolean;
 	}
-	
-	let { 
-		mode, 
-		algorithm, 
-		arraySize, 
+
+	let {
+		mode,
+		algorithm,
+		arraySize,
 		animationSpeed,
 		isAnimating,
 		completed,
 		currentStep,
 		totalSteps,
-		onModeChange, 
-		onAlgorithmChange, 
+		onModeChange,
+		onAlgorithmChange,
 		onArraySizeChange,
 		onAnimationSpeedChange,
 		onStart,
@@ -61,7 +61,7 @@ in logical groupings for better UX and consistency.
 		onToggleTurbo,
 		turboMode = false
 	}: Props = $props();
-	
+
 	const sortingAlgorithms: { value: SortingAlgorithm; label: string }[] = [
 		{ value: 'BUBBLE_SORT', label: 'Bubble Sort' },
 		{ value: 'SELECTION_SORT', label: 'Selection Sort' },
@@ -70,14 +70,14 @@ in logical groupings for better UX and consistency.
 		{ value: 'MERGE_SORT', label: 'Merge Sort' },
 		{ value: 'HEAP_SORT', label: 'Heap Sort' }
 	];
-	
+
 	const pathfindingAlgorithms: { value: PathfindingAlgorithm; label: string }[] = [
 		{ value: 'BFS', label: 'Breadth-First Search' },
 		{ value: 'DFS', label: 'Depth-First Search' },
-		{ value: 'DIJKSTRA', label: 'Dijkstra\'s Algorithm' },
+		{ value: 'DIJKSTRA', label: "Dijkstra's Algorithm" },
 		{ value: 'A_STAR', label: 'A* Algorithm' }
 	];
-	
+
 	// Updated speed options with much faster ranges
 	const speedOptions = [
 		{ value: 0, label: 'Instant' },
@@ -88,31 +88,31 @@ in logical groupings for better UX and consistency.
 		{ value: 250, label: 'Slow (250ms)' },
 		{ value: 500, label: 'Very Slow (500ms)' }
 	];
-	
+
 	function handleModeChange(newMode: AlgorithmType) {
 		onModeChange(newMode);
 	}
-	
+
 	function handleAlgorithmChange(event: Event) {
 		const target = event.target as HTMLSelectElement;
 		onAlgorithmChange(target.value as SortingAlgorithm | PathfindingAlgorithm);
 	}
-	
+
 	function handleArraySizeChange(event: Event) {
 		const target = event.target as HTMLInputElement;
 		onArraySizeChange(parseInt(target.value));
 	}
-	
+
 	function handleSpeedChange(event: Event) {
 		const target = event.target as HTMLSelectElement;
 		onAnimationSpeedChange(parseInt(target.value));
 	}
-	
+
 	function handleTurboToggle(event: Event) {
 		const target = event.target as HTMLInputElement;
 		onToggleTurbo?.(target.checked);
 	}
-	
+
 	function toggleSimulation() {
 		if (isAnimating) {
 			onPause();
@@ -126,7 +126,7 @@ in logical groupings for better UX and consistency.
 			}
 		}
 	}
-	
+
 	function handleSkipToEnd() {
 		onSkipToEnd?.();
 	}
@@ -140,7 +140,11 @@ in logical groupings for better UX and consistency.
 			<button
 				class="btn control-btn primary"
 				onclick={toggleSimulation}
-				aria-label={isAnimating ? 'Pause simulation' : completed ? 'Reset simulation' : 'Start simulation'}
+				aria-label={isAnimating
+					? 'Pause simulation'
+					: completed
+						? 'Reset simulation'
+						: 'Start simulation'}
 			>
 				{#if isAnimating}
 					<Pause size={16} />
@@ -213,11 +217,11 @@ in logical groupings for better UX and consistency.
 					Pathfinding
 				</button>
 			</div>
-			
+
 			<!-- Algorithm Selection -->
-			<select 
-				class="algorithm-select" 
-				value={algorithm} 
+			<select
+				class="algorithm-select"
+				value={algorithm}
 				onchange={handleAlgorithmChange}
 				disabled={isAnimating}
 			>
@@ -263,7 +267,7 @@ in logical groupings for better UX and consistency.
 					</div>
 				</div>
 			{/if}
-			
+
 			<!-- Speed Control -->
 			<div class="setting-item">
 				<label class="setting-label">Speed:</label>
@@ -305,8 +309,8 @@ in logical groupings for better UX and consistency.
 		</h4>
 		<div class="button-row" style="gap: var(--space-2);">
 			{#if mode === 'PATHFINDING'}
-				<button 
-					class="btn control-btn" 
+				<button
+					class="btn control-btn"
 					onclick={onClearWalls}
 					disabled={isAnimating}
 					aria-label="Clear all walls"
@@ -315,9 +319,9 @@ in logical groupings for better UX and consistency.
 					Clear
 				</button>
 			{/if}
-			
-			<button 
-				class="btn control-btn" 
+
+			<button
+				class="btn control-btn"
 				onclick={onShuffle}
 				disabled={isAnimating}
 				aria-label={mode === 'SORTING' ? 'Shuffle array' : 'Random walls'}
@@ -326,12 +330,7 @@ in logical groupings for better UX and consistency.
 				{mode === 'SORTING' ? 'Shuffle' : 'Random'}
 			</button>
 
-			<button 
-				class="btn control-btn" 
-				onclick={onReset}
-				disabled={isAnimating}
-				aria-label="Reset"
-			>
+			<button class="btn control-btn" onclick={onReset} disabled={isAnimating} aria-label="Reset">
 				<RotateCcw size={16} />
 				Reset
 			</button>
@@ -502,7 +501,7 @@ in logical groupings for better UX and consistency.
 	}
 
 	.range-container::before {
-		content: "";
+		content: '';
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -560,12 +559,16 @@ in logical groupings for better UX and consistency.
 	.range-input:hover {
 		background: var(--color-bg-secondary);
 		border-color: var(--color-primary);
-		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(201, 42, 42, 0.1);
+		box-shadow:
+			inset 0 1px 2px rgba(0, 0, 0, 0.1),
+			0 0 0 1px rgba(201, 42, 42, 0.1);
 	}
 
 	.range-input:focus {
 		border-color: var(--color-primary);
-		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 2px rgba(201, 42, 42, 0.2);
+		box-shadow:
+			inset 0 1px 2px rgba(0, 0, 0, 0.1),
+			0 0 0 2px rgba(201, 42, 42, 0.2);
 	}
 
 	.range-input::-webkit-slider-thumb {

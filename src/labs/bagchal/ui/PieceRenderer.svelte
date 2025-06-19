@@ -37,6 +37,8 @@
 	// Pointer-based drag and drop handlers
 	let isDragging = $state(false);
 	let pointerStartId: number | null = $state(null);
+	let pointerStartPosition = $state({ x: 0, y: 0 });
+	let hasMoved = $state(false);
 
 	function handlePointerDown(e: PointerEvent, id: number) {
 		if (!gameState.board[id]) return;
@@ -44,22 +46,36 @@
 		// Set capture to track pointer even when it leaves the element
 		(e.target as Element).setPointerCapture(e.pointerId);
 
-		isDragging = true;
+		isDragging = false; // Don't set to true immediately
 		draggedPieceId = id;
 		pointerStartId = id;
 		previewPosition = null;
-
-		onDragStart?.(id);
+		hasMoved = false;
+		pointerStartPosition = { x: e.clientX, y: e.clientY };
 
 		// Add global pointer event listeners
 		document.addEventListener('pointermove', handlePointerMove);
 		document.addEventListener('pointerup', handlePointerUp);
 
-		e.preventDefault();
+		// Don't prevent default immediately - let click events work
 	}
 
 	function handlePointerMove(e: PointerEvent) {
-		if (!isDragging || draggedPieceId === null) return;
+		if (draggedPieceId === null) return;
+
+		// Check if we've moved enough to start dragging (5px threshold)
+		const deltaX = e.clientX - pointerStartPosition.x;
+		const deltaY = e.clientY - pointerStartPosition.y;
+		const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+		if (!isDragging && distance > 5) {
+			// Start dragging after movement threshold
+			isDragging = true;
+			hasMoved = true;
+			onDragStart?.(draggedPieceId);
+		}
+
+		if (!isDragging) return;
 
 		// Find the element under the pointer
 		const elementUnder = document.elementFromPoint(e.clientX, e.clientY);
@@ -78,27 +94,33 @@
 	}
 
 	function handlePointerUp(e: PointerEvent) {
-		if (!isDragging) return;
+		const wasActuallyDragging = isDragging && hasMoved;
 
-		// Find the element under the pointer
-		const elementUnder = document.elementFromPoint(e.clientX, e.clientY);
-		const validMoveElement = elementUnder?.closest('[data-valid-move-id]');
+		if (wasActuallyDragging) {
+			// Handle drag drop
+			const elementUnder = document.elementFromPoint(e.clientX, e.clientY);
+			const validMoveElement = elementUnder?.closest('[data-valid-move-id]');
 
-		if (validMoveElement && draggedPieceId !== null) {
-			const moveId = parseInt(validMoveElement.getAttribute('data-valid-move-id') || '');
-			if (!isNaN(moveId) && validMoves.includes(moveId)) {
-				onDrop?.(moveId);
-				handlePointClick(moveId);
+			if (validMoveElement && draggedPieceId !== null) {
+				const moveId = parseInt(validMoveElement.getAttribute('data-valid-move-id') || '');
+				if (!isNaN(moveId) && validMoves.includes(moveId)) {
+					onDrop?.(moveId);
+					handlePointClick(moveId);
+				}
 			}
 		}
+		// If not dragging (just a click), let the click event handle it naturally
 
 		// Clean up
 		isDragging = false;
 		draggedPieceId = null;
 		previewPosition = null;
 		pointerStartId = null;
+		hasMoved = false;
 
-		onDragEnd?.();
+		if (wasActuallyDragging) {
+			onDragEnd?.();
+		}
 
 		// Remove global listeners
 		document.removeEventListener('pointermove', handlePointerMove);

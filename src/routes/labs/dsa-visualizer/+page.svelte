@@ -4,9 +4,10 @@
 
 <svelte:head>
 	<title>DSA Visualizer – Labs | anishshrestha.com</title>
-	<meta name="description" content="Interactive data structures and algorithms visualizer with sorting and pathfinding animations" />
+	<meta
+		name="description"
+		content="Interactive data structures and algorithms visualizer with sorting and pathfinding animations"
+	/>
 </svelte:head>
 
-<section class="container py-8 lg:py-12">
-	<Shell />
-</section>
+<Shell />

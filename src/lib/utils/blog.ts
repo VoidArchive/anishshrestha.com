@@ -6,6 +6,13 @@ export interface BlogPost {
 	published: boolean;
 	tags: string[];
 	content: any;
+	// New fields for lab integration
+	labSlug?: string;
+	relatedLab?: {
+		name: string;
+		url: string;
+		description: string;
+	};
 }
 
 interface BlogModule {

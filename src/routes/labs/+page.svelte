@@ -1,25 +1,32 @@
 <script lang="ts">
 	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
-	import { Grid3x3, BarChart3 } from 'lucide-svelte';
+	import { Grid3x3, BarChart3, BookOpen } from 'lucide-svelte';
 	// Simple list of labs/experiments – can be replaced with fetched data later
 	const experiments = [
 		{
 			name: 'DSA Visualizer',
-			description: 'Interactive visualization of sorting algorithms and data structures with step-by-step animations.',
+			description:
+				'Interactive visualization of sorting algorithms and data structures with step-by-step animations.',
 			slug: 'dsa-visualizer',
-			icon: 'barchart'
+			icon: 'barchart',
+			blogSlug: 'building-dsa-visualizer-animation-engine',
+			blogTitle: 'Building a DSA Visualizer: Animation Engine Architecture'
 		},
 		{
 			name: 'Game of Life',
 			description: "Conway's cellular automaton - watch patterns evolve and create your own.",
 			slug: 'gameoflife',
-			icon: 'grid'
+			icon: 'grid',
+			blogSlug: 'building-conways-game-of-life-svelte',
+			blogTitle: "Building Conway's Game of Life: From Theory to Interactive Simulation"
 		},
 		{
 			name: 'Bagchal',
 			description: 'Play the traditional Nepali tiger-goat strategy game.',
 			slug: 'bagchal',
-			icon: '/icons/tiger.svg'
+			icon: '/icons/tiger.svg',
+			blogSlug: 'bagchal-reforged-ai-chess-tigers',
+			blogTitle: 'Bagchal Reforged: AI Chess with Tigers and Goats'
 		},
 		{
 			name: 'Tic Tac Toe',
@@ -42,8 +49,8 @@
 				<h3 class="section-title text-lg">Labs</h3>
 				<p class="text-text-muted text-sm leading-relaxed">
 					This is my experimental playground where I build interactive projects, test new ideas, and
-					prototype concepts. Each lab is a hands-on exploration of different technologies and game
-					mechanics.
+					prototype concepts. Each lab is a hands-on exploration of deifferent technologies and game
+					mechanics. If you find a bug, report it on Github or drop me a message.
 				</p>
 			</section>
 		</svelte:fragment>
@@ -59,13 +66,29 @@
 					<div class="flex flex-1 flex-col" style="gap: var(--space-2);">
 						<h2 class="section-title m-0 text-xl">{experiment.name}</h2>
 						<p class="text-text-muted text-sm leading-relaxed">{experiment.description}</p>
-						<a
-							href={`/labs/${experiment.slug}`}
-							class="btn inline-flex w-max items-center"
+						<div
+							class="flex flex-wrap items-center"
 							style="margin-top: var(--space-1); gap: var(--space-2);"
 						>
-							<span>Play</span>
-						</a>
+							<a
+								href={`/labs/${experiment.slug}`}
+								class="btn inline-flex items-center"
+								style="gap: var(--space-2);"
+							>
+								<span>Play</span>
+							</a>
+							{#if experiment.blogSlug}
+								<a
+									href={`/blog/${experiment.blogSlug}`}
+									class="btn-secondary inline-flex items-center"
+									style="gap: var(--space-2);"
+									title={experiment.blogTitle}
+								>
+									<BookOpen size={16} />
+									<span>Read the Story</span>
+								</a>
+							{/if}
+						</div>
 					</div>
 					<!-- Icon -->
 					<div class="flex h-16 w-16 flex-shrink-0 items-center justify-center">

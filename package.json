@@ -12,7 +12,10 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"build": "vite build",
-		"deploy": "wrangler deploy --config wrangler.toml"
+		"deploy": "wrangler deploy --config wrangler.toml",
+		"deploy:production": "npm run build && npm run check && npm run lint && wrangler deploy --config wrangler.toml --env production",
+		"validate": "npm run check && npm run lint && npm run build",
+		"ci": "npm run validate"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",

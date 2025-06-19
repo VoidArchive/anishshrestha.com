@@ -7,7 +7,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 -->
 
 <script lang="ts">
-	import { 
+	import {
 		dsaState,
 		setAlgorithm,
 		setMode,
@@ -29,25 +29,27 @@ Features consolidated controls in sidebar and main content area with statistics.
 	import ControlPanel from './ControlPanel.svelte';
 	import ErrorBoundary from '$lib/components/ErrorBoundary.svelte';
 	import { ArrowUpDown, ArrowLeftRight, BarChart3, Search, Route, Grid3X3 } from 'lucide-svelte';
-	
+
 	// Derived state
 	let stepDescription = $derived(getCurrentStepDescription());
-	
+
 	// Algorithm complexity information
 	const algorithmComplexity = {
-		'BUBBLE_SORT': { time: 'O(n²)', space: 'O(1)' },
-		'SELECTION_SORT': { time: 'O(n²)', space: 'O(1)' },
-		'INSERTION_SORT': { time: 'O(n²)', space: 'O(1)' },
-		'QUICK_SORT': { time: 'O(n log n)', space: 'O(log n)' },
-		'MERGE_SORT': { time: 'O(n log n)', space: 'O(n)' },
-		'HEAP_SORT': { time: 'O(n log n)', space: 'O(1)' },
-		'BFS': { time: 'O(V + E)', space: 'O(V)' },
-		'DFS': { time: 'O(V + E)', space: 'O(V)' },
-		'DIJKSTRA': { time: 'O(V²)', space: 'O(V)' },
-		'A_STAR': { time: 'O(b^d)', space: 'O(b^d)' }
+		BUBBLE_SORT: { time: 'O(n²)', space: 'O(1)' },
+		SELECTION_SORT: { time: 'O(n²)', space: 'O(1)' },
+		INSERTION_SORT: { time: 'O(n²)', space: 'O(1)' },
+		QUICK_SORT: { time: 'O(n log n)', space: 'O(log n)' },
+		MERGE_SORT: { time: 'O(n log n)', space: 'O(n)' },
+		HEAP_SORT: { time: 'O(n log n)', space: 'O(1)' },
+		BFS: { time: 'O(V + E)', space: 'O(V)' },
+		DFS: { time: 'O(V + E)', space: 'O(V)' },
+		DIJKSTRA: { time: 'O(V²)', space: 'O(V)' },
+		A_STAR: { time: 'O(b^d)', space: 'O(b^d)' }
 	};
-	
-	let complexity = $derived(algorithmComplexity[dsaState.algorithm] || { time: 'N/A', space: 'N/A' });
+
+	let complexity = $derived(
+		algorithmComplexity[dsaState.algorithm] || { time: 'N/A', space: 'N/A' }
+	);
 </script>
 
 <ErrorBoundary fallback="The DSA Visualizer encountered an error. Please try refreshing the page.">
@@ -94,17 +96,17 @@ Features consolidated controls in sidebar and main content area with statistics.
 								<span class="algo-label">Algorithm:</span>
 								<span class="algo-value">{dsaState.algorithm.replace('_', ' ')}</span>
 							</div>
-							
+
 							<div class="algo-item">
 								<span class="algo-label">Time Complexity:</span>
 								<code class="complexity-value">{complexity.time}</code>
 							</div>
-							
+
 							<div class="algo-item">
 								<span class="algo-label">Space Complexity:</span>
 								<code class="complexity-value">{complexity.space}</code>
 							</div>
-							
+
 							<div class="algo-item step-description-item">
 								<span class="algo-label">Current Step:</span>
 								<div class="step-description-container">
@@ -136,13 +138,17 @@ Features consolidated controls in sidebar and main content area with statistics.
 								<div class="progress-header">
 									<span class="progress-label">Progress</span>
 									<span class="progress-percentage">
-										{dsaState.totalSteps > 0 ? Math.round((dsaState.currentStep / dsaState.totalSteps) * 100) : 0}%
+										{dsaState.totalSteps > 0
+											? Math.round((dsaState.currentStep / dsaState.totalSteps) * 100)
+											: 0}%
 									</span>
 								</div>
 								<div class="progress-bar">
-									<div 
-										class="progress-fill" 
-										style="width: {dsaState.totalSteps > 0 ? (dsaState.currentStep / dsaState.totalSteps) * 100 : 0}%"
+									<div
+										class="progress-fill"
+										style="width: {dsaState.totalSteps > 0
+											? (dsaState.currentStep / dsaState.totalSteps) * 100
+											: 0}%"
 									></div>
 								</div>
 								<div class="progress-steps">
@@ -163,7 +169,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 											<span class="stat-value">{dsaState.comparisons}</span>
 										</div>
 									</div>
-									
+
 									<div class="stat-card secondary">
 										<div class="stat-icon">
 											<ArrowLeftRight size={20} />
@@ -173,7 +179,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 											<span class="stat-value">{dsaState.swaps}</span>
 										</div>
 									</div>
-									
+
 									<div class="stat-card info">
 										<div class="stat-icon">
 											<BarChart3 size={20} />
@@ -194,7 +200,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 											<span class="stat-value">{dsaState.nodesVisited}</span>
 										</div>
 									</div>
-									
+
 									<div class="stat-card secondary">
 										<div class="stat-icon">
 											<Route size={20} />
@@ -204,14 +210,16 @@ Features consolidated controls in sidebar and main content area with statistics.
 											<span class="stat-value">{dsaState.pathLength}</span>
 										</div>
 									</div>
-									
+
 									<div class="stat-card info">
 										<div class="stat-icon">
 											<Grid3X3 size={20} />
 										</div>
 										<div class="stat-content">
 											<span class="stat-label">Grid Size</span>
-											<span class="stat-value">{dsaState.gridSize.width}×{dsaState.gridSize.height}</span>
+											<span class="stat-value"
+												>{dsaState.gridSize.width}×{dsaState.gridSize.height}</span
+											>
 										</div>
 									</div>
 								{/if}
@@ -219,7 +227,13 @@ Features consolidated controls in sidebar and main content area with statistics.
 
 							<!-- Status Badge -->
 							<div class="status-section">
-								<div class="status-badge {dsaState.completed ? 'completed' : dsaState.isAnimating ? 'running' : 'ready'}">
+								<div
+									class="status-badge {dsaState.completed
+										? 'completed'
+										: dsaState.isAnimating
+											? 'running'
+											: 'ready'}"
+								>
 									<div class="status-indicator"></div>
 									<span class="status-text">
 										{dsaState.completed ? 'Completed' : dsaState.isAnimating ? 'Running' : 'Ready'}
@@ -293,19 +307,19 @@ Features consolidated controls in sidebar and main content area with statistics.
 		flex-direction: column;
 		gap: var(--space-3);
 	}
-	
+
 	.algo-item {
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-1);
 	}
-	
+
 	.algo-item.step-description-item {
 		border-top: 1px solid var(--color-border);
 		padding-top: var(--space-3);
 		margin-top: var(--space-1);
 	}
-	
+
 	.algo-label {
 		font-size: 0.75rem;
 		color: var(--color-text-muted);
@@ -313,14 +327,14 @@ Features consolidated controls in sidebar and main content area with statistics.
 		letter-spacing: 0.5px;
 		font-weight: 600;
 	}
-	
+
 	.algo-value {
 		font-size: 1rem;
 		font-weight: 600;
 		color: var(--color-text-primary);
 		text-transform: capitalize;
 	}
-	
+
 	.complexity-value {
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.875rem;
@@ -331,7 +345,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 		font-weight: 600;
 		display: inline-block;
 	}
-	
+
 	.step-description {
 		font-size: 0.875rem;
 		color: var(--color-text-secondary);
@@ -450,7 +464,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 		gap: var(--space-1);
 		flex: 1;
 	}
-	
+
 	.stat-label {
 		font-size: 0.75rem;
 		color: var(--color-text-muted);
@@ -458,7 +472,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 		letter-spacing: 0.5px;
 		font-weight: 600;
 	}
-	
+
 	.stat-value {
 		font-size: 1.25rem;
 		font-weight: 700;
@@ -520,8 +534,13 @@ Features consolidated controls in sidebar and main content area with statistics.
 	}
 
 	@keyframes pulse {
-		0%, 100% { opacity: 1; }
-		50% { opacity: 0.5; }
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.5;
+		}
 	}
 
 	/* Fixed layout for step description */
@@ -542,11 +561,11 @@ Features consolidated controls in sidebar and main content area with statistics.
 			gap: var(--space-4);
 			min-height: auto;
 		}
-		
+
 		.sidebar-content {
 			gap: var(--space-3);
 		}
-		
+
 		.main-content {
 			gap: var(--space-3);
 		}
@@ -555,26 +574,25 @@ Features consolidated controls in sidebar and main content area with statistics.
 			grid-template-columns: 1fr;
 			gap: var(--space-2);
 		}
-		
+
 		.stat-card {
 			padding: var(--space-2);
 		}
-		
-		
+
 		.stat-value {
 			font-size: 1rem;
 		}
-		
+
 		.algo-item {
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
 		}
-		
+
 		.algo-value {
 			font-size: 1rem;
 		}
-		
+
 		.step-description {
 			text-align: right;
 			max-width: 60%;

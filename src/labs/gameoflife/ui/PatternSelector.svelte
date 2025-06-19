@@ -30,7 +30,9 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	/**
 	 * Gets the currently selected pattern details
 	 */
-	let selectedPattern = $derived(selectedPatternName ? getPatternByName(selectedPatternName) : null);
+	let selectedPattern = $derived(
+		selectedPatternName ? getPatternByName(selectedPatternName) : null
+	);
 
 	// Debug reactive variables
 	$effect(() => {
@@ -47,17 +49,16 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 			console.log('selectPattern called with:', patternName);
 			console.log('Before update - selectedPatternName:', selectedPatternName);
 			console.log('Before update - showPatternInfo:', showPatternInfo);
-			
+
 			selectedPatternName = patternName;
 			showPatternInfo = true;
-			
+
 			console.log('After update - selectedPatternName:', selectedPatternName);
 			console.log('After update - showPatternInfo:', showPatternInfo);
-			
+
 			// Test pattern lookup
 			const pattern = getPatternByName(patternName);
 			console.log('Pattern lookup result:', pattern);
-			
 		} catch (error) {
 			console.error('Error selecting pattern:', error);
 		}
@@ -157,7 +158,9 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		{#if currentPatterns.length === 0}
 			<div class="empty-category">
 				<p class="empty-text">No patterns in this category</p>
-				<p class="empty-text">Debug: Available categories: {Object.keys(PATTERNS_BY_CATEGORY).join(', ')}</p>
+				<p class="empty-text">
+					Debug: Available categories: {Object.keys(PATTERNS_BY_CATEGORY).join(', ')}
+				</p>
 			</div>
 		{/if}
 	</div>
@@ -208,7 +211,9 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	{:else}
 		<div class="pattern-help">
 			<p class="help-text">Select a pattern above to preview and insert it into the grid.</p>
-			<p class="help-text">Debug: Category = {selectedCategory}, Pattern count = {currentPatterns.length}</p>
+			<p class="help-text">
+				Debug: Category = {selectedCategory}, Pattern count = {currentPatterns.length}
+			</p>
 		</div>
 	{/if}
 </div>

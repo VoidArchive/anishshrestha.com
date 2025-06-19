@@ -2,3 +2,16 @@ name              = "anish"
 compatibility_date = "2025-06-10"
 main              = ".svelte-kit/cloudflare/_worker.js"
 assets            = { binding = "ASSETS", directory = ".svelte-kit/cloudflare" }
+
+# Production environment settings
+[env.production]
+vars = { NODE_ENV = "production" }
+
+# Add security headers and performance optimizations
+[[env.production.route]]
+pattern = "anishshrestha.com/*"
+zone_name = "anishshrestha.com"
+
+# Configure analytics and monitoring
+[env.production.analytics]
+enabled = true

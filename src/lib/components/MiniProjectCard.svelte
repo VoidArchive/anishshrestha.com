@@ -10,7 +10,7 @@
 	href={repo}
 	target="_blank"
 	rel="noopener noreferrer"
-	class="bg-bg-primary border-border hover:border-primary block border p-4 no-underline transition-all duration-300"
+	class="project-card bg-bg-primary border-border hover:border-primary relative block overflow-hidden border p-4 no-underline transition-all duration-300"
 >
 	<article>
 		<h3 class="mb-2 flex items-center gap-1">
@@ -35,6 +35,28 @@
 </a>
 
 <style>
+	.project-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+		transition: left 0.5s ease;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.project-card:hover::before {
+		left: 100%;
+	}
+
+	.project-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
+	}
+
 	.line-clamp-3 {
 		display: -webkit-box;
 		-webkit-line-clamp: 3;

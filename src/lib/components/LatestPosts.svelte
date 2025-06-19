@@ -19,7 +19,7 @@
 			{#each posts as post}
 				<a
 					href="/blog/{post.slug}"
-					class="bg-bg-primary border-border hover:border-primary block border p-4 no-underline transition-all duration-300"
+					class="post-card bg-bg-primary border-border hover:border-primary relative block overflow-hidden border p-4 no-underline transition-all duration-300"
 				>
 					<article>
 						<div class="mb-2">
@@ -50,14 +50,31 @@
 			</div>
 		{/if}
 	</div>
-
-	<a href="/blog" class="btn mt-4 ml-auto flex w-max items-center gap-1">
-		<span>View all posts</span>
-		<ArrowRight size={14} />
-	</a>
 </section>
 
 <style>
+	.post-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+		transition: left 0.5s ease;
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.post-card:hover::before {
+		left: 100%;
+	}
+
+	.post-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
+	}
+
 	.line-clamp-2 {
 		display: -webkit-box;
 		-webkit-line-clamp: 2;

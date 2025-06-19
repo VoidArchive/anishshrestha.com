@@ -36,6 +36,29 @@
 		return computerTurn;
 	});
 
+	// Phase transition notification state
+	let showPhaseTransition = $state(false);
+	let phaseTransitionVisible = $state(false);
+	let previousPhase = $state(gameState.phase);
+
+	// Watch for phase transitions from PLACEMENT to MOVEMENT
+	$effect(() => {
+		if (previousPhase === 'PLACEMENT' && gameState.phase === 'MOVEMENT') {
+			showPhaseTransition = true;
+			phaseTransitionVisible = true;
+			
+			// Hide the notification after 3 seconds
+			setTimeout(() => {
+				phaseTransitionVisible = false;
+				// Remove from DOM after fade out animation
+				setTimeout(() => {
+					showPhaseTransition = false;
+				}, 300);
+			}, 3000);
+		}
+		previousPhase = gameState.phase;
+	});
+
 	// Unified Animation state - works for both AI and player moves
 	let showAnimation = $state(false);
 	let animationProgress = $state(0);
@@ -170,7 +193,16 @@
 					</p>
 				{/if}
 				<div class="flex h-8 items-center justify-center">
-					{#if isComputerThinking && isComputerTurn()}
+					{#if showPhaseTransition}
+						<!-- Phase Transition Notification -->
+						<div
+							class="phase-transition-notification mx-auto flex max-w-sm items-center justify-center gap-2 border p-2 text-xs sm:text-sm"
+							class:visible={phaseTransitionVisible}
+						>
+							<div class="phase-transition-icon">🐐</div>
+							<span class="text-primary font-medium">Goats can now move!</span>
+						</div>
+					{:else if isComputerThinking && isComputerTurn()}
 						<!-- AI Thinking Indicator -->
 						<div
 							class="bg-bg-primary border-primary/20 mx-auto flex max-w-xs items-center gap-2 border p-2 text-xs sm:text-sm"
@@ -283,6 +315,42 @@
 				inset -2px -2px 8px rgba(255, 255, 255, 0.04),
 				inset 0 0 20px rgba(0, 0, 0, 0.5),
 				inset 0 0 40px rgba(201, 42, 42, 0.06);
+		}
+	}
+
+	/* Phase transition notification styles */
+	.phase-transition-notification {
+		background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-primary));
+		border-color: var(--color-primary);
+		opacity: 0;
+		transform: translateY(-10px) scale(0.95);
+		transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+		box-shadow: 
+			0 4px 15px rgba(201, 42, 42, 0.1),
+			inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	}
+
+	.phase-transition-notification.visible {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+
+	.phase-transition-icon {
+		animation: phase-bounce 0.6s ease-out;
+		filter: drop-shadow(0 0 3px rgba(201, 42, 42, 0.3));
+	}
+
+	@keyframes phase-bounce {
+		0% {
+			transform: scale(0.3) rotate(-10deg);
+			opacity: 0;
+		}
+		50% {
+			transform: scale(1.1) rotate(5deg);
+		}
+		100% {
+			transform: scale(1) rotate(0deg);
+			opacity: 1;
 		}
 	}
 

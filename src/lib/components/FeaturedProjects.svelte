@@ -1,3 +1,11 @@
+<!--
+Featured Projects Component
+
+Showcases major external and GitHub projects.
+Complements the LatestLabs component by focusing on production/GitHub projects
+rather than interactive browser-based labs.
+-->
+
 <script lang="ts">
 	import { FolderGit, ArrowRight } from 'lucide-svelte';
 	import MiniProjectCard from './MiniProjectCard.svelte';
@@ -16,15 +24,10 @@
 		/>
 
 		<MiniProjectCard
-			title="Bagchal – Nepali Strategy Game"
-			description="SvelteKit implementation of Bagchal, the traditional Tigers & Goats board game. Play against AI or friends. Features Easy and Hard AI difficulty levels."
-			tech={['SvelteKit', 'TypeScript', 'Game', 'AI']}
-			repo="/labs/bagchal"
+			title="Portfolio & Lab Platform"
+			description="This very website! SvelteKit-based portfolio featuring interactive labs, blog system, and responsive design. Includes game engines, algorithm visualizers, and educational tools."
+			tech={['SvelteKit', 'TypeScript', 'Tailwind', 'Cloudflare']}
+			repo="https://github.com/VoidArchive/anishshrestha.com"
 		/>
 	</div>
-
-	<a href="/projects" class="btn mt-4 ml-auto flex w-max items-center gap-1">
-		<span>View all projects</span>
-		<ArrowRight size={14} />
-	</a>
 </section>

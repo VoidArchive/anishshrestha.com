@@ -143,7 +143,6 @@ export function insertPatternAt(patternName: string, x: number, y: number): void
 	simulationState.stats.population = simulationState.grid.flat().filter((cell) => cell).length;
 }
 
-
 /**
  * Cleanup function to call when component is destroyed
  */

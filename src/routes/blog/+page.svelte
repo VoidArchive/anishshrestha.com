@@ -43,21 +43,31 @@
 			{#if data.posts.length > 0}
 				<div class="blog-posts-container">
 					{#each data.posts as post}
-						<a href="/blog/{post.slug}" class="blog-card">
+						<a href="/blog/{post.slug}" class="blog-card section-card">
 							<article class="blog-content">
-								<div class="blog-meta">
+								<div class="blog-header">
+									<h2 class="blog-title">{post.title}</h2>
 									<time class="blog-date">{formatDate(post.date)}</time>
+								</div>
+								
+								<p class="blog-description">{post.description}</p>
+								
+								<div class="blog-footer">
 									<div class="blog-tags">
 										{#each post.tags as tag}
 											<span class="blog-tag">{tag}</span>
 										{/each}
+										{#if post.relatedLab}
+											<span class="blog-tag interactive-tag">Interactive</span>
+										{/if}
 									</div>
+									
+									{#if post.relatedLab}
+										<p class="lab-preview">
+											Try live demo: <strong>{post.relatedLab.name}</strong>
+										</p>
+									{/if}
 								</div>
-
-								<!-- Decorative separator removed to prevent layout shift -->
-
-								<h2 class="blog-title-text">{post.title}</h2>
-								<p class="blog-description">{post.description}</p>
 							</article>
 						</a>
 					{/each}
@@ -72,97 +82,118 @@
 </main>
 
 <style>
-	/* Reset all potential conflicts */
 	.blog-posts-container {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: var(--space-6);
 	}
 
 	.blog-card {
 		display: block;
 		text-decoration: none;
 		color: inherit;
-		background-color: var(--color-bg-secondary);
-		border: 1px solid var(--color-border);
-		padding: 1rem;
-		transition:
-			transform 0.3s ease,
-			box-shadow 0.3s ease,
-			border-color 0.3s ease;
-		will-change: box-shadow, border-color;
-		position: relative;
-	}
-
-	@media (min-width: 768px) {
-		.blog-card {
-			padding: 1.25rem;
-		}
+		margin-bottom: 0;
+		transition: all 0.3s ease;
 	}
 
 	.blog-card:hover {
-		border-color: var(--color-primary);
-		box-shadow: 0 8px 15px -3px rgba(201, 42, 42, 0.1);
+		transform: translateY(-2px);
 	}
 
 	.blog-content {
-		/* Lock in spacing to prevent shifts */
-		display: block;
-		margin: 0;
-		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+		height: 100%;
 	}
 
-	.blog-meta {
+	.blog-header {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 0.75rem;
-		gap: 1rem;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+
+	.blog-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		margin: 0;
+		line-height: 1.3;
+		transition: color 0.3s ease;
+	}
+
+	.blog-card:hover .blog-title {
+		color: var(--color-primary);
 	}
 
 	.blog-date {
-		font-family: var(--font-family-mono);
+		font-family: var(--font-mono);
 		font-size: 0.875rem;
 		color: var(--color-text-muted);
 		margin: 0;
 		line-height: 1.4;
 	}
 
+	.blog-description {
+		color: var(--color-text-muted);
+		margin: 0;
+		line-height: 1.6;
+		font-size: 1rem;
+		flex-grow: 1;
+	}
+
+	.blog-footer {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		margin-top: auto;
+	}
+
 	.blog-tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: var(--space-2);
 	}
 
 	.blog-tag {
 		background-color: var(--color-bg-primary);
-		color: var(--color-text);
+		color: var(--color-text-primary);
 		border: 1px solid var(--color-border);
 		padding: 0.25rem 0.5rem;
 		font-size: 0.75rem;
 		line-height: 1;
 		margin: 0;
+		font-family: var(--font-mono);
+		transition: all 0.2s ease;
 	}
 
-	.blog-title-text {
-		font-size: 1.25rem;
+	.interactive-tag {
+		background-color: var(--color-primary);
+		color: white;
+		border-color: var(--color-primary);
 		font-weight: 600;
-		color: var(--color-text);
-		margin: 0 0 0.5rem 0;
-		line-height: 1.3;
-		transition: color 0.3s ease;
 	}
 
-	@media (min-width: 768px) {
-		.blog-title-text {
-			font-size: 1.5rem;
-		}
-	}
-
-	.blog-description {
+	.lab-preview {
 		color: var(--color-text-muted);
 		margin: 0;
-		line-height: 1.5;
-		font-size: 0.95rem;
+		font-size: 0.875rem;
+		font-style: italic;
+	}
+
+	.lab-preview strong {
+		color: var(--color-text-primary);
+		font-weight: 600;
+	}
+
+	/* Responsive design */
+	@media (max-width: 768px) {
+		.blog-title {
+			font-size: 1.25rem;
+		}
+		
+		.blog-description {
+			font-size: 0.95rem;
+		}
 	}
 </style>

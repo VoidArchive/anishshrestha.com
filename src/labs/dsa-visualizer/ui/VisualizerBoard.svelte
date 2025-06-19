@@ -10,22 +10,22 @@ Responsive design with proper click handling and space utilization.
 <script lang="ts">
 	import type { DSAState } from '../types';
 	import { toggleWall, setStartPoint, setEndPoint } from '../store.svelte';
-	
+
 	interface Props {
 		state: DSAState;
 	}
-	
+
 	let { state }: Props = $props();
-	
+
 	// Calculate bar heights for sorting visualization (0-100% scaling)
 	function getBarHeight(value: number, maxValue: number): number {
 		if (maxValue === 0) return 5;
 		return Math.max((value / maxValue) * 100, 2); // Min 2% height for visibility
 	}
-	
+
 	// Get maximum value in array for proper scaling
 	let maxValue = $derived(state.mode === 'SORTING' ? Math.max(...state.array) : 100);
-	
+
 	// Get bar color based on state - using site color scheme
 	function getBarColor(index: number): string {
 		if (state.sorted.includes(index)) {
@@ -36,38 +36,38 @@ Responsive design with proper click handling and space utilization.
 			return 'bar-default'; // Default gray
 		}
 	}
-	
+
 	// Get grid cell color for pathfinding - enhanced multi-layer visualization
 	function getCellColor(x: number, y: number): string {
 		const node = state.grid[y]?.[x];
 		if (!node) return 'cell-empty';
-		
+
 		// Priority order for visual states
 		if (node.isStart) return 'cell-start';
-		if (node.isEnd) return 'cell-end'; 
+		if (node.isEnd) return 'cell-end';
 		if (node.isWall) return 'cell-wall';
 		if (node.isPath) return 'cell-path';
 		if (node.isCurrent) return 'cell-current';
 		if (node.isFrontier) return 'cell-frontier';
 		if (node.isVisited) return 'cell-visited';
-		
+
 		return 'cell-empty';
 	}
-	
+
 	// Handle grid cell interactions for pathfinding
 	let isMouseDown = false;
 	let isDraggingStart = false;
 	let isDraggingEnd = false;
-	
+
 	function handleCellMouseDown(x: number, y: number, event: MouseEvent) {
 		if (state.mode !== 'PATHFINDING' || state.isAnimating) return;
-		
+
 		event.preventDefault();
 		isMouseDown = true;
-		
+
 		const node = state.grid[y]?.[x];
 		if (!node) return;
-		
+
 		if (node.isStart) {
 			isDraggingStart = true;
 		} else if (node.isEnd) {
@@ -77,10 +77,10 @@ Responsive design with proper click handling and space utilization.
 			toggleWall(x, y);
 		}
 	}
-	
+
 	function handleCellMouseEnter(x: number, y: number) {
 		if (!isMouseDown || state.mode !== 'PATHFINDING' || state.isAnimating) return;
-		
+
 		if (isDraggingStart) {
 			setStartPoint(x, y);
 		} else if (isDraggingEnd) {
@@ -89,19 +89,19 @@ Responsive design with proper click handling and space utilization.
 			toggleWall(x, y);
 		}
 	}
-	
+
 	function handleMouseUp() {
 		isMouseDown = false;
 		isDraggingStart = false;
 		isDraggingEnd = false;
 	}
-	
+
 	function handleCellDoubleClick(x: number, y: number) {
 		if (state.mode !== 'PATHFINDING' || state.isAnimating) return;
-		
+
 		const node = state.grid[y]?.[x];
 		if (!node) return;
-		
+
 		// Double-click to set start point if none exists
 		if (!state.start && !node.isWall && !node.isEnd) {
 			setStartPoint(x, y);
@@ -151,7 +151,7 @@ Responsive design with proper click handling and space utilization.
 				{:else if state.mode === 'PATHFINDING'}
 					<!-- Pathfinding Visualization -->
 					<div class="pathfinding-container">
-						<div 
+						<div
 							class="pathfinding-grid"
 							style:grid-template-columns="repeat({state.gridSize.width}, 1fr)"
 							style:grid-template-rows="repeat({state.gridSize.height}, 1fr)"
@@ -163,7 +163,21 @@ Responsive design with proper click handling and space utilization.
 										onmousedown={(e) => handleCellMouseDown(x, y, e)}
 										onmouseenter={() => handleCellMouseEnter(x, y)}
 										ondblclick={() => handleCellDoubleClick(x, y)}
-										title="({x}, {y}) - {node.isStart ? 'Start' : node.isEnd ? 'End' : node.isWall ? 'Wall' : node.isPath ? 'Path' : node.isCurrent ? 'Current' : node.isFrontier ? 'Frontier' : node.isVisited ? 'Visited' : 'Empty'}"
+										title="({x}, {y}) - {node.isStart
+											? 'Start'
+											: node.isEnd
+												? 'End'
+												: node.isWall
+													? 'Wall'
+													: node.isPath
+														? 'Path'
+														: node.isCurrent
+															? 'Current'
+															: node.isFrontier
+																? 'Frontier'
+																: node.isVisited
+																	? 'Visited'
+																	: 'Empty'}"
 									></button>
 								{/each}
 							{/each}
@@ -176,12 +190,12 @@ Responsive design with proper click handling and space utilization.
 </div>
 
 <style>
-	/* Board container takes full available space */
+	/* Board container takes full available space with consistent sizing */
 	.board-container {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
-		min-height: 0;
+		min-height: 500px; /* Prevent layout shifts */
 		height: 100%;
 	}
 
@@ -233,7 +247,7 @@ Responsive design with proper click handling and space utilization.
 		position: relative;
 		min-height: 0;
 		/* Deep inset effect - NO rounded corners */
-		box-shadow: 
+		box-shadow:
 			inset 4px 4px 12px rgba(0, 0, 0, 0.7),
 			inset -2px -2px 8px rgba(255, 255, 255, 0.04),
 			inset 0 0 20px rgba(0, 0, 0, 0.5),
@@ -286,7 +300,7 @@ Responsive design with proper click handling and space utilization.
 		width: 100%;
 		min-height: 300px;
 	}
-	
+
 	.bars-wrapper {
 		display: flex;
 		align-items: end;
@@ -296,7 +310,7 @@ Responsive design with proper click handling and space utilization.
 		width: 100%;
 		max-width: 800px;
 	}
-	
+
 	.bar-container {
 		display: flex;
 		flex-direction: column;
@@ -306,7 +320,7 @@ Responsive design with proper click handling and space utilization.
 		max-width: 40px;
 		height: 100%;
 	}
-	
+
 	.bar {
 		width: 100%;
 		transition: all 0.3s ease;
@@ -331,7 +345,7 @@ Responsive design with proper click handling and space utilization.
 		border: 1px solid #10b981;
 		box-shadow: 0 0 4px rgba(16, 185, 129, 0.3);
 	}
-	
+
 	.bar-label {
 		margin-top: 0.25rem;
 		font-size: 0.75rem;
@@ -349,7 +363,7 @@ Responsive design with proper click handling and space utilization.
 		height: 100%;
 		padding: 0.5rem;
 	}
-	
+
 	.pathfinding-grid {
 		display: grid;
 		gap: 1px;
@@ -361,7 +375,7 @@ Responsive design with proper click handling and space utilization.
 		min-width: 300px;
 		min-height: 300px;
 	}
-	
+
 	.grid-cell {
 		border: none;
 		cursor: pointer;
@@ -374,13 +388,13 @@ Responsive design with proper click handling and space utilization.
 		margin: 0;
 		outline: none;
 	}
-	
+
 	.grid-cell:hover {
 		transform: scale(1.1);
 		z-index: 1;
 		position: relative;
 	}
-	
+
 	.grid-cell:active {
 		transform: scale(0.9);
 	}
@@ -454,16 +468,20 @@ Responsive design with proper click handling and space utilization.
 
 	/* Animations for better UX */
 	@keyframes frontier-pulse {
-		from { opacity: 0.6; }
-		to { opacity: 0.9; }
+		from {
+			opacity: 0.6;
+		}
+		to {
+			opacity: 0.9;
+		}
 	}
 
 	@keyframes current-pulse {
-		from { 
+		from {
 			transform: scale(1);
 			box-shadow: 0 0 6px rgba(254, 240, 138, 0.6);
 		}
-		to { 
+		to {
 			transform: scale(1.05);
 			box-shadow: 0 0 8px rgba(254, 240, 138, 0.8);
 		}
@@ -480,20 +498,20 @@ Responsive design with proper click handling and space utilization.
 		.sorting-container {
 			padding: 0.5rem;
 		}
-		
+
 		.bar-label {
 			font-size: 0.625rem;
 		}
-		
+
 		.pathfinding-container {
 			padding: 0.5rem;
 		}
-		
+
 		.grid-info {
 			flex-direction: column;
 			gap: var(--space-1);
 		}
-		
+
 		.pathfinding-grid {
 			min-width: 250px;
 			min-height: 250px;
@@ -504,16 +522,16 @@ Responsive design with proper click handling and space utilization.
 			min-height: 6px;
 		}
 	}
-	
+
 	@media (max-width: 480px) {
 		.bars-wrapper {
 			gap: 1px;
 		}
-		
+
 		.bar-container {
 			min-width: 6px;
 		}
-		
+
 		.bar-label {
 			display: none;
 		}
@@ -522,7 +540,7 @@ Responsive design with proper click handling and space utilization.
 			min-width: 4px;
 			min-height: 4px;
 		}
-		
+
 		.pathfinding-grid {
 			gap: 0.5px;
 			min-width: 200px;

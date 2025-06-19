@@ -164,11 +164,11 @@ Uses two-column layout similar to other games but adapted for cellular automaton
 			gap: var(--space-4);
 			min-height: auto;
 		}
-		
+
 		.sidebar-content {
 			gap: var(--space-3);
 		}
-		
+
 		.main-content {
 			gap: var(--space-3);
 		}

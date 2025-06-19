@@ -7,7 +7,13 @@ Controls animation flow, user interactions, and algorithm execution.
 */
 
 import { DSAEngine } from './engine';
-import type { DSAState, DSAMove, AlgorithmType, SortingAlgorithm, PathfindingAlgorithm } from './types';
+import type {
+	DSAState,
+	DSAMove,
+	AlgorithmType,
+	SortingAlgorithm,
+	PathfindingAlgorithm
+} from './types';
 
 // Create engine instance
 const engine = new DSAEngine();
@@ -24,7 +30,7 @@ let animationTimeoutId: number | null = null;
  */
 export function applyMove(move: DSAMove) {
 	const newState = engine.applyMove(dsaState, move);
-	
+
 	// Update state properties individually for proper reactivity
 	dsaState.array = newState.array;
 	dsaState.grid = newState.grid;
@@ -52,26 +58,26 @@ export function resetVisualization() {
 		clearTimeout(animationTimeoutId);
 		animationTimeoutId = null;
 	}
-	
+
 	const newState = engine.initialState();
-	
+
 	// Preserve current settings
 	newState.mode = dsaState.mode;
 	newState.algorithm = dsaState.algorithm;
 	newState.arraySize = dsaState.arraySize;
 	newState.animationSpeed = dsaState.animationSpeed;
 	newState.turboMode = dsaState.turboMode;
-	
+
 	// Generate appropriate data for current mode
 	if (newState.mode === 'SORTING') {
 		newState.array = engine.generateRandomArray(newState.arraySize, 10, 100);
 	} else {
-		// Create larger grid for pathfinding (similar to Game of Life)
+		// Use consistent grid size to prevent layout shifts
 		const gridSize = { width: 40, height: 25 };
 		newState.grid = engine.createEmptyGrid(gridSize.width, gridSize.height);
 		newState.gridSize = gridSize;
 	}
-	
+
 	// Update all state properties for reactivity
 	dsaState.mode = newState.mode;
 	dsaState.algorithm = newState.algorithm;
@@ -104,7 +110,7 @@ export function resetVisualization() {
  */
 export function setAlgorithm(algorithm: SortingAlgorithm | PathfindingAlgorithm) {
 	const newState = engine.setAlgorithm(dsaState, algorithm);
-	
+
 	dsaState.algorithm = newState.algorithm;
 	dsaState.completed = newState.completed;
 	dsaState.isAnimating = newState.isAnimating;
@@ -120,9 +126,9 @@ export function setMode(mode: AlgorithmType) {
 		clearTimeout(animationTimeoutId);
 		animationTimeoutId = null;
 	}
-	
+
 	const newState = engine.setMode(dsaState, mode);
-	
+
 	// Update all relevant state properties
 	dsaState.mode = newState.mode;
 	dsaState.algorithm = newState.algorithm;
@@ -150,9 +156,9 @@ export function setMode(mode: AlgorithmType) {
  */
 export function setArraySize(size: number) {
 	if (dsaState.isAnimating) return;
-	
+
 	dsaState.arraySize = size;
-	
+
 	// Regenerate array with new size
 	dsaState.array = engine.generateRandomArray(size, 10, 100);
 	dsaState.sorted = [];
@@ -170,14 +176,14 @@ export function setArraySize(size: number) {
  */
 export function shuffleArray() {
 	if (dsaState.isAnimating) return;
-	
+
 	if (dsaState.mode === 'SORTING') {
 		// Shuffle the array for sorting algorithms
 		for (let i = dsaState.array.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[dsaState.array[i], dsaState.array[j]] = [dsaState.array[j], dsaState.array[i]];
 		}
-		
+
 		// Reset sorting state
 		dsaState.sorted = [];
 		dsaState.comparing = [];
@@ -189,11 +195,11 @@ export function shuffleArray() {
 	} else if (dsaState.mode === 'PATHFINDING') {
 		// Generate random walls (approximately 25% of empty cells)
 		const wallProbability = 0.25;
-		
+
 		for (let y = 0; y < dsaState.gridSize.height; y++) {
 			for (let x = 0; x < dsaState.gridSize.width; x++) {
 				const node = dsaState.grid[y][x];
-				
+
 				// Don't place walls on start or end points
 				if (node && !node.isStart && !node.isEnd) {
 					node.isWall = Math.random() < wallProbability;
@@ -205,7 +211,7 @@ export function shuffleArray() {
 				}
 			}
 		}
-		
+
 		// Reset pathfinding statistics
 		dsaState.visitedNodes = [];
 		dsaState.path = [];
@@ -236,13 +242,13 @@ export function setTurboMode(enabled: boolean) {
  */
 export function skipToEnd() {
 	if (!dsaState.isAnimating && dsaState.totalSteps === 0) return;
-	
+
 	// Stop current animation
 	if (animationTimeoutId) {
 		clearTimeout(animationTimeoutId);
 		animationTimeoutId = null;
 	}
-	
+
 	// Apply all remaining steps instantly
 	while (dsaState.currentStep < dsaState.totalSteps) {
 		const step = engine.getStepAt(dsaState.currentStep);
@@ -257,7 +263,7 @@ export function skipToEnd() {
 		}
 		dsaState.currentStep++;
 	}
-	
+
 	dsaState.isAnimating = false;
 	dsaState.completed = true;
 }
@@ -267,9 +273,9 @@ export function skipToEnd() {
  */
 export function startAnimation() {
 	if (dsaState.isAnimating) return;
-	
+
 	const preparedState = engine.prepareAlgorithm(dsaState);
-	
+
 	// Update state with prepared animation data
 	dsaState.currentStep = preparedState.currentStep;
 	dsaState.totalSteps = preparedState.totalSteps;
@@ -283,8 +289,8 @@ export function startAnimation() {
 	dsaState.sorted = preparedState.sorted;
 	dsaState.visitedNodes = preparedState.visitedNodes;
 	dsaState.path = preparedState.path;
-	
-	if (dsaState.totalSteps > 0) {
+
+	if (dsaState.totalSteps > 0 || dsaState.totalSteps === -1) {
 		runNextStep();
 	} else {
 		dsaState.isAnimating = false;
@@ -316,25 +322,31 @@ export function resumeAnimation() {
  * Steps forward one animation step
  */
 export function stepForward() {
-	if (dsaState.completed || dsaState.currentStep >= dsaState.totalSteps) return;
-	
+	if (
+		dsaState.completed ||
+		(dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps)
+	)
+		return;
+
 	const step = engine.getStepAt(dsaState.currentStep);
+
+
 	if (step) {
 		// Apply step state updates
 		if (step.state) {
 			applyStepState(step.state);
 		}
-		
+
 		// Apply the move (only for UI effects, not data changes)
 		if (step.move.type === 'COMPARE' || step.move.type === 'HIGHLIGHT') {
 			applyMove(step.move);
 		}
-		
+
 		// Progress to next step
 		dsaState.currentStep++;
-		
+
 		// Check completion
-		if (dsaState.currentStep >= dsaState.totalSteps) {
+		if (dsaState.totalSteps > 0 && dsaState.currentStep >= dsaState.totalSteps) {
 			dsaState.completed = true;
 			dsaState.isAnimating = false;
 		}
@@ -346,13 +358,13 @@ export function stepForward() {
  */
 export function stepBackward() {
 	if (dsaState.currentStep <= 0) return;
-	
+
 	dsaState.currentStep--;
-	
+
 	// Reapply all steps up to current step
 	const resetState = engine.prepareAlgorithm(dsaState);
 	applyStepState(resetState);
-	
+
 	for (let i = 0; i < dsaState.currentStep; i++) {
 		const step = engine.getStepAt(i);
 		if (step) {
@@ -371,22 +383,26 @@ export function stepBackward() {
  * Runs the next animation step
  */
 function runNextStep() {
-	if (!dsaState.isAnimating || dsaState.completed || dsaState.currentStep >= dsaState.totalSteps) {
+	if (!dsaState.isAnimating || dsaState.completed) {
 		dsaState.isAnimating = false;
-		if (dsaState.currentStep >= dsaState.totalSteps) {
-			dsaState.completed = true;
-		}
 		return;
 	}
-	
+
+	if (dsaState.currentStep >= dsaState.totalSteps) {
+		dsaState.isAnimating = false;
+		dsaState.completed = true;
+		return;
+	}
+
 	const step = engine.getStepAt(dsaState.currentStep);
-	
+
+
 	if (step) {
 		// Apply step state updates (contains the corrected array/grid state)
 		if (step.state) {
 			applyStepState(step.state);
 		}
-		
+
 		// Apply the move for side effects (stats, comparisons, etc.) but not for data changes
 		if (step.move.type !== 'STEP_COMPLETE') {
 			// Only apply moves that don't modify the main data structures
@@ -396,21 +412,27 @@ function runNextStep() {
 			} else {
 				// For SWAP, SET_VALUE, etc., only update counters and UI state
 				if (step.move.type === 'SWAP') {
-					dsaState.swaps = (step.state.swaps !== undefined) ? step.state.swaps : dsaState.swaps + 1;
+					dsaState.swaps = step.state.swaps !== undefined ? step.state.swaps : dsaState.swaps + 1;
 					dsaState.comparing = [];
 				} else if (step.move.type === 'VISIT_NODE') {
-					dsaState.nodesVisited = (step.state.nodesVisited !== undefined) ? step.state.nodesVisited : dsaState.nodesVisited + 1;
+					dsaState.nodesVisited =
+						step.state.nodesVisited !== undefined
+							? step.state.nodesVisited
+							: dsaState.nodesVisited + 1;
 				}
 			}
 		}
-		
+
 		// Progress to next step
 		dsaState.currentStep++;
-		
-		// Handle instant mode (0ms delay)
+
+		// Handle instant mode (0ms delay) with performance safeguards
 		if (dsaState.animationSpeed === 0) {
-			// Run all steps instantly
-			while (dsaState.currentStep < dsaState.totalSteps) {
+			// Run steps in batches to prevent browser hanging
+			const BATCH_SIZE = 50;
+			let batchCount = 0;
+
+			while (dsaState.currentStep < dsaState.totalSteps && batchCount < BATCH_SIZE) {
 				const nextStep = engine.getStepAt(dsaState.currentStep);
 				if (nextStep) {
 					if (nextStep.state) {
@@ -423,16 +445,25 @@ function runNextStep() {
 						}
 					}
 					dsaState.currentStep++;
+					batchCount++;
 				} else {
 					break;
 				}
 			}
-			dsaState.completed = true;
-			dsaState.isAnimating = false;
-			dsaState.comparing = [];
+
+			if (dsaState.currentStep >= dsaState.totalSteps) {
+				dsaState.completed = true;
+				dsaState.isAnimating = false;
+				dsaState.comparing = [];
+			} else {
+				// Continue with next batch after yielding to browser
+				animationTimeoutId = setTimeout(() => {
+					runNextStep();
+				}, 0);
+			}
 			return;
 		}
-		
+
 		// Check completion
 		if (dsaState.currentStep >= dsaState.totalSteps) {
 			dsaState.completed = true;
@@ -444,7 +475,10 @@ function runNextStep() {
 			if (dsaState.turboMode && step && !step.isKeyStep) {
 				delay = Math.min(delay / 4, 10); // Much faster for non-key steps
 			}
-			
+
+			// Minimum delay to prevent browser hangs
+			delay = Math.max(delay, 1);
+
 			// Schedule next step
 			animationTimeoutId = setTimeout(() => {
 				runNextStep();
@@ -482,14 +516,14 @@ export function getValidMoves(): DSAMove[] {
 }
 
 export function getProgressPercentage(): number {
-	if (dsaState.totalSteps === 0) return 0;
+	if (dsaState.totalSteps <= 0) return 0;
 	return Math.round((dsaState.currentStep / dsaState.totalSteps) * 100);
 }
 
 // Grid utilities for pathfinding
 export function toggleWall(x: number, y: number) {
 	if (dsaState.mode !== 'PATHFINDING' || dsaState.isAnimating) return;
-	
+
 	const node = dsaState.grid[y]?.[x];
 	if (node && !node.isStart && !node.isEnd) {
 		node.isWall = !node.isWall;
@@ -500,13 +534,13 @@ export function toggleWall(x: number, y: number) {
 
 export function setStartPoint(x: number, y: number) {
 	if (dsaState.mode !== 'PATHFINDING' || dsaState.isAnimating) return;
-	
+
 	// Clear previous start
 	if (dsaState.start) {
 		const [prevX, prevY] = dsaState.start;
 		dsaState.grid[prevY][prevX].isStart = false;
 	}
-	
+
 	// Set new start
 	const node = dsaState.grid[y]?.[x];
 	if (node && !node.isWall && !node.isEnd) {
@@ -520,13 +554,13 @@ export function setStartPoint(x: number, y: number) {
 
 export function setEndPoint(x: number, y: number) {
 	if (dsaState.mode !== 'PATHFINDING' || dsaState.isAnimating) return;
-	
+
 	// Clear previous end
 	if (dsaState.end) {
 		const [prevX, prevY] = dsaState.end;
 		dsaState.grid[prevY][prevX].isEnd = false;
 	}
-	
+
 	// Set new end
 	const node = dsaState.grid[y]?.[x];
 	if (node && !node.isWall && !node.isStart) {
@@ -544,7 +578,7 @@ export function setEndPoint(x: number, y: number) {
  */
 export function clearWalls() {
 	if (dsaState.mode !== 'PATHFINDING' || dsaState.isAnimating) return;
-	
+
 	// Clear walls from all nodes
 	for (let y = 0; y < dsaState.gridSize.height; y++) {
 		for (let x = 0; x < dsaState.gridSize.width; x++) {
@@ -559,7 +593,7 @@ export function clearWalls() {
 			}
 		}
 	}
-	
+
 	// Reset pathfinding statistics
 	dsaState.visitedNodes = [];
 	dsaState.path = [];

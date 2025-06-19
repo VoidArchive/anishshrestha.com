@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils/blog';
+	import LiveDemoCallout from '$lib/components/LiveDemoCallout.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -37,9 +38,29 @@
 			</div>
 		</header>
 
+		<!-- Live demo callout if this post has a corresponding lab -->
+		{#if post.relatedLab}
+			<LiveDemoCallout
+				labName={post.relatedLab.name}
+				labUrl={post.relatedLab.url}
+				labDescription={post.relatedLab.description}
+				variant="default"
+			/>
+		{/if}
+
 		<div class="post-content">
 			{@render post.content()}
 		</div>
+
+		<!-- Additional live demo callout at the bottom for better conversion -->
+		{#if post.relatedLab}
+			<LiveDemoCallout
+				labName={post.relatedLab.name}
+				labUrl={post.relatedLab.url}
+				labDescription={post.relatedLab.description}
+				variant="minimal"
+			/>
+		{/if}
 
 		<footer class="post-footer">
 			<nav class="post-nav">

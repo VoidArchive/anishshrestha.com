@@ -271,7 +271,7 @@ Responsive design adapts cell size for mobile devices.
 			min-width: 4px;
 			min-height: 4px;
 		}
-		
+
 		.game-grid {
 			gap: 0.5px;
 			min-width: 200px;
