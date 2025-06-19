@@ -182,6 +182,7 @@ Responsive design with proper click handling and space utilization.
 							class="pathfinding-grid"
 							style:grid-template-columns="repeat({state.gridSize.width}, 1fr)"
 							style:grid-template-rows="repeat({state.gridSize.height}, 1fr)"
+							style="aspect-ratio: {state.gridSize.width} / {state.gridSize.height};"
 						>
 							{#each state.grid as row, y}
 								{#each row as node, x}
@@ -388,7 +389,10 @@ Responsive design with proper click handling and space utilization.
 		justify-content: center;
 		width: 100%;
 		height: 100%;
-		padding: 0.5rem;
+		padding: 0.25rem; /* Reduced padding for more space */
+		/* Prevent layout shift by stabilizing container */
+		contain: layout;
+		flex: 1; /* Ensure it takes full available space */
 	}
 
 	.pathfinding-grid {
@@ -400,95 +404,105 @@ Responsive design with proper click handling and space utilization.
 		width: 100%;
 		height: 100%;
 		min-width: 300px;
-		min-height: 300px;
+		min-height: 300px; /* Much larger minimum */
+		/* Force stable grid sizing */
+		contain: layout size style;
 	}
 
 	.grid-cell {
 		border: none;
 		cursor: pointer;
 		transition: all 0.15s ease;
-		min-width: 0;
-		min-height: 0;
+		min-width: 8px; /* Larger minimum for better visibility */
+		min-height: 8px;
 		aspect-ratio: 1;
 		border-radius: 0; /* No rounded corners */
 		padding: 0;
 		margin: 0;
 		outline: none;
+		/* Force stable cell sizing */
+		contain: layout style;
+		will-change: background, opacity;
 	}
 
 	.grid-cell:hover {
-		transform: scale(1.1);
+		background-color: rgba(255, 255, 255, 0.1);
 		z-index: 1;
 		position: relative;
 	}
 
 	.grid-cell:active {
-		transform: scale(0.9);
+		opacity: 0.8;
 	}
 
-	/* Grid cell color classes - matching Game of Life transparency */
+	/* Grid cell color classes - consistent styling to prevent layout shifts */
 	.cell-empty {
 		background: var(--color-bg-secondary);
-		opacity: 0.8;
+		opacity: 1;
+		border: 1px solid transparent; /* Consistent border space */
 	}
 
 	.cell-empty:hover {
 		background: #fef2f2;
 		opacity: 1;
+		border: 1px solid transparent;
 	}
 
 	.cell-wall {
 		background: var(--color-text-muted);
 		opacity: 1;
+		border: 1px solid transparent; /* Consistent border space */
 	}
 
 	.cell-wall:hover {
 		background: var(--color-text-primary);
+		border: 1px solid transparent;
 	}
 
 	.cell-start {
 		background: #10b981; /* Green */
-		box-shadow: 0 0 4px rgba(16, 185, 129, 0.3);
+		border: 1px solid transparent; /* Consistent border space */
 		opacity: 1;
 	}
 
 	.cell-start:hover {
 		background: #059669;
-		box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+		border: 1px solid transparent;
 	}
 
 	.cell-end {
 		background: var(--color-primary); /* Red */
-		box-shadow: 0 0 4px rgba(201, 42, 42, 0.3);
+		border: 1px solid transparent; /* Consistent border space */
 		opacity: 1;
 	}
 
 	.cell-end:hover {
 		background: #b91c1c;
-		box-shadow: 0 0 6px rgba(201, 42, 42, 0.5);
+		border: 1px solid transparent;
 	}
 
 	.cell-path {
 		background: #fbbf24; /* Yellow */
-		box-shadow: 0 0 4px rgba(251, 191, 36, 0.3);
+		border: 1px solid transparent; /* Consistent border space */
 		opacity: 1;
 	}
 
 	.cell-visited {
 		background: #bfdbfe; /* Light blue */
-		opacity: 0.9;
+		border: 1px solid transparent; /* Consistent border space */
+		opacity: 1;
 	}
 
 	.cell-frontier {
 		background: #c7d2fe; /* Lighter blue for frontier */
-		box-shadow: 0 0 2px rgba(99, 102, 241, 0.3);
-		opacity: 0.8;
+		border: 1px solid transparent; /* Consistent border space */
+		opacity: 1;
 		animation: frontier-pulse 1s ease-in-out infinite alternate;
 	}
 
 	.cell-current {
 		background: #fef08a; /* Bright yellow for current exploring */
-		box-shadow: 0 0 6px rgba(254, 240, 138, 0.6);
+		border: 1px solid transparent; /* Consistent border space */
 		opacity: 1;
 		animation: current-pulse 0.8s ease-in-out infinite alternate;
 	}
@@ -496,78 +510,66 @@ Responsive design with proper click handling and space utilization.
 	/* Enhanced current state with exploring animation */
 	.cell-current.exploring {
 		background: linear-gradient(45deg, #fef08a, #f59e0b);
-		box-shadow: 
-			0 0 8px rgba(254, 240, 138, 0.8),
-			0 0 16px rgba(245, 158, 11, 0.4);
+		border: 1px solid transparent; /* Consistent border space */
 		animation: exploring-pulse 1s ease-in-out infinite;
 	}
 
 	/* Enhanced frontier with pulsing animation */
 	.cell-frontier.pulsing {
 		background: linear-gradient(135deg, #c7d2fe, #818cf8);
+		border: 1px solid transparent; /* Consistent border space */
 		animation: frontier-wave 1.5s ease-in-out infinite;
 	}
 
-	/* Animations for better UX */
+	/* Animations for better UX - layout-shift free */
 	@keyframes frontier-pulse {
 		from {
-			opacity: 0.6;
+			opacity: 0.8;
 		}
 		to {
-			opacity: 0.9;
+			opacity: 1;
 		}
 	}
 
 	@keyframes current-pulse {
 		from {
-			transform: scale(1);
-			box-shadow: 0 0 6px rgba(254, 240, 138, 0.6);
+			opacity: 0.9;
 		}
 		to {
-			transform: scale(1.05);
-			box-shadow: 0 0 8px rgba(254, 240, 138, 0.8);
+			opacity: 1;
 		}
 	}
 
-	/* Enhanced exploring animation */
+	/* Enhanced exploring animation - only opacity changes */
 	@keyframes exploring-pulse {
 		0% {
-			transform: scale(1);
-			box-shadow: 
-				0 0 8px rgba(254, 240, 138, 0.8),
-				0 0 16px rgba(245, 158, 11, 0.4);
+			opacity: 0.9;
 		}
 		50% {
-			transform: scale(1.15);
-			box-shadow: 
-				0 0 12px rgba(254, 240, 138, 1),
-				0 0 24px rgba(245, 158, 11, 0.6);
+			opacity: 1;
 		}
 		100% {
-			transform: scale(1);
-			box-shadow: 
-				0 0 8px rgba(254, 240, 138, 0.8),
-				0 0 16px rgba(245, 158, 11, 0.4);
+			opacity: 0.9;
 		}
 	}
 
-	/* Enhanced frontier wave animation */
+	/* Enhanced frontier wave animation - layout-shift free */
 	@keyframes frontier-wave {
 		0% {
 			background: linear-gradient(135deg, #c7d2fe, #818cf8);
-			transform: scale(1);
+			opacity: 0.8;
 		}
 		50% {
 			background: linear-gradient(135deg, #818cf8, #6366f1);
-			transform: scale(1.08);
+			opacity: 1;
 		}
 		100% {
 			background: linear-gradient(135deg, #c7d2fe, #818cf8);
-			transform: scale(1);
+			opacity: 0.8;
 		}
 	}
 
-	/* Wave effect for visited nodes */
+	/* Wave effect for visited nodes - only affects opacity and background */
 	.wave-effect {
 		animation: wave-ripple 0.6s ease-out;
 	}
@@ -584,32 +586,29 @@ Responsive design with proper click handling and space utilization.
 	/* A* f-score based coloring */
 	.fscore-0 { 
 		background: linear-gradient(45deg, #dbeafe, #e0e7ff) !important; 
-		border: 1px solid #c7d2fe;
+		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
 	.fscore-1 { 
 		background: linear-gradient(45deg, #bfdbfe, #c7d2fe) !important; 
-		border: 1px solid #a5b4fc;
+		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
 	.fscore-2 { 
 		background: linear-gradient(45deg, #93c5fd, #a5b4fc) !important; 
-		border: 1px solid #818cf8;
+		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
 	.fscore-3 { 
 		background: linear-gradient(45deg, #60a5fa, #818cf8) !important; 
-		border: 1px solid #6366f1;
+		border: 1px solid transparent !important; /* Consistent with other cells */
 	}
 
 	@keyframes wave-ripple {
 		0% {
-			transform: scale(0.8);
 			opacity: 0.6;
 		}
 		50% {
-			transform: scale(1.1);
 			opacity: 1;
 		}
 		100% {
-			transform: scale(1);
 			opacity: 0.9;
 		}
 	}
@@ -631,7 +630,7 @@ Responsive design with proper click handling and space utilization.
 		}
 
 		.pathfinding-container {
-			padding: 0.5rem;
+			padding: 0.25rem;
 		}
 
 		.grid-info {
@@ -640,13 +639,13 @@ Responsive design with proper click handling and space utilization.
 		}
 
 		.pathfinding-grid {
-			min-width: 250px;
-			min-height: 250px;
+			min-width: 300px; /* Increased minimum */
+			min-height: 350px; /* Much larger for mobile */
 		}
 
 		.grid-cell {
-			min-width: 6px;
-			min-height: 6px;
+			min-width: 8px; /* Larger for better touch targets */
+			min-height: 8px;
 		}
 	}
 
@@ -664,14 +663,14 @@ Responsive design with proper click handling and space utilization.
 		}
 
 		.grid-cell {
-			min-width: 4px;
-			min-height: 4px;
+			min-width: 6px; /* Larger minimum for small screens */
+			min-height: 6px;
 		}
 
 		.pathfinding-grid {
 			gap: 0.5px;
-			min-width: 200px;
-			min-height: 200px;
+			min-width: 280px; /* Increased minimum */
+			min-height: 320px; /* Much larger */
 		}
 	}
 </style>

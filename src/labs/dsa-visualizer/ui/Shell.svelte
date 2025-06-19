@@ -556,6 +556,12 @@ Features consolidated controls in sidebar and main content area with statistics.
 	}
 
 	/* Mobile adjustments */
+	@media (max-width: 1024px) {
+		.dsa-layout {
+			grid-template-columns: 1fr; /* Single column on tablets */
+		}
+	}
+
 	@media (max-width: 768px) {
 		.dsa-layout {
 			gap: var(--space-4);
@@ -571,12 +577,15 @@ Features consolidated controls in sidebar and main content area with statistics.
 		}
 
 		.stats-grid {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr); /* 2 columns on mobile */
 			gap: var(--space-2);
 		}
 
 		.stat-card {
 			padding: var(--space-2);
+			flex-direction: column; /* Stack icon and content */
+			text-align: center;
+			gap: var(--space-1);
 		}
 
 		.stat-value {
@@ -584,18 +593,45 @@ Features consolidated controls in sidebar and main content area with statistics.
 		}
 
 		.algo-item {
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-1);
 		}
 
-		.algo-value {
-			font-size: 1rem;
+		.algo-value,
+		.complexity-value {
+			font-size: 0.875rem;
+		}
+
+		.step-description-container {
+			min-height: auto; /* Allow natural height on mobile */
 		}
 
 		.step-description {
-			text-align: right;
-			max-width: 60%;
+			font-size: 0.875rem;
+			line-height: 1.4;
+		}
+
+		/* Better board sizing on mobile */
+		.board-section {
+			min-height: 400px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.stats-grid {
+			grid-template-columns: 1fr; /* Single column on small mobile */
+		}
+
+		.stat-card {
+			flex-direction: row; /* Back to row for very small screens */
+			text-align: left;
+		}
+
+		.progress-header {
+			flex-direction: column;
+			gap: var(--space-1);
+			text-align: center;
 		}
 	}
 </style>

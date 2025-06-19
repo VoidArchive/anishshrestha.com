@@ -159,6 +159,12 @@ Uses two-column layout similar to other games but adapted for cellular automaton
 	}
 
 	/* Mobile adjustments */
+	@media (max-width: 1024px) {
+		.game-layout {
+			grid-template-columns: 1fr; /* Single column on tablets and below */
+		}
+	}
+
 	@media (max-width: 768px) {
 		.game-layout {
 			gap: var(--space-4);
@@ -171,6 +177,29 @@ Uses two-column layout similar to other games but adapted for cellular automaton
 
 		.main-content {
 			gap: var(--space-3);
+		}
+
+		/* Better board sizing on mobile */
+		.board-section {
+			min-height: 400px;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.game-layout {
+			gap: var(--space-3);
+		}
+
+		.sidebar-content {
+			gap: var(--space-2);
+		}
+
+		.main-content {
+			gap: var(--space-2);
+		}
+
+		.board-section {
+			min-height: 350px;
 		}
 	}
 </style>

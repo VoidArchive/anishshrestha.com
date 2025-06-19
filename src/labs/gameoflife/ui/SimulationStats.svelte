@@ -82,15 +82,13 @@ generation count, birth/death rates, and other relevant metrics.
 			</span>
 		</div>
 
-		<!-- Speed Info -->
-		{#if stats.isRunning}
-			<div class="speed-info">
-				<Activity size={16} />
-				<span class="speed-text">
-					{stats.speed}ms per generation
-				</span>
-			</div>
-		{/if}
+		<!-- Speed Info - Always reserve space to prevent layout shift -->
+		<div class="speed-info" class:visible={stats.isRunning}>
+			<Activity size={16} />
+			<span class="speed-text">
+				{stats.speed}ms per generation
+			</span>
+		</div>
 
 		<!-- Wrap Mode Info -->
 		{#if stats.wrapEdges}
@@ -204,7 +202,6 @@ generation count, birth/death rates, and other relevant metrics.
 		font-family: var(--font-family-mono);
 		font-size: 0.875rem;
 		color: var(--color-text);
-		font-weight: 500;
 	}
 
 	.speed-info {
@@ -215,12 +212,20 @@ generation count, birth/death rates, and other relevant metrics.
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
 		border-radius: 4px;
-		color: var(--color-text-muted);
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.3s ease, visibility 0.3s ease;
+	}
+
+	.speed-info.visible {
+		opacity: 1;
+		visibility: visible;
 	}
 
 	.speed-text {
 		font-family: var(--font-family-mono);
-		font-size: 0.75rem;
+		font-size: 0.875rem;
+		color: var(--color-text-muted);
 	}
 
 	.wrap-info {

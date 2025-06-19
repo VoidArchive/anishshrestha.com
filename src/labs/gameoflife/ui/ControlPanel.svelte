@@ -261,10 +261,43 @@ Uses consistent button styling and clear visual feedback for current state.
 	@media (max-width: 768px) {
 		.button-row {
 			flex-direction: column;
+			gap: var(--space-2) !important;
 		}
 
 		.control-btn {
+			width: 100%;
 			justify-content: center;
+		}
+
+		.control-group {
+			gap: var(--space-3);
+		}
+
+		.speed-select {
+			font-size: 0.875rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.control-panel {
+			gap: var(--space-2);
+		}
+
+		.control-btn {
+			padding: var(--space-3) var(--space-2);
+			font-size: 0.8rem;
+		}
+
+		.control-group-title {
+			font-size: 0.8rem;
+		}
+
+		.checkbox-label {
+			font-size: 0.8rem;
+		}
+
+		.checkbox-text {
+			font-size: 0.8rem;
 		}
 	}
 </style>

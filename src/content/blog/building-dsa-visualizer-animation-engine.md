@@ -433,6 +433,8 @@ This ensures the visualization remains readable across different array sizes and
 
 ## Educational Design Decisions
 
+> **Fun Developer Fact**: All those statistics you see in the UI—comparisons, swaps, steps, operation counts—were originally `console.log()` debug statements! I had so many debugging variables scattered throughout my code to track what was happening during algorithm execution that instead of deleting them, I just turned them into a proper stats card UI. Sometimes the best features come from refusing to clean up your debugging mess! 
+
 ### Algorithm Complexity Display
 
 I added real-time complexity analysis to reinforce theoretical concepts:
