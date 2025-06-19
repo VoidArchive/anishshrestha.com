@@ -16,7 +16,7 @@ export async function GET() {
 		{ url: '', priority: '1.0', changefreq: 'weekly' },
 		{ url: '/projects', priority: '0.9', changefreq: 'monthly' },
 		{ url: '/blog', priority: '0.8', changefreq: 'weekly' },
-		{ url: '/games', priority: '0.6', changefreq: 'monthly' }
+		{ url: '/labs', priority: '0.6', changefreq: 'monthly' }
 	];
 
 	const blogPosts: SitemapPage[] = posts.map((post: BlogPost) => ({

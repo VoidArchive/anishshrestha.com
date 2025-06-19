@@ -7,7 +7,7 @@
 	export let demo: string | null = null;
 </script>
 
-<section class="section-card">
+<section class="section-card" style="margin-bottom: 0;">
 	<h2 class="section-title flex items-center gap-2">
 		<FolderGit size={20} class="inline" />
 		{title}

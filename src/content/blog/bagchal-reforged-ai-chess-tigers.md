@@ -13,26 +13,30 @@ tags: ['ai', 'game-dev', 'sveltekit', 'minimax', 'typescript']
 
 Bagchal is a traditional Nepali board game played on a 5×5 grid with 25 intersection points connected by orthogonal and diagonal lines. The game features two distinct phases and asymmetric gameplay between two players: one controlling four tigers and another controlling twenty goats. During the placement phase, the tiger player begins with four tigers positioned at the four corners of the board, while the goat player places their twenty goats one by one on any empty intersection. Tigers can move to adjacent intersections during this phase, and critically, they can capture goats by jumping over them to an empty adjacent space—similar to checkers but in any direction along the connecting lines.
 
-Once all twenty goats are placed, the game transitions to the movement phase where both tigers and goats can move to adjacent intersections along the board's lines. Tigers continue their ability to capture goats through jumping, while goats cannot capture anything but can block tiger movement through strategic positioning. The victory conditions are asymmetric: tigers win by capturing five goats total, while goats win by immobilizing all four tigers simultaneously—trapping them so none can make a legal move. This creates a fundamental tension where tigers must balance aggressive capturing with maintaining mobility, while goats must coordinate to create strategic blockades while minimizing losses during the vulnerable placement phase. 
-
-
+Once all twenty goats are placed, the game transitions to the movement phase where both tigers and goats can move to adjacent intersections along the board's lines. Tigers continue their ability to capture goats through jumping, while goats cannot capture anything but can block tiger movement through strategic positioning. The victory conditions are asymmetric: tigers win by capturing five goats total, while goats win by immobilizing all four tigers simultaneously—trapping them so none can make a legal move. This creates a fundamental tension where tigers must balance aggressive capturing with maintaining mobility, while goats must coordinate to create strategic blockades while minimizing losses during the vulnerable placement phase.
 
 ## The First Attempt: When Perfect Becomes Boring
 
 My first AI was mathematically beautiful and absolutely terrible to play against. I implemented a standard minimax algorithm with alpha-beta pruning—the kind of thing that looks impressive in computer science papers:
 
 ```typescript
-function minimax(state: GameState, depth: number, alpha: number, beta: number, maximizing: boolean): number {
-    if (depth === 0 || isTerminal(state)) {
-        return evaluate(state);
-    }
-    // ... the usual minimax dance
+function minimax(
+	state: GameState,
+	depth: number,
+	alpha: number,
+	beta: number,
+	maximizing: boolean
+): number {
+	if (depth === 0 || isTerminal(state)) {
+		return evaluate(state);
+	}
+	// ... the usual minimax dance
 }
 ```
 
-At depth 16, it was unbeatable. At depth 12, it was still crushing me every time. The problem wasn't that the AI was bad, it was that it was *too good*.
+At depth 16, it was unbeatable. At depth 12, it was still crushing me every time. The problem wasn't that the AI was bad, it was that it was _too good_.
 
-Analysis revealed that perfect play in Bagchal converges to a draw. Both sides possess optimal strategies that, when executed flawlessly, result in stalemate. Multiple attempts to implement an unbeatable AI consistently resulted in drawn games. Unless utilizing dedicated chess engine optimizations with extensive opening books and endgame tables, the game reaches theoretical completion at relatively shallow search depths. However, for practical gameplay, "good enough" AI performance proves optimal for user engagement. 
+Analysis revealed that perfect play in Bagchal converges to a draw. Both sides possess optimal strategies that, when executed flawlessly, result in stalemate. Multiple attempts to implement an unbeatable AI consistently resulted in drawn games. Unless utilizing dedicated chess engine optimizations with extensive opening books and endgame tables, the game reaches theoretical completion at relatively shallow search depths. However, for practical gameplay, "good enough" AI performance proves optimal for user engagement.
 
 ## Evaluation Function Design
 
@@ -65,7 +69,7 @@ Implementation of timeout and depth limits resolved the issue:
 ```typescript
 // Failsafe: Prevent infinite loops with hard limits
 if (searchDepth > maxDepth || timeElapsed > maxTime) {
-    return bestMoveFound || validMoves[0];
+	return bestMoveFound || validMoves[0];
 }
 ```
 
@@ -81,13 +85,13 @@ Goat evaluation focuses on strategic defensive patterns: mutual support networks
 
 ```typescript
 if (state.phase === 'PLACEMENT') {
-    // Placement phase vulnerability assessment
-    if (isImmediatelyCaptureable(position)) {
-        return -50000; // Critical positioning penalty
-    }
+	// Placement phase vulnerability assessment
+	if (isImmediatelyCaptureable(position)) {
+		return -50000; // Critical positioning penalty
+	}
 } else {
-    // Movement phase strategic evaluation
-    score += evaluateMovementDynamics(state);
+	// Movement phase strategic evaluation
+	score += evaluateMovementDynamics(state);
 }
 ```
 
@@ -117,4 +121,4 @@ TWithout utilizing chess engine-level optimizations (opening databases, extensiv
 
 ---
 
-*The Bagchal AI implementation is available at **[/games/bagchal](/games/bagchal)** for testing and gameplay.
+\*The Bagchal AI implementation is available at **[/labs/bagchal](/labs/bagchal)** for testing and gameplay.

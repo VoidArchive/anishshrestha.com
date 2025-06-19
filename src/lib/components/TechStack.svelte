@@ -4,7 +4,7 @@
 
 <section class="section-card">
 	<h2 class="section-title flex items-center gap-2">
-		<Code size={20} class="inline text-primary" /> Tech Stack
+		<Code size={20} class="text-primary inline" /> Tech Stack
 	</h2>
 
 	<div class="space-y-4">

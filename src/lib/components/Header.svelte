@@ -21,8 +21,8 @@
 
 			<!-- Desktop Navigation -->
 			<nav class="hidden items-center gap-2 md:flex">
-				<a href="/games" class="nav-link {page.url.pathname.startsWith('/games') ? 'active' : ''}"
-					>Games</a
+				<a href="/labs" class="nav-link {page.url.pathname.startsWith('/labs') ? 'active' : ''}"
+					>Labs</a
 				>
 				<span class="text-text-muted mx-1">/</span>
 				<a href="/blog" class="nav-link {page.url.pathname.startsWith('/blog') ? 'active' : ''}"
@@ -78,11 +78,11 @@
 		<nav class="mobile-nav {isMenuOpen ? 'open' : ''} md:hidden">
 			<div class="mobile-nav-content">
 				<a
-					href="/games"
-					class="btn {page.url.pathname.startsWith('/games') ? 'active' : ''}"
+					href="/labs"
+					class="btn {page.url.pathname.startsWith('/labs') ? 'active' : ''}"
 					on:click={closeMenu}
 				>
-					Games
+					Labs
 				</a>
 				<a
 					href="/blog"

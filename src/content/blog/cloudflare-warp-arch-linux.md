@@ -50,6 +50,7 @@ warp-cli registration new
 ```
 
 Registration process execution:
+
 - Generates unique device identifier and cryptographic key pair
 - Establishes secure authentication with Cloudflare edge servers
 - Downloads client configuration parameters and routing tables
@@ -78,6 +79,7 @@ warp-cli mode -- warp
 ```
 
 **Implementation characteristics:**
+
 - Complete traffic routing through Cloudflare edge infrastructure
 - End-to-end encryption between client and Cloudflare termination points
 - Source IP address masking with Cloudflare exit node addresses
@@ -92,6 +94,7 @@ warp-cli mode -- warp+doh
 ```
 
 **Implementation characteristics:**
+
 - Combined traffic tunneling with DNS-over-HTTPS protocol
 - Dual-layer encryption for both application data and DNS queries
 - Prevention of DNS manipulation and traffic analysis
@@ -106,6 +109,7 @@ warp-cli mode -- doh
 ```
 
 **Implementation characteristics:**
+
 - Exclusive DNS query routing through Cloudflare resolvers
 - Preservation of original source IP addressing
 - Reduced latency compared to full tunneling
@@ -278,4 +282,3 @@ Cloudflare WARP provides an excellent balance of privacy, performance, and simpl
 The CLI interface aligns perfectly with Arch Linux's philosophy, giving you full control without unnecessary complexity. Whether you're protecting your privacy on public Wi-Fi or just want faster, more secure DNS resolution, WARP is a valuable addition to your networking toolkit.
 
 ---
-

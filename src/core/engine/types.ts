@@ -1,16 +1,2 @@
-export type Player = string;
-
-export type MoveType = string;
-
-export interface Move {
-  from: number | null;
-  to: number;
-  meta?: unknown;
-  type: MoveType;
-}
-
-export interface GameState<B = unknown> {
-  board: B;
-  turn: Player;
-  winner: Player | 'DRAW' | null;
-}
+// This file contained generic types that were not being used anywhere in the codebase.
+// Game-specific types are defined in their respective modules.

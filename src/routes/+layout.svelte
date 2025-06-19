@@ -90,7 +90,11 @@
 			}
 		}
 	</script>
-	<script defer src="https://cloud.umami.is/script.js" data-website-id="b7abb816-2b4e-4807-bddb-f31649532505"></script>
+	<script
+		defer
+		src="https://cloud.umami.is/script.js"
+		data-website-id="b7abb816-2b4e-4807-bddb-f31649532505"
+	></script>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">

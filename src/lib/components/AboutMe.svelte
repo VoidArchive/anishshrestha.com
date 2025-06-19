@@ -37,11 +37,12 @@
 		<User size={20} class="text-primary inline" /> About Me
 	</h2>
 	<div class="space-y-4">
+		<p class="text-text leading-relaxed">Hi, I am Anish. I am a backend engineer from Kathmandu.</p>
 		<p class="text-text leading-relaxed">
-			Hi, I am Anish. I am a backend engineer from Kathmandu.
-		</p>
-		<p class="text-text leading-relaxed">
-			Currently building production services at <a href="https://www.globalsquareit.com" class="font-bold">Global Square.</a>
+			Currently building production services at <a
+				href="https://www.globalsquareit.com"
+				class="font-bold">Global Square.</a
+			>
 		</p>
 		<p class="text-text leading-relaxed">
 			Previously built ERP systems focusing on accounting and invoicing modules, integrating it with

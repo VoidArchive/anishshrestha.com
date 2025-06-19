@@ -5,8 +5,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	// Collect unique tags for sidebar display
-	const tags: string[] = Array.from(new Set(data.posts.flatMap((p) => p.tags)));
+	// Removed unused tags variable
 </script>
 
 <svelte:head>
@@ -27,22 +26,20 @@
 	<meta property="og:url" content="https://anishshrestha.com/blog" />
 </svelte:head>
 
-<main class="container py-8">
-	<TwoColumnShell leftGap="gap-2">
+<main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
+	<TwoColumnShell>
 		<svelte:fragment slot="left">
-			<section class="section-card p-4">
-				<h3 class="section-title mb-4 text-lg">Tags</h3>
-				<div class="flex flex-wrap gap-2">
-					{#each tags as tag}
-						<span class="badge cursor-pointer select-none">{tag}/</span>
-					{/each}
-				</div>
+			<section class="section-card">
+				<h3 class="section-title text-lg">Blog</h3>
+				<p class="text-text-muted text-sm leading-relaxed">
+					Technical writings about software development, programming challenges, and insights from
+					building distributed systems. Sharing my journey through code, algorithms, and
+					architectural decisions.
+				</p>
 			</section>
 		</svelte:fragment>
 
 		<div class="mx-auto max-w-4xl">
-			
-
 			{#if data.posts.length > 0}
 				<div class="blog-posts-container">
 					{#each data.posts as post}
@@ -56,7 +53,7 @@
 										{/each}
 									</div>
 								</div>
-								
+
 								<!-- Decorative separator removed to prevent layout shift -->
 
 								<h2 class="blog-title-text">{post.title}</h2>
@@ -66,9 +63,9 @@
 					{/each}
 				</div>
 			{:else}
-						<div class="py-8 text-center text-text-muted">
-				<p>No blog posts found. Check back soon!</p>
-			</div>
+				<div class="text-text-muted py-8 text-center">
+					<p>No blog posts found. Check back soon!</p>
+				</div>
 			{/if}
 		</div>
 	</TwoColumnShell>
@@ -89,7 +86,10 @@
 		background-color: var(--color-bg-secondary);
 		border: 1px solid var(--color-border);
 		padding: 1rem;
-		transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease,
+			border-color 0.3s ease;
 		will-change: box-shadow, border-color;
 		position: relative;
 	}

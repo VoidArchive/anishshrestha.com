@@ -6,15 +6,13 @@ Personal portfolio and blog built with SvelteKit.
 
 ### 🚨 **HIGH PRIORITY** (Fix Immediately)
 
-#### **Code Quality & Architecture**
-- [x] **Standardize CSS architecture** ✅ 
-  - [x] Simplified color scheme (removed duplicate `--color-text-primary/secondary`)
-  - [x] Pure Tailwind migration (removed all inline styles)
-  - [x] Updated all components to use `text-text`, `text-text-muted`, `text-primary`
-- [x] **Break down massive Bagchal components** 
+- [x] Simplified color scheme (removed duplicate `--color-text-primary/secondary`)
+- [x] Pure Tailwind migration (removed all inline styles)
+- [x] Updated all components to use `text-text`, `text-text-muted`, `text-primary`
+- [x] **Break down massive Bagchal components**
   - [x] Split `BagchalBoard.svelte` (537 lines → <200 each)
     - [x] `BoardGrid.svelte` - SVG grid and lines
-    - [x] `PieceRenderer.svelte` - Tigers and goats rendering  
+    - [x] `PieceRenderer.svelte` - Tigers and goats rendering
     - [x] `MoveHighlight.svelte` - Move indicators and highlights
     - [x] `BoardInteraction.svelte` - Click handling and validation
   - [x] Split `Shell.svelte` (422 lines → <200 each)
@@ -26,12 +24,14 @@ Personal portfolio and blog built with SvelteKit.
     - [x] `GameStats.svelte` - Statistics and replay options
 
 #### **Bug Fixes**
+
 - [x] **Fix TicTacToe bugs**
   - [x] Replace deprecated `on:click` with `onclick` (Shell.svelte:62)
   - [x] Fix direct state mutation in AI (creates immutable copies)
   - [x] Convert TicTacToe to use BaseEngine for consistency
 
-#### **Game Engine Consistency** 
+#### **Game Engine Consistency**
+
 - [x] **Standardize TicTacToe on BaseEngine**
   - [x] Create `TicTacToeEngine` implementing `BaseEngine<TicTacToeMove, TicTacToeState>`
   - [x] Update TicTacToe AI to use Minimax class from `$core`
@@ -40,7 +40,9 @@ Personal portfolio and blog built with SvelteKit.
 ### ⚠️ **MEDIUM PRIORITY** (Next Sprint)
 
 #### **Code Duplication & Reusability**
+
 - [ ] **Create shared game UI patterns**
+
   - [ ] `GameModal.svelte` - Base modal for all games
   - [ ] `GameControls.svelte` - Common control patterns
   - [ ] `GameStatus.svelte` - Status display component
@@ -52,6 +54,7 @@ Personal portfolio and blog built with SvelteKit.
   - [ ] Standardize modal patterns
 
 #### **Bagchal Multiplayer Foundation**
+
 - [ ] **Prepare for Cloudflare D1 + Durable Objects**
   - [ ] Design multiplayer state schema
   - [ ] Create database migrations for D1
@@ -61,6 +64,7 @@ Personal portfolio and blog built with SvelteKit.
 ### 🔧 **LOW PRIORITY** (Future Enhancements)
 
 #### **Content & Features**
+
 - [ ] Write project descriptions for Bagchal Reforged, Kathmandu Shame Map, Bhetum
 - [x] Add blog posts (technical deep-dives, Nepal tech scene, minimalist dev practices)
 - [ ] Create resume page with downloadable PDF
@@ -70,6 +74,7 @@ Personal portfolio and blog built with SvelteKit.
 - [ ] Add analytics (privacy-focused)
 
 #### **Technical Improvements**
+
 - [ ] Optimize images and add lazy loading
 - [ ] Implement proper SEO meta tags
 - [ ] Add sitemap generation
@@ -78,6 +83,7 @@ Personal portfolio and blog built with SvelteKit.
 - [ ] Create performance monitoring
 
 #### **Design & UX**
+
 - [ ] Mobile responsiveness improvements
 - [ ] Add subtle animations and hover effects
 - [ ] Create custom 404 page
@@ -86,6 +92,7 @@ Personal portfolio and blog built with SvelteKit.
 - [ ] Improve accessibility (ARIA labels, keyboard navigation)
 
 #### **Game Engine Expansion**
+
 - [ ] **Add new games to validate engine abstraction**
   - [ ] Chess (complex piece movement)
   - [ ] Checkers (jump mechanics like Bagchal)
@@ -97,6 +104,7 @@ Personal portfolio and blog built with SvelteKit.
 ---
 
 ### 📊 **Metrics to Track**
+
 - [ ] Component size (keep under 200 lines)
 - [ ] Build bundle size
 - [ ] Page load performance
@@ -104,6 +112,7 @@ Personal portfolio and blog built with SvelteKit.
 - [ ] Code duplication percentage
 
 ### 🎯 **Success Criteria**
+
 - [x] Modern SvelteKit 5 + Runes usage
 - [x] Clean TypeScript implementation
 - [ ] All components under 200 lines

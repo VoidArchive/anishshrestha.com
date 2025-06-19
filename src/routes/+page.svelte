@@ -10,7 +10,7 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<main class="container min-h-[calc(100vh-100px)] pb-8 lg:pb-8">
+<main class="container min-h-[calc(100vh-100px)]" style="padding-bottom: var(--space-8);">
 	<div class="main-grid">
 		<!-- Left Column -->
 		<aside class="flex flex-col">

@@ -14,8 +14,9 @@ tags: ['adventofcode', 'quine', 'go']
 The puzzle presents a minimalist virtual machine architecture featuring three general-purpose registers and an eight-instruction command set. The system operates on unlimited-precision integers with 3-bit operand encoding for specific operations.
 
 Implementation requirements:
+
 1. Virtual machine execution engine with proper instruction cycle handling
-2. Combo operand resolution mechanism 
+2. Combo operand resolution mechanism
 3. Self-replicating program search algorithm utilizing reverse engineering approach
 
 ---
@@ -35,6 +36,7 @@ type Computer struct {
 ```
 
 Core components:
+
 - **A, B, C**: Unlimited-precision integer registers for computation
 - **program**: Instruction sequence stored as integer array
 - **ip**: Program counter tracking current execution position
@@ -46,17 +48,16 @@ Core components:
 
 The virtual machine implements eight distinct operations encoded as opcode-operand pairs. Each instruction consumes two consecutive program values for complete specification.
 
-
-| Opcode | Mnemonic | Operation                                    |
-| ------ | -------- | -------------------------------------------- |
-| 0      | adv      | A = A / 2^combo(operand)                     |
-| 1      | bxl      | B = B XOR operand                            |
-| 2      | bst      | B = combo(operand) % 8                       |
-| 3      | jnz      | if A ≠ 0 then IP = operand                   |
-| 4      | bxc      | B = B XOR C                                  |
-| 5      | out      | output.append(combo(operand) % 8)            |
-| 6      | bdv      | B = A / 2^combo(operand)                     |
-| 7      | cdv      | C = A / 2^combo(operand)                     |
+| Opcode | Mnemonic | Operation                         |
+| ------ | -------- | --------------------------------- |
+| 0      | adv      | A = A / 2^combo(operand)          |
+| 1      | bxl      | B = B XOR operand                 |
+| 2      | bst      | B = combo(operand) % 8            |
+| 3      | jnz      | if A ≠ 0 then IP = operand        |
+| 4      | bxc      | B = B XOR C                       |
+| 5      | out      | output.append(combo(operand) % 8) |
+| 6      | bdv      | B = A / 2^combo(operand)          |
+| 7      | cdv      | C = A / 2^combo(operand)          |
 
 Implementation details:
 
@@ -137,6 +138,7 @@ func (c *Computer) Execute() {
 ```
 
 Standard fetch-decode-execute cycle:
+
 1. Fetch opcode and operand from program memory
 2. Decode instruction type and operand interpretation
 3. Execute operation with appropriate register/memory modifications
@@ -194,6 +196,7 @@ Algorithm summary: systematically build candidate values by appending 3-bit segm
 Example program: `[2,4,1,3,7,5,0,3,1,4,4,7,5,5,3,0]`
 
 Algorithm execution:
+
 1. Target final output digit: `0`. Test 3-bit candidates `000`-`111`, retain matches.
 2. Append next 3-bit segment to left side, validate output digit `3`.
 3. Continue iteratively until complete program output matches.
@@ -203,6 +206,7 @@ The reverse construction approach reduces search space from exponential to linea
 ## Summary
 
 Key implementation achievements:
+
 - Minimal virtual machine with 8-instruction set and 3-register architecture
 - Efficient combo operand resolution supporting dual interpretation modes
 - Reverse-engineering quine search algorithm exploiting predictable bit patterns

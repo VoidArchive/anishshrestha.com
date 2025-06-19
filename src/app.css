@@ -16,7 +16,29 @@
 	--color-border: #333333;
 
 	--font-family-mono: 'Fira Code', monospace;
-	--font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--font-family-sans:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+		'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+	/* Consistent Spacing System - 8px base scale */
+	--space-1: 0.25rem; /* 4px  - tight spacing */
+	--space-2: 0.5rem; /* 8px  - small spacing */
+	--space-3: 0.75rem; /* 12px - medium-small spacing */
+	--space-4: 1rem; /* 16px - base spacing unit */
+	--space-5: 1.25rem; /* 20px - medium spacing */
+	--space-6: 1.5rem; /* 24px - large spacing */
+	--space-8: 2rem; /* 32px - section spacing */
+	--space-12: 3rem; /* 48px - major section spacing */
+	--space-16: 4rem; /* 64px - page spacing */
+
+	/* Design System Usage Guidelines:
+	 * --space-1: Element spacing (badges, tight gaps)
+	 * --space-2: Small component spacing (buttons, tags)
+	 * --space-4: Default component spacing (cards, inputs)
+	 * --space-6: Section spacing (between components)
+	 * --space-8: Page section spacing (main content areas)
+	 * --space-16: Major page spacing (top/bottom page margins)
+	 */
 }
 
 /* Base body styles */
@@ -64,8 +86,9 @@ ul {
 
 /* Base card styles */
 .section-card {
-	@apply bg-bg-secondary border-border relative mb-3 overflow-hidden border p-3 shadow-lg transition-all duration-300 sm:mb-4 sm:p-4 md:mb-6 md:p-6;
-	
+	@apply bg-bg-secondary border-border relative overflow-hidden border shadow-lg transition-all duration-300;
+	margin-bottom: var(--space-6);
+	padding: var(--space-4);
 }
 
 .section-card:hover {
@@ -74,7 +97,9 @@ ul {
 }
 
 .section-title {
-	@apply text-text border-border relative mb-3 border-b pb-2 text-lg font-semibold md:mb-4 md:text-xl;
+	@apply text-text border-border relative border-b text-lg font-semibold md:text-xl;
+	margin-bottom: var(--space-4);
+	padding-bottom: var(--space-2);
 }
 
 .section-title::after {
@@ -88,11 +113,22 @@ ul {
 
 /* Container and layout */
 .container {
-	@apply mx-auto max-w-6xl px-4 md:px-6 lg:px-8;
+	@apply mx-auto max-w-6xl;
+	padding-left: var(--space-4);
+	padding-right: var(--space-4);
+}
+
+@media (min-width: 768px) {
+	.container {
+		padding-left: var(--space-6);
+		padding-right: var(--space-6);
+	}
 }
 
 .main-grid {
-	@apply mt-4 grid grid-cols-1 gap-4 opacity-100 md:mt-8 md:gap-8 lg:grid-cols-[1fr_2fr];
+	@apply grid grid-cols-1 opacity-100 lg:grid-cols-[1fr_2fr];
+	margin-top: var(--space-8);
+	gap: var(--space-6);
 }
 
 /* Button styles */
