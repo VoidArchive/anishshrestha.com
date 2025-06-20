@@ -15,7 +15,7 @@
 
 	<!-- Grid of cells -->
 	<div class="ttt-grid">
-		{#each gameState.board as cell, index}
+		{#each gameState.board as cell, index (index)}
 			<button
 				class="cell"
 				onclick={() => handleCellClick(index)}

@@ -12,22 +12,11 @@ Responsive design adapts cell size for mobile devices.
 	// Get simulation state reactively
 	let simulationState = $derived(getSimulationState());
 
-	// Grid dimensions from simulation state
-	let GRID_WIDTH = $derived(simulationState.gridSize.width);
-	let GRID_HEIGHT = $derived(simulationState.gridSize.height);
-
 	/**
 	 * Handles cell click to toggle its state
 	 */
 	function handleCellClick(x: number, y: number): void {
 		toggleCellAt(x, y);
-	}
-
-	/**
-	 * Gets cell key for tracking
-	 */
-	function getCellKey(x: number, y: number): string {
-		return `${x}-${y}`;
 	}
 
 	/**
@@ -61,11 +50,12 @@ Responsive design adapts cell size for mobile devices.
 					role="grid"
 					aria-label="Conway's Game of Life grid"
 				>
-					{#each Array(gridHeight) as _, y}
-						{#each Array(gridWidth) as _, x}
+					<!-- eslint-disable @typescript-eslint/no-unused-vars -->
+					{#each Array(gridHeight) as _, y (y)}
+						{#each Array(gridWidth) as _, x (`${y}-${x}`)}
 							<button
 								class="cell {isCellAlive(x, y) ? 'alive' : 'dead'}"
-								on:click={() => handleCellClick(x, y)}
+								onclick={() => handleCellClick(x, y)}
 								aria-label="Cell at position {x}, {y}. Currently {isCellAlive(x, y)
 									? 'alive'
 									: 'dead'}"

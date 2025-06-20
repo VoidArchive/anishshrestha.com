@@ -53,6 +53,7 @@ export function stopSimulation(): void {
 export function stepGeneration(): void {
 	engine.stepGeneration(simulationState);
 	// Force Svelte reactivity update for manual steps
+	// eslint-disable-next-line no-self-assign
 	simulationState = simulationState;
 }
 

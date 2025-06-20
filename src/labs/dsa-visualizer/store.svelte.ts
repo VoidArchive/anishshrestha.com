@@ -491,7 +491,7 @@ function runNextStep() {
 		}
 	} else {
 		// Use configured animation speed
-		let delay = Math.max(dsaState.animationSpeed, 1); // Minimum delay to prevent browser hangs
+		const delay = Math.max(dsaState.animationSpeed, 1); // Minimum delay to prevent browser hangs
 
 		// Schedule next step
 		animationTimeoutId = setTimeout(() => {

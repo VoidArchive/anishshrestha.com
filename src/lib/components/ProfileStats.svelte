@@ -29,7 +29,7 @@ and hover effects to add personality to the profile section.
 			const targetValue = stat.value;
 			const duration = 2000; // 2 seconds
 			const startTime = Date.now();
-			const increment = targetValue / (duration / 16); // ~60fps
+			// const increment = targetValue / (duration / 16); // ~60fps // Unused variable removed
 
 			const animate = () => {
 				const elapsed = Date.now() - startTime;
@@ -56,7 +56,7 @@ and hover effects to add personality to the profile section.
 
 <section class="profile-stats">
 	<div class="stats-grid">
-		{#each stats as stat, index}
+		{#each stats as stat, index (stat.label)}
 			<div class="stat-item {stat.color}">
 				<div class="stat-icon">
 					<svelte:component this={stat.icon} size={18} />

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils/blog';
 	import type { BlogPost } from '$lib/utils/blog';
-	import { Rss, ArrowRight } from 'lucide-svelte';
+	import { Rss } from 'lucide-svelte';
 
 	interface Props {
 		posts: BlogPost[];
@@ -16,7 +16,7 @@
 	</h2>
 	<div class="flex flex-col gap-6">
 		{#if posts.length > 0}
-			{#each posts as post}
+			{#each posts as post (post.slug)}
 				<a
 					href="/blog/{post.slug}"
 					class="post-card bg-bg-primary border-border hover:border-primary relative block overflow-hidden border p-4 no-underline transition-all duration-300"
@@ -35,7 +35,7 @@
 							{post.description}
 						</p>
 						<div class="flex flex-wrap gap-1">
-							{#each post.tags.slice(0, 3) as tag}
+							{#each post.tags.slice(0, 3) as tag (tag)}
 								<span class="bg-bg-secondary border-border border px-1.5 py-0.5 text-xs text-white"
 									>{tag}</span
 								>

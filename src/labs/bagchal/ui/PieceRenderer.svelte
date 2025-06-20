@@ -36,7 +36,7 @@
 
 	// Pointer-based drag and drop handlers
 	let isDragging = $state(false);
-	let pointerStartId: number | null = $state(null);
+	// let pointerStartId: number | null = $state(null); // Removed unused variable
 	let pointerStartPosition = $state({ x: 0, y: 0 });
 	let hasMoved = $state(false);
 
@@ -48,7 +48,7 @@
 
 		isDragging = false; // Don't set to true immediately
 		draggedPieceId = id;
-		pointerStartId = id;
+		// pointerStartId = id; // Unused assignment removed
 		previewPosition = null;
 		hasMoved = false;
 		pointerStartPosition = { x: e.clientX, y: e.clientY };
@@ -115,7 +115,7 @@
 		isDragging = false;
 		draggedPieceId = null;
 		previewPosition = null;
-		pointerStartId = null;
+		// pointerStartId = null; // Unused assignment removed
 		hasMoved = false;
 
 		if (wasActuallyDragging) {
@@ -129,7 +129,7 @@
 </script>
 
 <!-- Render all pieces with Angular Design -->
-{#each points as { x, y, id }}
+{#each points as { x, y, id } (id)}
 	{@const piece = gameState.board[id]}
 	{@const selected = gameState.selectedPieceId === id}
 	{@const valid = validMoves.includes(id)}

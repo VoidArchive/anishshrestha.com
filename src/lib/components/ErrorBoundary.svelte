@@ -10,7 +10,7 @@
 		fallback = 'Something went wrong with the game.',
 		onError,
 		children
-	}: Props & { children: any } = $props();
+	}: Props & { children?: import('svelte').Snippet } = $props();
 
 	let hasError = $state(false);
 	let error: Error | null = $state(null);

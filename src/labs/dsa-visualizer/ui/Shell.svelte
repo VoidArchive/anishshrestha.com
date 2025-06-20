@@ -545,6 +545,7 @@ Features consolidated controls in sidebar and main content area with statistics.
 		min-height: 60px; /* Fixed height to prevent layout shifts */
 		display: flex;
 		align-items: flex-start;
+		overflow: hidden; /* Prevent text from extending beyond container */
 	}
 
 	/* Board section stability */
@@ -601,7 +602,8 @@ Features consolidated controls in sidebar and main content area with statistics.
 		}
 
 		.step-description-container {
-			min-height: auto; /* Allow natural height on mobile */
+			min-height: 72px; /* Fixed height to prevent layout shifts on mobile */
+			overflow-wrap: break-word; /* Handle long descriptions gracefully */
 		}
 
 		.step-description {
@@ -629,6 +631,15 @@ Features consolidated controls in sidebar and main content area with statistics.
 			flex-direction: column;
 			gap: var(--space-1);
 			text-align: center;
+		}
+
+		.step-description-container {
+			min-height: 80px; /* Slightly more height for very small screens */
+		}
+
+		.step-description {
+			font-size: 0.8125rem; /* Slightly smaller text for better fit */
+			line-height: 1.3;
 		}
 	}
 </style>

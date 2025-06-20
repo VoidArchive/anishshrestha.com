@@ -217,11 +217,11 @@ in logical groupings for better UX and consistency.
 				disabled={isAnimating}
 			>
 				{#if mode === 'SORTING'}
-					{#each sortingAlgorithms as algo}
+					{#each sortingAlgorithms as algo (algo.value)}
 						<option value={algo.value}>{algo.label}</option>
 					{/each}
 				{:else}
-					{#each pathfindingAlgorithms as algo}
+					{#each pathfindingAlgorithms as algo (algo.value)}
 						<option value={algo.value}>{algo.label}</option>
 					{/each}
 				{/if}
@@ -268,7 +268,7 @@ in logical groupings for better UX and consistency.
 					onchange={handleSpeedChange}
 					disabled={isAnimating}
 				>
-					{#each speedOptions as speed}
+					{#each speedOptions as speed (speed.value)}
 						<option value={speed.value}>{speed.label}</option>
 					{/each}
 				</select>

@@ -5,7 +5,7 @@ export interface BlogPost {
 	date: string;
 	published: boolean;
 	tags: string[];
-	content: any;
+	content: unknown;
 	// New fields for lab integration
 	labSlug?: string;
 	relatedLab?: {
@@ -16,7 +16,7 @@ export interface BlogPost {
 }
 
 interface BlogModule {
-	default: any;
+	default: unknown;
 	metadata: {
 		title: string;
 		description: string;

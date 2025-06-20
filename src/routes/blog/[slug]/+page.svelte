@@ -31,7 +31,7 @@
 			<div class="post-meta">
 				<time class="post-date">{formatDate(post.date)}</time>
 				<div class="post-tags">
-					{#each post.tags as tag}
+					{#each post.tags as tag (tag)}
 						<span class="tag">{tag}</span>
 					{/each}
 				</div>
@@ -49,7 +49,7 @@
 		{/if}
 
 		<div class="post-content">
-			{@render post.content()}
+			{@render (post.content as import('svelte').Snippet)()}
 		</div>
 
 		<!-- Additional live demo callout at the bottom for better conversion -->

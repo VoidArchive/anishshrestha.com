@@ -6,7 +6,7 @@ Includes BFS, DFS, Dijkstra's algorithm, and A* search.
 Generates animation steps to visualize the algorithm execution.
 */
 
-import type { DSAMove, AnimationStep, PathfindingAlgorithm, GridNode } from '../../types';
+import type { AnimationStep, PathfindingAlgorithm, GridNode } from '../../types';
 
 // Maximum animation steps to prevent browser hangs
 // For 25x15 grid (375 cells), optimized for performance
@@ -248,7 +248,7 @@ export class PathfindingAlgorithms {
 				description: 'Algorithm terminated (step limit reached)',
 				state: { completed: true }
 			});
-		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
+		} else if (steps.length === 0 || !steps[steps.length - 1].state?.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
@@ -356,7 +356,7 @@ export class PathfindingAlgorithms {
 				description: 'Algorithm terminated (step limit reached)',
 				state: { completed: true }
 			});
-		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
+		} else if (steps.length === 0 || !steps[steps.length - 1].state?.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
@@ -516,7 +516,7 @@ export class PathfindingAlgorithms {
 				description: 'Algorithm terminated (step limit reached)',
 				state: { completed: true }
 			});
-		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
+		} else if (steps.length === 0 || !steps[steps.length - 1].state?.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
@@ -645,7 +645,7 @@ export class PathfindingAlgorithms {
 				description: 'Algorithm terminated (step limit reached)',
 				state: { completed: true }
 			});
-		} else if (steps.length === 0 || !steps[steps.length - 1].state.completed) {
+		} else if (steps.length === 0 || !steps[steps.length - 1].state?.completed) {
 			steps.push({
 				move: { type: 'STEP_COMPLETE' },
 				description: 'No path found - Start and end are not connected',
@@ -760,8 +760,8 @@ export class PathfindingAlgorithms {
 		const newGrid = grid.map((row) => row.map((node) => ({ ...node })));
 
 		// Clear previous current nodes
-		for (let row of newGrid) {
-			for (let node of row) {
+		for (const row of newGrid) {
+			for (const node of row) {
 				node.isCurrent = false;
 			}
 		}

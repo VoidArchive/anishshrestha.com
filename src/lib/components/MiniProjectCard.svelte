@@ -24,7 +24,7 @@
 		<p class="text-text-muted mb-3 line-clamp-3 text-sm leading-relaxed">{description}</p>
 		{#if tech.length}
 			<div class="flex flex-wrap gap-1">
-				{#each tech.slice(0, 4) as t}
+				{#each tech.slice(0, 4) as t (t)}
 					<span class="bg-bg-secondary border-border border px-1.5 py-0.5 text-xs text-white"
 						>{t}</span
 					>

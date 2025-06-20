@@ -13,7 +13,7 @@
 			<p class="text-text-muted text-sm">No moves yet</p>
 		{:else}
 			<ul class="space-y-1 text-xs sm:text-sm">
-				{#each moveHistory.toReversed() as move, index}
+				{#each moveHistory.toReversed() as move, index (index)}
 					<li class="text-text-muted list-none">
 						{moveHistory.length - index}. {move}
 					</li>

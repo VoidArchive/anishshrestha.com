@@ -1,4 +1,4 @@
-import type { DSAMove, AnimationStep, SortingAlgorithm } from '../../types';
+import type { AnimationStep, SortingAlgorithm } from '../../types';
 
 export class SortingAlgorithms {
 	static generateSteps(array: number[], algorithm: SortingAlgorithm): AnimationStep[] {

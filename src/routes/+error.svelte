@@ -13,8 +13,8 @@
 	import { Home, ArrowLeft, RefreshCw, Bug, AlertTriangle } from 'lucide-svelte';
 
 	// Get error details from the page state
-	$: errorStatus = page.status;
-	$: errorMessage = page.error?.message || 'An unexpected error occurred';
+	let errorStatus = $derived(page.status);
+	let errorMessage = $derived(page.error?.message || 'An unexpected error occurred');
 
 	// Determine error type and appropriate message
 	function getErrorDetails(status: number, message: string) {
@@ -54,7 +54,7 @@
 		}
 	}
 
-	$: errorDetails = getErrorDetails(errorStatus, errorMessage);
+	let errorDetails = $derived(getErrorDetails(errorStatus, errorMessage));
 
 	// Navigation functions
 	function goHome() {
@@ -130,7 +130,7 @@
 		>
 			<!-- Error icon -->
 			<div class="error-icon" style="color: {errorDetails.color};" aria-hidden="true">
-				<svelte:component this={errorDetails.icon} size={120} />
+				<errorDetails.icon size={120} />
 			</div>
 
 			<!-- Error content -->

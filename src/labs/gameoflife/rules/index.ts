@@ -7,7 +7,7 @@
  * 3. All other live cells die, all other dead cells stay dead
  */
 
-import type { Grid, Coordinate, GridDimensions, SimulationStats } from './types';
+import type { Grid, SimulationStats } from './types';
 
 /**
  * Creates an empty grid of specified dimensions

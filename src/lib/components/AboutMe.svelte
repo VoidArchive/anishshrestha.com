@@ -7,7 +7,7 @@ Enhanced with better readability and subtle visual improvements.
 -->
 
 <script lang="ts">
-	import { User, MapPin, Briefcase } from 'lucide-svelte';
+	import { User, Briefcase } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let vimText: HTMLElement;
@@ -178,7 +178,7 @@ Enhanced with better readability and subtle visual improvements.
 	}
 
 	.vim-easter-egg {
-		font-family: var(--font-family-mono);
+		/* font-family: var(--font-family-mono); */
 		cursor: pointer;
 		transition: all 0.3s ease;
 		padding: var(--space-1) var(--space-2);

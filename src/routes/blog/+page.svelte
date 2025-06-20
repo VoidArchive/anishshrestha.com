@@ -42,7 +42,7 @@
 		<div class="mx-auto max-w-4xl">
 			{#if data.posts.length > 0}
 				<div class="blog-posts-container">
-					{#each data.posts as post}
+					{#each data.posts as post (post.slug)}
 						<a href="/blog/{post.slug}" class="blog-card section-card">
 							<article class="blog-content">
 								<div class="blog-header">
@@ -54,7 +54,7 @@
 
 								<div class="blog-footer">
 									<div class="blog-tags">
-										{#each post.tags as tag}
+										{#each post.tags as tag (tag)}
 											<span class="blog-tag">{tag}</span>
 										{/each}
 										{#if post.relatedLab}

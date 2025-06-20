@@ -161,7 +161,7 @@ Responsive design with proper click handling and space utilization.
 					<!-- Sorting Visualization -->
 					<div class="sorting-container">
 						<div class="bars-wrapper">
-							{#each state.array as value, index}
+							{#each state.array as value, index (index)}
 								<div class="bar-container">
 									<!-- Bar with proper scaling -->
 									<div
@@ -184,8 +184,8 @@ Responsive design with proper click handling and space utilization.
 							style:grid-template-rows="repeat({state.gridSize.height}, 1fr)"
 							style="aspect-ratio: {state.gridSize.width} / {state.gridSize.height};"
 						>
-							{#each state.grid as row, y}
-								{#each row as node, x}
+							{#each state.grid as row, y (y)}
+								{#each row as node, x (`${y}-${x}`)}
 									<button
 										class="grid-cell {getCellColor(x, y)} {getCellAnimationClass(x, y)}"
 										onmousedown={(e) => handleCellMouseDown(x, y, e)}

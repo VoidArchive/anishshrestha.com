@@ -55,19 +55,19 @@ with subtle hover animations and visual hierarchy.
 	</h2>
 
 	<div class="tech-grid">
-		{#each techStack as category}
+		{#each techStack as category (category.name)}
 			<div class="tech-category">
 				<!-- Category Header -->
 				<div class="category-header">
-					<svelte:component this={category.icon} size={16} />
+					<category.icon size={16} />
 					<span class="category-name">{category.name}</span>
 				</div>
 
 				<!-- Tech Badges -->
 				<div class="tech-badges">
-					{#each category.items as item}
+					{#each category.items as item (item.name)}
 						<div class="tech-badge">
-							<svelte:component this={item.icon} size={14} />
+							<item.icon size={14} />
 							<span class="tech-name">{item.name}</span>
 						</div>
 					{/each}

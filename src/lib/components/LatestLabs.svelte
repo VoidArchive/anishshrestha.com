@@ -35,7 +35,7 @@ that emphasize project descriptions and technology stacks.
 		<Cpu size={20} class="text-primary inline" /> Latest Labs
 	</h2>
 	<div class="flex flex-col gap-6">
-		{#each latestLabs as lab}
+		{#each latestLabs as lab (lab.slug)}
 			<div class="lab-preview-card">
 				<!-- Header with icon -->
 				<div class="lab-header">
@@ -55,7 +55,7 @@ that emphasize project descriptions and technology stacks.
 
 					<!-- Tech stack -->
 					<div class="tech-stack">
-						{#each lab.tech as tech}
+						{#each lab.tech as tech (tech)}
 							<span class="tech-tag">{tech}</span>
 						{/each}
 					</div>

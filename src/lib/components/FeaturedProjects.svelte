@@ -7,7 +7,7 @@ rather than interactive browser-based labs.
 -->
 
 <script lang="ts">
-	import { FolderGit, ArrowRight } from 'lucide-svelte';
+	import { FolderGit } from 'lucide-svelte';
 	import MiniProjectCard from './MiniProjectCard.svelte';
 </script>
 

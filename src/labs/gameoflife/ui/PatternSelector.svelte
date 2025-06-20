@@ -9,8 +9,8 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	import { Shapes, MousePointer, Info } from 'lucide-svelte';
 	import {
 		PATTERNS_BY_CATEGORY,
-		getPatternByName,
-		insertPattern as insertPatternAtPosition
+		getPatternByName
+		// insertPattern as insertPatternAtPosition // Unused import removed
 	} from '../engine/patterns';
 	import { PatternCategory } from '../rules/types';
 	import { getSimulationState, insertPatternAt } from '../store.svelte';
@@ -67,7 +67,7 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	/**
 	 * Handles pattern click with debugging
 	 */
-	function handlePatternClick(pattern: any): void {
+	function handlePatternClick(pattern: { name: string }): void {
 		try {
 			console.log('Pattern clicked:', pattern.name, pattern);
 			selectPattern(pattern.name);
@@ -79,7 +79,7 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	/**
 	 * Handle click event with proper event handling
 	 */
-	function handleClickEvent(event: Event, pattern: any): void {
+	function handleClickEvent(event: Event, pattern: { name: string }): void {
 		event.preventDefault();
 		event.stopPropagation();
 		handlePatternClick(pattern);
@@ -123,10 +123,10 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 <div class="pattern-selector">
 	<!-- Category Tabs -->
 	<div class="category-tabs">
-		{#each Object.values(PatternCategory) as category}
+		{#each Object.values(PatternCategory) as category (category)}
 			<button
 				class="category-tab {selectedCategory === category ? 'active' : ''}"
-				on:click={() => {
+				onclick={() => {
 					selectedCategory = category;
 					selectedPatternName = null;
 					showPatternInfo = false;
@@ -139,10 +139,10 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 
 	<!-- Pattern List -->
 	<div class="pattern-list">
-		{#each currentPatterns as pattern}
+		{#each currentPatterns as pattern (pattern.name)}
 			<button
 				class="pattern-item {selectedPatternName === pattern.name ? 'selected' : ''}"
-				on:click={(event) => handleClickEvent(event, pattern)}
+				onclick={(event) => handleClickEvent(event, pattern)}
 				style="outline: none;"
 			>
 				<div class="pattern-name">
@@ -191,15 +191,15 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 						--preview-height: {selectedPattern.height};
 					"
 				>
-					{#each selectedPattern.grid as row}
-						{#each row as cell}
+					{#each selectedPattern.grid as row, y (y)}
+						{#each row as cell, x (`${y}-${x}`)}
 							<div class="preview-cell {cell ? 'alive' : 'dead'}"></div>
 						{/each}
 					{/each}
 				</div>
 			</div>
 
-			<button class="btn insert-btn" on:click={insertPattern} disabled={simulationState.isRunning}>
+			<button class="btn insert-btn" onclick={insertPattern} disabled={simulationState.isRunning}>
 				<MousePointer size={16} />
 				Insert at Center
 			</button>
