@@ -65,19 +65,19 @@
 </script>
 
 <svelte:head>
-	<title>Projects - Go & Python Developer Nepal | Anish Shrestha</title>
+	<title>Projects - Full-Stack Software Developer Portfolio | Anish Shrestha</title>
 	<meta
 		name="description"
-		content="Open source projects by Anish Shrestha - Go and Python applications including CLI tools, web apps, and algorithms. Nepal software developer portfolio."
+		content="Open source projects by Anish Shrestha - Full-stack applications, web tools, algorithms, and interactive experiences. Showcasing modern software development practices from Nepal."
 	/>
 	<meta
 		name="keywords"
-		content="Nepal developer projects, Go programming Nepal, Python projects Kathmandu, open source Nepal, CLI tools Go, software portfolio Nepal"
+		content="software developer portfolio Nepal, full stack projects, web applications Nepal, open source projects, interactive demos, programming portfolio Nepal, software development showcase"
 	/>
-	<meta property="og:title" content="Projects - Go & Python Developer Nepal" />
+	<meta property="og:title" content="Projects - Full-Stack Software Developer Portfolio" />
 	<meta
 		property="og:description"
-		content="Open source projects by Anish Shrestha - Go and Python applications including CLI tools, web apps, and algorithms."
+		content="Open source projects by Anish Shrestha - Full-stack applications, web tools, algorithms, and interactive experiences from Nepal."
 	/>
 	<meta property="og:url" content="https://anishshrestha.com/projects" />
 </svelte:head>

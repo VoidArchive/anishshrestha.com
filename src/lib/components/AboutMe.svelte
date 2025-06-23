@@ -48,7 +48,7 @@ Enhanced with better readability and subtle visual improvements.
 		<!-- Introduction -->
 		<div class="intro-section">
 			<p class="intro-text">
-				Hi, I'm Anish. I'm a backend engineer from Nepal who loves building things on the internet.
+				Hi, I'm Anish. I'm a software developer from Nepal who loves building innovative solutions and bringing ideas to life through code.
 			</p>
 		</div>
 
@@ -59,20 +59,24 @@ Enhanced with better readability and subtle visual improvements.
 				<span class="work-label">Currently</span>
 			</div>
 			<p class="work-description">
-				Building production services at <a
+				Building full-stack applications at <a
 					href="https://www.globalsquareit.com"
 					class="company-link"
 					target="_blank"
 					rel="noopener noreferrer">Global Square</a
-				>, focusing on scalable backend systems and API design.
+				>, crafting scalable systems from database design to user interfaces, with expertise in modern web technologies and distributed architectures.
 			</p>
 		</div>
 
 		<!-- Background -->
 		<div class="background-section">
 			<p class="background-text">
-				Previously built ERP systems with accounting and invoicing modules, integrating them with
-				e-commerce platforms. Experience spans from startup MVPs to enterprise-scale applications.
+				I specialize in full-stack development, creating everything from interactive visualizers and games to enterprise applications. My experience spans frontend frameworks, backend services, database design, and DevOps practices - bringing complete software solutions to life.
+			</p>
+			
+			<!-- Additional detail for SEO and AI understanding -->
+			<p class="background-text">
+				My work includes building scalable web applications, implementing complex algorithms, creating interactive user experiences, and solving challenging software engineering problems. I enjoy working across the entire technology stack and have experience with both startup environments and enterprise systems.
 			</p>
 		</div>
 

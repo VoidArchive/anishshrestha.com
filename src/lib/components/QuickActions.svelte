@@ -139,7 +139,7 @@ and reading blog posts with consistent styling and hover animations.
 		line-height: 1.4;
 	}
 
-	.action-arrow {
+	/* .action-arrow {
 		color: var(--color-text-muted);
 		transition: all 0.3s ease;
 		flex-shrink: 0;
@@ -148,7 +148,7 @@ and reading blog posts with consistent styling and hover animations.
 	.action-card:hover .action-arrow {
 		transform: translateX(4px);
 		color: var(--color-primary);
-	}
+	} */
 
 	/* Mobile responsiveness */
 	@media (max-width: 768px) {

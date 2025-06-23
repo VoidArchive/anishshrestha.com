@@ -8,7 +8,7 @@
 	</div>
 	<div class="profile-name">Anish Shrestha</div>
 	<div class="profile-title">
-		<Terminal size={16} class="text-primary inline" /> Backend Engineer
+		<Terminal size={16} class="text-primary inline" /> Software Developer
 	</div>
 	<div class="profile-title">
 		<Locate size={16} class="text-primary inline" /> Nepal

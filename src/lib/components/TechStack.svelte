@@ -39,11 +39,13 @@ with subtle hover animations and visual hierarchy.
 			]
 		},
 		{
-			name: 'DevOps',
+			name: 'DevOps & Tools',
 			icon: Cloud,
 			items: [
 				{ name: 'Docker', icon: Layers },
-				{ name: 'Linux', icon: Terminal }
+				{ name: 'Linux', icon: Terminal },
+				{ name: 'Git', icon: Code },
+				{ name: 'AWS', icon: Cloud }
 			]
 		}
 	];

@@ -24,11 +24,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta
 		name="description"
-		content="Anish Shrestha - Go & Python Developer in Kathmandu, Nepal. Building distributed systems and web applications. Available for remote work worldwide."
+		content="Anish Shrestha - Full-Stack Software Developer in Kathmandu, Nepal. Building web applications, distributed systems, and interactive experiences. Specializing in Go, Python, SvelteKit, and modern development practices."
 	/>
 	<meta
 		name="keywords"
-		content="Nepal software developer, Kathmandu web developer, Go developer Nepal, SvelteKit developer, remote developer Nepal, Python developer Kathmandu, software engineer Nepal"
+		content="software developer Nepal, full stack developer Nepal, Kathmandu web developer, Nepal programmer, software engineer Nepal, Go developer, Python developer, SvelteKit developer, remote developer Nepal, web development Nepal, software development Nepal, tech talent Nepal"
 	/>
 	<meta name="author" content="Anish Shrestha" />
 	<meta name="robots" content="index, follow" />
@@ -37,16 +37,16 @@
 	<meta name="geo.placename" content="Kathmandu, Nepal" />
 	<meta name="geo.position" content="27.7172;85.3240" />
 	<meta name="ICBM" content="27.7172, 85.3240" />
-	<title>Anish Shrestha - Go Developer Nepal | Remote Software Engineer</title>
+	<title>Anish Shrestha - Software Developer Nepal | Full-Stack Engineer & Tech Innovator</title>
 
 	<!-- Open Graph -->
 	<meta
 		property="og:title"
-		content="Anish Shrestha - Go Developer Nepal | Remote Software Engineer"
+		content="Anish Shrestha - Software Developer Nepal | Full-Stack Engineer & Tech Innovator"
 	/>
 	<meta
 		property="og:description"
-		content="Go & Python developer from Kathmandu, Nepal. Building distributed systems and web applications. Available for remote work worldwide."
+		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences with modern technologies. Available for remote collaboration worldwide."
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://anishshrestha.com" />
@@ -55,10 +55,10 @@
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content="Anish Shrestha - Go Developer Nepal" />
+	<meta name="twitter:title" content="Anish Shrestha - Software Developer Nepal" />
 	<meta
 		name="twitter:description"
-		content="Go & Python developer from Kathmandu, Nepal. Building distributed systems and web applications."
+		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences."
 	/>
 
 	<!-- JSON-LD Schema -->
@@ -67,8 +67,8 @@
 			"@context": "https://schema.org",
 			"@type": "Person",
 			"name": "Anish Shrestha",
-			"jobTitle": "Software Engineer",
-			"description": "Go and Python developer specializing in distributed systems and web applications",
+			"jobTitle": "Software Developer",
+			"description": "Full-stack software developer specializing in web applications, distributed systems, and interactive experiences. Expert in Go, Python, SvelteKit, and modern development practices.",
 			"url": "https://anishshrestha.com",
 			"sameAs": ["https://github.com/VoidArchive", "https://linkedin.com/in/theinanish"],
 			"address": {
@@ -77,16 +77,50 @@
 				"addressCountry": "Nepal"
 			},
 			"knowsAbout": [
+				"Software Development",
+				"Full-Stack Development",
+				"Web Development",
 				"Go Programming",
 				"Python Development",
-				"Distributed Systems",
+				"JavaScript",
+				"TypeScript",
 				"SvelteKit",
+				"React",
+				"Node.js",
 				"PostgreSQL",
-				"Software Architecture"
+				"Distributed Systems",
+				"Software Architecture",
+				"API Design",
+				"DevOps",
+				"Docker",
+				"Linux",
+				"AWS",
+				"Algorithm Design",
+				"Data Structures"
 			],
 			"workLocation": {
 				"@type": "Place",
 				"name": "Remote / Kathmandu, Nepal"
+			},
+			"hasOccupation": {
+				"@type": "Occupation",
+				"name": "Software Developer",
+				"occupationLocation": {
+					"@type": "Country",
+					"name": "Nepal"
+				},
+				"skills": [
+					"Full-Stack Development",
+					"Backend Development",
+					"Frontend Development",
+					"Web Application Development",
+					"Distributed Systems",
+					"Software Architecture",
+					"Algorithm Implementation",
+					"Database Design",
+					"API Development",
+					"DevOps Practices"
+				]
 			}
 		}
 	</script>

@@ -181,13 +181,13 @@ that emphasize project descriptions and technology stacks.
 		margin-left: auto;
 	}
 
-	.lab-action-btn .action-arrow {
+	/* .lab-action-btn .action-arrow {
 		transition: transform 0.3s ease;
 	}
 
 	.lab-action-btn:hover .action-arrow {
 		transform: translateX(4px);
-	}
+	} */
 
 	/* Mobile responsiveness */
 	@media (max-width: 768px) {

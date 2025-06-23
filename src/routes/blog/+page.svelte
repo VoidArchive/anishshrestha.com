@@ -9,19 +9,19 @@
 </script>
 
 <svelte:head>
-	<title>Blog - Software Engineering Insights from Nepal | Anish Shrestha</title>
+	<title>Blog - Software Development Insights & Tutorials | Anish Shrestha</title>
 	<meta
 		name="description"
-		content="Technical blog by Anish Shrestha, Go and Python developer from Kathmandu, Nepal. Deep-dives into software engineering, distributed systems, and web development."
+		content="Technical blog by Anish Shrestha, full-stack software developer from Kathmandu, Nepal. Deep-dives into software engineering, web development, algorithms, and modern programming practices."
 	/>
 	<meta
 		name="keywords"
-		content="Nepal tech blog, software engineering Nepal, Go programming blog, Python development, distributed systems, Kathmandu developer blog"
+		content="software development blog Nepal, web development tutorials, programming insights Nepal, full stack development, algorithms, software engineering Nepal, Kathmandu developer blog, tech blog Nepal"
 	/>
-	<meta property="og:title" content="Blog - Software Engineering Insights from Nepal" />
+	<meta property="og:title" content="Blog - Software Development Insights & Tutorials" />
 	<meta
 		property="og:description"
-		content="Technical blog by Anish Shrestha, Go and Python developer from Kathmandu, Nepal. Deep-dives into software engineering."
+		content="Technical blog by Anish Shrestha, full-stack software developer from Kathmandu, Nepal. Deep-dives into software engineering and modern programming practices."
 	/>
 	<meta property="og:url" content="https://anishshrestha.com/blog" />
 </svelte:head>
