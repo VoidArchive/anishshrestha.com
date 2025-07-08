@@ -13,10 +13,7 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		// insertPattern as insertPatternAtPosition // Unused import removed
 	} from '../engine/patterns';
 	import { PatternCategory } from '../rules/types';
-	import { getSimulationState, insertPatternAt } from '../store.svelte';
-
-	// Get simulation state reactively
-	let simulationState = $derived(getSimulationState());
+	import { simulationState, insertPatternAt } from '../store.svelte';
 
 	let selectedCategory = $state<PatternCategory>(PatternCategory.OSCILLATORS);
 	let selectedPatternName = $state<string | null>(null);

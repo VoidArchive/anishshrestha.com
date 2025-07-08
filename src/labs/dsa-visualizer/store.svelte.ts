@@ -21,8 +21,71 @@ const engine = new DSAEngine();
 // Reactive state with proper Svelte reactivity
 export const dsaState = $state<DSAState>(engine.initialState());
 
-// Animation control
+// Animation control and timeout management
 let animationTimeoutId: number | null = null;
+let batchTimeoutId: number | null = null;
+let stepTimeoutId: number | null = null;
+
+// TODO: Track all timeout IDs for proper cleanup
+// WARN: Multiple timeouts can cause memory leaks if not cleaned up properly
+const activeTimeouts = new Set<number>();
+
+/**
+ * Utility function to create and track timeouts
+ * Automatically adds timeout ID to tracking set for cleanup
+ */
+function createTrackedTimeout(callback: () => void, delay: number): number {
+	const timeoutId = setTimeout(() => {
+		activeTimeouts.delete(timeoutId);
+		callback();
+	}, delay);
+	activeTimeouts.add(timeoutId);
+	return timeoutId;
+}
+
+/**
+ * Clears a specific timeout and removes it from tracking
+ */
+function clearTrackedTimeout(timeoutId: number | null): void {
+	if (timeoutId !== null) {
+		clearTimeout(timeoutId);
+		activeTimeouts.delete(timeoutId);
+	}
+}
+
+/**
+ * Clears all active timeouts and resets animation state
+ * Call this function when components unmount or need cleanup
+ */
+export function cleanupTimeouts(): void {
+	// Clear all tracked timeouts
+	activeTimeouts.forEach(id => clearTimeout(id));
+	activeTimeouts.clear();
+	
+	// Clear individual timeout references
+	if (animationTimeoutId !== null) {
+		clearTimeout(animationTimeoutId);
+		animationTimeoutId = null;
+	}
+	if (batchTimeoutId !== null) {
+		clearTimeout(batchTimeoutId);
+		batchTimeoutId = null;
+	}
+	if (stepTimeoutId !== null) {
+		clearTimeout(stepTimeoutId);
+		stepTimeoutId = null;
+	}
+	
+	// Reset animation state
+	dsaState.isAnimating = false;
+}
+
+/**
+ * Gets count of active timeouts (for debugging)
+ */
+export function getActiveTimeoutCount(): number {
+	return activeTimeouts.size;
+}
 
 /**
  * Applies a move to the current state and updates reactive state
@@ -31,6 +94,7 @@ let animationTimeoutId: number | null = null;
 export function applyMove(move: DSAMove) {
 	const newState = engine.applyMove(dsaState, move);
 
+	// NOTE: Direct property mutation for consistent state management pattern
 	// Update state properties individually for proper reactivity
 	dsaState.array = newState.array;
 	dsaState.grid = newState.grid;
@@ -54,10 +118,8 @@ export function applyMove(move: DSAMove) {
  * Preserves user settings (mode, algorithm, size, speed)
  */
 export function resetVisualization() {
-	if (animationTimeoutId) {
-		clearTimeout(animationTimeoutId);
-		animationTimeoutId = null;
-	}
+	// Use new timeout cleanup system
+	cleanupTimeouts();
 
 	const newState = engine.initialState();
 
@@ -121,10 +183,8 @@ export function setAlgorithm(algorithm: SortingAlgorithm | PathfindingAlgorithm)
  * Changes between sorting and pathfinding modes
  */
 export function setMode(mode: AlgorithmType) {
-	if (animationTimeoutId) {
-		clearTimeout(animationTimeoutId);
-		animationTimeoutId = null;
-	}
+	// Clean up all active timeouts when switching modes
+	cleanupTimeouts();
 
 	const newState = engine.setMode(dsaState, mode);
 
@@ -235,11 +295,8 @@ export function setAnimationSpeed(speed: number) {
 export function skipToEnd() {
 	if (!dsaState.isAnimating && dsaState.totalSteps === 0) return;
 
-	// Stop current animation
-	if (animationTimeoutId) {
-		clearTimeout(animationTimeoutId);
-		animationTimeoutId = null;
-	}
+	// Stop current animation and clean up timeouts
+	cleanupTimeouts();
 
 	// Apply all remaining steps instantly
 	while (dsaState.currentStep < dsaState.totalSteps) {
@@ -293,10 +350,8 @@ export function startAnimation() {
  * Pauses the current animation
  */
 export function pauseAnimation() {
-	if (animationTimeoutId) {
-		clearTimeout(animationTimeoutId);
-		animationTimeoutId = null;
-	}
+	// Clean up all animation timeouts
+	cleanupTimeouts();
 	dsaState.isAnimating = false;
 }
 
@@ -470,7 +525,7 @@ function runNextStep() {
 			}
 		} else {
 			// Continue with next batch after yielding to browser
-			animationTimeoutId = setTimeout(() => {
+			batchTimeoutId = createTrackedTimeout(() => {
 				runNextStep();
 			}, 0);
 		}
@@ -493,8 +548,8 @@ function runNextStep() {
 		// Use configured animation speed
 		const delay = Math.max(dsaState.animationSpeed, 1); // Minimum delay to prevent browser hangs
 
-		// Schedule next step
-		animationTimeoutId = setTimeout(() => {
+		// Schedule next step with tracked timeout
+		stepTimeoutId = createTrackedTimeout(() => {
 			runNextStep();
 		}, delay);
 	}

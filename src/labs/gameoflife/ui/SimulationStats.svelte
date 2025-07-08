@@ -7,10 +7,7 @@ generation count, birth/death rates, and other relevant metrics.
 
 <script lang="ts">
 	import { Activity, Users, TrendingUp, TrendingDown, Hash } from 'lucide-svelte';
-	import { getSimulationState } from '../store.svelte';
-
-	// Get simulation state reactively
-	let simulationState = $derived(getSimulationState());
+	import { simulationState } from '../store.svelte';
 
 	// Get reactive stats directly from simulation state
 	let stats = $derived({

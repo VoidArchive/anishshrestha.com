@@ -15,7 +15,7 @@ export const lines: Line[] = generateLines(points);
 export const adjacency = buildAdjacencyMap(points, lines);
 const initialBoard = makeInitialBoard();
 
-// Reactive game state (Svelte runes)
+// NOTE: Reactive game state exported directly for consistent state management pattern
 export const gameState = $state<GameState>({
 	board: initialBoard,
 	turn: 'GOAT',

@@ -8,7 +8,7 @@ Uses consistent button styling and clear visual feedback for current state.
 <script lang="ts">
 	import { Play, Pause, SkipForward, RotateCcw, Shuffle, Square } from 'lucide-svelte';
 	import {
-		getSimulationState,
+		simulationState,
 		startSimulation,
 		stopSimulation,
 		stepGeneration,
@@ -16,12 +16,10 @@ Uses consistent button styling and clear visual feedback for current state.
 		clearGrid,
 		randomizeGrid,
 		changeSpeed,
-		toggleWrapEdges
+		toggleWrapEdges,
+		resizeGrid
 	} from '../store.svelte';
 	import { SimulationSpeed } from '../rules/types';
-
-	// Get simulation state reactively
-	let simulationState = $derived(getSimulationState());
 
 	// Get reactive stats directly from simulation state
 	let stats = $derived({
@@ -31,7 +29,9 @@ Uses consistent button styling and clear visual feedback for current state.
 		died: simulationState.stats.died,
 		isRunning: simulationState.isRunning,
 		speed: simulationState.speed,
-		wrapEdges: simulationState.wrapEdges
+		wrapEdges: simulationState.wrapEdges,
+		gridWidth: simulationState.gridSize.width,
+		gridHeight: simulationState.gridSize.height
 	});
 
 	/**
@@ -59,6 +59,15 @@ Uses consistent button styling and clear visual feedback for current state.
 	 */
 	function handleRandomize(): void {
 		randomizeGrid(0.25); // 25% alive probability
+	}
+
+	/**
+	 * Handles grid size preset selection
+	 */
+	function handleGridSizeChange(event: Event): void {
+		const target = event.target as HTMLSelectElement;
+		const [width, height] = target.value.split('x').map(Number);
+		resizeGrid(width, height);
 	}
 </script>
 
@@ -144,6 +153,24 @@ Uses consistent button styling and clear visual feedback for current state.
 				Reset All
 			</button>
 		</div>
+	</div>
+
+	<!-- Grid Size Control -->
+	<div class="control-group">
+		<h4 class="control-group-title">Grid Size</h4>
+		<select
+			class="size-select"
+			value="{stats.gridWidth}x{stats.gridHeight}"
+			onchange={handleGridSizeChange}
+			disabled={stats.isRunning}
+		>
+			<option value="20x15">Small (20×15)</option>
+			<option value="40x30">Medium (40×30)</option>
+			<option value="60x45">Large (60×45) - Virtualized</option>
+			<option value="80x60">X-Large (80×60) - Virtualized</option>
+			<option value="100x75">XX-Large (100×75) - Virtualized</option>
+			<option value="150x100">Huge (150×100) - Virtualized</option>
+		</select>
 	</div>
 
 	<!-- Options -->
@@ -247,6 +274,33 @@ Uses consistent button styling and clear visual feedback for current state.
 		cursor: not-allowed;
 	}
 
+	.size-select {
+		width: 100%;
+		padding: var(--space-2);
+		background: var(--color-bg-secondary);
+		border: 1px solid var(--color-border);
+		color: var(--color-text);
+		font-family: var(--font-family-mono);
+		font-size: 0.875rem;
+		border-radius: 4px;
+		transition: border-color 0.3s ease;
+	}
+
+	.size-select:hover {
+		border-color: var(--color-primary);
+	}
+
+	.size-select:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 2px rgba(201, 42, 42, 0.1);
+	}
+
+	.size-select:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
 	.checkbox-label {
 		display: flex;
 		align-items: center;
@@ -313,6 +367,10 @@ Uses consistent button styling and clear visual feedback for current state.
 		}
 
 		.speed-select {
+			font-size: 0.875rem;
+		}
+
+		.size-select {
 			font-size: 0.875rem;
 		}
 	}

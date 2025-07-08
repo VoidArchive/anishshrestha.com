@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import {
 		gameState,
 		handleCellClick as applyPlayerMove,
@@ -13,6 +14,9 @@
 	let isPlayingComputer = $state(true);
 	let playerSide: 'X' | 'O' = $state('X');
 	let isComputerThinking = $state(false);
+
+	// Timeout tracking for cleanup
+	let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
 
 	function isComputerTurn(): boolean {
 		return isPlayingComputer && gameState.turn !== playerSide;
@@ -40,10 +44,18 @@
 				isComputerThinking = false;
 			}, 200);
 
+			// Track timeout for cleanup
+			activeTimeouts.push(timeoutId);
+
 			// Cleanup function to cancel timeout if effect reruns
 			return () => {
 				clearTimeout(timeoutId);
 				isComputerThinking = false;
+				// Remove from active timeouts
+				const index = activeTimeouts.indexOf(timeoutId);
+				if (index > -1) {
+					activeTimeouts.splice(index, 1);
+				}
 			};
 		}
 	});
@@ -61,6 +73,20 @@
 		resetGame();
 		resetAI(); // Clear AI cache when resetting game
 	}
+
+	// Cleanup function to clear all active timeouts
+	function cleanup() {
+		activeTimeouts.forEach(timeoutId => {
+			clearTimeout(timeoutId);
+		});
+		activeTimeouts = [];
+		isComputerThinking = false;
+	}
+
+	// Clear timeouts when component is destroyed
+	onDestroy(() => {
+		cleanup();
+	});
 </script>
 
 <!-- Layout: controls left, board right (same as Bagchal) -->

@@ -14,14 +14,13 @@ import { insertPattern, getPatternByName } from './engine/patterns';
 // Create singleton engine instance
 const engine = new GameOfLifeEngine();
 
-// Create simulation state - not exported directly to avoid reassignment issues
-let simulationState = $state<SimulationState>(
+// Reactive simulation state - exported directly for consistent pattern
+export const simulationState = $state<SimulationState>(
 	engine.createInitialSimulation({ width: 40, height: 30 })
 );
 
 /**
  * Gets the current simulation state
- * This avoids the "cannot export state from module" error
  */
 export function getSimulationState(): SimulationState {
 	return simulationState;
@@ -52,9 +51,7 @@ export function stopSimulation(): void {
  */
 export function stepGeneration(): void {
 	engine.stepGeneration(simulationState);
-	// Force Svelte reactivity update for manual steps
-	// eslint-disable-next-line no-self-assign
-	simulationState = simulationState;
+	// NOTE: Svelte 5 runes automatically detect state changes, no workaround needed
 }
 
 /**
@@ -121,7 +118,7 @@ export function toggleCellAt(x: number, y: number): void {
 		stopSimulation();
 	}
 
-	// Update state by mutating the existing object
+	// NOTE: Direct property mutation for consistent state management pattern
 	simulationState.grid = toggleCell(simulationState.grid, x, y);
 	simulationState.stats.population = simulationState.grid.flat().filter((cell) => cell).length;
 }
@@ -138,10 +135,47 @@ export function insertPatternAt(patternName: string, x: number, y: number): void
 		stopSimulation();
 	}
 
-	// Update state by mutating the existing object
+	// NOTE: Direct property mutation for consistent state management pattern
 	simulationState.grid = insertPattern(simulationState.grid, pattern, x, y);
 	simulationState.selectedPattern = patternName;
 	simulationState.stats.population = simulationState.grid.flat().filter((cell) => cell).length;
+}
+
+/**
+ * Resizes the grid to new dimensions
+ * NOTE: This is primarily for testing virtualization with larger grids
+ */
+export function resizeGrid(width: number, height: number): void {
+	// Stop simulation during resize
+	if (simulationState.isRunning) {
+		stopSimulation();
+	}
+
+	// Create new grid with same pattern preservation logic
+	const newGrid = Array(height).fill(null).map(() => Array(width).fill(false));
+	
+	// Copy existing cells that fit in the new dimensions
+	const copyWidth = Math.min(simulationState.gridSize.width, width);
+	const copyHeight = Math.min(simulationState.gridSize.height, height);
+	
+	for (let y = 0; y < copyHeight; y++) {
+		for (let x = 0; x < copyWidth; x++) {
+			if (simulationState.grid[y] && simulationState.grid[y][x]) {
+				newGrid[y][x] = true;
+			}
+		}
+	}
+
+	// Update state
+	simulationState.grid = newGrid;
+	simulationState.gridSize = { width, height };
+	simulationState.generation = 0;
+	simulationState.stats = {
+		population: newGrid.flat().filter(cell => cell).length,
+		born: 0,
+		died: 0,
+		totalGenerations: 0
+	};
 }
 
 /**

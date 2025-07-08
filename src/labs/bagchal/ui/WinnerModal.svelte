@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import type { GameState } from '$labs/bagchal/rules';
 
 	interface Props {
@@ -86,10 +87,28 @@
 	let stats = $derived(gameStats());
 	let playerWon = $derived(stats?.playerWon ?? null);
 
+	// Timeout tracking for cleanup
+	let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
+
 	// Show modal with animation when winner is determined
 	$effect(() => {
 		if (gameState.winner) {
-			setTimeout(() => (modalVisible = true), 100);
+			try {
+				const timeoutId = setTimeout(() => {
+					try {
+						modalVisible = true;
+					} catch (error) {
+						// NOTE: Error showing modal - display immediately
+						console.warn('Modal visibility animation failed:', error);
+						modalVisible = true;
+					}
+				}, 100);
+				activeTimeouts.push(timeoutId);
+			} catch (error) {
+				// NOTE: setTimeout for modal failed - show immediately
+				console.warn('Modal setTimeout failed:', error);
+				modalVisible = true;
+			}
 		} else {
 			modalVisible = false;
 		}
@@ -97,22 +116,56 @@
 
 	function handlePlayAgain() {
 		modalVisible = false;
-		setTimeout(onPlayAgain, 200);
+		try {
+			const timeoutId = setTimeout(onPlayAgain, 200);
+			activeTimeouts.push(timeoutId);
+		} catch (error) {
+			// NOTE: setTimeout for play again failed - execute immediately
+			console.warn('Play again setTimeout failed:', error);
+			onPlayAgain();
+		}
 	}
 
 	function handleSwitchSides() {
 		if (onSwitchSides) {
 			modalVisible = false;
-			setTimeout(onSwitchSides, 200);
+			try {
+				const timeoutId = setTimeout(onSwitchSides, 200);
+				activeTimeouts.push(timeoutId);
+			} catch (error) {
+				// NOTE: setTimeout for switch sides failed - execute immediately
+				console.warn('Switch sides setTimeout failed:', error);
+				onSwitchSides();
+			}
 		}
 	}
 
 	function handleChangeMode() {
 		if (onChangeMode) {
 			modalVisible = false;
-			setTimeout(onChangeMode, 200);
+			try {
+				const timeoutId = setTimeout(onChangeMode, 200);
+				activeTimeouts.push(timeoutId);
+			} catch (error) {
+				// NOTE: setTimeout for change mode failed - execute immediately
+				console.warn('Change mode setTimeout failed:', error);
+				onChangeMode();
+			}
 		}
 	}
+
+	// Cleanup function to clear all active timeouts
+	function cleanup() {
+		activeTimeouts.forEach(timeoutId => {
+			clearTimeout(timeoutId);
+		});
+		activeTimeouts = [];
+	}
+
+	// Clear timeouts when component is destroyed
+	onDestroy(() => {
+		cleanup();
+	});
 
 	// Get performance color classes
 	function getPerformanceColor(performance: string): string {

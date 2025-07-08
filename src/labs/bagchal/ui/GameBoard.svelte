@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import type { GameState, Line, Point } from '$labs/bagchal/rules';
 	import BoardGrid from './BoardGrid.svelte';
 	import PieceRenderer from './PieceRenderer.svelte';
@@ -41,6 +42,9 @@
 	let phaseTransitionVisible = $state(false);
 	let previousPhase = $state(gameState.phase);
 
+	// Timeout tracking for cleanup
+	let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
+
 	// Watch for phase transitions from PLACEMENT to MOVEMENT
 	$effect(() => {
 		if (previousPhase === 'PLACEMENT' && gameState.phase === 'MOVEMENT') {
@@ -48,13 +52,35 @@
 			phaseTransitionVisible = true;
 
 			// Hide the notification after 3 seconds
-			setTimeout(() => {
+			try {
+				const timeoutId1 = setTimeout(() => {
+					try {
+						phaseTransitionVisible = false;
+						// Remove from DOM after fade out animation
+						const timeoutId2 = setTimeout(() => {
+							try {
+								showPhaseTransition = false;
+							} catch (error) {
+								// NOTE: Error during phase transition cleanup - reset state
+								console.warn('Phase transition cleanup failed:', error);
+								showPhaseTransition = false;
+							}
+						}, 300);
+						activeTimeouts.push(timeoutId2);
+					} catch (error) {
+						// NOTE: Error during phase transition fade - reset state
+						console.warn('Phase transition fade failed:', error);
+						showPhaseTransition = false;
+						phaseTransitionVisible = false;
+					}
+				}, 3000);
+				activeTimeouts.push(timeoutId1);
+			} catch (error) {
+				// NOTE: Error during phase transition setup - reset state
+				console.warn('Phase transition setup failed:', error);
+				showPhaseTransition = false;
 				phaseTransitionVisible = false;
-				// Remove from DOM after fade out animation
-				setTimeout(() => {
-					showPhaseTransition = false;
-				}, 300);
-			}, 3000);
+			}
 		}
 		previousPhase = gameState.phase;
 	});
@@ -106,30 +132,85 @@
 	});
 
 	async function animateMove(duration: number) {
-		// Reset animation
-		animationProgress = 0;
+		try {
+			// Reset animation
+			animationProgress = 0;
 
-		const startTime = Date.now();
+			const startTime = Date.now();
+			let animationFrameId: number;
 
-		function animate() {
-			const elapsed = Date.now() - startTime;
-			const progress = Math.min(elapsed / duration, 1);
+			function animate() {
+				try {
+					const elapsed = Date.now() - startTime;
+					const progress = Math.min(elapsed / duration, 1);
 
-			// Snappy ease-out animation for responsive gameplay
-			animationProgress = 1 - Math.pow(1 - progress, 2);
+					// Snappy ease-out animation for responsive gameplay
+					animationProgress = 1 - Math.pow(1 - progress, 2);
 
-			if (progress < 1) {
-				requestAnimationFrame(animate);
-			} else {
-				// Animation complete - clean up immediately
-				showAnimation = false;
-				animationProgress = 0;
-				currentAnimationMove = null;
+					if (progress < 1) {
+						try {
+							animationFrameId = requestAnimationFrame(animate);
+						} catch (rafError) {
+							// WARN: requestAnimationFrame failed - fallback to setTimeout
+							console.warn('requestAnimationFrame failed, using setTimeout fallback:', rafError);
+							setTimeout(animate, 16); // ~60fps fallback
+						}
+					} else {
+						// Animation complete - clean up immediately
+						showAnimation = false;
+						animationProgress = 0;
+						currentAnimationMove = null;
+					}
+				} catch (error) {
+					// NOTE: Error during animation frame - graceful cleanup
+					console.warn('Animation frame error:', error);
+					// Clean up animation state
+					showAnimation = false;
+					animationProgress = 0;
+					currentAnimationMove = null;
+					if (animationFrameId) {
+						try {
+							cancelAnimationFrame(animationFrameId);
+						} catch (cancelError) {
+							console.warn('Failed to cancel animation frame:', cancelError);
+						}
+					}
+				}
 			}
-		}
 
-		requestAnimationFrame(animate);
+			try {
+				animationFrameId = requestAnimationFrame(animate);
+			} catch (rafError) {
+				// WARN: Initial requestAnimationFrame failed - fallback to setTimeout
+				console.warn('Initial requestAnimationFrame failed, using setTimeout fallback:', rafError);
+				setTimeout(animate, 16); // ~60fps fallback
+			}
+		} catch (error) {
+			// NOTE: Error during animation setup - reset animation state
+			console.warn('Animation setup failed:', error);
+			showAnimation = false;
+			animationProgress = 0;
+			currentAnimationMove = null;
+		}
 	}
+
+	// Cleanup function to clear all active timeouts
+	function cleanup() {
+		activeTimeouts.forEach(timeoutId => {
+			clearTimeout(timeoutId);
+		});
+		activeTimeouts = [];
+		showPhaseTransition = false;
+		phaseTransitionVisible = false;
+		showAnimation = false;
+		animationProgress = 0;
+		currentAnimationMove = null;
+	}
+
+	// Clear timeouts when component is destroyed
+	onDestroy(() => {
+		cleanup();
+	});
 
 	// Export animation trigger for parent components
 	export { triggerAnimation };
