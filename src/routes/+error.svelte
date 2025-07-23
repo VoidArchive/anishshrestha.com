@@ -78,7 +78,7 @@
 	function reportIssue() {
 		const subject = `Error Report: ${errorStatus} - ${errorDetails.title}`;
 		const body = `Error Details:\n- Status: ${errorStatus}\n- Message: ${errorMessage}\n- URL: ${page.url.pathname}\n- User Agent: ${typeof window !== 'undefined' ? navigator.userAgent : 'N/A'}`;
-		const mailtoLink = `mailto:your-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+		const mailtoLink = `mailto:hi@anishshrestha.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
 		if (typeof window !== 'undefined') {
 			window.location.href = mailtoLink;
@@ -166,7 +166,7 @@
 			</div>
 
 			<!-- Report issue link -->
-			{#if errorStatus >= 500}
+			{#if errorStatus >= 400}
 				<div class="report-section">
 					<button class="report-link text-text-muted text-sm" onclick={reportIssue}>
 						<Bug size={14} />
