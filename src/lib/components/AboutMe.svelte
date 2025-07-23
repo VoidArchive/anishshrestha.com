@@ -48,7 +48,8 @@ Enhanced with better readability and subtle visual improvements.
 		<!-- Introduction -->
 		<div class="intro-section">
 			<p class="intro-text">
-				Hi, I'm Anish. I'm a software developer from Nepal who loves building innovative solutions and bringing ideas to life through code.
+				Hi, I'm Anish. I'm a software developer from Nepal who loves building innovative solutions
+				and bringing ideas to life through code.
 			</p>
 		</div>
 
@@ -64,19 +65,25 @@ Enhanced with better readability and subtle visual improvements.
 					class="company-link"
 					target="_blank"
 					rel="noopener noreferrer">Global Square</a
-				>, crafting scalable systems from database design to user interfaces, with expertise in modern web technologies and distributed architectures.
+				>, crafting scalable systems from database design to user interfaces, with expertise in
+				modern web technologies and distributed architectures.
 			</p>
 		</div>
 
 		<!-- Background -->
 		<div class="background-section">
 			<p class="background-text">
-				I specialize in full-stack development, creating everything from interactive visualizers and games to enterprise applications. My experience spans frontend frameworks, backend services, database design, and DevOps practices - bringing complete software solutions to life.
+				I specialize in full-stack development, creating everything from interactive visualizers and
+				games to enterprise applications. My experience spans frontend frameworks, backend services,
+				database design, and DevOps practices - bringing complete software solutions to life.
 			</p>
-			
+
 			<!-- Additional detail for SEO and AI understanding -->
 			<p class="background-text">
-				My work includes building scalable web applications, implementing complex algorithms, creating interactive user experiences, and solving challenging software engineering problems. I enjoy working across the entire technology stack and have experience with both startup environments and enterprise systems.
+				My work includes building scalable web applications, implementing complex algorithms,
+				creating interactive user experiences, and solving challenging software engineering
+				problems. I enjoy working across the entire technology stack and have experience with both
+				startup environments and enterprise systems.
 			</p>
 		</div>
 
@@ -94,7 +101,7 @@ Enhanced with better readability and subtle visual improvements.
 				>
 					The internet can still be fun.
 				</span>
-				<span class="vim-hint">← try hovering</span>
+				<!-- <span class="vim-hint">← try hovering</span> -->
 			</p>
 		</div>
 	</div>
@@ -196,12 +203,6 @@ Enhanced with better readability and subtle visual improvements.
 		/* border-color: var(--color-border); */
 		/* background: rgba(201, 42, 42, 0.05); */
 		outline: none;
-	}
-
-	.vim-hint {
-		font-size: 0.75rem;
-		opacity: 0.6;
-		font-style: italic;
 	}
 
 	.gopher-cursor {

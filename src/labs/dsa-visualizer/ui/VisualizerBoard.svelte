@@ -191,6 +191,21 @@ Responsive design with proper click handling and space utilization.
 										onmousedown={(e) => handleCellMouseDown(x, y, e)}
 										onmouseenter={() => handleCellMouseEnter(x, y)}
 										ondblclick={() => handleCellDoubleClick(x, y)}
+										aria-label="Grid cell at ({x}, {y}) - {node.isStart
+											? 'Start'
+											: node.isEnd
+												? 'End'
+												: node.isWall
+													? 'Wall'
+													: node.isPath
+														? 'Path'
+														: node.isCurrent
+															? `Current (exploring)`
+															: node.isFrontier
+																? 'Frontier (queued)'
+																: node.isVisited
+																	? `Visited${node.distance !== Infinity ? ` (d:${node.distance})` : ''}`
+																	: 'Empty'}"
 										title="({x}, {y}) - {node.isStart
 											? 'Start'
 											: node.isEnd

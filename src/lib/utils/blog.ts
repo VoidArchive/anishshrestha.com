@@ -174,7 +174,7 @@ const blogCache = new BlogCache();
  */
 export async function getBlogPosts(): Promise<BlogPost[]> {
 	const cacheKey = 'all-blog-posts';
-	
+
 	// Check cache first
 	const cachedPosts = blogCache.get(cacheKey);
 	if (cachedPosts) {
@@ -210,7 +210,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 
 	// Cache the results
 	blogCache.set(cacheKey, sortedPosts);
-	
+
 	return sortedPosts;
 }
 
@@ -242,7 +242,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 
 			// Cache the single post
 			blogCache.setSingle(slug, blogPost);
-			
+
 			return blogPost;
 		}
 

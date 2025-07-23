@@ -152,12 +152,14 @@ export function resizeGrid(width: number, height: number): void {
 	}
 
 	// Create new grid with same pattern preservation logic
-	const newGrid = Array(height).fill(null).map(() => Array(width).fill(false));
-	
+	const newGrid = Array(height)
+		.fill(null)
+		.map(() => Array(width).fill(false));
+
 	// Copy existing cells that fit in the new dimensions
 	const copyWidth = Math.min(simulationState.gridSize.width, width);
 	const copyHeight = Math.min(simulationState.gridSize.height, height);
-	
+
 	for (let y = 0; y < copyHeight; y++) {
 		for (let x = 0; x < copyWidth; x++) {
 			if (simulationState.grid[y] && simulationState.grid[y][x]) {
@@ -171,7 +173,7 @@ export function resizeGrid(width: number, height: number): void {
 	simulationState.gridSize = { width, height };
 	simulationState.generation = 0;
 	simulationState.stats = {
-		population: newGrid.flat().filter(cell => cell).length,
+		population: newGrid.flat().filter((cell) => cell).length,
 		born: 0,
 		died: 0,
 		totalGenerations: 0

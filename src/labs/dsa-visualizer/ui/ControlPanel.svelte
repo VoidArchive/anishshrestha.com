@@ -236,12 +236,13 @@ in logical groupings for better UX and consistency.
 			{#if mode === 'SORTING'}
 				<!-- Array Size -->
 				<div class="setting-item">
-					<label class="setting-label">
+					<label class="setting-label" for="array-size-input">
 						Array Size: <span class="setting-value">{arraySize}</span>
 						<span class="setting-hint">Drag to adjust</span>
 					</label>
 					<div class="range-container">
 						<input
+							id="array-size-input"
 							type="range"
 							class="range-input"
 							min="5"
@@ -261,8 +262,9 @@ in logical groupings for better UX and consistency.
 
 			<!-- Speed Control -->
 			<div class="setting-item">
-				<label class="setting-label">Speed:</label>
+				<label class="setting-label" for="speed-select">Speed:</label>
 				<select
+					id="speed-select"
 					class="speed-select"
 					value={animationSpeed}
 					onchange={handleSpeedChange}
@@ -339,11 +341,6 @@ in logical groupings for better UX and consistency.
 		margin: 0;
 		padding-bottom: var(--space-1);
 		border-bottom: 1px solid var(--color-border);
-	}
-
-	.button-row {
-		display: flex;
-		flex-wrap: wrap;
 	}
 
 	/* New Simulation Controls Layout */
@@ -426,18 +423,6 @@ in logical groupings for better UX and consistency.
 	.control-btn.primary:hover:not(:disabled) {
 		background: #b91c1c;
 		border-color: #b91c1c;
-	}
-
-	.control-btn.secondary {
-		background: var(--color-bg-secondary);
-		color: var(--color-text-secondary);
-		border-color: var(--color-border);
-	}
-
-	.control-btn.secondary:hover:not(:disabled) {
-		background: var(--color-bg-primary);
-		color: var(--color-text-primary);
-		border-color: var(--color-primary);
 	}
 
 	.algorithm-controls {

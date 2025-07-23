@@ -44,24 +44,14 @@ function createTrackedTimeout(callback: () => void, delay: number): number {
 }
 
 /**
- * Clears a specific timeout and removes it from tracking
- */
-function clearTrackedTimeout(timeoutId: number | null): void {
-	if (timeoutId !== null) {
-		clearTimeout(timeoutId);
-		activeTimeouts.delete(timeoutId);
-	}
-}
-
-/**
  * Clears all active timeouts and resets animation state
  * Call this function when components unmount or need cleanup
  */
 export function cleanupTimeouts(): void {
 	// Clear all tracked timeouts
-	activeTimeouts.forEach(id => clearTimeout(id));
+	activeTimeouts.forEach((id) => clearTimeout(id));
 	activeTimeouts.clear();
-	
+
 	// Clear individual timeout references
 	if (animationTimeoutId !== null) {
 		clearTimeout(animationTimeoutId);
@@ -75,7 +65,7 @@ export function cleanupTimeouts(): void {
 		clearTimeout(stepTimeoutId);
 		stepTimeoutId = null;
 	}
-	
+
 	// Reset animation state
 	dsaState.isAnimating = false;
 }

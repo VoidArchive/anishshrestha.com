@@ -30,7 +30,7 @@
 
 	// Computer move state
 	let isComputerThinking = $state(false);
-	
+
 	// Race condition protection - atomic lock mechanism
 	let moveExecutionLock = $state(false);
 
@@ -47,7 +47,7 @@
 	async function executeComputerMove() {
 		// Atomic check-and-set pattern to prevent race conditions
 		if (moveExecutionLock || isComputerThinking || gameState.winner) return;
-		
+
 		// Set lock atomically - if already set, another execution is in progress
 		moveExecutionLock = true;
 		isComputerThinking = true;
@@ -155,7 +155,12 @@
 				try {
 					const timeoutId = setTimeout(() => {
 						try {
-							if (isComputerTurn() && !moveExecutionLock && !isComputerThinking && !gameState.winner) {
+							if (
+								isComputerTurn() &&
+								!moveExecutionLock &&
+								!isComputerThinking &&
+								!gameState.winner
+							) {
 								executeComputerMove();
 							}
 						} catch (error) {
@@ -178,7 +183,7 @@
 
 	// Cleanup function to clear all active timeouts
 	function cleanup() {
-		activeTimeouts.forEach(timeoutId => {
+		activeTimeouts.forEach((timeoutId) => {
 			clearTimeout(timeoutId);
 		});
 		activeTimeouts = [];

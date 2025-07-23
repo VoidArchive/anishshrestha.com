@@ -11,12 +11,12 @@ with subtle hover animations and visual hierarchy.
 
 	interface TechItem {
 		name: string;
-		icon: any;
+		icon: typeof Code;
 	}
 
 	interface TechCategory {
 		name: string;
-		icon: any;
+		icon: typeof Code;
 		items: TechItem[];
 	}
 

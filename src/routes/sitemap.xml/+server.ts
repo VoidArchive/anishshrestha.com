@@ -13,7 +13,12 @@ export async function GET() {
 	const baseUrl = 'https://anishshrestha.com';
 
 	const staticPages: SitemapPage[] = [
-		{ url: '', priority: '1.0', changefreq: 'weekly', lastmod: new Date().toISOString().split('T')[0] },
+		{
+			url: '',
+			priority: '1.0',
+			changefreq: 'weekly',
+			lastmod: new Date().toISOString().split('T')[0]
+		},
 		{ url: '/projects', priority: '0.9', changefreq: 'monthly' },
 		{ url: '/blog', priority: '0.8', changefreq: 'weekly' },
 		{ url: '/labs', priority: '0.7', changefreq: 'monthly' },

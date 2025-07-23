@@ -76,7 +76,7 @@
 
 	// Cleanup function to clear all active timeouts
 	function cleanup() {
-		activeTimeouts.forEach(timeoutId => {
+		activeTimeouts.forEach((timeoutId) => {
 			clearTimeout(timeoutId);
 		});
 		activeTimeouts = [];

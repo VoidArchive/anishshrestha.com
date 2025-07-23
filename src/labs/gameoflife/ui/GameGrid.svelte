@@ -48,20 +48,20 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 	// Calculate viewport bounds for virtual scrolling
 	let viewportBounds = $derived(() => {
 		if (!useVirtualization) return null;
-		
+
 		const cellSizeWithGap = cellSize() + 1; // Include gap
 		const visibleCols = Math.ceil(containerWidth / cellSizeWithGap);
 		const visibleRows = Math.ceil(containerHeight / cellSizeWithGap);
-		
+
 		// Add buffer for smooth scrolling
 		const bufferCols = Math.max(2, Math.ceil(visibleCols * 0.1));
 		const bufferRows = Math.max(2, Math.ceil(visibleRows * 0.1));
-		
+
 		const startCol = Math.max(0, Math.floor(scrollLeft / cellSizeWithGap) - bufferCols);
 		const endCol = Math.min(gridWidth - 1, startCol + visibleCols + bufferCols * 2);
 		const startRow = Math.max(0, Math.floor(scrollTop / cellSizeWithGap) - bufferRows);
 		const endRow = Math.min(gridHeight - 1, startRow + visibleRows + bufferRows * 2);
-		
+
 		return {
 			startCol,
 			endCol,
@@ -84,10 +84,10 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 			}
 			return cells;
 		}
-		
+
 		const bounds = viewportBounds();
 		if (!bounds) return [];
-		
+
 		const cells = [];
 		for (let y = bounds.startRow; y <= bounds.endRow; y++) {
 			for (let x = bounds.startCol; x <= bounds.endCol; x++) {
@@ -126,9 +126,9 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 			const handleResize = () => {
 				updateContainerDimensions();
 			};
-			
+
 			window.addEventListener('resize', handleResize);
-			
+
 			// Cleanup on component destroy
 			return () => {
 				window.removeEventListener('resize', handleResize);
@@ -178,7 +178,10 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 										height: {cellSize()}px;
 									"
 									onclick={() => handleCellClick(cell.x, cell.y)}
-									aria-label="Cell at position {cell.x}, {cell.y}. Currently {isCellAlive(cell.x, cell.y)
+									aria-label="Cell at position {cell.x}, {cell.y}. Currently {isCellAlive(
+										cell.x,
+										cell.y
+									)
 										? 'alive'
 										: 'dead'}"
 									aria-selected={isCellAlive(cell.x, cell.y)}
@@ -201,7 +204,10 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 								<button
 									class="cell {isCellAlive(cell.x, cell.y) ? 'alive' : 'dead'}"
 									onclick={() => handleCellClick(cell.x, cell.y)}
-									aria-label="Cell at position {cell.x}, {cell.y}. Currently {isCellAlive(cell.x, cell.y)
+									aria-label="Cell at position {cell.x}, {cell.y}. Currently {isCellAlive(
+										cell.x,
+										cell.y
+									)
 										? 'alive'
 										: 'dead'}"
 									aria-selected={isCellAlive(cell.x, cell.y)}
