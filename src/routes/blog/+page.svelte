@@ -28,7 +28,7 @@
 
 <main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
 	<TwoColumnShell>
-		<svelte:fragment slot="left">
+		{#snippet left()}
 			<section class="section-card">
 				<h3 class="section-title text-lg">Blog</h3>
 				<p class="text-text-muted text-sm leading-relaxed">
@@ -37,7 +37,7 @@
 					architectural decisions.
 				</p>
 			</section>
-		</svelte:fragment>
+		{/snippet}
 
 		<div class="mx-auto max-w-4xl">
 			{#if data.posts.length > 0}

@@ -43,7 +43,7 @@
 
 <main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
 	<TwoColumnShell>
-		<svelte:fragment slot="left">
+		{#snippet left()}
 			<!-- Labs description -->
 			<section class="section-card">
 				<h3 class="section-title text-lg">Labs</h3>
@@ -53,7 +53,7 @@
 					mechanics. If you find a bug, report it on Github or drop me a message.
 				</p>
 			</section>
-		</svelte:fragment>
+		{/snippet}
 
 		<!-- Main column -->
 		<div class="flex flex-col">

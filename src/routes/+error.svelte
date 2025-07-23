@@ -97,7 +97,7 @@
 
 <main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
 	<TwoColumnShell>
-		<svelte:fragment slot="left">
+		{#snippet left()}
 			<!-- Error summary -->
 			<section class="section-card">
 				<h3 class="section-title text-lg">Error Details</h3>
@@ -121,7 +121,7 @@
 					</button>
 				</div>
 			</section>
-		</svelte:fragment>
+		{/snippet}
 
 		<!-- Main error display -->
 		<div

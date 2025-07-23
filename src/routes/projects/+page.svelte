@@ -84,7 +84,7 @@
 
 <main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
 	<TwoColumnShell>
-		<svelte:fragment slot="left">
+		{#snippet left()}
 			<section class="section-card">
 				<h3 class="section-title text-lg">Projects</h3>
 				<p class="text-text-muted text-sm leading-relaxed">
@@ -93,7 +93,7 @@
 					software development using Go, Python, and modern web technologies.
 				</p>
 			</section>
-		</svelte:fragment>
+		{/snippet}
 
 		<div class="w-full">
 			<section class="flex flex-col" style="gap: var(--space-4); padding-bottom: var(--space-16);">

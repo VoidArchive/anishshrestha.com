@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let leftWidth: string = '280px'; // configurable, but defaults to 280px
+	let { left, children, leftWidth = '280px' } = $props();
 </script>
 
 <div
@@ -7,10 +7,10 @@
 	style="--left-width:{leftWidth}; gap: var(--space-6);"
 >
 	<aside class="flex flex-col" style="gap: var(--space-6);">
-		<slot name="left" />
+		{@render left?.()}
 	</aside>
 
 	<main class="flex min-w-0 flex-col" style="gap: var(--space-6);">
-		<slot />
+		{@render children?.()}
 	</main>
 </div>
