@@ -24,10 +24,10 @@ rather than interactive browser-based labs.
 		/>
 
 		<MiniProjectCard
-			title="Portfolio & Lab Platform"
-			description="This very website! SvelteKit-based portfolio featuring interactive labs, blog system, and responsive design. Includes game engines, algorithm visualizers, and educational tools."
-			tech={['SvelteKit', 'TypeScript', 'Tailwind', 'Cloudflare']}
-			repo="https://github.com/VoidArchive/anishshrestha.com"
+			title="NepseAuth – NEPSE API Go Library"
+			description="Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval."
+			tech={['Go', 'API', 'Finance', 'NEPSE']}
+			repo="https://github.com/VoidArchive/nepseauth"
 		/>
 	</div>
 </section>

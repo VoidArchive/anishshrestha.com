@@ -4,6 +4,14 @@
 
 	const projects = [
 		{
+			title: 'NepseAuth – NEPSE API Go Library',
+			description:
+				'Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval.',
+			tech: ['Go', 'API', 'Finance', 'NEPSE'],
+			repo: 'https://github.com/VoidArchive/nepseauth',
+			demo: null
+		},
+		{
 			title: 'Bagchal – Nepali Strategy Game',
 			description:
 				'Browser implementation of Bagchal, the traditional Nepali Tigers & Goats board game. Features AI opponent with Easy and Hard difficulty levels.',
