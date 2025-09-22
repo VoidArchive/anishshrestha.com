@@ -22,6 +22,7 @@
 		positionHistory: string[];
 		positionCounts: Map<string, number>;
 		moveHistoryLength: number;
+		movesWithoutCapture: number;
 	}
 
 	let gameStateHistory: SavedGameState[] = $state([]);
@@ -42,7 +43,8 @@
 			winner: gameState.winner,
 			positionHistory: [...gameState.positionHistory],
 			positionCounts: new Map(gameState.positionCounts),
-			moveHistoryLength: moveHistory.length
+			moveHistoryLength: moveHistory.length,
+			movesWithoutCapture: gameState.movesWithoutCapture
 		});
 
 		if (gameStateHistory.length > 10) {
@@ -63,6 +65,7 @@
 				gameState.winner = previousState.winner;
 				gameState.positionHistory = previousState.positionHistory;
 				gameState.positionCounts = previousState.positionCounts;
+				gameState.movesWithoutCapture = previousState.movesWithoutCapture;
 
 				if (i === undoCount - 1) {
 					// Only update move history on the last undo
