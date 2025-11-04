@@ -129,6 +129,7 @@
 		src="https://cloud.umami.is/script.js"
 		data-website-id="b7abb816-2b4e-4807-bddb-f31649532505"
 	></script>
+	<script src="https://app.rybbit.io/api/script.js" data-site-id="496561f9af63" defer></script>
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
