@@ -45,6 +45,7 @@
 body {
 	@apply bg-bg-primary text-text min-h-screen font-mono leading-relaxed;
 	font-size: 14px;
+	font-family: var(--font-family-mono);
 }
 
 @media (min-width: 768px) {
