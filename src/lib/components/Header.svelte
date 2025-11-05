@@ -105,7 +105,7 @@
 
 <style>
 	.nav-link {
-		color: #f8f8f8;
+		color: var(--color-text);
 		transition: color 0.3s ease;
 		font-size: 1rem;
 		padding: 0.25rem 0.5rem;
@@ -114,18 +114,19 @@
 	}
 
 	.nav-link:hover {
-		color: #c92a2a;
+		color: var(--color-primary);
 	}
 
 	.nav-link.active {
-		background-color: #c92a2a;
-		color: #f8f8f8;
+		background-color: var(--color-primary);
+		color: var(--color-text);
 		padding: 0.25rem 0.5rem;
 		border-radius: 0;
 	}
 
-	.nav-link:focus {
-		outline: none;
+	.nav-link:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
 	}
 
 	/* Hamburger Icon Animation */

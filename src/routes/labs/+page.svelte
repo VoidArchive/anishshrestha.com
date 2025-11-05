@@ -4,6 +4,14 @@
 	// Simple list of labs/experiments – can be replaced with fetched data later
 	const experiments = [
 		{
+			name: 'Bagchal',
+			description: 'Play the traditional Nepali tiger-goat strategy game.',
+			slug: 'bagchal',
+			icon: '/icons/tiger.svg',
+			blogSlug: 'bagchal-reforged-ai-chess-tigers',
+			blogTitle: 'Bagchal Reforged: AI Chess with Tigers and Goats'
+		},
+		{
 			name: 'DSA Visualizer',
 			description:
 				'Interactive visualization of sorting algorithms and data structures with step-by-step animations.',
@@ -19,14 +27,6 @@
 			icon: 'grid',
 			blogSlug: 'building-conways-game-of-life-svelte',
 			blogTitle: "Building Conway's Game of Life: From Theory to Interactive Simulation"
-		},
-		{
-			name: 'Bagchal',
-			description: 'Play the traditional Nepali tiger-goat strategy game.',
-			slug: 'bagchal',
-			icon: '/icons/tiger.svg',
-			blogSlug: 'bagchal-reforged-ai-chess-tigers',
-			blogTitle: 'Bagchal Reforged: AI Chess with Tigers and Goats'
 		},
 		{
 			name: 'Tic Tac Toe',

@@ -2,7 +2,7 @@
 Latest Labs Component
 
 Clean showcase of the most recent interactive lab projects on the homepage.
-Features Game of Life and DSA Visualizer with minimal, focused preview cards
+Features Bagchal and DSA Visualizer with minimal, focused preview cards
 that emphasize project descriptions and technology stacks.
 -->
 
@@ -12,20 +12,20 @@ that emphasize project descriptions and technology stacks.
 	// Lab projects data
 	const latestLabs = [
 		{
+			name: 'Bagchal',
+			description:
+				'Traditional Nepali tiger-goat strategy game with AI opponent powered by minimax algorithm. Play as tigers or goats in this ancient board game.',
+			slug: 'bagchal',
+			tech: ['SvelteKit', 'TypeScript', 'AI', 'Game Theory'],
+			icon: 'tiger'
+		},
+		{
 			name: 'DSA Visualizer',
 			description:
 				'Interactive visualization of sorting algorithms and pathfinding with step-by-step animations, speed controls, and detailed statistics for learning data structures.',
 			slug: 'dsa-visualizer',
 			tech: ['SvelteKit', 'TypeScript', 'Algorithms', 'Visualization'],
 			icon: 'barchart'
-		},
-		{
-			name: 'Game of Life',
-			description:
-				"Conway's cellular automaton with pattern library, speed controls, and interactive grid editing. Watch evolution patterns unfold and create your own configurations.",
-			slug: 'gameoflife',
-			tech: ['SvelteKit', 'TypeScript', 'Cellular Automata', 'Simulation'],
-			icon: 'grid'
 		}
 	];
 </script>
@@ -42,6 +42,8 @@ that emphasize project descriptions and technology stacks.
 					<div class="lab-icon">
 						{#if lab.icon === 'barchart'}
 							<BarChart3 size={24} class="text-primary" />
+						{:else if lab.icon === 'tiger'}
+							<img src="/icons/tiger.svg" alt="Tiger icon" class="icon-img" />
 						{:else if lab.icon === 'grid'}
 							<Grid3x3 size={24} class="text-primary" />
 						{/if}
@@ -125,6 +127,13 @@ that emphasize project descriptions and technology stacks.
 		background: rgba(201, 42, 42, 0.15);
 		border-color: var(--color-primary);
 		transform: scale(1.05);
+	}
+
+	.icon-img {
+		width: 24px;
+		height: 24px;
+		filter: brightness(0) saturate(100%) invert(26%) sepia(98%) saturate(2526%) hue-rotate(348deg)
+			brightness(89%) contrast(95%);
 	}
 
 	.lab-content {

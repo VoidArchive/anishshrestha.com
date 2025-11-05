@@ -26,7 +26,11 @@
 	<meta property="og:url" content="https://anishshrestha.com/blog" />
 </svelte:head>
 
-<main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
+<main
+	id="main-content"
+	class="container"
+	style="padding-top: var(--space-8); padding-bottom: var(--space-8);"
+>
 	<TwoColumnShell>
 		{#snippet left()}
 			<section class="section-card">

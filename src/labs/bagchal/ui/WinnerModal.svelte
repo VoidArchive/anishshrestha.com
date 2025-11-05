@@ -154,6 +154,27 @@
 		}
 	}
 
+	function handleClose() {
+		modalVisible = false;
+	}
+
+	// Handle ESC key to close modal
+	$effect(() => {
+		if (!modalVisible) return;
+
+		function handleKeyDown(event: KeyboardEvent) {
+			if (event.key === 'Escape') {
+				handleClose();
+			}
+		}
+
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	});
+
 	// Cleanup function to clear all active timeouts
 	function cleanup() {
 		activeTimeouts.forEach((timeoutId) => {
@@ -186,20 +207,43 @@
 	}
 </script>
 
-{#if gameState.winner}
+{#if gameState.winner && modalVisible}
 	<!-- Modal Overlay -->
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4
-			{modalVisible ? 'opacity-100' : 'opacity-0'}
-			transition-opacity duration-300"
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 opacity-100 transition-opacity duration-300"
 	>
 		<!-- Modal Card -->
 		<div
-			class="bg-bg-primary border-border max-h-[80vh] w-full max-w-md overflow-y-auto border-2
-				{modalVisible ? 'translate-y-0 scale-100' : 'translate-y-5 scale-95'}
+			class="bg-bg-primary border-border relative max-h-[80vh] w-full max-w-md translate-y-0 scale-100 overflow-y-auto border-2
 				shadow-[0_8px_0_rgba(201,42,42,0.2),0_12px_20px_rgba(0,0,0,0.3)] transition-all duration-300
 				ease-out"
 		>
+			<!-- Close Button -->
+			<button
+				onclick={handleClose}
+				class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center
+					border border-border bg-bg-secondary text-text-muted
+					transition-all duration-200
+					hover:border-primary hover:text-primary hover:bg-bg-primary
+					active:translate-y-px"
+				aria-label="Close modal"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<line x1="18" y1="6" x2="6" y2="18"></line>
+					<line x1="6" y1="6" x2="18" y2="18"></line>
+				</svg>
+			</button>
+
 			<!-- Winner Announcement -->
 			<div class="border-border border-b p-8 pb-4 text-center">
 				<!-- Winner Icon with bounce animation -->

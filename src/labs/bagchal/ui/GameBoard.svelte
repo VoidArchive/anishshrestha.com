@@ -269,7 +269,7 @@
 						{#if gameState.winner === 'DRAW'}
 							🤝 It's a Draw!
 						{:else}
-							🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
+							{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
 						{/if}
 					</p>
 				{/if}

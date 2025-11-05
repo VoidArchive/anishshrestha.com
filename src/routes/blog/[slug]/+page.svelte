@@ -15,7 +15,7 @@
 	<meta property="og:type" content="article" />
 </svelte:head>
 
-<main class="container">
+<main id="main-content" class="container">
 	<article class="blog-post">
 		<header class="post-header">
 			<nav class="breadcrumb">
@@ -49,7 +49,8 @@
 		{/if}
 
 		<div class="post-content">
-			{@render (post.content as import('svelte').Snippet)()}
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+			{@html post.html}
 		</div>
 
 		<!-- Additional live demo callout at the bottom for better conversion -->

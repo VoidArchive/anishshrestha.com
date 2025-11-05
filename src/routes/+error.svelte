@@ -41,7 +41,7 @@
 					message: "You don't have permission to access this resource.",
 					suggestion: 'Please check your credentials or contact support.',
 					icon: AlertTriangle,
-					color: '#f59e0b'
+					color: 'var(--color-primary)'
 				};
 			default:
 				return {
@@ -228,8 +228,9 @@
 	}
 
 	.action-btn.primary:hover {
-		background: #b91c1c;
-		border-color: #b91c1c;
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		opacity: 0.9;
 	}
 
 	.error-icon {
@@ -313,8 +314,9 @@
 	}
 
 	.primary-btn:hover {
-		background: #b91c1c;
-		border-color: #b91c1c;
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		opacity: 0.9;
 	}
 
 	.secondary-btn {

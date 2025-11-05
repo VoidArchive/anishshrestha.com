@@ -20,7 +20,11 @@ Enhanced with quick actions for immediate engagement and profile stats.
 	let { data }: { data: PageData } = $props();
 </script>
 
-<main class="container min-h-[calc(100vh-100px)]" style="padding-bottom: var(--space-8);">
+<main
+	id="main-content"
+	class="container min-h-[calc(100vh-100px)]"
+	style="padding-bottom: var(--space-8);"
+>
 	<div class="main-grid">
 		<!-- Left Column -->
 		<aside class="flex flex-col">

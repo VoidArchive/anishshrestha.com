@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils/blog';
-	import type { BlogPost } from '$lib/utils/blog';
+	import type { BlogPostSummary } from '$lib/utils/blog';
 	import { Rss } from 'lucide-svelte';
 
 	interface Props {
-		posts: BlogPost[];
+		posts: BlogPostSummary[];
 	}
 
 	let { posts }: Props = $props();

@@ -1,5 +1,5 @@
 import { getBlogPosts } from '$lib/utils/blog';
-import type { BlogPost } from '$lib/utils/blog';
+import type { BlogPostSummary } from '$lib/utils/blog';
 
 interface SitemapPage {
 	url: string;
@@ -28,7 +28,7 @@ export async function GET() {
 		{ url: '/labs/tictactoe', priority: '0.6', changefreq: 'monthly' }
 	];
 
-	const blogPosts: SitemapPage[] = posts.map((post: BlogPost) => ({
+	const blogPosts: SitemapPage[] = posts.map((post: BlogPostSummary) => ({
 		url: `/blog/${post.slug}`,
 		priority: '0.8',
 		changefreq: 'monthly',

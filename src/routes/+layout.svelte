@@ -22,6 +22,10 @@
 <svelte:head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- Resource hints for analytics -->
+	<link rel="preconnect" href="https://cloud.umami.is" crossorigin="anonymous" />
+
 	<meta
 		name="description"
 		content="Anish Shrestha - Full-Stack Software Developer in Kathmandu, Nepal. Building web applications, distributed systems, and interactive experiences. Specializing in Go, Python, SvelteKit, and modern development practices."
@@ -129,8 +133,10 @@
 		src="https://cloud.umami.is/script.js"
 		data-website-id="b7abb816-2b4e-4807-bddb-f31649532505"
 	></script>
-	<script src="https://app.rybbit.io/api/script.js" data-site-id="496561f9af63" defer></script>
 </svelte:head>
+
+<!-- Skip link for keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <div class="flex min-h-screen flex-col">
 	<Header />
@@ -140,3 +146,23 @@
 	</div>
 	<Footer />
 </div>
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: 0;
+		background: var(--color-primary);
+		color: white;
+		padding: 8px 16px;
+		text-decoration: none;
+		z-index: 1000;
+		border-radius: 0 0 4px 0;
+		font-weight: 600;
+		transition: top 0.2s ease;
+	}
+
+	.skip-link:focus {
+		top: 0;
+	}
+</style>

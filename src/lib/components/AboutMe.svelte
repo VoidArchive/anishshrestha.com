@@ -171,7 +171,7 @@ Enhanced with better readability and subtle visual improvements.
 
 	.company-link:hover {
 		border-bottom-color: var(--color-primary);
-		color: #ef4444;
+		color: var(--color-primary);
 	}
 
 	.vim-section {

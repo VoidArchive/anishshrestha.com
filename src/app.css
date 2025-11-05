@@ -171,11 +171,11 @@ ul {
 /* Button styles */
 .btn {
 	@apply border-border text-text relative cursor-pointer overflow-hidden border bg-transparent px-4 py-2 font-mono text-sm transition-all duration-300;
-	outline: none; /* Remove focus outline */
 }
 
-.btn:focus {
-	outline: none; /* Remove focus outline */
+.btn:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
 }
 
 .btn::before {
@@ -195,11 +195,11 @@ ul {
 /* Secondary button variant */
 .btn-secondary {
 	@apply border-border text-text-muted relative cursor-pointer overflow-hidden border bg-transparent px-3 py-2 font-mono text-xs transition-all duration-300;
-	outline: none;
 }
 
-.btn-secondary:focus {
-	outline: none;
+.btn-secondary:focus-visible {
+	outline: 2px solid var(--color-text-muted);
+	outline-offset: 2px;
 }
 
 .btn-secondary::before {
@@ -236,17 +236,18 @@ ul {
 }
 
 /* Focus and selection styles */
-button:focus,
-input:focus,
-textarea:focus,
-select:focus {
-	@apply outline-primary outline-2 outline-offset-2;
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
 }
 
-/* Remove focus outlines for game buttons */
-.mode-btn:focus,
-.btn:focus {
-	outline: none !important;
+/* Game buttons use default btn focus styles */
+.mode-btn:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
 }
 
 ::selection {
@@ -259,7 +260,7 @@ select:focus {
 	top: 0.5rem;
 	right: 0.5rem;
 	background: rgba(248, 248, 248, 0.15);
-	color: #f8f8f8;
+	color: var(--color-text);
 	border: 1px solid rgba(248, 248, 248, 0.3);
 	border-radius: 4px;
 	padding: 0.5rem;
@@ -277,17 +278,17 @@ select:focus {
 .copy-code-button:hover {
 	background: rgba(248, 248, 248, 0.15);
 	border-color: rgba(248, 248, 248, 0.4);
-	color: #c92a2a;
+	color: var(--color-primary);
 }
 
 .copy-code-button.copied {
 	background: rgba(201, 42, 42, 0.2);
-	border-color: #c92a2a;
-	color: #c92a2a;
+	border-color: var(--color-primary);
+	color: var(--color-primary);
 }
 
-.copy-code-button:focus {
-	outline: 2px solid #c92a2a;
+.copy-code-button:focus-visible {
+	outline: 2px solid var(--color-primary);
 	outline-offset: 2px;
 }
 
