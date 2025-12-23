@@ -20,7 +20,11 @@ export default ts.config(
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node }
 		},
-		rules: { 'no-undef': 'off' }
+		rules: {
+			'no-undef': 'off',
+			// Disable for static internal links - no base path used in this app
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	},
 	{
 		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],

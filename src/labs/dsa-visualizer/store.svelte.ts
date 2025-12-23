@@ -6,6 +6,7 @@ Provides reactive store for sorting and pathfinding algorithm animations.
 Controls animation flow, user interactions, and algorithm execution.
 */
 
+import { SvelteSet } from 'svelte/reactivity';
 import { DSAEngine } from './engine';
 import type {
 	DSAState,
@@ -28,7 +29,7 @@ let stepTimeoutId: number | null = null;
 
 // TODO: Track all timeout IDs for proper cleanup
 // WARN: Multiple timeouts can cause memory leaks if not cleaned up properly
-const activeTimeouts = new Set<number>();
+const activeTimeouts = new SvelteSet<number>();
 
 /**
  * Utility function to create and track timeouts

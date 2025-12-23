@@ -7,10 +7,18 @@ that emphasize project descriptions and technology stacks.
 -->
 
 <script lang="ts">
-	import { Cpu, ArrowRight, Play, BarChart3, Grid3x3 } from 'lucide-svelte';
+	import { Cpu, ArrowRight, Play, BarChart3, Grid3x3, Bird } from 'lucide-svelte';
 
 	// Lab projects data
 	const latestLabs = [
+		{
+			name: 'Boids Flocking',
+			description:
+				'Watch emergent flocking behavior arise from three simple rules: separation, alignment, and cohesion. Adjust parameters in real-time to see how the flock responds.',
+			slug: 'boids',
+			tech: ['SvelteKit', 'TypeScript', 'Canvas', 'Spatial Hashing'],
+			icon: 'bird'
+		},
 		{
 			name: 'DSA Visualizer',
 			description:
@@ -44,6 +52,8 @@ that emphasize project descriptions and technology stacks.
 							<BarChart3 size={24} class="text-primary" />
 						{:else if lab.icon === 'grid'}
 							<Grid3x3 size={24} class="text-primary" />
+						{:else if lab.icon === 'bird'}
+							<Bird size={24} class="text-primary" />
 						{/if}
 					</div>
 				</div>

@@ -4,7 +4,8 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	const { post } = data;
+	// Use $derived to react to data changes
+	let post = $derived(data.post);
 </script>
 
 <svelte:head>

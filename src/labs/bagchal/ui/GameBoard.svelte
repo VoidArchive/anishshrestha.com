@@ -40,7 +40,8 @@
 	// Phase transition notification state
 	let showPhaseTransition = $state(false);
 	let phaseTransitionVisible = $state(false);
-	let previousPhase = $state(gameState.phase);
+	// Initialize to PLACEMENT since games always start in that phase
+	let previousPhase = $state<'PLACEMENT' | 'MOVEMENT'>('PLACEMENT');
 
 	// Timeout tracking for cleanup
 	let activeTimeouts: ReturnType<typeof setTimeout>[] = [];

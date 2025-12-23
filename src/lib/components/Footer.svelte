@@ -11,7 +11,9 @@
 
 	// Peek-a-boo gopher state
 	let gopherState = $state<'hidden' | 'peeking' | 'scared' | 'waving'>('hidden');
-	let gopherCorner = $state<'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'>('bottom-right');
+	let gopherCorner = $state<'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'>(
+		'bottom-right'
+	);
 	let gopherMessage = $state('psst... hey!');
 	let peekTimer: ReturnType<typeof setTimeout> | null = null;
 	let hideTimer: ReturnType<typeof setTimeout> | null = null;
@@ -19,7 +21,10 @@
 	const PEEK_AGAIN_DELAY = 8000; // 8 seconds before peeking again after hiding
 	const DETECTION_RADIUS = 150; // pixels - how close mouse needs to be to scare gopher
 	const CORNERS: Array<'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'> = [
-		'bottom-right', 'bottom-left', 'top-right', 'top-left'
+		'bottom-right',
+		'bottom-left',
+		'top-right',
+		'top-left'
 	];
 
 	// Funny gopher messages
@@ -40,7 +45,7 @@
 		'defer panic()',
 		'select { }',
 		'func main() {}',
-		'import "fmt"',
+		'import "fmt"'
 	];
 
 	function getRandomMessage() {
@@ -89,8 +94,7 @@
 		const pos = getGopherPosition(gopherCorner);
 
 		const distance = Math.sqrt(
-			Math.pow(event.clientX - pos.x, 2) +
-			Math.pow(event.clientY - pos.y, 2)
+			Math.pow(event.clientX - pos.x, 2) + Math.pow(event.clientY - pos.y, 2)
 		);
 
 		if (distance < DETECTION_RADIUS) {
@@ -168,9 +172,9 @@
 			<span
 				bind:this={vimText}
 				class="vim-easter-egg"
-				on:mouseenter={handleMouseEnter}
-				on:mouseleave={handleMouseLeave}
-				on:mousemove={handleMouseMove}
+				onmouseenter={handleMouseEnter}
+				onmouseleave={handleMouseLeave}
+				onmousemove={handleMouseMove}
 				role="button"
 				tabindex="0"
 			>
@@ -365,7 +369,8 @@
 	}
 
 	@keyframes waveBottom {
-		0%, 100% {
+		0%,
+		100% {
 			transform: translateY(0);
 		}
 		50% {
@@ -374,7 +379,8 @@
 	}
 
 	@keyframes waveTop {
-		0%, 100% {
+		0%,
+		100% {
 			transform: translateY(0);
 		}
 		50% {
@@ -400,23 +406,43 @@
 	}
 
 	@keyframes wiggleBottomRight {
-		0%, 100% { transform: scaleX(-1) rotate(-3deg); }
-		50% { transform: scaleX(-1) rotate(3deg); }
+		0%,
+		100% {
+			transform: scaleX(-1) rotate(-3deg);
+		}
+		50% {
+			transform: scaleX(-1) rotate(3deg);
+		}
 	}
 
 	@keyframes wiggleBottomLeft {
-		0%, 100% { transform: rotate(-3deg); }
-		50% { transform: rotate(3deg); }
+		0%,
+		100% {
+			transform: rotate(-3deg);
+		}
+		50% {
+			transform: rotate(3deg);
+		}
 	}
 
 	@keyframes wiggleTopRight {
-		0%, 100% { transform: scaleX(-1) scaleY(-1) rotate(-3deg); }
-		50% { transform: scaleX(-1) scaleY(-1) rotate(3deg); }
+		0%,
+		100% {
+			transform: scaleX(-1) scaleY(-1) rotate(-3deg);
+		}
+		50% {
+			transform: scaleX(-1) scaleY(-1) rotate(3deg);
+		}
 	}
 
 	@keyframes wiggleTopLeft {
-		0%, 100% { transform: scaleY(-1) rotate(-3deg); }
-		50% { transform: scaleY(-1) rotate(3deg); }
+		0%,
+		100% {
+			transform: scaleY(-1) rotate(-3deg);
+		}
+		50% {
+			transform: scaleY(-1) rotate(3deg);
+		}
 	}
 
 	/* Scared animation - quick hide */
@@ -478,27 +504,55 @@
 	}
 
 	@keyframes shakeBottomRight {
-		0%, 100% { transform: scaleX(-1) translateX(0); }
-		25% { transform: scaleX(-1) translateX(-5px); }
-		75% { transform: scaleX(-1) translateX(5px); }
+		0%,
+		100% {
+			transform: scaleX(-1) translateX(0);
+		}
+		25% {
+			transform: scaleX(-1) translateX(-5px);
+		}
+		75% {
+			transform: scaleX(-1) translateX(5px);
+		}
 	}
 
 	@keyframes shakeBottomLeft {
-		0%, 100% { transform: translateX(0); }
-		25% { transform: translateX(-5px); }
-		75% { transform: translateX(5px); }
+		0%,
+		100% {
+			transform: translateX(0);
+		}
+		25% {
+			transform: translateX(-5px);
+		}
+		75% {
+			transform: translateX(5px);
+		}
 	}
 
 	@keyframes shakeTopRight {
-		0%, 100% { transform: scaleX(-1) scaleY(-1) translateX(0); }
-		25% { transform: scaleX(-1) scaleY(-1) translateX(-5px); }
-		75% { transform: scaleX(-1) scaleY(-1) translateX(5px); }
+		0%,
+		100% {
+			transform: scaleX(-1) scaleY(-1) translateX(0);
+		}
+		25% {
+			transform: scaleX(-1) scaleY(-1) translateX(-5px);
+		}
+		75% {
+			transform: scaleX(-1) scaleY(-1) translateX(5px);
+		}
 	}
 
 	@keyframes shakeTopLeft {
-		0%, 100% { transform: scaleY(-1) translateX(0); }
-		25% { transform: scaleY(-1) translateX(-5px); }
-		75% { transform: scaleY(-1) translateX(5px); }
+		0%,
+		100% {
+			transform: scaleY(-1) translateX(0);
+		}
+		25% {
+			transform: scaleY(-1) translateX(-5px);
+		}
+		75% {
+			transform: scaleY(-1) translateX(5px);
+		}
 	}
 
 	/* Speech bubble - position based on corner */

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
 	makeInitialBoard,
 	generatePoints,
@@ -10,8 +10,7 @@ import {
 	checkIfTigersAreTrapped,
 	checkForDraw,
 	getBoardPositionHash,
-	type GameState,
-	type Point
+	type GameState
 } from './bagchal';
 
 // Helper to create a fresh game state

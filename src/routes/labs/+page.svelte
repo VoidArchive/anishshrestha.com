@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
-	import { Grid3x3, BarChart3, BookOpen } from 'lucide-svelte';
+	import { Grid3x3, BarChart3, BookOpen, Bird } from 'lucide-svelte';
 	// Simple list of labs/experiments – can be replaced with fetched data later
 	const experiments = [
 		{
@@ -33,6 +33,13 @@
 			description: 'Play the classic Tic Tac Toe game.',
 			slug: 'tictactoe',
 			icon: '/icons/hash.svg'
+		},
+		{
+			name: 'Boids Flocking',
+			description:
+				'Watch emergent flocking behavior arise from three simple rules: separation, alignment, and cohesion.',
+			slug: 'boids',
+			icon: 'bird'
 		}
 	];
 </script>
@@ -96,6 +103,8 @@
 							<Grid3x3 size={48} />
 						{:else if experiment.icon === 'barchart'}
 							<BarChart3 size={48} />
+						{:else if experiment.icon === 'bird'}
+							<Bird size={48} />
 						{:else}
 							<img src={experiment.icon} alt={experiment.name} class="h-16 w-16 flex-shrink-0" />
 						{/if}

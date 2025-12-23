@@ -33,13 +33,7 @@
 	<!-- Terminal content -->
 	<div class="terminal-body">
 		<div class="mb-6 flex justify-center">
-			<img
-				src="/bird-logo.svg"
-				alt="Anish's Logo"
-				width="64"
-				height="116"
-				class="logo-glow"
-			/>
+			<img src="/bird-logo.svg" alt="Anish's Logo" width="64" height="116" class="logo-glow" />
 		</div>
 
 		<div class="terminal-line {nameVisible ? 'visible' : ''}">

@@ -25,8 +25,8 @@
 		onTriggerAnimation
 	}: Props = $props();
 
-	// Computer player
-	let computerPlayer = new ComputerPlayer(gameMode);
+	// Computer player - use $derived to react to gameMode changes
+	let computerPlayer = $derived(new ComputerPlayer(gameMode));
 
 	// Computer move state
 	let isComputerThinking = $state(false);
@@ -138,11 +138,6 @@
 			moveExecutionLock = false;
 		}
 	}
-
-	// Update computer player mode when gameMode changes
-	$effect(() => {
-		computerPlayer.setMode(gameMode);
-	});
 
 	// Reactive computer move trigger
 	$effect(() => {

@@ -1,3 +1,4 @@
+import { SvelteMap } from 'svelte/reactivity';
 import type { GameState, Point, Line, CaptureInfo } from './rules';
 import {
 	generatePoints,
@@ -27,7 +28,7 @@ export const gameState = $state<GameState>({
 	validMoves: [],
 	message: '',
 	positionHistory: [],
-	positionCounts: new Map(),
+	positionCounts: new SvelteMap(),
 	mode: 'EASY',
 	movesWithoutCapture: 0
 });
