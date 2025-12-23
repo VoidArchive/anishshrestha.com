@@ -52,14 +52,20 @@
 	<meta property="og:url" content="https://anishshrestha.com" />
 	<meta property="og:site_name" content="Anish Shrestha" />
 	<meta property="og:locale" content="en_US" />
+	<meta property="og:image" content="https://anishshrestha.com/og-image.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="Anish Shrestha - Software Developer from Nepal" />
 
 	<!-- Twitter Card -->
-	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Anish Shrestha - Software Developer Nepal" />
 	<meta
 		name="twitter:description"
 		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences."
 	/>
+	<meta name="twitter:image" content="https://anishshrestha.com/og-image.png" />
+	<meta name="twitter:image:alt" content="Anish Shrestha - Software Developer from Nepal" />
 
 	<!-- JSON-LD Schema -->
 	<script type="application/ld+json">
