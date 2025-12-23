@@ -139,16 +139,16 @@ and reading blog posts with consistent styling and hover animations.
 		line-height: 1.4;
 	}
 
-	/* .action-arrow {
+	.action-card :global(.action-arrow) {
 		color: var(--color-text-muted);
 		transition: all 0.3s ease;
 		flex-shrink: 0;
 	}
 
-	.action-card:hover .action-arrow {
+	.action-card:hover :global(.action-arrow) {
 		transform: translateX(4px);
 		color: var(--color-primary);
-	} */
+	}
 
 	/* Mobile responsiveness */
 	@media (max-width: 768px) {

@@ -49,8 +49,8 @@
 				<h3 class="section-title text-lg">Labs</h3>
 				<p class="text-text-muted text-sm leading-relaxed">
 					This is my experimental playground where I build interactive projects, test new ideas, and
-					prototype concepts. Each lab is a hands-on exploration of deifferent technologies and game
-					mechanics. If you find a bug, report it on Github or drop me a message.
+					prototype concepts. Each lab is a hands-on exploration of different technologies and game
+					mechanics. If you find a bug, report it on GitHub or drop me a message.
 				</p>
 			</section>
 		{/snippet}

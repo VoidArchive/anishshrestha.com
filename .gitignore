@@ -1,17 +1,12 @@
 node_modules
 
 # Output
-.output
-.vercel
-.netlify
 .wrangler
 /.svelte-kit
-.cursor
 .vscode
-.claude
-.kiro 
-CLAUDE.md
 /build
+.playwright-mcp/
+
 
 # OS
 .DS_Store

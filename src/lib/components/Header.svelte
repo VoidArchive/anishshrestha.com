@@ -12,11 +12,12 @@
 	};
 </script>
 
-<header class="border-border border-b py-4">
+<header class="header-terminal">
 	<div class="container">
 		<div class="flex items-center justify-between">
-			<div class="text-text text-xl font-bold md:text-2xl">
-				<a href="/" on:click={closeMenu}>Anish</a>
+			<div class="logo-wrapper">
+				<span class="logo-prompt">~/</span>
+				<a href="/" on:click={closeMenu} class="logo-text">Anish</a>
 			</div>
 
 			<!-- Desktop Navigation -->
@@ -104,24 +105,91 @@
 </header>
 
 <style>
-	.nav-link {
-		color: #f8f8f8;
-		transition: color 0.3s ease;
-		font-size: 1rem;
-		padding: 0.25rem 0.5rem;
-		border-radius: 0.25rem;
+	.header-terminal {
+		border-bottom: 1px solid var(--color-border);
+		padding: 1rem 0;
+		background: var(--color-bg-secondary);
+		position: relative;
+	}
+
+	.header-terminal::after {
+		content: '';
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 100%;
+		height: 1px;
+		background: linear-gradient(90deg, var(--color-primary), transparent 50%);
+		opacity: 0.5;
+	}
+
+	.logo-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0;
+		font-size: 1.25rem;
+		font-weight: 700;
+	}
+
+	.logo-prompt {
+		color: var(--color-primary);
+		font-weight: 400;
+		opacity: 0.7;
+	}
+
+	.logo-text {
+		color: var(--color-text);
 		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.logo-text:hover {
+		color: var(--color-primary);
+		text-shadow: 0 0 20px var(--color-glow);
+	}
+
+	.nav-link {
+		color: var(--color-text-muted);
+		transition: all 0.3s ease;
+		font-size: 1rem;
+		padding: 0.25rem 0.75rem;
+		border-radius: 4px;
+		text-decoration: none;
+		position: relative;
+	}
+
+	.nav-link::before {
+		content: './';
+		color: var(--color-primary);
+		opacity: 0;
+		margin-right: 0;
+		transition: all 0.3s ease;
+		display: inline-block;
+		width: 0;
+		overflow: hidden;
+	}
+
+	.nav-link:hover::before {
+		opacity: 0.7;
+		width: 1.2em;
+		margin-right: 0;
 	}
 
 	.nav-link:hover {
-		color: #c92a2a;
+		color: var(--color-text);
 	}
 
 	.nav-link.active {
-		background-color: #c92a2a;
-		color: #f8f8f8;
-		padding: 0.25rem 0.5rem;
-		border-radius: 0;
+		background-color: var(--color-primary);
+		color: var(--color-bg-primary);
+		padding: 0.25rem 0.75rem;
+		border-radius: 4px;
+		font-weight: 600;
+		box-shadow: 0 0 15px -3px var(--color-glow);
+	}
+
+	.nav-link.active::before {
+		display: none;
 	}
 
 	.nav-link:focus {
@@ -169,5 +237,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+	}
+
+	@media (min-width: 768px) {
+		.logo-wrapper {
+			font-size: 1.5rem;
+		}
 	}
 </style>
