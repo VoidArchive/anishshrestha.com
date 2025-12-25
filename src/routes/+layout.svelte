@@ -37,13 +37,10 @@
 	<meta name="geo.placename" content="Kathmandu, Nepal" />
 	<meta name="geo.position" content="27.7172;85.3240" />
 	<meta name="ICBM" content="27.7172, 85.3240" />
-	<title>Anish Shrestha - Software Developer Nepal | Full-Stack Engineer & Tech Innovator</title>
+	<title>Anish Shrestha | Software Developer</title>
 
 	<!-- Open Graph -->
-	<meta
-		property="og:title"
-		content="Anish Shrestha - Software Developer Nepal | Full-Stack Engineer & Tech Innovator"
-	/>
+	<meta property="og:title" content="Anish Shrestha | Software Developer" />
 	<meta
 		property="og:description"
 		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences with modern technologies. Available for remote collaboration worldwide."
@@ -59,7 +56,7 @@
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Anish Shrestha - Software Developer Nepal" />
+	<meta name="twitter:title" content="Anish Shrestha | Software Developer" />
 	<meta
 		name="twitter:description"
 		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences."

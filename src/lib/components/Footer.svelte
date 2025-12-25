@@ -17,7 +17,7 @@
 	let gopherMessage = $state('psst... hey!');
 	let peekTimer: ReturnType<typeof setTimeout> | null = null;
 	let hideTimer: ReturnType<typeof setTimeout> | null = null;
-	const PEEK_DELAY = 5000; // 5 seconds before first peek
+	const PEEK_DELAY = 10000; // 10 seconds before first peek
 	const PEEK_AGAIN_DELAY = 8000; // 8 seconds before peeking again after hiding
 	const DETECTION_RADIUS = 150; // pixels - how close mouse needs to be to scare gopher
 	const CORNERS: Array<'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'> = [

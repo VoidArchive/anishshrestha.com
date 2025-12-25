@@ -244,6 +244,14 @@ ul {
 		grid-template-columns: 1fr;
 		gap: var(--space-4);
 	}
+
+	/* Reorder: main content first on mobile */
+	.main-grid > aside {
+		order: 2;
+	}
+	.main-grid > section {
+		order: 1;
+	}
 }
 
 @media (max-width: 768px) {
@@ -341,7 +349,8 @@ select:focus {
 }
 
 ::selection {
-	@apply bg-primary text-text;
+	background: var(--color-primary-dim);
+	color: #fff;
 }
 
 /* Copy button styles for code blocks */

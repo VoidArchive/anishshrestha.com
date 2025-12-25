@@ -121,56 +121,18 @@ with subtle hover animations and visual hierarchy.
 		padding: var(--space-2) var(--space-3);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		transition: all 0.3s ease;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.tech-badge::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(201, 42, 42, 0.1), transparent);
-		transition: left 0.4s ease;
-		pointer-events: none;
-	}
-
-	.tech-badge:hover::before {
-		left: 100%;
-	}
-
-	.tech-badge:hover {
-		border-color: var(--color-primary);
-		transform: translateY(-2px);
-		background: rgba(201, 42, 42, 0.03);
-		box-shadow: 0 4px 12px -2px rgba(201, 42, 42, 0.15);
 	}
 
 	.tech-name {
 		font-size: 0.875rem;
 		font-weight: 500;
 		color: var(--color-text);
-		transition: color 0.3s ease;
 		white-space: nowrap;
-	}
-
-	.tech-badge:hover .tech-name {
-		color: var(--color-primary);
-		font-weight: 600;
 	}
 
 	:global(.tech-badge svg) {
 		color: var(--color-text-muted);
-		transition: color 0.3s ease;
 		flex-shrink: 0;
-	}
-
-	.tech-badge:hover :global(svg) {
-		color: var(--color-primary);
 	}
 
 	/* Mobile responsiveness */

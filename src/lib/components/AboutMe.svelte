@@ -2,42 +2,11 @@
 About Me Component
 
 Personal introduction with improved content structure and engagement.
-Features the famous vim easter egg with gopher cursor follow animation.
 Enhanced with better readability and subtle visual improvements.
 -->
 
 <script lang="ts">
 	import { User, Briefcase } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-
-	let vimText: HTMLElement;
-	let showGopher = false;
-	let hoverTimer: ReturnType<typeof setTimeout> | null = null;
-	let mouseX = 0;
-	let mouseY = 0;
-
-	function handleMouseEnter() {
-		if (hoverTimer) clearTimeout(hoverTimer);
-		hoverTimer = setTimeout(() => {
-			showGopher = true;
-		}, 200);
-	}
-
-	function handleMouseLeave() {
-		if (hoverTimer) clearTimeout(hoverTimer);
-		showGopher = false;
-	}
-
-	function handleMouseMove(event: MouseEvent) {
-		mouseX = event.clientX;
-		mouseY = event.clientY;
-	}
-
-	onMount(() => {
-		return () => {
-			if (hoverTimer) clearTimeout(hoverTimer);
-		};
-	});
 </script>
 
 <section class="section-card">
@@ -86,33 +55,8 @@ Enhanced with better readability and subtle visual improvements.
 				startup environments and enterprise systems.
 			</p>
 		</div>
-
-		<!-- Vim easter egg -->
-		<div class="vim-section">
-			<p class="vim-container">
-				<span
-					bind:this={vimText}
-					class="vim-easter-egg"
-					on:mouseenter={handleMouseEnter}
-					on:mouseleave={handleMouseLeave}
-					on:mousemove={handleMouseMove}
-					role="button"
-					tabindex="0"
-				>
-					The internet can still be fun.
-				</span>
-				<!-- <span class="vim-hint">← try hovering</span> -->
-			</p>
-		</div>
 	</div>
 </section>
-
-<!-- Go Gopher that follows cursor -->
-{#if showGopher}
-	<div class="gopher-cursor" style="left: {mouseX - 16}px; top: {mouseY + 20}px;">
-		<img src="/go-vim.svg" alt="Go Gopher with Vim" width="48" height="36" />
-	</div>
-{/if}
 
 <style>
 	.about-content {
@@ -174,53 +118,10 @@ Enhanced with better readability and subtle visual improvements.
 		color: #ef4444;
 	}
 
-	.vim-section {
-		padding-top: var(--space-2);
-		border-top: 1px solid var(--color-border);
-	}
-
-	.vim-container {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-		margin: 0;
-	}
-
-	.vim-easter-egg {
-		/* font-family: var(--font-family-mono); */
-		cursor: pointer;
-		transition: all 0.3s ease;
-		padding: var(--space-1) var(--space-2);
-		border: 1px solid transparent;
-	}
-
-	.vim-easter-egg:hover,
-	.vim-easter-egg:focus {
-		color: var(--color-primary);
-		/* border-color: var(--color-border); */
-		/* background: rgba(201, 42, 42, 0.05); */
-		outline: none;
-	}
-
-	.gopher-cursor {
-		position: fixed;
-		pointer-events: none;
-		z-index: 9999;
-		transition: opacity 0.3s ease;
-	}
-
 	/* Mobile responsiveness */
 	@media (max-width: 768px) {
 		.about-content {
 			gap: var(--space-3);
-		}
-
-		.vim-container {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: var(--space-1);
 		}
 	}
 </style>

@@ -72,15 +72,6 @@
 			0 0 0 1px rgba(255, 107, 107, 0.05),
 			0 20px 50px -10px rgba(0, 0, 0, 0.5),
 			0 0 40px -20px var(--color-glow);
-		transition: all 0.4s ease;
-	}
-
-	.terminal-window:hover {
-		box-shadow:
-			0 0 0 1px rgba(255, 107, 107, 0.1),
-			0 25px 60px -10px rgba(0, 0, 0, 0.6),
-			0 0 60px -20px var(--color-glow-strong);
-		border-color: var(--color-primary-dim);
 	}
 
 	.terminal-header {
@@ -106,7 +97,6 @@
 		height: 12px;
 		border-radius: 50%;
 		background: var(--color-border);
-		transition: all 0.2s ease;
 	}
 
 	.terminal-btn.close {
@@ -121,18 +111,6 @@
 		background: #27ca40;
 	}
 
-	.terminal-window:hover .terminal-btn.close {
-		box-shadow: 0 0 8px #ff5f56;
-	}
-
-	.terminal-window:hover .terminal-btn.minimize {
-		box-shadow: 0 0 8px #ffbd2e;
-	}
-
-	.terminal-window:hover .terminal-btn.maximize {
-		box-shadow: 0 0 8px #27ca40;
-	}
-
 	.terminal-title {
 		font-size: 0.8rem;
 		color: var(--color-text-muted);
@@ -145,12 +123,6 @@
 
 	.logo-glow {
 		filter: drop-shadow(0 0 20px var(--color-glow));
-		transition: all 0.4s ease;
-	}
-
-	.terminal-window:hover .logo-glow {
-		filter: drop-shadow(0 0 30px var(--color-glow-strong));
-		transform: scale(1.02);
 	}
 
 	.terminal-line {
