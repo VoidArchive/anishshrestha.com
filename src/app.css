@@ -45,6 +45,10 @@
 	 */
 }
 
+html {
+	background-color: var(--color-bg-primary);
+}
+
 /* Base body styles */
 body {
 	@apply bg-bg-primary text-text min-h-screen font-mono leading-relaxed;
