@@ -255,7 +255,6 @@ Uses consistent button styling and clear visual feedback for current state.
 		color: var(--color-text);
 		font-family: var(--font-family-mono);
 		font-size: 0.875rem;
-		border-radius: 4px;
 		transition: border-color 0.3s ease;
 	}
 
@@ -282,7 +281,6 @@ Uses consistent button styling and clear visual feedback for current state.
 		color: var(--color-text);
 		font-family: var(--font-family-mono);
 		font-size: 0.875rem;
-		border-radius: 4px;
 		transition: border-color 0.3s ease;
 	}
 

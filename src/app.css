@@ -108,7 +108,7 @@ ul {
 }
 
 ::-webkit-scrollbar-thumb {
-	@apply bg-border rounded;
+	@apply bg-border;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -120,7 +120,6 @@ ul {
 	@apply bg-bg-secondary border-border relative overflow-hidden border transition-all duration-300;
 	margin-bottom: var(--space-6);
 	padding: var(--space-4);
-	border-radius: 8px;
 	box-shadow:
 		0 0 0 1px rgba(255, 107, 107, 0.03),
 		0 10px 40px -10px rgba(0, 0, 0, 0.4);
@@ -259,7 +258,6 @@ ul {
 .btn {
 	@apply border-border text-text relative cursor-pointer overflow-hidden border bg-transparent px-4 py-2 font-mono text-sm transition-all duration-300;
 	outline: none;
-	border-radius: 4px;
 }
 
 .btn:focus {
@@ -350,7 +348,6 @@ select:focus {
 	background: rgba(248, 248, 248, 0.15);
 	color: #f8f8f8;
 	border: 1px solid rgba(248, 248, 248, 0.3);
-	border-radius: 4px;
 	padding: 0.5rem;
 	cursor: pointer;
 	transition: all 0.2s ease;

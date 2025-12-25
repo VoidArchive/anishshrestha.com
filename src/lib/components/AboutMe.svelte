@@ -194,7 +194,6 @@ Enhanced with better readability and subtle visual improvements.
 		transition: all 0.3s ease;
 		padding: var(--space-1) var(--space-2);
 		border: 1px solid transparent;
-		border-radius: 2px;
 	}
 
 	.vim-easter-egg:hover,

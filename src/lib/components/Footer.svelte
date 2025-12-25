@@ -560,7 +560,6 @@
 		position: absolute;
 		background: var(--color-bg-secondary);
 		border: 1px solid var(--color-primary);
-		border-radius: 8px;
 		padding: 6px 12px;
 		white-space: nowrap;
 		box-shadow: 0 0 20px -5px var(--color-glow);

@@ -121,7 +121,6 @@ with subtle hover animations and visual hierarchy.
 		padding: var(--space-2) var(--space-3);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 6px;
 		transition: all 0.3s ease;
 		cursor: pointer;
 		position: relative;

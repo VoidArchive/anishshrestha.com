@@ -35,7 +35,6 @@
 
 	.max-h-40::-webkit-scrollbar-thumb {
 		background: var(--color-border);
-		border-radius: 2px;
 	}
 
 	.max-h-40::-webkit-scrollbar-thumb:hover {

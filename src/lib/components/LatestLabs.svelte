@@ -127,7 +127,6 @@ that emphasize project descriptions and technology stacks.
 		height: 40px;
 		background: rgba(201, 42, 42, 0.1);
 		border: 1px solid var(--color-border);
-		border-radius: 6px;
 		transition: all 0.3s ease;
 	}
 
@@ -173,7 +172,6 @@ that emphasize project descriptions and technology stacks.
 		padding: var(--space-1) var(--space-2);
 		font-size: 0.75rem;
 		font-family: var(--font-family-mono);
-		border-radius: 4px;
 		transition: all 0.3s ease;
 	}
 

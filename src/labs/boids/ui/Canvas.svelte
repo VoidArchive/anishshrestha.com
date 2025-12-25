@@ -202,7 +202,6 @@
 		height: 100%;
 		min-height: 300px;
 		background: rgba(13, 13, 13, 1);
-		border-radius: 4px;
 		overflow: hidden;
 	}
 

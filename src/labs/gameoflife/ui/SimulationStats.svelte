@@ -122,7 +122,6 @@ generation count, birth/death rates, and other relevant metrics.
 		padding: var(--space-2);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 		transition: all 0.3s ease;
 	}
 
@@ -176,7 +175,6 @@ generation count, birth/death rates, and other relevant metrics.
 		padding: var(--space-2);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 	}
 
 	.status-dot {
@@ -208,7 +206,6 @@ generation count, birth/death rates, and other relevant metrics.
 		padding: var(--space-2);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 		opacity: 0;
 		visibility: hidden;
 		transition:
@@ -237,7 +234,6 @@ generation count, birth/death rates, and other relevant metrics.
 		background: var(--color-primary);
 		color: white;
 		padding: var(--space-1) var(--space-2);
-		border-radius: 12px;
 		font-family: var(--font-family-mono);
 		font-size: 0.625rem;
 		text-transform: uppercase;

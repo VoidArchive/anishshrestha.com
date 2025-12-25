@@ -274,7 +274,6 @@
 		padding: var(--space-3);
 		background: var(--color-bg-secondary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 		text-align: left;
 		max-width: 100%;
 	}

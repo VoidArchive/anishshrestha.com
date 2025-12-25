@@ -338,7 +338,6 @@ Features consolidated controls in sidebar and main content area with statistics.
 		color: var(--color-primary);
 		background: var(--color-bg-secondary);
 		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
 		font-weight: 600;
 		display: inline-block;
 	}

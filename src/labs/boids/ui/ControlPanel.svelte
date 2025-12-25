@@ -172,7 +172,6 @@
 	.slider {
 		width: 100%;
 		height: 6px;
-		border-radius: 3px;
 		background: var(--color-bg-secondary);
 		outline: none;
 		cursor: pointer;
@@ -214,7 +213,6 @@
 		padding: var(--space-2);
 		background: var(--color-bg-secondary);
 		border: 1px solid transparent;
-		border-radius: 4px;
 		color: var(--color-text-muted);
 		font-size: 0.875rem;
 		cursor: pointer;

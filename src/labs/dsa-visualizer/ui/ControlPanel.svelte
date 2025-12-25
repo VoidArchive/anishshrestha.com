@@ -357,7 +357,6 @@ in logical groupings for better UX and consistency.
 		gap: var(--space-1);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 		padding: var(--space-1);
 	}
 
@@ -389,7 +388,6 @@ in logical groupings for better UX and consistency.
 		padding: var(--space-1) var(--space-2);
 		background: transparent;
 		border: none;
-		border-radius: 2px;
 	}
 
 	.step-btn:hover:not(:disabled) {
@@ -568,7 +566,6 @@ in logical groupings for better UX and consistency.
 		background: var(--color-border);
 		outline: none;
 		border: 1px solid var(--color-border);
-		border-radius: 3px;
 		-webkit-appearance: none;
 		appearance: none;
 		cursor: pointer;

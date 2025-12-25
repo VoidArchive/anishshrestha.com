@@ -101,7 +101,6 @@ and reading blog posts with consistent styling and hover animations.
 		justify-content: center;
 		width: 40px;
 		height: 40px;
-		border-radius: 6px;
 		transition: all 0.3s ease;
 		flex-shrink: 0;
 		background: rgba(201, 42, 42, 0.1);

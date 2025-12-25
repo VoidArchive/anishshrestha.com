@@ -141,7 +141,6 @@
 		color: var(--color-text-primary);
 		font-size: 0.8rem;
 		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
 		border: 1px solid var(--color-border);
 	}
 
@@ -194,7 +193,6 @@
 		background-color: var(--color-bg-secondary);
 		color: var(--color-text-primary);
 		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
 		font-family: var(--font-family-mono);
 		font-size: 0.9rem;
 		border: 1px solid var(--color-border);
@@ -203,7 +201,6 @@
 	.post-content :global(pre) {
 		background-color: var(--color-bg-primary);
 		border: 1px solid rgba(248, 248, 248, 0.2);
-		border-radius: 6px;
 		padding: 1.5rem;
 		margin: 1.5rem 0;
 		overflow-x: auto;
@@ -226,7 +223,6 @@
 		background-color: var(--color-bg-secondary);
 		padding: 1rem 1.5rem;
 		margin: 1.5rem 0;
-		border-radius: 0 6px 6px 0;
 	}
 
 	.post-content :global(blockquote p) {

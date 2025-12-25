@@ -66,7 +66,6 @@
 	.terminal-window {
 		background: var(--color-bg-secondary);
 		border: 1px solid var(--color-border);
-		border-radius: 8px;
 		overflow: hidden;
 		margin-bottom: var(--space-6);
 		box-shadow:

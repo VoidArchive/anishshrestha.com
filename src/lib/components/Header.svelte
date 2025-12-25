@@ -153,7 +153,6 @@
 		transition: all 0.3s ease;
 		font-size: 1rem;
 		padding: 0.25rem 0.75rem;
-		border-radius: 4px;
 		text-decoration: none;
 		position: relative;
 	}
@@ -183,7 +182,6 @@
 		background-color: var(--color-primary);
 		color: var(--color-bg-primary);
 		padding: 0.25rem 0.75rem;
-		border-radius: 4px;
 		font-weight: 600;
 		box-shadow: 0 0 15px -3px var(--color-glow);
 	}

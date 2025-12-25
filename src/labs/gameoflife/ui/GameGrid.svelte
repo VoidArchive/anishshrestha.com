@@ -331,7 +331,6 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 		width: 100%;
 		height: 100%;
 		background: rgba(21, 21, 21, 0.5);
-		border-radius: 4px;
 		padding: 2px;
 		min-width: 300px;
 		min-height: 300px;
@@ -354,12 +353,10 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 
 	.game-grid-container.virtualized::-webkit-scrollbar-track {
 		background: rgba(21, 21, 21, 0.2);
-		border-radius: 4px;
 	}
 
 	.game-grid-container.virtualized::-webkit-scrollbar-thumb {
 		background: rgba(201, 42, 42, 0.3);
-		border-radius: 4px;
 	}
 
 	.game-grid-container.virtualized::-webkit-scrollbar-thumb:hover {
@@ -383,7 +380,6 @@ Implements virtual scrolling for large grids (>50x50) to optimize performance.
 		border: none;
 		cursor: pointer;
 		transition: all 0.2s ease;
-		border-radius: 1px;
 		padding: 0;
 		margin: 0;
 		outline: none;

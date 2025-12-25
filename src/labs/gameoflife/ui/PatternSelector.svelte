@@ -239,7 +239,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		font-size: 0.75rem;
 		cursor: pointer;
 		transition: all 0.3s ease;
-		border-radius: 4px;
 	}
 
 	.category-tab:hover {
@@ -271,7 +270,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		color: var(--color-text);
 		cursor: pointer;
 		transition: all 0.3s ease;
-		border-radius: 4px;
 		/* Ensure buttons are clickable */
 		pointer-events: auto;
 		position: relative;
@@ -318,7 +316,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		padding: var(--space-3);
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-3);
@@ -361,7 +358,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		justify-content: center;
 		padding: var(--space-2);
 		background: var(--color-bg-secondary);
-		border-radius: 4px;
 	}
 
 	.preview-grid {
@@ -375,7 +371,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	.preview-cell {
 		width: 8px;
 		height: 8px;
-		border-radius: 1px;
 	}
 
 	.preview-cell.alive {
@@ -419,7 +414,6 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		text-align: center;
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 	}
 
 	.help-text {

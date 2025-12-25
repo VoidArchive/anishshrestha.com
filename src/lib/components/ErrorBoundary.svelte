@@ -136,7 +136,6 @@
 		padding: 1rem;
 		background: var(--color-bg-secondary);
 		border: 1px solid var(--color-border);
-		border-radius: 4px;
 	}
 
 	.error-details summary {
