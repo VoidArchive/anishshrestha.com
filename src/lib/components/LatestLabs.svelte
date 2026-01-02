@@ -87,30 +87,8 @@ that emphasize project descriptions and technology stacks.
 		background: var(--color-bg-primary);
 		border: 1px solid var(--color-border);
 		padding: var(--space-4);
-		transition: all 0.3s ease;
 		position: relative;
 		overflow: hidden;
-	}
-
-	.lab-preview-card::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-		transition: left 0.5s ease;
-	}
-
-	.lab-preview-card:hover::before {
-		left: 100%;
-	}
-
-	.lab-preview-card:hover {
-		border-color: var(--color-primary);
-		transform: translateY(-2px);
-		box-shadow: 0 8px 25px -3px rgba(201, 42, 42, 0.15);
 	}
 
 	.lab-header {
@@ -127,13 +105,6 @@ that emphasize project descriptions and technology stacks.
 		height: 40px;
 		background: rgba(201, 42, 42, 0.1);
 		border: 1px solid var(--color-border);
-		transition: all 0.3s ease;
-	}
-
-	.lab-preview-card:hover .lab-icon {
-		background: rgba(201, 42, 42, 0.15);
-		border-color: var(--color-primary);
-		transform: scale(1.05);
 	}
 
 	.lab-content {
@@ -145,11 +116,6 @@ that emphasize project descriptions and technology stacks.
 		font-weight: 600;
 		color: var(--color-text);
 		margin-bottom: var(--space-2);
-		transition: color 0.3s ease;
-	}
-
-	.lab-preview-card:hover .lab-title {
-		color: var(--color-primary);
 	}
 
 	.lab-description {
@@ -172,13 +138,6 @@ that emphasize project descriptions and technology stacks.
 		padding: var(--space-1) var(--space-2);
 		font-size: 0.75rem;
 		font-family: var(--font-family-mono);
-		transition: all 0.3s ease;
-	}
-
-	.lab-preview-card:hover .tech-tag {
-		border-color: var(--color-primary);
-		background: rgba(201, 42, 42, 0.05);
-		color: var(--color-text);
 	}
 
 	.lab-action-btn {
