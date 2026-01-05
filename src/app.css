@@ -206,10 +206,10 @@ ul {
 
 	/* Reorder: main content first on mobile */
 	.main-grid > aside {
-		order: 2;
+		order: 1;
 	}
 	.main-grid > section {
-		order: 1;
+		order: 2;
 	}
 }
 

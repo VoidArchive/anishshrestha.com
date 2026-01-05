@@ -1,4 +1,3 @@
-// Removed unused GameState import
 import { generatePoints, generateLines, buildAdjacencyMap } from '$labs/bagchal/rules';
 
 /**
@@ -22,15 +21,8 @@ export const POINTS = _points;
 
 // Key board positions (derived from 5×5 grid indices)
 export const BOARD_POSITIONS = {
-	CENTER: 12,
-	CORNERS: [0, 4, 20, 24],
-	EDGE_MIDPOINTS: [2, 10, 14, 22],
-	CROSS_POSITIONS: [6, 8, 16, 18]
+  CENTER: 12,
+  CORNERS: [0, 4, 20, 24],
+  EDGE_MIDPOINTS: [2, 10, 14, 22],
+  CROSS_POSITIONS: [6, 8, 16, 18]
 };
-
-// Removed unused utility functions:
-// - getDistance: Manhattan distance calculation (not used)
-// - getTigerPositions: Get tiger positions from state (not used)
-// - getGoatPositions: Get goat positions from state (not used)
-// - getJumpLanding: Calculate jump landing position (not used)
-// - areCollinearAndAdjacent: Check collinear adjacency (not used)
