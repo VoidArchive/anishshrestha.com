@@ -4,11 +4,19 @@
 
 	const projects = [
 		{
-			title: 'NepseAuth – NEPSE API Go Library',
+			title: 'NTX – Nepse Stock Analyzer',
+			description:
+				'A powerful terminal-based stock analyzer for the Nepal Stock Exchange (NEPSE). Features a stock screener with fundamental filters, detailed company pages, and market overview including indices and top movers.',
+			tech: ['Go', 'SvelteKit', 'GRPC', 'SQLC'],
+			repo: 'https://github.com/voidarchive/ntx',
+			demo: 'https://ntx.anishshrestha.com'
+		},
+		{
+			title: 'go-nepse – NEPSE API Go Library',
 			description:
 				'Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval.',
 			tech: ['Go', 'API', 'Finance', 'NEPSE'],
-			repo: 'https://github.com/VoidArchive/nepseauth',
+			repo: 'https://github.com/VoidArchive/go-nepse',
 			demo: null
 		},
 		{
