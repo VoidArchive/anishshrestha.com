@@ -1,8 +1,15 @@
 <script lang="ts">
 	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
-	import { Grid3x3, BarChart3, BookOpen, Bird } from 'lucide-svelte';
+	import { Grid3x3, BarChart3, BookOpen, Bird, Calendar } from 'lucide-svelte';
 	// Simple list of labs/experiments – can be replaced with fetched data later
 	const experiments = [
+		{
+			name: 'Life Calendar',
+			description:
+				'Visualize your life in weeks. A perspective on time that is both humbling and motivating.',
+			slug: 'life-calendar',
+			icon: 'calendar'
+		},
 		{
 			name: 'DSA Visualizer',
 			description:
@@ -101,6 +108,8 @@
 					<div class="flex h-16 w-16 flex-shrink-0 items-center justify-center">
 						{#if experiment.icon === 'grid'}
 							<Grid3x3 size={48} />
+						{:else if experiment.icon === 'calendar'}
+							<Calendar size={48} />
 						{:else if experiment.icon === 'barchart'}
 							<BarChart3 size={48} />
 						{:else if experiment.icon === 'bird'}

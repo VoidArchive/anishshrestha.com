@@ -16,7 +16,11 @@ const config = {
 			$labs: 'src/labs'
 		}
 	},
-	extensions: ['.svelte', '.svx', '.md']
+	extensions: ['.svelte', '.svx', '.md'],
+	vitePlugin: {
+		inspector: true
+	}
+
 };
 
 export default config;
