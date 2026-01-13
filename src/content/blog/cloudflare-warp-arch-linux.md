@@ -45,6 +45,9 @@ The `cloudflare-warp-bin` package installs the `warp-cli` command-line interface
 Post-installation configuration requires device registration with Cloudflare's authentication infrastructure:
 
 ```bash
+# Enable and start the service
+sudo systemctl enable --now warp-svc
+
 # Initialize device registration
 warp-cli registration new
 ```
@@ -117,17 +120,6 @@ warp-cli mode -- doh
 
 **Use cases:** DNS performance optimization, selective privacy enhancement, bandwidth conservation.
 
-#### 4. Disabled (`off`)
-
-```bash
-warp-cli mode -- off
-```
-
-**What it does:**
-
-- Completely disables WARP
-- Returns to your system's default networking
-- Useful for troubleshooting connectivity issues
 
 ## Connecting and Managing WARP
 
@@ -181,19 +173,23 @@ warp-cli dns families malware
 warp-cli dns families off
 ```
 
-### Exclude Applications
+### Split Tunneling
 
-Some applications might not work well with WARP. You can exclude them:
+Instead of excluding applications by name (which isn't supported on Linux), you can use Split Tunneling to exclude specific IP addresses or domains from the tunnel.
 
 ```bash
-# Exclude specific applications
-warp-cli exclude add "application-name"
+# Exclude a domain from WARP
+warp-cli tunnel host add example.com
 
-# List excluded applications
-warp-cli exclude list
+# Exclude an IP address
+warp-cli tunnel ip add 192.168.1.1/24
 
-# Remove exclusions
-warp-cli exclude remove "application-name"
+# View current exclusions
+warp-cli tunnel host list
+warp-cli tunnel ip list
+
+# Remove an exclusion
+warp-cli tunnel host remove example.com
 ```
 
 ## Troubleshooting Common Issues
