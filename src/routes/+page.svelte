@@ -33,9 +33,9 @@ Enhanced with quick actions for immediate engagement and profile stats.
 		<!-- Right Column -->
 		<section class="flex flex-col">
 			<AboutMe />
-			<LatestLabs />
-			<FeaturedProjects />
 			<LatestPosts posts={data.latestPosts} />
+			<FeaturedProjects />
+			<LatestLabs />
 		</section>
 	</div>
 </main>

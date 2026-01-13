@@ -20,7 +20,6 @@ const config = {
 	vitePlugin: {
 		inspector: true
 	}
-
 };
 
 export default config;

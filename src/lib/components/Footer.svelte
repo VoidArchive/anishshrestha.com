@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	const currentYear = new Date().getFullYear();
 	let vimText: HTMLElement;
 
@@ -37,7 +37,6 @@
 		'nice code!',
 		':wq',
 		'go brrr...',
-		'*happy gopher noises*',
 		'concurrent!',
 		'no generics? jk',
 		'simplicity wins',
@@ -71,6 +70,7 @@
 	}
 
 	function handleMouseEnter() {
+		if (page.url.pathname !== '/') return;
 		if (hoverTimer) clearTimeout(hoverTimer);
 		hoverTimer = setTimeout(() => {
 			showHoverGopher = true;
@@ -142,23 +142,34 @@
 		}, 500);
 	}
 
-	onMount(() => {
-		// Start the initial peek timer
-		startPeekTimer();
+	$effect(() => {
+		if (page.url.pathname === '/') {
+			// Start the initial peek timer
+			startPeekTimer();
 
-		// Global mouse move listener for proximity detection
-		const handleGlobalMouseMove = (event: MouseEvent) => {
-			checkGopherProximity(event);
-		};
+			// Global mouse move listener for proximity detection
+			const handleGlobalMouseMove = (event: MouseEvent) => {
+				checkGopherProximity(event);
+			};
 
-		window.addEventListener('mousemove', handleGlobalMouseMove);
+			window.addEventListener('mousemove', handleGlobalMouseMove);
 
-		return () => {
-			if (hoverTimer) clearTimeout(hoverTimer);
-			if (peekTimer) clearTimeout(peekTimer);
-			if (hideTimer) clearTimeout(hideTimer);
-			window.removeEventListener('mousemove', handleGlobalMouseMove);
-		};
+			return () => {
+				if (hoverTimer) clearTimeout(hoverTimer);
+				if (peekTimer) clearTimeout(peekTimer);
+				if (hideTimer) clearTimeout(hideTimer);
+				window.removeEventListener('mousemove', handleGlobalMouseMove);
+
+				// Reset states
+				gopherState = 'hidden';
+				showHoverGopher = false;
+			};
+		} else {
+			// Ensure cleanup if ensuring route requires it (though return func handles it usually)
+			// But for initial load on non-home, we just do nothing.
+			// And if navigating away, the return function above handles it.
+			// However, if we preserve the component, the return function runs.
+		}
 	});
 </script>
 
@@ -185,14 +196,14 @@
 </footer>
 
 <!-- Go Gopher that follows cursor (on footer hover) -->
-{#if showHoverGopher}
+{#if showHoverGopher && page.url.pathname === '/'}
 	<div class="gopher-cursor" style="left: {mouseX + 16}px; top: {mouseY - 20}px;">
 		<img src="/go-vim.svg" alt="Go Gopher with Vim" width="48" height="36" />
 	</div>
 {/if}
 
 <!-- Peek-a-boo Gopher (random corner) -->
-{#if gopherState !== 'hidden'}
+{#if gopherState !== 'hidden' && page.url.pathname === '/'}
 	<div class="gopher-peekaboo {gopherState} {gopherCorner}">
 		<div class="gopher-container">
 			<img

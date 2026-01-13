@@ -26,7 +26,7 @@ rather than interactive browser-based labs.
 			title="Bagchal – Nepali Strategy Game"
 			description="Browser implementation of the traditional Nepali Tigers & Goats board game. Features AI opponent with minimax algorithm and adjustable difficulty levels."
 			tech={['SvelteKit', 'TypeScript', 'Game', 'AI']}
-			repo="https://github.com/VoidArchive/anishshrestha.com/tree/main/src/labs/bagchal"
+			repo="/labs/bagchal"
 		/>
 		<MiniProjectCard
 			title="go-nepse – NEPSE API Go Library"

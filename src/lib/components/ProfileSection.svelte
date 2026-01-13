@@ -41,7 +41,7 @@
 			<span class="command">whoami</span>
 		</div>
 		<div class="terminal-output profile-name {nameVisible ? 'visible' : ''}">
-			Anish <span class="cursor"></span>
+			<span>Anish Shrestha</span>
 		</div>
 
 		<div class="terminal-line {titleVisible ? 'visible' : ''}">

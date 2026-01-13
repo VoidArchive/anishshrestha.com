@@ -74,11 +74,13 @@ body::before {
 	height: 100%;
 	pointer-events: none;
 	z-index: 9999;
-	background: repeating-linear-gradient(0deg,
-			rgba(0, 0, 0, 0.03) 0px,
-			rgba(0, 0, 0, 0.03) 1px,
-			transparent 1px,
-			transparent 2px);
+	background: repeating-linear-gradient(
+		0deg,
+		rgba(0, 0, 0, 0.03) 0px,
+		rgba(0, 0, 0, 0.03) 1px,
+		transparent 1px,
+		transparent 2px
+	);
 	opacity: 0.4;
 }
 
@@ -202,11 +204,11 @@ ul {
 	}
 
 	/* Reorder: main content first on mobile */
-	.main-grid>aside {
+	.main-grid > aside {
 		order: 1;
 	}
 
-	.main-grid>section {
+	.main-grid > section {
 		order: 2;
 	}
 }
