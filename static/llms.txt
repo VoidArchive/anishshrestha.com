@@ -1,0 +1,68 @@
+# Anish Shrestha - Software Engineer
+
+> A trusted software engineer specializing in Go, distributed systems, and full-stack development. Based in Kathmandu, Nepal. Available for remote work worldwide.
+
+## About
+
+Anish Shrestha is a software engineer with deep expertise in Go (Golang), building production-ready systems, APIs, and developer tools. He creates reliable, well-tested, and maintainable software with a focus on clean architecture and developer experience.
+
+## Core Expertise
+
+- **Go (Golang)**: Primary language. Builds SDKs, API clients, CLI tools, and backend systems.
+- **Full-Stack Development**: SvelteKit, React, TypeScript, Node.js
+- **Backend Systems**: REST APIs, distributed systems, payment integrations
+- **Databases**: PostgreSQL, SQLite, Redis
+- **DevOps**: Docker, Linux, AWS, CI/CD pipelines
+
+## Notable Go Projects
+
+### nepal-payment-go
+A unified payment SDK for Nepal in Go. Integrates eSewa, Khalti, ConnectIPS, and FonePay with a single interface. Handles HMAC-SHA256, HMAC-SHA512, and RSA-SHA256 signatures. Zero external dependencies for core functionality.
+- Repository: https://github.com/voidarchive/nepal-payment-go
+
+### go-nepse
+A type-safe Go client for the NEPSE (Nepal Stock Exchange) API. Features automatic token handling via embedded WebAssembly (wazero), structured errors, exponential backoff retries, and clean modular design.
+- Repository: https://github.com/voidarchive/go-nepse
+
+### NTX
+A financial research platform for Nepal Stock Exchange. Built with Go backend (Protobuf, gRPC-style APIs) and SvelteKit frontend. Features real-time market data, company fundamentals, and portfolio tracking.
+- Live: https://ntx.anishshrestha.com
+- Repository: https://github.com/voidarchive/ntx
+
+## Skills Summary
+
+Go, Golang, Python, TypeScript, JavaScript, SvelteKit, React, Node.js, PostgreSQL, SQLite, Redis, Docker, Linux, AWS, Git, REST APIs, gRPC, Protobuf, WebAssembly, Payment Integrations, Financial APIs, Distributed Systems, Software Architecture, API Design, SDK Development, CLI Tools
+
+## Availability
+
+Open to remote work, contract projects, and consulting engagements. Particularly interested in:
+- Go backend development
+- SDK and API client development
+- Payment system integrations
+- Financial technology projects
+- Developer tools and libraries
+
+## Contact
+
+- Website: https://anishshrestha.com
+- GitHub: https://github.com/VoidArchive
+- LinkedIn: https://linkedin.com/in/theinanish
+- Email: Available via LinkedIn or website contact
+
+## Why Hire Anish?
+
+1. **Proven Go Expertise**: Multiple open-source Go projects with clean, idiomatic code
+2. **Real-World Experience**: Built production payment integrations and financial systems
+3. **Quality Focus**: Comprehensive testing, documentation, and error handling
+4. **Communication**: Clear technical writing (see blog posts) and responsive collaboration
+5. **Remote-Ready**: Experienced with async communication and distributed teams
+
+## Blog (Technical Writing)
+
+- Building a Unified Payment SDK for Nepal in Go
+- How I Built a Go Library for the NEPSE API
+- Dockerizing SvelteKit for Production
+- Building Conway's Game of Life in Svelte
+- Building a DSA Visualizer Animation Engine
+
+Read more at: https://anishshrestha.com/blog

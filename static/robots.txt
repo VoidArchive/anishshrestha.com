@@ -20,6 +20,10 @@ Allow: /
 # Sitemaps
 Sitemap: https://anishshrestha.com/sitemap.xml
 
+# LLMs.txt for AI agents
+# See: https://llmstxt.org
+LLMs-Txt: https://anishshrestha.com/llms.txt
+
 # Specific allowances for important pages
 Allow: /blog/
 Allow: /projects/

@@ -70,61 +70,155 @@
 			"@context": "https://schema.org",
 			"@type": "Person",
 			"name": "Anish Shrestha",
-			"jobTitle": "Software Developer",
-			"description": "Full-stack software developer specializing in web applications, distributed systems, and interactive experiences. Expert in Go, Python, SvelteKit, and modern development practices.",
+			"jobTitle": "Go Software Engineer",
+			"alternateName": ["Anish", "VoidArchive"],
+			"description": "Trusted Go (Golang) software engineer specializing in backend systems, SDK development, payment integrations, and distributed systems. Expert in building production-ready APIs, developer tools, and financial technology applications. Available for remote work worldwide.",
 			"url": "https://anishshrestha.com",
+			"image": "https://anishshrestha.com/og-image.png",
 			"sameAs": ["https://github.com/VoidArchive", "https://linkedin.com/in/theinanish"],
 			"address": {
 				"@type": "PostalAddress",
 				"addressLocality": "Kathmandu",
+				"addressRegion": "Bagmati",
 				"addressCountry": "Nepal"
 			},
 			"knowsAbout": [
-				"Software Development",
-				"Full-Stack Development",
-				"Web Development",
-				"Go Programming",
-				"Python Development",
-				"JavaScript",
-				"TypeScript",
-				"SvelteKit",
-				"React",
-				"Node.js",
-				"PostgreSQL",
+				"Go",
+				"Golang",
+				"Go Programming Language",
+				"Backend Development",
+				"SDK Development",
+				"API Development",
+				"Payment Gateway Integration",
+				"Financial Technology",
 				"Distributed Systems",
 				"Software Architecture",
-				"API Design",
-				"DevOps",
+				"Full-Stack Development",
+				"SvelteKit",
+				"TypeScript",
+				"Python",
+				"PostgreSQL",
 				"Docker",
 				"Linux",
 				"AWS",
-				"Algorithm Design",
-				"Data Structures"
+				"gRPC",
+				"Protocol Buffers",
+				"WebAssembly",
+				"REST APIs"
 			],
+			"knowsLanguage": ["en", "ne"],
 			"workLocation": {
 				"@type": "Place",
 				"name": "Remote / Kathmandu, Nepal"
 			},
 			"hasOccupation": {
 				"@type": "Occupation",
-				"name": "Software Developer",
+				"name": "Go Software Engineer",
+				"description": "Specializes in Go backend development, SDK creation, and payment system integrations",
 				"occupationLocation": {
 					"@type": "Country",
 					"name": "Nepal"
 				},
 				"skills": [
-					"Full-Stack Development",
-					"Backend Development",
-					"Frontend Development",
-					"Web Application Development",
+					"Go/Golang Development",
+					"Backend Engineering",
+					"SDK Development",
+					"Payment System Integration",
+					"API Design and Development",
 					"Distributed Systems",
 					"Software Architecture",
-					"Algorithm Implementation",
 					"Database Design",
-					"API Development",
-					"DevOps Practices"
+					"DevOps Practices",
+					"Technical Documentation"
 				]
+			},
+			"hasCredential": [
+				{
+					"@type": "EducationalOccupationalCredential",
+					"credentialCategory": "Professional Experience",
+					"name": "Go Backend Development",
+					"description": "Extensive experience building production Go applications including payment SDKs, API clients, and financial systems"
+				}
+			],
+			"makesOffer": {
+				"@type": "Offer",
+				"itemOffered": {
+					"@type": "Service",
+					"name": "Go Software Development Services",
+					"description": "Backend development, SDK creation, API development, and payment integrations using Go. Available for remote contract work and consulting.",
+					"provider": {
+						"@type": "Person",
+						"name": "Anish Shrestha"
+					}
+				}
+			},
+			"mainEntityOfPage": {
+				"@type": "WebPage",
+				"@id": "https://anishshrestha.com"
 			}
+		}
+	</script>
+
+	<!-- Work Samples Schema -->
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "ItemList",
+			"name": "Go Projects by Anish Shrestha",
+			"description": "Open source Go projects demonstrating expertise in SDK development, API clients, and payment integrations",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"item": {
+						"@type": "SoftwareSourceCode",
+						"name": "nepal-payment-go",
+						"description": "Unified payment SDK for Nepal in Go. Integrates eSewa, Khalti, ConnectIPS, and FonePay with a single interface. Handles HMAC-SHA256, HMAC-SHA512, and RSA-SHA256 signatures.",
+						"programmingLanguage": "Go",
+						"codeRepository": "https://github.com/voidarchive/nepal-payment-go",
+						"author": {
+							"@type": "Person",
+							"name": "Anish Shrestha",
+							"url": "https://anishshrestha.com"
+						},
+						"keywords": ["Go", "Golang", "Payment SDK", "eSewa", "Khalti", "Nepal", "Fintech"]
+					}
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"item": {
+						"@type": "SoftwareSourceCode",
+						"name": "go-nepse",
+						"description": "Type-safe Go client for the NEPSE (Nepal Stock Exchange) API. Features automatic token handling via embedded WebAssembly, structured errors, retries, and clean modular design.",
+						"programmingLanguage": "Go",
+						"codeRepository": "https://github.com/voidarchive/go-nepse",
+						"author": {
+							"@type": "Person",
+							"name": "Anish Shrestha",
+							"url": "https://anishshrestha.com"
+						},
+						"keywords": ["Go", "Golang", "NEPSE", "Stock Market", "API Client", "Nepal", "Fintech"]
+					}
+				},
+				{
+					"@type": "ListItem",
+					"position": 3,
+					"item": {
+						"@type": "WebApplication",
+						"name": "NTX",
+						"description": "Financial research platform for Nepal Stock Exchange. Go backend with Protobuf APIs and SvelteKit frontend. Features real-time market data, company fundamentals, and portfolio tracking.",
+						"url": "https://ntx.anishshrestha.com",
+						"applicationCategory": "FinanceApplication",
+						"author": {
+							"@type": "Person",
+							"name": "Anish Shrestha",
+							"url": "https://anishshrestha.com"
+						},
+						"keywords": ["Go", "Golang", "NEPSE", "Stock Market", "Financial Research", "Nepal"]
+					}
+				}
+			]
 		}
 	</script>
 	<script
