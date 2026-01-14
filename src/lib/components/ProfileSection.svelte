@@ -175,27 +175,6 @@
 		gap: var(--space-2);
 	}
 
-	.cursor {
-		display: inline-block;
-		width: 10px;
-		height: 1.2em;
-		background: var(--color-primary);
-		margin-left: 4px;
-		animation: blink 1s step-end infinite;
-		vertical-align: text-bottom;
-	}
-
-	@keyframes blink {
-		0%,
-		50% {
-			opacity: 1;
-		}
-		51%,
-		100% {
-			opacity: 0;
-		}
-	}
-
 	@media (max-width: 768px) {
 		.terminal-body {
 			padding: var(--space-4);

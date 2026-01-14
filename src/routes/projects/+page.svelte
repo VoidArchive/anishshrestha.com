@@ -20,6 +20,14 @@
 			demo: null
 		},
 		{
+			title: 'nepal-payment-go – Payment SDK',
+			description:
+				'Unified Go SDK for Nepali payment providers. Supports eSewa, Khalti, ConnectIPS, and FonePay with a single interface. Handles HMAC signatures, RSA certificates, and callback verification.',
+			tech: ['Go', 'SDK', 'Payments', 'FinTech'],
+			repo: 'https://github.com/VoidArchive/nepal-payment-go',
+			demo: null
+		},
+		{
 			title: 'Bagchal – Nepali Strategy Game',
 			description:
 				'Browser implementation of Bagchal, the traditional Nepali Tigers & Goats board game. Features AI opponent with Easy and Hard difficulty levels.',

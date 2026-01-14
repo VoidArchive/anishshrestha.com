@@ -29,6 +29,12 @@ rather than interactive browser-based labs.
 			repo="/labs/bagchal"
 		/>
 		<MiniProjectCard
+			title="nepal-payment-go – Payment SDK"
+			description="Unified Go SDK for Nepali payment providers. Supports eSewa, Khalti, ConnectIPS, and FonePay with a single interface."
+			tech={['Go', 'SDK', 'Payments', 'FinTech']}
+			repo="https://github.com/VoidArchive/nepal-payment-go"
+		/>
+		<MiniProjectCard
 			title="go-nepse – NEPSE API Go Library"
 			description="Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval."
 			tech={['Go', 'API', 'Finance', 'NEPSE']}
