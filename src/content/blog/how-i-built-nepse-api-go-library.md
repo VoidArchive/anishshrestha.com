@@ -136,4 +136,4 @@ css.wasm
 
 Combined with automatic retries, transparent token management, and Go's strong typing, it provides a solid foundation for anyone building financial tools for the Nepali market.
 
-The code is open source and available on GitHub. (Repo Link)[https://github.com/voidarchive/go-nepse]
+The code is open source and available on GitHub. [View the repository →](https://github.com/voidarchive/go-nepse)

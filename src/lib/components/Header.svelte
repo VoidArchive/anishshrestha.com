@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { Github } from 'lucide-svelte';
 
 	let isMenuOpen = false;
 
@@ -33,6 +34,16 @@
 				<a href="/projects" class="nav-link {page.url.pathname === '/projects' ? 'active' : ''}"
 					>Projects</a
 				>
+				<span class="text-text-muted mx-1">/</span>
+				<a
+					href="https://github.com/VoidArchive"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="github-link"
+					aria-label="GitHub Profile"
+				>
+					<Github size={20} />
+				</a>
 			</nav>
 
 			<!-- Mobile Menu Button -->
@@ -98,6 +109,15 @@
 					on:click={closeMenu}
 				>
 					Projects
+				</a>
+				<a
+					href="https://github.com/VoidArchive"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="btn flex items-center gap-2"
+					on:click={closeMenu}
+				>
+					<Github size={16} /> GitHub
 				</a>
 			</div>
 		</nav>
@@ -192,6 +212,20 @@
 
 	.nav-link:focus {
 		outline: none;
+	}
+
+	/* GitHub Link */
+	.github-link {
+		color: var(--color-text-muted);
+		padding: 0.25rem 0.5rem;
+		transition: all 0.3s ease;
+		display: flex;
+		align-items: center;
+	}
+
+	.github-link:hover {
+		color: var(--color-primary);
+		text-shadow: 0 0 15px var(--color-glow);
 	}
 
 	/* Hamburger Icon Animation */

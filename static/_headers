@@ -1,0 +1,25 @@
+# Cloudflare Pages Headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  # Security Headers
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Allow all bots and crawlers - don't block AI assistants or SEO crawlers
+# Note: The 403 issue is likely from Cloudflare's Bot Fight Mode in dashboard settings
+# This file helps signal intent but dashboard settings may override
+
+/llms.txt
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+  Access-Control-Allow-Origin: *
