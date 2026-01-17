@@ -4,28 +4,28 @@
 
 	const projects = [
 		{
-			title: 'NTX – Nepse Stock Analyzer',
+			title: 'nepal-payment-go – Unified Payment SDK',
 			description:
-				'A powerful terminal-based stock analyzer for the Nepal Stock Exchange (NEPSE). Features a stock screener with fundamental filters, detailed company pages, and market overview including indices and top movers.',
-			tech: ['Go', 'SvelteKit', 'GRPC', 'SQLC'],
-			repo: 'https://github.com/voidarchive/ntx',
-			demo: 'https://ntx.anishshrestha.com'
+				'Production-ready Go SDK for Nepal payment providers. Integrates eSewa, Khalti, ConnectIPS, and FonePay with a single type-safe interface. Handles HMAC-SHA256, HMAC-SHA512, and RSA-SHA256 signatures. Zero external dependencies.',
+			tech: ['Go', 'SDK', 'eSewa', 'Khalti'],
+			repo: 'https://github.com/VoidArchive/nepal-payment-go',
+			demo: null
 		},
 		{
-			title: 'go-nepse – NEPSE API Go Library',
+			title: 'go-nepse – NEPSE API Client',
 			description:
-				'Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval.',
-			tech: ['Go', 'API', 'Finance', 'NEPSE'],
+				'Type-safe Go client for Nepal Stock Exchange API. Features automatic token handling via embedded WebAssembly (wazero), structured errors, exponential backoff retries, and clean modular design.',
+			tech: ['Go', 'API', 'NEPSE', 'WASM'],
 			repo: 'https://github.com/VoidArchive/go-nepse',
 			demo: null
 		},
 		{
-			title: 'nepal-payment-go – Payment SDK',
+			title: 'NTX – Stock Research Platform',
 			description:
-				'Unified Go SDK for Nepali payment providers. Supports eSewa, Khalti, ConnectIPS, and FonePay with a single interface. Handles HMAC signatures, RSA certificates, and callback verification.',
-			tech: ['Go', 'SDK', 'Payments', 'FinTech'],
-			repo: 'https://github.com/VoidArchive/nepal-payment-go',
-			demo: null
+				'Financial research platform for Nepal Stock Exchange. Go backend with Protobuf APIs and SvelteKit frontend. Features stock screener, company fundamentals, real-time market data, and portfolio tracking.',
+			tech: ['Go', 'SvelteKit', 'Protobuf', 'FinTech'],
+			repo: 'https://github.com/voidarchive/ntx',
+			demo: 'https://ntx.anishshrestha.com'
 		},
 		{
 			title: 'Bagchal – Nepali Strategy Game',

@@ -120,7 +120,6 @@ warp-cli mode -- doh
 
 **Use cases:** DNS performance optimization, selective privacy enhancement, bandwidth conservation.
 
-
 ## Connecting and Managing WARP
 
 ### Start Your Connection

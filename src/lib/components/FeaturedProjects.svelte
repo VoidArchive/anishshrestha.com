@@ -17,28 +17,22 @@ rather than interactive browser-based labs.
 	</h2>
 	<div class="flex flex-col gap-6">
 		<MiniProjectCard
-			title="NTX – Nepse Stock Analyzer"
-			description="A powerful terminal-based stock analyzer for the Nepal Stock Exchange (NEPSE). Features stock screener, company pages, and market overview."
-			tech={['Go', 'SvelteKit', 'GRPC', 'SQLC']}
-			repo="https://github.com/voidarchive/ntx"
-		/>
-		<MiniProjectCard
-			title="Bagchal – Nepali Strategy Game"
-			description="Browser implementation of the traditional Nepali Tigers & Goats board game. Features AI opponent with minimax algorithm and adjustable difficulty levels."
-			tech={['SvelteKit', 'TypeScript', 'Game', 'AI']}
-			repo="/labs/bagchal"
-		/>
-		<MiniProjectCard
-			title="nepal-payment-go – Payment SDK"
-			description="Unified Go SDK for Nepali payment providers. Supports eSewa, Khalti, ConnectIPS, and FonePay with a single interface."
-			tech={['Go', 'SDK', 'Payments', 'FinTech']}
+			title="nepal-payment-go – Unified Payment SDK"
+			description="Production-ready Go SDK for Nepal's payment providers. Supports eSewa, Khalti, ConnectIPS, and FonePay with type-safe APIs. Handles HMAC and RSA signatures."
+			tech={['Go', 'SDK', 'eSewa', 'Khalti']}
 			repo="https://github.com/VoidArchive/nepal-payment-go"
 		/>
 		<MiniProjectCard
-			title="go-nepse – NEPSE API Go Library"
-			description="Modern Go library for accessing Nepal Stock Exchange (NEPSE) API. Features type-safe client, automatic authentication, retry logic, and comprehensive market data retrieval."
-			tech={['Go', 'API', 'Finance', 'NEPSE']}
+			title="go-nepse – NEPSE API Client"
+			description="Type-safe Go client for Nepal Stock Exchange API. Features automatic WASM-based authentication, structured errors, and exponential backoff retries."
+			tech={['Go', 'API', 'NEPSE', 'WASM']}
 			repo="https://github.com/VoidArchive/go-nepse"
+		/>
+		<MiniProjectCard
+			title="NTX – Stock Research Platform"
+			description="Financial research platform for NEPSE. Go backend with Protobuf APIs and SvelteKit frontend. Live at ntx.anishshrestha.com"
+			tech={['Go', 'SvelteKit', 'Protobuf', 'FinTech']}
+			repo="https://github.com/voidarchive/ntx"
 		/>
 	</div>
 </section>

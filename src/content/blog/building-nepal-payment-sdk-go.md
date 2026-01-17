@@ -147,12 +147,12 @@ Each provider has different callback formats, but the SDK normalizes them all to
 
 Each provider returns different status strings:
 
-| Provider | Success | Pending | Failed |
-|----------|---------|---------|--------|
-| eSewa | "COMPLETE" | "PENDING" | "FAILURE" |
-| Khalti | "Completed" | "Pending" | "Expired" |
-| ConnectIPS | "SUCCESS" | "PENDING" | various |
-| FonePay | "true" | "pending" | "false" |
+| Provider   | Success     | Pending   | Failed    |
+| ---------- | ----------- | --------- | --------- |
+| eSewa      | "COMPLETE"  | "PENDING" | "FAILURE" |
+| Khalti     | "Completed" | "Pending" | "Expired" |
+| ConnectIPS | "SUCCESS"   | "PENDING" | various   |
+| FonePay    | "true"      | "pending" | "false"   |
 
 The SDK normalizes these to consistent constants:
 

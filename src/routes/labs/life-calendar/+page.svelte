@@ -1,11 +1,22 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
+	import { browser } from '$app/environment';
+	import { SvelteSet } from 'svelte/reactivity';
 
 	let birthDate = $state('2000-03-28');
 	let livedWeeks = $state(0);
 
 	const TOTAL_YEARS = 100;
 	const WEEKS_PER_YEAR = 52;
+
+	// Detect mobile/touch device to disable expensive ripple effect
+	let isMobile = $state(false);
+
+	$effect(() => {
+		if (browser) {
+			isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		}
+	});
 
 	// Calculate lived weeks when birthDate changes
 	$effect(() => {
@@ -17,7 +28,7 @@
 		livedWeeks = diffWeeks;
 	});
 
-	// Grid generation for years and weeks
+	// Pre-compute grid data to avoid recalculation in template
 	const years = Array.from({ length: TOTAL_YEARS }, (_, i) => i);
 	const weeks = Array.from({ length: WEEKS_PER_YEAR }, (_, i) => i);
 
@@ -28,31 +39,26 @@
 	function isCurrent(year: number, week: number) {
 		return year * 52 + week === livedWeeks;
 	}
-	// Ripple Animation Logic
+
+	// Ripple Animation Logic (disabled on mobile for performance)
 	let svgRef: SVGSVGElement;
 	let mousePos = { x: -100, y: -100 };
 	let isHovering = false;
 	let animationFrameId: number;
-
-	// Store keys of currently affected cells to clean them up efficiently
-	let dirtyKeys = new Set<string>();
+	let dirtyKeys = new SvelteSet<string>();
 
 	function handleMouseMove(e: MouseEvent) {
-		if (!svgRef) return;
+		// Skip ripple effect on mobile
+		if (isMobile || !svgRef) return;
 
-		// Get mouse position relative to SVG
-		// grid is 52 x 100, plus margins (-4 to 56, -6 to 104) -> roughly 60x110 viewbox
-		// We need to map client coordinates to SVG coordinates
 		const rect = svgRef.getBoundingClientRect();
-		const viewBoxWidth = 60; // 56 - (-4)
-		const viewBoxHeight = 110; // 104 - (-6)
+		const viewBoxWidth = 60;
+		const viewBoxHeight = 110;
 		const scaleX = viewBoxWidth / rect.width;
 		const scaleY = viewBoxHeight / rect.height;
 
-		// Calculate grid coordinates (relative to 0,0 origin of the grid rects)
-		// Mouse X in SVG space
-		const svgX = (e.clientX - rect.left) * scaleX - 4; // -4 is the viewBox min-x offset
-		const svgY = (e.clientY - rect.top) * scaleY - 6; // -6 is the viewBox min-y offset
+		const svgX = (e.clientX - rect.left) * scaleX - 4;
+		const svgY = (e.clientY - rect.top) * scaleY - 6;
 
 		mousePos = { x: svgX, y: svgY };
 		isHovering = true;
@@ -63,6 +69,7 @@
 	}
 
 	function handleMouseLeave() {
+		if (isMobile) return;
 		isHovering = false;
 		if (!animationFrameId) {
 			animationFrameId = requestAnimationFrame(updateRipple);
@@ -72,22 +79,17 @@
 	function updateRipple() {
 		animationFrameId = 0;
 
-		// 1. Reset previous dirty cells
+		// Reset previous dirty cells
 		for (const key of dirtyKeys) {
 			const el = document.getElementById(key);
 			if (el) {
 				el.style.transform = '';
-				el.style.filter = '';
-				// Keep z-index standard
-				el.style.zIndex = '';
 			}
 		}
 		dirtyKeys.clear();
 
 		if (!isHovering) return;
 
-		// 2. Calculate new affected cells
-		// Radius of effect in grid units
 		const RADIUS = 6;
 		const startX = Math.floor(mousePos.x - RADIUS);
 		const endX = Math.ceil(mousePos.x + RADIUS);
@@ -96,7 +98,6 @@
 
 		for (let y = startY; y <= endY; y++) {
 			for (let w = startX; w <= endX; w++) {
-				// Bounds check
 				if (y < 0 || y >= TOTAL_YEARS || w < 0 || w >= WEEKS_PER_YEAR) continue;
 
 				const dist = Math.hypot(w - mousePos.x, y - mousePos.y);
@@ -105,20 +106,11 @@
 					const key = `cell-${y}-${w}`;
 					const el = document.getElementById(key);
 					if (el) {
-						// Calculate intensity (0 to 1)
-						// Quadratic falloff looks smoother: (1 - d/R)^2
 						const intensity = Math.pow(1 - dist / RADIUS, 2);
-
-						// Scale up to 1.2x at center to prevent filling the gaps (0.8 * 1.25 = 1.0)
-						// Keeping it slightly under 1.25 ensures gaps are always visible
 						const scale = 1 + intensity * 0.2;
-
-						// Apply styles directly
 						el.style.transform = `scale(${scale})`;
-						// Center the scaling
 						el.style.transformBox = 'fill-box';
 						el.style.transformOrigin = 'center';
-
 						dirtyKeys.add(key);
 					}
 				}
@@ -132,7 +124,6 @@
 	<meta name="description" content="A visualization of your life in weeks." />
 </svelte:head>
 
-<!-- Restored container and max-width to match Header -->
 <main class="container mx-auto min-h-screen px-4 py-8 md:px-6">
 	<div class="w-full">
 		<header
@@ -160,12 +151,6 @@
 		</header>
 
 		<div class="w-full" in:fly={{ y: 20, duration: 500, delay: 200 }}>
-			<!-- 
-				SVG Grid
-				viewBox: -4 -6 60 110
-				- Increased margins slightly for labels
-			-->
-			<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 			<svg
 				bind:this={svgRef}
 				viewBox="-4 -6 60 110"
@@ -192,20 +177,16 @@
 							text-transform: uppercase;
 							pointer-events: none;
 						}
-						/* Smooth transition mainly for color changes, NOT for the ripple transform */
-						rect {
-							transition:
-								fill 0.3s ease,
-								stroke 0.3s ease;
-							/* Will-change helps browser anticipate transform changes */
-							will-change: transform;
+						/* Removed will-change and heavy transitions for mobile perf */
+						.cell {
+							transition: fill 0.2s ease;
 						}
 					</style>
 				</defs>
 
 				<!-- Week Labels (Top) -->
 				<text x="0" y="-3.5" text-anchor="start" class="axis-title">Weeks &rarr;</text>
-				{#each weeks as week}
+				{#each weeks as week (week)}
 					{#if (week + 1) % 5 === 0 || week === 0}
 						<text x={week + 0.4} y="-1.5" text-anchor="middle" class="label-text">
 							{week + 1}
@@ -217,17 +198,18 @@
 				<text x="-3" y="0" text-anchor="end" transform="rotate(-90, -3, 0)" class="axis-title">
 					Years &larr;
 				</text>
-				{#each years as year}
+				{#each years as year (year)}
 					{#if year % 5 === 0}
 						<text x="-1" y={year + 0.6} text-anchor="end" class="label-text">
 							{year}
 						</text>
 					{/if}
 				{/each}
-				<!-- Main Grid -->
+
+				<!-- Main Grid - with keys for efficient updates -->
 				<g>
-					{#each years as year}
-						{#each weeks as week}
+					{#each years as year (year)}
+						{#each weeks as week (week)}
 							<rect
 								id={`cell-${year}-${week}`}
 								x={week}
@@ -235,7 +217,7 @@
 								width="0.8"
 								height="0.8"
 								rx="0.1"
-								class="transition-colors duration-300"
+								class="cell"
 								style:fill={isCurrent(year, week)
 									? 'var(--color-primary)'
 									: isLived(year, week)
@@ -244,9 +226,7 @@
 								style:stroke={isLived(year, week) ? 'none' : 'var(--color-border)'}
 								style:stroke-width="0.05"
 								style:opacity={isLived(year, week) ? '0.8' : '0.5'}
-							>
-								<title>Year {year}, Week {week + 1}</title>
-							</rect>
+							/>
 						{/each}
 					{/each}
 				</g>
