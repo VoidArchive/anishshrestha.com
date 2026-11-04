@@ -29,17 +29,19 @@
 		};
 
 		// Handle unhandled promise rejections
-		window.addEventListener('unhandledrejection', (event) => {
-			const err = event.reason instanceof Error ? event.reason : new Error(String(event.reason));
-			handleError(err);
-		});
+		window.addEventListener('unhandledrejection', handleRejection);
 	});
 
+	function handleRejection(event: PromiseRejectionEvent) {
+		const err = event.reason instanceof Error ? event.reason : new Error(String(event.reason));
+		handleError(err);
+	}
+
 	onDestroy(() => {
-		// Restore original error handler
-		if (originalErrorHandler) {
-			window.onerror = originalErrorHandler;
-		}
+		// Restore original error handler and drop the rejection listener
+		if (typeof window === 'undefined') return;
+		window.onerror = originalErrorHandler;
+		window.removeEventListener('unhandledrejection', handleRejection);
 	});
 
 	function handleError(err: Error) {
@@ -145,9 +147,9 @@
 	}
 
 	.error-stack {
-		font-family: 'Courier New', monospace;
+		font-family: var(--font-family-mono);
 		font-size: 0.8rem;
-		color: #ef4444;
+		color: var(--color-spot);
 		overflow-x: auto;
 		white-space: pre-wrap;
 		margin: 0;
@@ -184,8 +186,8 @@
 	}
 
 	.error-btn.primary:hover {
-		background: #b91c1c;
-		border-color: #b91c1c;
+		background: var(--color-spot-dim);
+		border-color: var(--color-spot-dim);
 	}
 
 	.error-btn:active {

@@ -1,4 +1,4 @@
-import type { GameState } from '$labs/bagchal/rules';
+import type { GameState } from '#labs/bagchal/rules/index.js';
 import type { Move } from './types';
 
 import { MoveGenerator } from './moveGeneration.js';

@@ -1,4 +1,4 @@
-import type { BaseEngine } from '$core/engine/BaseEngine';
+import type { BaseEngine } from '#core/engine/BaseEngine.js';
 import { initialState, applyMove, type GameState } from './rules';
 
 export interface TicTacToeMove {

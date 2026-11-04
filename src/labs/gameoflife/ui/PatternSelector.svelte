@@ -6,81 +6,18 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 -->
 
 <script lang="ts">
-	import { Shapes, MousePointer, Info } from 'lucide-svelte';
-	import {
-		PATTERNS_BY_CATEGORY,
-		getPatternByName
-		// insertPattern as insertPatternAtPosition // Unused import removed
-	} from '../engine/patterns';
+	import { PATTERNS_BY_CATEGORY, getPatternByName } from '../engine/patterns';
 	import { PatternCategory } from '../rules/types';
-	import { simulationState, insertPatternAt } from '../store.svelte';
+	import { simulationState, insertPatternAt } from '../store.svelte.js';
 
 	let selectedCategory = $state<PatternCategory>(PatternCategory.OSCILLATORS);
 	let selectedPatternName = $state<string | null>(null);
-	let showPatternInfo = $state(false);
 
-	/**
-	 * Gets patterns for the selected category
-	 */
 	let currentPatterns = $derived(PATTERNS_BY_CATEGORY[selectedCategory] || []);
 
-	/**
-	 * Gets the currently selected pattern details
-	 */
 	let selectedPattern = $derived(
 		selectedPatternName ? getPatternByName(selectedPatternName) : null
 	);
-
-	// Debug reactive variables
-	$effect(() => {
-		console.log('Reactive update - selectedPatternName:', selectedPatternName);
-		console.log('Reactive update - showPatternInfo:', showPatternInfo);
-		console.log('Reactive update - selectedPattern:', selectedPattern);
-	});
-
-	/**
-	 * Handles pattern selection with debugging
-	 */
-	function selectPattern(patternName: string): void {
-		try {
-			console.log('selectPattern called with:', patternName);
-			console.log('Before update - selectedPatternName:', selectedPatternName);
-			console.log('Before update - showPatternInfo:', showPatternInfo);
-
-			selectedPatternName = patternName;
-			showPatternInfo = true;
-
-			console.log('After update - selectedPatternName:', selectedPatternName);
-			console.log('After update - showPatternInfo:', showPatternInfo);
-
-			// Test pattern lookup
-			const pattern = getPatternByName(patternName);
-			console.log('Pattern lookup result:', pattern);
-		} catch (error) {
-			console.error('Error selecting pattern:', error);
-		}
-	}
-
-	/**
-	 * Handles pattern click with debugging
-	 */
-	function handlePatternClick(pattern: { name: string }): void {
-		try {
-			console.log('Pattern clicked:', pattern.name, pattern);
-			selectPattern(pattern.name);
-		} catch (error) {
-			console.error('Error handling pattern click:', error);
-		}
-	}
-
-	/**
-	 * Handle click event with proper event handling
-	 */
-	function handleClickEvent(event: Event, pattern: { name: string }): void {
-		event.preventDefault();
-		event.stopPropagation();
-		handlePatternClick(pattern);
-	}
 
 	/**
 	 * Inserts the selected pattern at grid center
@@ -93,14 +30,9 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 
 		insertPatternAt(selectedPattern.name, Math.max(0, centerX), Math.max(0, centerY));
 
-		// Clear selection after insertion
 		selectedPatternName = null;
-		showPatternInfo = false;
 	}
 
-	/**
-	 * Gets display name for category
-	 */
 	function getCategoryName(category: PatternCategory): string {
 		switch (category) {
 			case PatternCategory.STILL_LIFES:
@@ -118,15 +50,16 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 </script>
 
 <div class="pattern-selector">
-	<!-- Category Tabs -->
-	<div class="category-tabs">
+	<div class="category-tabs" role="tablist" aria-label="Pattern categories">
 		{#each Object.values(PatternCategory) as category (category)}
 			<button
-				class="category-tab {selectedCategory === category ? 'active' : ''}"
+				class="btn"
+				class:active={selectedCategory === category}
+				role="tab"
+				aria-selected={selectedCategory === category}
 				onclick={() => {
 					selectedCategory = category;
 					selectedPatternName = null;
-					showPatternInfo = false;
 				}}
 			>
 				{getCategoryName(category)}
@@ -134,84 +67,58 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 		{/each}
 	</div>
 
-	<!-- Pattern List -->
 	<div class="pattern-list">
 		{#each currentPatterns as pattern (pattern.name)}
 			<button
-				class="pattern-item {selectedPatternName === pattern.name ? 'selected' : ''}"
-				onclick={(event) => handleClickEvent(event, pattern)}
-				style="outline: none;"
+				class="pattern-item caps"
+				class:selected={selectedPatternName === pattern.name}
+				aria-pressed={selectedPatternName === pattern.name}
+				onclick={() => (selectedPatternName = pattern.name)}
 			>
-				<div class="pattern-name">
-					<Shapes size={14} />
-					{pattern.name}
-				</div>
-				<div class="pattern-size">
-					{pattern.width}×{pattern.height}
-				</div>
+				<span>{pattern.name}</span>
+				<span class="pattern-size">{pattern.width}×{pattern.height}</span>
 			</button>
 		{/each}
 
 		{#if currentPatterns.length === 0}
-			<div class="empty-category">
-				<p class="empty-text">No patterns in this category</p>
-				<p class="empty-text">
-					Debug: Available categories: {Object.keys(PATTERNS_BY_CATEGORY).join(', ')}
-				</p>
-			</div>
+			<p class="note">No patterns in this category.</p>
 		{/if}
 	</div>
 
-	<!-- Pattern Info & Insert -->
-	{#if showPatternInfo && selectedPattern}
+	{#if selectedPattern}
 		<div class="pattern-info">
 			<div class="info-header">
-				<h4 class="pattern-title">
-					<Info size={16} />
-					{selectedPattern.name}
-				</h4>
-				<span class="pattern-dimensions">
-					{selectedPattern.width} × {selectedPattern.height}
-				</span>
+				<h3>{selectedPattern.name}</h3>
+				<span class="caps pattern-size">{selectedPattern.width} × {selectedPattern.height}</span>
 			</div>
 
-			<p class="pattern-description">
-				{selectedPattern.description}
-			</p>
+			<p class="pattern-description">{selectedPattern.description}</p>
 
-			<!-- Pattern Preview Grid -->
-			<div class="pattern-preview">
-				<div
-					class="preview-grid"
-					style="
-						--preview-width: {selectedPattern.width};
-						--preview-height: {selectedPattern.height};
-					"
-				>
-					{#each selectedPattern.grid as row, y (y)}
-						{#each row as cell, x (`${y}-${x}`)}
-							<div class="preview-cell {cell ? 'alive' : 'dead'}"></div>
-						{/each}
+			<div
+				class="preview-grid"
+				style="
+					--preview-width: {selectedPattern.width};
+					--preview-height: {selectedPattern.height};
+				"
+				aria-hidden="true"
+			>
+				{#each selectedPattern.grid as row, y (y)}
+					{#each row as cell, x (`${y}-${x}`)}
+						<div class="preview-cell" class:alive={cell}></div>
 					{/each}
-				</div>
+				{/each}
 			</div>
 
-			<button class="btn insert-btn" onclick={insertPattern} disabled={simulationState.isRunning}>
-				<MousePointer size={16} />
+			<button class="btn" onclick={insertPattern} disabled={simulationState.isRunning}>
 				Insert at Center
 			</button>
 
 			{#if simulationState.isRunning}
-				<p class="insert-note">Stop simulation to insert patterns</p>
+				<p class="note">Pause the simulation to insert a pattern.</p>
 			{/if}
 		</div>
 	{:else}
-		<div class="pattern-help">
-			<p class="help-text">Select a pattern above to preview and insert it into the grid.</p>
-			<p class="help-text">
-				Debug: Category = {selectedCategory}, Pattern count = {currentPatterns.length}
-			</p>
-		</div>
+		<p class="note">Select a pattern above to preview it and insert it into the grid.</p>
 	{/if}
 </div>
 
@@ -219,225 +126,116 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 	.pattern-selector {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-3);
+		gap: 12px;
 	}
 
 	.category-tabs {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-1);
-		border-bottom: 1px solid var(--color-border);
-		padding-bottom: var(--space-2);
-	}
-
-	.category-tab {
-		padding: var(--space-1) var(--space-2);
-		background: transparent;
-		border: 1px solid var(--color-border);
-		color: var(--color-text-muted);
-		font-family: var(--font-family-mono);
-		font-size: 0.75rem;
-		cursor: pointer;
-		transition: all 0.3s ease;
-	}
-
-	.category-tab:hover {
-		border-color: var(--color-primary);
-		color: var(--color-text);
-	}
-
-	.category-tab.active {
-		background: var(--color-primary);
-		border-color: var(--color-primary);
-		color: white;
+		gap: 4px;
 	}
 
 	.pattern-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-1);
 		max-height: 200px;
 		overflow-y: auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-ink) var(--color-paper);
 	}
 
+	/* Rows on hairline rules, no boxes */
 	.pattern-item {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
-		padding: var(--space-2);
-		background: var(--color-bg-primary);
-		border: 1px solid var(--color-border);
-		color: var(--color-text);
+		align-items: baseline;
+		gap: 8px;
+		padding: 7px 0;
+		background: none;
+		border: 0;
+		border-top: 1px solid var(--color-ink);
+		color: var(--color-ink);
+		text-align: left;
 		cursor: pointer;
-		transition: all 0.3s ease;
-		/* Ensure buttons are clickable */
-		pointer-events: auto;
-		position: relative;
-		z-index: 1;
 	}
 
-	.pattern-item:hover {
-		border-color: var(--color-primary);
-		background: rgba(201, 42, 42, 0.05);
-	}
-
+	.pattern-item:hover,
 	.pattern-item.selected {
-		border-color: var(--color-primary);
-		background: rgba(201, 42, 42, 0.1);
+		color: var(--color-spot);
 	}
 
-	.pattern-name {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		font-family: var(--font-family-mono);
-		font-size: 0.875rem;
-		font-weight: 500;
+	.pattern-item.selected::before {
+		content: '';
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		background: currentColor;
+		margin-right: 6px;
+		flex: none;
+	}
+
+	.pattern-item.selected > span:first-of-type {
+		flex: 1;
 	}
 
 	.pattern-size {
-		font-family: var(--font-family-mono);
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-	}
-
-	.empty-category {
-		padding: var(--space-4);
-		text-align: center;
-	}
-
-	.empty-text {
-		color: var(--color-text-muted);
-		font-style: italic;
-		margin: 0;
+		font-weight: 400;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.pattern-info {
-		padding: var(--space-3);
-		background: var(--color-bg-primary);
-		border: 1px solid var(--color-border);
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-3);
+		align-items: flex-start;
+		gap: 10px;
+		padding-top: 12px;
+		border-top: 1px solid var(--color-ink);
 	}
 
 	.info-header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: baseline;
+		gap: 8px;
+		width: 100%;
 	}
 
-	.pattern-title {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
+	.info-header h3 {
 		margin: 0;
-		font-family: var(--font-family-mono);
-		font-size: 0.875rem;
-		color: var(--color-text);
-	}
-
-	.pattern-dimensions {
-		font-family: var(--font-family-mono);
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		background: var(--color-bg-secondary);
-		padding: var(--space-1);
-		border-radius: 4px;
+		font-family: var(--font-family-serif);
+		font-size: 17px;
+		font-weight: 600;
+		line-height: 1.2;
 	}
 
 	.pattern-description {
 		margin: 0;
-		font-size: 0.875rem;
-		color: var(--color-text-muted);
-		line-height: 1.4;
-	}
-
-	.pattern-preview {
-		display: flex;
-		justify-content: center;
-		padding: var(--space-2);
-		background: var(--color-bg-secondary);
+		font-size: 15.5px;
+		text-wrap: pretty;
 	}
 
 	.preview-grid {
 		display: grid;
-		grid-template-columns: repeat(var(--preview-width), 1fr);
-		grid-template-rows: repeat(var(--preview-height), 1fr);
+		grid-template-columns: repeat(var(--preview-width), 10px);
+		grid-template-rows: repeat(var(--preview-height), 10px);
 		gap: 1px;
-		background: var(--color-border);
+		padding: 1px;
+		background: var(--color-tint);
+		max-width: 100%;
+		overflow: auto;
 	}
 
 	.preview-cell {
-		width: 8px;
-		height: 8px;
+		background: var(--color-paper);
 	}
 
 	.preview-cell.alive {
-		background: var(--color-primary);
+		background: var(--color-ink);
 	}
 
-	.preview-cell.dead {
-		background: var(--color-bg-secondary);
-	}
-
-	.insert-btn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		background: var(--color-primary);
-		color: white;
-		border-color: var(--color-primary);
-	}
-
-	.insert-btn:hover:not(:disabled) {
-		background: #b91c1c;
-		border-color: #b91c1c;
-	}
-
-	.insert-btn:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.insert-note {
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		text-align: center;
+	.note {
 		margin: 0;
+		font-size: 15.5px;
 		font-style: italic;
-	}
-
-	.pattern-help {
-		padding: var(--space-4);
-		text-align: center;
-		background: var(--color-bg-primary);
-		border: 1px solid var(--color-border);
-	}
-
-	.help-text {
-		margin: 0;
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-		line-height: 1.4;
-	}
-
-	/* Mobile responsive */
-	@media (max-width: 768px) {
-		.category-tabs {
-			gap: var(--space-2);
-		}
-
-		.category-tab {
-			flex: 1;
-			text-align: center;
-		}
-
-		.pattern-item {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: var(--space-1);
-		}
 	}
 </style>

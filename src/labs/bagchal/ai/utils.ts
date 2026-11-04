@@ -1,4 +1,4 @@
-import { generatePoints, generateLines, buildAdjacencyMap } from '$labs/bagchal/rules';
+import { generatePoints, generateLines, buildAdjacencyMap } from '#labs/bagchal/rules/index.js';
 
 /**
  * Shared utilities for Bagchal AI components – single source of truth for

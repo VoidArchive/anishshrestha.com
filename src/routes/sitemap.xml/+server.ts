@@ -1,5 +1,5 @@
-import { getBlogPosts } from '$lib/utils/blog';
-import type { BlogPost } from '$lib/utils/blog';
+import { getBlogPosts } from '#lib/utils/blog.js';
+import type { BlogPost } from '#lib/utils/blog.js';
 
 interface SitemapPage {
 	url: string;

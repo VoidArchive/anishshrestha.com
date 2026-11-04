@@ -92,6 +92,7 @@ export class PathfindingAlgorithms {
 		}
 
 		const steps: AnimationStep[] = [];
+		this.beginRun(grid);
 
 		switch (algorithm) {
 			case 'BFS':
@@ -237,6 +238,7 @@ export class PathfindingAlgorithms {
 					visited.add(key);
 					previous.set(key, [x, y]);
 					queue.push({ x: nx, y: ny });
+					this.markFrontier(nx, ny);
 				}
 			}
 		}
@@ -345,6 +347,7 @@ export class PathfindingAlgorithms {
 					visited.add(key);
 					previous.set(key, [x, y]);
 					stack.push({ x: nx, y: ny });
+					this.markFrontier(nx, ny);
 				}
 			}
 		}
@@ -504,6 +507,7 @@ export class PathfindingAlgorithms {
 						previous.set(neighborKey, [x, y]);
 						// Add updated distance to priority queue
 						priorityQueue.enqueue({ key: neighborKey, x: nx, y: ny, distance: newDistance });
+						this.markFrontier(nx, ny);
 					}
 				}
 			}
@@ -628,6 +632,7 @@ export class PathfindingAlgorithms {
 
 				if (!openSet.has(neighborKey)) {
 					openSet.add(neighborKey);
+					this.markFrontier(nx, ny);
 				} else if (tentativeG >= (gScore.get(neighborKey) || Infinity)) {
 					continue;
 				}
@@ -714,64 +719,86 @@ export class PathfindingAlgorithms {
 	/**
 	 * Updates grid with visited node
 	 */
+	/**
+	 * One working grid per run. Every step mutates it and snapshots a copy, so a step's grid
+	 * carries everything explored before it; stepping backwards restores the earlier snapshot.
+	 */
+	private static work: GridNode[][] = [];
+
+	private static beginRun(grid: GridNode[][]): void {
+		this.work = grid.map((row) =>
+			row.map((node) => ({
+				...node,
+				isVisited: false,
+				isCurrent: false,
+				isPath: false,
+				isFrontier: false
+			}))
+		);
+	}
+
+	private static snapshot(): GridNode[][] {
+		return this.work.map((row) => row.map((node) => ({ ...node })));
+	}
+
+	private static clearCurrent(): void {
+		for (const row of this.work) for (const node of row) node.isCurrent = false;
+	}
+
+	private static markFrontier(x: number, y: number): void {
+		const node = this.work[y]?.[x];
+		if (node && !node.isVisited) node.isFrontier = true;
+	}
+
 	private static updateGrid(
 		grid: GridNode[][],
 		x: number,
 		y: number,
 		type: 'visited'
 	): GridNode[][] {
-		const newGrid = grid.map((row) => row.map((node) => ({ ...node })));
-		if (newGrid[y] && newGrid[y][x]) {
-			newGrid[y][x].isVisited = type === 'visited';
+		void grid;
+		this.clearCurrent();
+		const node = this.work[y]?.[x];
+		if (node) {
+			node.isVisited = type === 'visited';
+			node.isFrontier = false;
+			node.isCurrent = true;
 		}
-		return newGrid;
+		return this.snapshot();
+	}
+	private static updateGridWithPath(grid: GridNode[][], path: [number, number][]): GridNode[][] {
+		void grid;
+		this.clearCurrent();
+		for (const [x, y] of path) {
+			const node = this.work[y]?.[x];
+			if (node && !node.isStart && !node.isEnd) node.isPath = true;
+		}
+		return this.snapshot();
+	}
+	private static updateGridWithFrontier(grid: GridNode[][], x: number, y: number): GridNode[][] {
+		void grid;
+		this.markFrontier(x, y);
+		return this.snapshot();
+	}
+	private static updateGridWithCurrent(grid: GridNode[][], x: number, y: number): GridNode[][] {
+		void grid;
+		this.clearCurrent();
+		const node = this.work[y]?.[x];
+		if (node) node.isCurrent = true;
+		return this.snapshot();
 	}
 
 	/**
 	 * Updates grid with final path
 	 */
-	private static updateGridWithPath(grid: GridNode[][], path: [number, number][]): GridNode[][] {
-		const newGrid = grid.map((row) => row.map((node) => ({ ...node })));
-
-		for (const [x, y] of path) {
-			if (newGrid[y] && newGrid[y][x] && !newGrid[y][x].isStart && !newGrid[y][x].isEnd) {
-				newGrid[y][x].isPath = true;
-			}
-		}
-
-		return newGrid;
-	}
 
 	/**
 	 * Updates grid with frontier node
 	 */
-	private static updateGridWithFrontier(grid: GridNode[][], x: number, y: number): GridNode[][] {
-		const newGrid = grid.map((row) => row.map((node) => ({ ...node })));
-		if (newGrid[y] && newGrid[y][x]) {
-			newGrid[y][x].isFrontier = true;
-		}
-		return newGrid;
-	}
 
 	/**
 	 * Updates grid with current exploring node
 	 */
-	private static updateGridWithCurrent(grid: GridNode[][], x: number, y: number): GridNode[][] {
-		const newGrid = grid.map((row) => row.map((node) => ({ ...node })));
-
-		// Clear previous current nodes
-		for (const row of newGrid) {
-			for (const node of row) {
-				node.isCurrent = false;
-			}
-		}
-
-		// Set new current node
-		if (newGrid[y] && newGrid[y][x]) {
-			newGrid[y][x].isCurrent = true;
-		}
-		return newGrid;
-	}
 
 	/**
 	 * Validates if coordinates are within grid bounds

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
-	import { state, updateCanvasSize } from '../store.svelte';
+	import { onMount } from 'svelte';
+	import { state, updateCanvasSize, resetSimulation } from '../store.svelte.js';
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -8,10 +8,9 @@
 	let container: HTMLDivElement;
 
 	const BOID_SIZE = 8;
-	const BOID_COLOR = '#ff6b6b';
 	const TRAIL_ALPHA = 0.15;
 
-	function drawBoid(x: number, y: number, vx: number, vy: number): void {
+	function drawBoid(x: number, y: number, vx: number, vy: number, color: string): void {
 		if (!ctx) return;
 
 		const angle = Math.atan2(vy, vx);
@@ -27,7 +26,7 @@
 		ctx.lineTo(-BOID_SIZE / 2, -BOID_SIZE / 2);
 		ctx.closePath();
 
-		ctx.fillStyle = BOID_COLOR;
+		ctx.fillStyle = color;
 		ctx.fill();
 
 		ctx.restore();
@@ -36,13 +35,19 @@
 	function render(): void {
 		if (!ctx || !canvas) return;
 
-		// Semi-transparent clear for trail effect
-		ctx.fillStyle = `rgba(13, 13, 13, ${TRAIL_ALPHA})`;
-		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		// Inks come from the page tokens so the plate matches the spread
+		const styles = getComputedStyle(canvas);
+		const paper = styles.getPropertyValue('--color-paper');
+		const boidColor = styles.getPropertyValue(state.isRunning ? '--color-spot' : '--color-ink');
 
-		// Draw all boids
+		// Semi-transparent wash of paper for the trail effect
+		ctx.globalAlpha = TRAIL_ALPHA;
+		ctx.fillStyle = paper;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.globalAlpha = 1;
+
 		for (const boid of state.boids) {
-			drawBoid(boid.position.x, boid.position.y, boid.velocity.x, boid.velocity.y);
+			drawBoid(boid.position.x, boid.position.y, boid.velocity.x, boid.velocity.y, boidColor);
 		}
 
 		animationId = requestAnimationFrame(render);
@@ -51,9 +56,9 @@
 	function handleResize(): void {
 		if (!container || !canvas) return;
 
-		const rect = container.getBoundingClientRect();
-		const width = Math.floor(rect.width);
-		const height = Math.floor(rect.height);
+		// Content box: the plate's border must not count toward the drawing size
+		const width = container.clientWidth;
+		const height = container.clientHeight;
 
 		canvas.width = width;
 		canvas.height = height;
@@ -62,7 +67,7 @@
 
 		// Clear canvas on resize
 		if (ctx) {
-			ctx.fillStyle = '#0d0d0d';
+			ctx.fillStyle = getComputedStyle(canvas).getPropertyValue('--color-paper');
 			ctx.fillRect(0, 0, width, height);
 		}
 	}
@@ -70,139 +75,40 @@
 	onMount(() => {
 		ctx = canvas.getContext('2d');
 		handleResize();
+		// The flock was seeded at a placeholder size; reseed inside the measured plate
+		resetSimulation();
 		render();
 
 		window.addEventListener('resize', handleResize);
-	});
 
-	onDestroy(() => {
-		if (animationId !== null) {
-			cancelAnimationFrame(animationId);
-		}
-		window.removeEventListener('resize', handleResize);
+		// Cleanup lives here, not in onDestroy: onDestroy also runs during SSR where window is undefined
+		return () => {
+			if (animationId !== null) {
+				cancelAnimationFrame(animationId);
+			}
+			window.removeEventListener('resize', handleResize);
+		};
 	});
 </script>
 
-<div class="canvas-board-container">
-	<!-- Canvas Info -->
-	<div class="canvas-info">
-		<span class="canvas-size">{state.canvasSize.width} × {state.canvasSize.height}</span>
-		<span class="interaction-hint">{state.boids.length} boids</span>
-	</div>
-
-	<!-- Recessed Board Well -->
-	<div class="board-well">
-		<div class="board-inner">
-			<div class="board-wrapper">
-				<div class="canvas-wrapper" bind:this={container}>
-					<canvas bind:this={canvas}></canvas>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="plate" class:paused={!state.isRunning} bind:this={container}>
+	<canvas
+		bind:this={canvas}
+		aria-label="A flock of {state.boids.length} boids following separation, alignment and cohesion."
+	></canvas>
 </div>
 
 <style>
-	.canvas-board-container {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-height: 0;
-		height: 100%;
-	}
-
-	.canvas-info {
-		display: flex;
-		gap: var(--space-4);
-		align-items: center;
-		justify-content: center;
-		font-family: var(--font-mono);
-		font-size: 0.875rem;
-		color: var(--color-text-muted);
-		text-align: center;
-		margin-bottom: var(--space-3);
-		flex-shrink: 0;
-	}
-
-	.canvas-size {
-		font-weight: 600;
-	}
-
-	.interaction-hint {
-		font-style: italic;
-	}
-
-	.board-well {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		min-height: 0;
-		position: relative;
-		padding: 0.5rem;
-	}
-
-	@media (min-width: 640px) {
-		.board-well {
-			padding: 0.75rem;
-		}
-	}
-
-	.board-inner {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		background: linear-gradient(145deg, #151515, var(--color-bg-primary));
-		padding: 0.5rem;
-		position: relative;
-		min-height: 0;
-		box-shadow:
-			inset 4px 4px 12px rgba(0, 0, 0, 0.7),
-			inset -2px -2px 8px rgba(255, 255, 255, 0.04),
-			inset 0 0 20px rgba(0, 0, 0, 0.5),
-			inset 0 0 40px rgba(255, 107, 107, 0.02);
-	}
-
-	@media (min-width: 640px) {
-		.board-inner {
-			padding: 0.75rem;
-		}
-	}
-
-	.board-inner::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background:
-			radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.015) 0%, transparent 50%),
-			radial-gradient(circle at 80% 70%, rgba(255, 107, 107, 0.008) 0%, transparent 50%);
-		pointer-events: none;
-	}
-
-	.board-wrapper {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 0;
-		padding: 0.5rem;
-		background: transparent;
-	}
-
-	@media (min-width: 640px) {
-		.board-wrapper {
-			padding: 0.75rem;
-		}
-	}
-
-	.canvas-wrapper {
+	.plate {
 		width: 100%;
-		height: 100%;
-		min-height: 300px;
-		background: rgba(13, 13, 13, 1);
+		aspect-ratio: 3 / 2;
+		border: 1.5px solid var(--color-ink);
+		background: var(--color-paper);
 		overflow: hidden;
+	}
+
+	.plate.paused {
+		border-style: dashed;
 	}
 
 	canvas {
@@ -211,21 +117,9 @@
 		height: 100%;
 	}
 
-	@media (max-width: 768px) {
-		.canvas-info {
-			flex-direction: column;
-			gap: var(--space-1);
-			margin-bottom: var(--space-2);
-		}
-
-		.canvas-wrapper {
-			min-height: 250px;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.canvas-wrapper {
-			min-height: 200px;
+	@media (max-width: 640px) {
+		.plate {
+			aspect-ratio: 4 / 3;
 		}
 	}
 </style>

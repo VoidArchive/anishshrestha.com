@@ -1,7 +1,7 @@
-import type { GameState, GameMode } from '$labs/bagchal/rules';
+import type { GameState, GameMode } from '#labs/bagchal/rules/index.js';
 import type { Move } from './types';
-import { Minimax } from '$core/ai';
-import { BagchalEngine } from '$labs/bagchal/engine';
+import { Minimax } from '#core/ai/index.js';
+import { BagchalEngine } from '#labs/bagchal/engine/index.js';
 import { OpeningBook } from './openingBook.js';
 import { MoveOrderer } from './moveOrdering.js';
 import { ADJACENCY_MAP, POINTS } from './utils.js';

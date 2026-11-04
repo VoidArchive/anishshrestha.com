@@ -173,24 +173,19 @@
 	});
 </script>
 
-<footer class="border-border bg-bg-secondary border-t">
-	<div
-		class="text-text container flex flex-col items-center justify-between gap-2 py-6 sm:flex-row"
-	>
-		<p>&copy; {currentYear} Anish Shrestha. All rights reserved.</p>
-
-		<p class="text-text-muted italic">
-			<span
+<footer class="colophon-foot">
+	<div class="container">
+		<p>&copy; {currentYear} Anish Shrestha</p>
+		<p>
+			<a
 				bind:this={vimText}
 				class="vim-easter-egg"
+				href="https://github.com/VoidArchive"
+				rel="me"
 				onmouseenter={handleMouseEnter}
 				onmouseleave={handleMouseLeave}
-				onmousemove={handleMouseMove}
-				role="button"
-				tabindex="0"
+				onmousemove={handleMouseMove}>VoidArchive on GitHub</a
 			>
-				<a href="https://github.com/VoidArchive/anishshrestha.com">Made with SvelteKit</a>
-			</span>
 		</p>
 	</div>
 </footer>
@@ -226,38 +221,32 @@
 {/if}
 
 <style>
+	.colophon-foot {
+		margin-top: 72px;
+	}
+	.colophon-foot .container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 8px 24px;
+		border-top: 1.5px solid var(--color-ink);
+		padding-top: 10px;
+		padding-bottom: 40px;
+		font-family: var(--font-family-sans);
+		font-size: 12px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+	.colophon-foot p {
+		margin: 0;
+	}
 	.vim-easter-egg {
-		position: relative;
-		transition: all 0.3s ease-in-out;
-		cursor: pointer;
+		display: inline-block;
+		padding: 4px 0;
+		text-decoration: none;
 	}
-
 	.vim-easter-egg:hover {
-		background: linear-gradient(
-			90deg,
-			#ffffff 0%,
-			#fecaca 25%,
-			#f87171 50%,
-			#ef4444 75%,
-			#dc2626 100%
-		);
-		-webkit-background-clip: text;
-		background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 200% 100%;
-		animation: gradientShift 2s ease-in-out infinite;
-	}
-
-	@keyframes gradientShift {
-		0% {
-			background-position: 0% 50%;
-		}
-		50% {
-			background-position: 100% 50%;
-		}
-		100% {
-			background-position: 0% 50%;
-		}
+		color: var(--color-spot);
 	}
 
 	.gopher-cursor {

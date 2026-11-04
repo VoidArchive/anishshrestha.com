@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { gameState, points, lines, getValidMoves } from '$labs/bagchal/store.svelte';
+	import { gameState, points, lines, getValidMoves } from '#labs/bagchal/store.svelte.js';
 	import GameBoard from './GameBoard.svelte';
 	import GameSidebar from './GameSidebar.svelte';
 	import WinnerModal from './WinnerModal.svelte';
-	import ErrorBoundary from '$lib/components/ErrorBoundary.svelte';
+	import ErrorBoundary from '#lib/components/ErrorBoundary.svelte';
 	import GameLogicHandler from './GameLogicHandler.svelte';
 	import ComputerAIHandler from './ComputerAIHandler.svelte';
 	import GameStateHandler from './GameStateHandler.svelte';
@@ -87,8 +87,14 @@
 	onTriggerAnimation={(move) => gameBoardRef?.triggerAnimation(move, 1200)}
 />
 
+<header class="lab-head">
+	<span class="fig" aria-hidden="true">Fig. 5</span>
+	<h1>Bagchal</h1>
+	<p class="dek">The Nepali tigers-and-goats game, with a minimax opponent.</p>
+</header>
+
 <ErrorBoundary fallback="The Bagchal game encountered an error. Please try restarting the game.">
-	<div class="flex flex-col gap-4 lg:grid lg:h-full lg:grid-cols-[350px_1fr] lg:gap-8">
+	<div class="flex flex-col gap-10 lg:grid lg:grid-cols-[350px_1fr] lg:gap-14">
 		<GameBoard
 			bind:this={gameBoardRef}
 			{points}
@@ -133,3 +139,30 @@
 		}}
 	/>
 </ErrorBoundary>
+
+<style>
+	.lab-head {
+		margin-bottom: 40px;
+	}
+	.fig {
+		display: block;
+		font-family: var(--font-family-sans);
+		font-weight: 700;
+		font-size: clamp(40px, 5vw, 64px);
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-spot);
+	}
+	h1 {
+		font-weight: 600;
+		font-size: clamp(34px, 3vw, 40px);
+		line-height: 1.02;
+		letter-spacing: -0.015em;
+		margin-top: 8px;
+	}
+	.dek {
+		font-style: italic;
+		font-size: 17px;
+		margin-top: 8px;
+	}
+</style>

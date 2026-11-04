@@ -1,4 +1,4 @@
-import type { GameState } from '$labs/bagchal/rules';
+import type { GameState } from '#labs/bagchal/rules/index.js';
 import { BOARD_POSITIONS } from './utils';
 
 /**

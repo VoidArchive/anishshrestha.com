@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Shell from '$labs/dsa-visualizer/ui/Shell.svelte';
+	import Shell from '#labs/dsa-visualizer/ui/Shell.svelte';
 </script>
 
 <svelte:head>

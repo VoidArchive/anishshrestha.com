@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GameState } from '$labs/bagchal/rules';
+	import type { GameState } from '#labs/bagchal/rules/index.js';
 
 	interface Props {
 		gameState: GameState;
@@ -50,223 +50,176 @@
 	}
 </script>
 
-<aside class="space-y-4 lg:order-1 lg:space-y-6">
-	<!-- Game Status -->
-	<div class="section-card">
+<aside class="sidebar lg:order-1">
+	<section>
 		<h2 class="section-title">Game Status</h2>
-		<div class="space-y-3">
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Current Turn:</span>
-				<div class="flex items-center gap-2">
-					<span class="font-semibold capitalize" class:text-primary={gameState.turn === 'TIGER'}>
-						{gameState.turn.toLowerCase()}
-					</span>
+		<dl class="rows">
+			<div>
+				<dt class="caps">Turn</dt>
+				<dd>
+					{gameState.turn === 'TIGER' ? 'Tigers' : 'Goats'}
 					{#if isComputerTurn && !gameState.winner}
-						<span class="text-text-muted text-xs">
-							{isComputerThinking ? '(Computer)' : '(Your turn)'}
-						</span>
+						<i>{isComputerThinking ? '(computer)' : '(you)'}</i>
 					{/if}
-				</div>
+				</dd>
 			</div>
-
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Phase:</span>
-				<span class="font-semibold capitalize">{gameState.phase.toLowerCase()}</span>
+			<div>
+				<dt class="caps">Phase</dt>
+				<dd>{gameState.phase === 'PLACEMENT' ? 'Placement' : 'Movement'}</dd>
 			</div>
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Goats Placed:</span>
-				<span class="font-semibold">{gameState.goatsPlaced}/20</span>
+			<div>
+				<dt class="caps">Goats placed</dt>
+				<dd>{gameState.goatsPlaced}/20</dd>
 			</div>
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Goats Captured:</span>
-				<span class="text-primary font-semibold">{gameState.goatsCaptured}</span>
+			<div>
+				<dt class="caps">Goats captured</dt>
+				<dd>{gameState.goatsCaptured}</dd>
 			</div>
-
 			{#if gameState.phase === 'MOVEMENT'}
-				<div class="flex items-center justify-between">
-					<span class="text-text-muted">Moves without capture:</span>
-					<span
-						class="font-semibold"
-						class:text-yellow-400={gameState.movesWithoutCapture >= 40}
-						class:text-primary={gameState.movesWithoutCapture >= 50}
-					>
+				<div>
+					<dt class="caps">Moves without capture</dt>
+					<dd class:warn={gameState.movesWithoutCapture >= 40}>
 						{gameState.movesWithoutCapture}/51
-					</span>
+					</dd>
 				</div>
 			{/if}
-		</div>
-	</div>
+		</dl>
+	</section>
 
-	<!-- Game Settings -->
-	<div class="section-card">
+	<section>
 		<h2 class="section-title">Game Mode</h2>
-		<div class="space-y-3">
-			<!-- Opponent Selection -->
-			<div class="flex items-center justify-between">
-				<span class="text-text-muted">Opponent:</span>
-				<div class="mode-buttons">
+		<dl class="rows">
+			<div>
+				<dt class="caps">Opponent</dt>
+				<dd class="choices">
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={!isPlayingComputer}
 						onclick={() => handleModeChange(false)}
 					>
 						Human
 					</button>
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={isPlayingComputer}
 						onclick={() => handleModeChange(true)}
 					>
 						AI
 					</button>
-				</div>
+				</dd>
 			</div>
-
-			<!-- Player Side Selection (only when playing computer) -->
-			<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
-				<span class="text-text-muted">Play as:</span>
-				<div class="mode-buttons">
+			<div>
+				<dt class="caps">Play as</dt>
+				<dd class="choices">
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={playerSide === 'GOAT'}
-						class:disabled={!isPlayingComputer}
 						onclick={() => handleSideChange('GOAT')}
 						disabled={!isPlayingComputer}
 					>
 						Goat
 					</button>
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={playerSide === 'TIGER'}
-						class:disabled={!isPlayingComputer}
 						onclick={() => handleSideChange('TIGER')}
 						disabled={!isPlayingComputer}
 					>
 						Tiger
 					</button>
-				</div>
+				</dd>
 			</div>
-
-			<!-- AI Difficulty Selection (only when playing computer) -->
-			<div class="flex items-center justify-between" class:disabled={!isPlayingComputer}>
-				<span class="text-text-muted">Difficulty:</span>
-				<div class="mode-buttons">
+			<div>
+				<dt class="caps">Difficulty</dt>
+				<dd class="choices">
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={gameMode === 'EASY'}
-						class:disabled={!isPlayingComputer}
 						onclick={() => handleModeChangeLocal('EASY')}
 						disabled={!isPlayingComputer}
 					>
 						Easy
 					</button>
 					<button
-						class="mode-btn"
+						class="btn"
 						class:active={gameMode === 'HARD'}
-						class:disabled={!isPlayingComputer}
 						onclick={() => handleModeChangeLocal('HARD')}
 						disabled={!isPlayingComputer}
 					>
 						Hard
 					</button>
-				</div>
+				</dd>
 			</div>
-		</div>
-	</div>
+		</dl>
+	</section>
 
-	<!-- Game Controls -->
-	<div class="section-card">
+	<section>
 		<h2 class="section-title">Game Controls</h2>
-		<div class="space-y-3">
-			<div class="flex gap-2">
-				<button
-					onclick={onUndo}
-					disabled={!canUndo || isComputerThinking}
-					class="btn flex-1 text-xs tracking-wider uppercase disabled:cursor-not-allowed disabled:opacity-40"
-				>
-					Undo
-				</button>
-
-				<button
-					onclick={onReset}
-					disabled={isComputerThinking}
-					class="btn flex-1 text-xs tracking-wider uppercase disabled:cursor-not-allowed disabled:opacity-40"
-				>
-					Reset
-				</button>
-			</div>
+		<div class="choices">
+			<button onclick={onUndo} disabled={!canUndo || isComputerThinking} class="btn">Undo</button>
+			<button onclick={onReset} disabled={isComputerThinking} class="btn">Reset</button>
 		</div>
-	</div>
+	</section>
 
-	<!-- Quick Rules -->
-	<div class="section-card">
+	<section>
 		<h2 class="section-title">Quick Rules</h2>
-		<div class="text-text-muted space-y-2 text-sm">
-			<p><strong class="text-text">Goal:</strong></p>
-			<ul class="ml-4 list-none space-y-1 text-xs">
-				<li>Tigers: Capture 5 goats to win</li>
-				<li>Goats: Block all tiger moves</li>
-			</ul>
-			<p><strong class="text-text">Phases:</strong></p>
-			<ul class="ml-4 list-none space-y-1 text-xs">
-				<li>Place 20 goats on board</li>
-				<li>Move pieces strategically</li>
-			</ul>
-		</div>
-	</div>
+		<dl class="rows">
+			<div>
+				<dt class="caps">Goal</dt>
+				<dd class="prose">Tigers capture five goats; goats block every tiger move.</dd>
+			</div>
+			<div>
+				<dt class="caps">Phases</dt>
+				<dd class="prose">Place twenty goats, then move pieces along the lines.</dd>
+			</div>
+		</dl>
+	</section>
 </aside>
 
 <style>
-	.mode-buttons {
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		font-size: 15.5px;
+	}
+	.rows div {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 12px;
+		padding: 6px 0;
+		border-top: 1px solid var(--color-ink);
+	}
+	.rows div:first-child {
+		border-top: 0;
+		padding-top: 0;
+	}
+	.rows dt {
+		color: var(--color-spot);
+		white-space: nowrap;
+	}
+	.rows dd {
+		margin: 0;
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+	.rows dd.prose {
+		flex: 1;
+		text-align: left;
+	}
+	.rows dd i {
+		margin-left: 4px;
+	}
+	.warn {
+		color: var(--color-spot);
+	}
+	.choices {
 		display: flex;
 		gap: 8px;
 	}
-
-	.mode-btn {
-		padding: 6px 12px;
-		font-size: 0.75rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		background: var(--color-bg-secondary);
-		border: 1px solid var(--color-border);
-		color: var(--color-text-secondary);
-		cursor: pointer;
-		transition: all 0.2s ease;
-		min-width: 70px;
-		outline: none;
-	}
-
-	.mode-btn:hover:not(:disabled) {
-		border-color: var(--color-primary-red);
-		color: var(--color-text-primary);
-	}
-
-	.mode-btn:focus {
-		outline: none;
-	}
-
-	.mode-btn.active {
-		background: var(--color-bg-primary);
-		border-color: var(--color-primary-red);
-		color: var(--color-text-primary);
-		font-weight: 700;
-	}
-
-	.mode-btn:active:not(:disabled) {
-		transform: translateY(1px);
-	}
-
-	.mode-btn:disabled {
-		opacity: 0.4;
-		cursor: not-allowed;
-	}
-
-	.disabled {
-		opacity: 0.6;
-	}
-
-	.disabled .text-text-muted {
-		opacity: 0.5;
+	.choices .btn {
+		min-width: 64px;
+		justify-content: center;
 	}
 </style>

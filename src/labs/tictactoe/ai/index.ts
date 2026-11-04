@@ -1,7 +1,7 @@
-import type { GameState } from '$labs/tictactoe/rules';
-import type { TicTacToeMove } from '$labs/tictactoe/engine';
-import { TicTacToeEngine as TicTacToeEngineClass } from '$labs/tictactoe/engine';
-import { Minimax } from '$core/ai';
+import type { GameState } from '#labs/tictactoe/rules.js';
+import type { TicTacToeMove } from '#labs/tictactoe/engine.js';
+import { TicTacToeEngine as TicTacToeEngineClass } from '#labs/tictactoe/engine.js';
+import { Minimax } from '#core/ai/index.js';
 
 // Create AI instances for both players
 const aiEngines = {

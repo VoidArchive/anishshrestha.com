@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { gameState, resetGameState } from '$labs/bagchal/store.svelte';
-	import type { PieceType, Player, GamePhase } from '$labs/bagchal/rules';
+	import { gameState, resetGameState } from '#labs/bagchal/store.svelte.js';
+	import type { PieceType, Player, GamePhase } from '#labs/bagchal/rules/index.js';
 
 	interface Props {
 		moveHistory: string[];

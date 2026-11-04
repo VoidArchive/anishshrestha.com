@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { BagchalEngine } from './index';
-import type { Move } from '$labs/bagchal/ai/types';
+import type { Move } from '#labs/bagchal/ai/types.js';
 
 describe('BagchalEngine', () => {
 	describe('initialState', () => {

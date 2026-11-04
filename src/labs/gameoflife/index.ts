@@ -27,7 +27,7 @@ export { GameOfLifeEngine } from './engine';
 export * from './engine/patterns';
 
 // Export reactive store
-export * from './store.svelte';
+export * from './store.svelte.js';
 
 // Export UI components
 export { default as GameOfLifeShell } from './ui/Shell.svelte';

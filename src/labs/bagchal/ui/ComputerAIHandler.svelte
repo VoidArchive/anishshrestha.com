@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { gameState, adjacency, points } from '$labs/bagchal/store.svelte';
-	import { executeMove, checkIfTigersAreTrapped } from '$labs/bagchal/rules';
-	import { ComputerPlayer } from '$labs/bagchal/ai';
-	import type { Move } from '$labs/bagchal/ai/types';
+	import { gameState, adjacency, points } from '#labs/bagchal/store.svelte.js';
+	import { executeMove, checkIfTigersAreTrapped } from '#labs/bagchal/rules/index.js';
+	import { ComputerPlayer } from '#labs/bagchal/ai/index.js';
+	import type { Move } from '#labs/bagchal/ai/types.js';
 
 	interface Props {
 		gameMode: 'EASY' | 'HARD';

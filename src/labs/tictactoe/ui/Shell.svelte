@@ -1,22 +1,40 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
 	import {
 		gameState,
 		handleCellClick as applyPlayerMove,
 		resetGame
-	} from '$labs/tictactoe/store.svelte';
+	} from '#labs/tictactoe/store.svelte.js';
 	import TicTacToeBoard from './TicTacToeBoard.svelte';
 	import GameSettings from './GameSettings.svelte';
 	import WinnerModal from './WinnerModal.svelte';
-	import { getBestMove, resetAI } from '$labs/tictactoe/ai';
+	import { getBestMove, resetAI } from '#labs/tictactoe/ai/index.js';
 
 	// Game options
 	let isPlayingComputer = $state(true);
 	let playerSide: 'X' | 'O' = $state('X');
-	let isComputerThinking = $state(false);
 
-	// Timeout tracking for cleanup
-	let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
+	// Session tally, counted once per finished game; the store itself keeps no score
+	let tally = $state({ X: 0, O: 0, DRAW: 0 });
+	let tallied = false;
+	$effect(() => {
+		const w = gameState.winner;
+		if (w && !tallied) {
+			tally[w]++;
+			tallied = true;
+		}
+		if (!w) tallied = false;
+	});
+
+	const status = $derived.by(() => {
+		const w = gameState.winner;
+		if (w === 'DRAW') return 'Draw';
+		if (w) {
+			if (!isPlayingComputer) return `${w} wins`;
+			return w === playerSide ? 'You win' : 'You lose';
+		}
+		if (!isPlayingComputer) return `${gameState.turn} to move`;
+		return gameState.turn === playerSide ? 'Your move' : 'Thinking';
+	});
 
 	function isComputerTurn(): boolean {
 		return isPlayingComputer && gameState.turn !== playerSide;
@@ -27,37 +45,17 @@
 		applyPlayerMove(index);
 	}
 
+	// The computer answers a beat after the turn passes to it. Only state reads happen here;
+	// the move itself runs in the timeout, so the effect never writes what it tracks.
 	$effect(() => {
-		// trigger computer move if conditions met
-		if (isComputerTurn() && !isComputerThinking && !gameState.winner) {
-			isComputerThinking = true;
-			// small async delay for UX
-			const timeoutId = setTimeout(() => {
-				// Double-check conditions in case state changed during timeout
-				if (isComputerTurn() && !gameState.winner) {
-					const aiPlayer = playerSide === 'X' ? 'O' : 'X'; // AI plays opposite of player
-					const move = getBestMove(gameState, aiPlayer);
-					if (move !== null) {
-						applyPlayerMove(move);
-					}
-				}
-				isComputerThinking = false;
-			}, 200);
-
-			// Track timeout for cleanup
-			activeTimeouts.push(timeoutId);
-
-			// Cleanup function to cancel timeout if effect reruns
-			return () => {
-				clearTimeout(timeoutId);
-				isComputerThinking = false;
-				// Remove from active timeouts
-				const index = activeTimeouts.indexOf(timeoutId);
-				if (index > -1) {
-					activeTimeouts.splice(index, 1);
-				}
-			};
-		}
+		if (!isComputerTurn() || gameState.winner) return;
+		const aiPlayer = playerSide === 'X' ? 'O' : 'X';
+		const id = setTimeout(() => {
+			if (!isComputerTurn() || gameState.winner) return;
+			const move = getBestMove(gameState, aiPlayer);
+			if (move !== null) applyPlayerMove(move);
+		}, 200);
+		return () => clearTimeout(id);
 	});
 
 	function handleGameModeChange(isComputer: boolean) {
@@ -73,42 +71,16 @@
 		resetGame();
 		resetAI(); // Clear AI cache when resetting game
 	}
-
-	// Cleanup function to clear all active timeouts
-	function cleanup() {
-		activeTimeouts.forEach((timeoutId) => {
-			clearTimeout(timeoutId);
-		});
-		activeTimeouts = [];
-		isComputerThinking = false;
-	}
-
-	// Clear timeouts when component is destroyed
-	onDestroy(() => {
-		cleanup();
-	});
 </script>
 
-<!-- Layout: controls left, board right (same as Bagchal) -->
-<div class="grid h-full grid-cols-1 gap-8 lg:grid-cols-[350px_1fr]">
-	<!-- Sidebar Section -->
-	<aside class="space-y-6">
-		<!-- Game Status -->
-		<div class="section-card">
-			<h2 class="section-title">Game Status</h2>
-			<p><strong>Current Turn:</strong> {gameState.turn}</p>
-			{#if isComputerThinking && isComputerTurn() && !gameState.winner}
-				<p class="text-text-muted mt-1 text-sm">AI is thinking…</p>
-			{/if}
-		</div>
+<header class="lab-head">
+	<span class="fig" aria-hidden="true">Fig. 6</span>
+	<h1>Tic Tac Toe</h1>
+	<p class="dek">The classic game against an unbeatable minimax player.</p>
+</header>
 
-		<!-- Controls -->
-		<div class="section-card">
-			<h2 class="section-title">Controls</h2>
-			<button class="btn w-full" onclick={handleReset}>Reset Game</button>
-		</div>
-
-		<!-- Game Settings -->
+<div class="lab-grid">
+	<aside class="settings">
 		<GameSettings
 			{isPlayingComputer}
 			{playerSide}
@@ -118,59 +90,139 @@
 		/>
 	</aside>
 
-	<!-- Board Section -->
-	<section class="flex flex-col">
-		<div class="section-card h-full">
-			<h2 class="section-title">Tic Tac Toe</h2>
-
-			<!-- Recessed Game Board Container -->
-			<div class="flex flex-1 flex-col items-center justify-center p-3 sm:p-6">
-				<!-- Board Well for consistent styling with Bagchal -->
-				<div class="board-well">
-					<div class="board-inner">
-						<div class="board-wrapper">
-							<TicTacToeBoard {gameState} {handleCellClick} />
-						</div>
-					</div>
-				</div>
-			</div>
+	<section class="figure" aria-label="Game">
+		<div class="plate" class:over={!!gameState.winner}>
+			<TicTacToeBoard {gameState} {handleCellClick} />
 		</div>
+
+		<div class="reading">
+			<span class="state">{status}</span>
+			{#if isPlayingComputer}
+				<span>{playerSide}</span>
+				<span>Wins {tally[playerSide]}</span>
+				<span>Draws {tally.DRAW}</span>
+				<span>Losses {tally[playerSide === 'X' ? 'O' : 'X']}</span>
+			{:else}
+				<span>X {tally.X}</span>
+				<span>O {tally.O}</span>
+				<span>Draws {tally.DRAW}</span>
+			{/if}
+			<span class="controls">
+				<button onclick={handleReset}>Reset</button>
+			</span>
+		</div>
+
+		<WinnerModal {gameState} onPlayAgain={handleReset} />
 	</section>
 </div>
 
-<!-- Winner modal -->
-<WinnerModal {gameState} onPlayAgain={handleReset} />
-
 <style>
-	/* Board well styling copied from Bagchal for a consistent look */
-	.board-well {
-		width: 100%;
-		padding: 0.75rem;
-		position: relative;
+	.lab-head {
+		margin-bottom: 40px;
+	}
+	.fig {
+		display: block;
+		font-family: var(--font-family-sans);
+		font-weight: 700;
+		font-size: clamp(40px, 5vw, 64px);
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-spot);
+		margin-left: -0.04em;
+	}
+	h1 {
+		font-family: var(--font-family-serif);
+		font-weight: 600;
+		font-size: clamp(34px, 3vw, 40px);
+		line-height: 1.02;
+		letter-spacing: -0.015em;
+		margin: 8px 0 10px;
+	}
+	.dek {
+		font-family: var(--font-family-serif);
+		font-style: italic;
+		font-size: 17px;
+		margin: 0;
 	}
 
-	.board-inner {
+	.lab-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 40px;
+	}
+	.figure {
+		max-width: 560px;
 		width: 100%;
-		aspect-ratio: 1;
-		background: linear-gradient(145deg, #151515, var(--color-bg-primary));
-		padding: 0.75rem;
-		position: relative;
-		box-shadow:
-			inset 4px 4px 12px rgba(0, 0, 0, 0.7),
-			inset -2px -2px 8px rgba(255, 255, 255, 0.04),
-			inset 0 0 20px rgba(0, 0, 0, 0.5),
-			inset 0 0 40px rgba(201, 42, 42, 0.02);
+	}
+	.plate {
+		border: 1.5px solid var(--color-ink);
+		background: var(--color-paper);
+	}
+	.plate.over {
+		border-style: dashed;
 	}
 
-	.board-wrapper {
+	/* Reading row: the home page pattern, scoped here */
+	.reading {
 		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
+		flex-wrap: wrap;
+		gap: 4px 18px;
+		margin-top: 8px;
+		padding-top: 8px;
+		border-top: 1px solid var(--color-ink);
+		font-family: var(--font-family-sans);
+		font-size: 11.5px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		line-height: 1.5;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-spot);
+	}
+	.state::before {
+		content: '';
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		background: currentColor;
+		margin-right: 6px;
+		vertical-align: 1px;
+	}
+	.controls {
+		margin-left: auto;
+		display: flex;
+		gap: 12px;
+	}
+	.reading button {
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		color: var(--color-ink);
+		background: none;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		text-decoration: underline;
+		text-decoration-color: var(--color-spot);
+		text-underline-offset: 3px;
+	}
+	.reading button:hover {
+		color: var(--color-spot);
 	}
 
-	/* Increase cell size when space allows */
-	:global(.ttt-grid .cell) {
-		font-size: clamp(2.5rem, 6vw, 6rem);
+	@media (min-width: 1025px) {
+		.lab-grid {
+			grid-template-columns: 350px minmax(0, 1fr);
+			align-items: start;
+		}
+	}
+	@media (max-width: 1024px) {
+		/* The board leads on phones; settings follow it */
+		.settings {
+			order: 2;
+		}
+		.figure {
+			order: 1;
+		}
 	}
 </style>

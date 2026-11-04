@@ -1,12 +1,13 @@
-<!--
-Conway's Game of Life Route Page
-
-Main entry point for the Game of Life lab experiment.
-Follows the same pattern as other lab routes.
--->
-
 <script lang="ts">
-	import { GameOfLifeShell } from '$labs/gameoflife';
+	import { GameOfLifeShell } from '#labs/gameoflife/index.js';
 </script>
+
+<svelte:head>
+	<title>Game of Life – Labs | anishshrestha.com</title>
+	<meta
+		name="description"
+		content="Conway's Game of Life: an interactive cellular automaton. Toggle cells, insert gliders and oscillators, and watch three rules about neighbours play out."
+	/>
+</svelte:head>
 
 <GameOfLifeShell />

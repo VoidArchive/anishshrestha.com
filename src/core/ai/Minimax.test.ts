@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Minimax } from './Minimax';
-import type { BaseEngine } from '$core/engine/BaseEngine';
+import type { BaseEngine } from '#core/engine/BaseEngine.js';
 
 // Simple Tic-Tac-Toe engine for testing Minimax
 interface TTTState {

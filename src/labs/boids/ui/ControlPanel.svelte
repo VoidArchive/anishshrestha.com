@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Play, Pause, RotateCcw } from 'lucide-svelte';
-	import { state, toggleSimulation, resetSimulation, updateBoidCount } from '../store.svelte';
+	import { state, updateBoidCount } from '../store.svelte.js';
 
 	function handleBoidCountChange(e: Event): void {
 		const target = e.target as HTMLInputElement;
@@ -9,31 +8,9 @@
 </script>
 
 <div class="controls">
-	<!-- Playback Controls -->
-	<div class="control-row">
-		<button
-			class="btn control-btn"
-			onclick={toggleSimulation}
-			aria-label={state.isRunning ? 'Pause' : 'Play'}
-		>
-			{#if state.isRunning}
-				<Pause size={18} />
-				<span>Pause</span>
-			{:else}
-				<Play size={18} />
-				<span>Play</span>
-			{/if}
-		</button>
-
-		<button class="btn btn-secondary control-btn" onclick={resetSimulation} aria-label="Reset">
-			<RotateCcw size={18} />
-			<span>Reset</span>
-		</button>
-	</div>
-
 	<!-- Boid Count -->
 	<label class="control-group">
-		<span class="control-label">Boids: {state.params.boidCount}</span>
+		<span class="caps control-label">Boids <b>{state.params.boidCount}</b></span>
 		<input
 			type="range"
 			min="10"
@@ -41,81 +18,49 @@
 			step="10"
 			value={state.params.boidCount}
 			oninput={handleBoidCountChange}
-			class="slider"
 		/>
 	</label>
 
 	<!-- Max Speed -->
 	<label class="control-group">
-		<span class="control-label">Max Speed: {state.params.maxSpeed.toFixed(1)}</span>
-		<input
-			type="range"
-			min="1"
-			max="10"
-			step="0.5"
-			bind:value={state.params.maxSpeed}
-			class="slider"
-		/>
+		<span class="caps control-label">Max speed <b>{state.params.maxSpeed.toFixed(1)}</b></span>
+		<input type="range" min="1" max="10" step="0.5" bind:value={state.params.maxSpeed} />
 	</label>
 
 	<!-- Perception Radius -->
 	<label class="control-group">
-		<span class="control-label">Perception: {state.params.perceptionRadius}px</span>
-		<input
-			type="range"
-			min="20"
-			max="150"
-			step="5"
-			bind:value={state.params.perceptionRadius}
-			class="slider"
-		/>
+		<span class="caps control-label">Perception <b>{state.params.perceptionRadius}px</b></span>
+		<input type="range" min="20" max="150" step="5" bind:value={state.params.perceptionRadius} />
 	</label>
 
 	<!-- Separation Weight -->
 	<label class="control-group">
-		<span class="control-label">Separation: {state.params.separationWeight.toFixed(1)}</span>
-		<input
-			type="range"
-			min="0"
-			max="5"
-			step="0.1"
-			bind:value={state.params.separationWeight}
-			class="slider"
-		/>
+		<span class="caps control-label"
+			>Separation <b>{state.params.separationWeight.toFixed(1)}</b></span
+		>
+		<input type="range" min="0" max="5" step="0.1" bind:value={state.params.separationWeight} />
 	</label>
 
 	<!-- Alignment Weight -->
 	<label class="control-group">
-		<span class="control-label">Alignment: {state.params.alignmentWeight.toFixed(1)}</span>
-		<input
-			type="range"
-			min="0"
-			max="5"
-			step="0.1"
-			bind:value={state.params.alignmentWeight}
-			class="slider"
-		/>
+		<span class="caps control-label"
+			>Alignment <b>{state.params.alignmentWeight.toFixed(1)}</b></span
+		>
+		<input type="range" min="0" max="5" step="0.1" bind:value={state.params.alignmentWeight} />
 	</label>
 
 	<!-- Cohesion Weight -->
 	<label class="control-group">
-		<span class="control-label">Cohesion: {state.params.cohesionWeight.toFixed(1)}</span>
-		<input
-			type="range"
-			min="0"
-			max="5"
-			step="0.1"
-			bind:value={state.params.cohesionWeight}
-			class="slider"
-		/>
+		<span class="caps control-label">Cohesion <b>{state.params.cohesionWeight.toFixed(1)}</b></span>
+		<input type="range" min="0" max="5" step="0.1" bind:value={state.params.cohesionWeight} />
 	</label>
 
 	<!-- Edge Mode -->
 	<div class="control-group">
-		<span class="control-label">Edge Behavior</span>
+		<span class="caps control-label">Edge behavior</span>
 		<div class="toggle-group" role="radiogroup" aria-label="Edge behavior">
 			<button
-				class="toggle-btn"
+				class="btn"
 				class:active={state.params.edgeMode === 'wrap'}
 				onclick={() => (state.params.edgeMode = 'wrap')}
 				role="radio"
@@ -124,7 +69,7 @@
 				Wrap
 			</button>
 			<button
-				class="toggle-btn"
+				class="btn"
 				class:active={state.params.edgeMode === 'bounce'}
 				onclick={() => (state.params.edgeMode = 'bounce')}
 				role="radio"
@@ -143,20 +88,6 @@
 		gap: var(--space-4);
 	}
 
-	.control-row {
-		display: flex;
-		gap: var(--space-2);
-	}
-
-	.control-btn {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		padding: var(--space-2) var(--space-3);
-	}
-
 	.control-group {
 		display: flex;
 		flex-direction: column;
@@ -164,68 +95,35 @@
 	}
 
 	.control-label {
-		font-size: 0.875rem;
-		color: var(--color-text-muted);
-		font-family: var(--font-mono);
+		display: flex;
+		justify-content: space-between;
+		font-weight: 400;
+		letter-spacing: 0.14em;
+		font-size: 12px;
 	}
 
-	.slider {
+	.control-label b {
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		color: var(--color-spot);
+		font-variant-numeric: tabular-nums;
+	}
+
+	input[type='range'] {
 		width: 100%;
-		height: 6px;
-		background: var(--color-bg-secondary);
-		outline: none;
+		margin: 0;
+		border: 0;
+		background: none;
 		cursor: pointer;
-		-webkit-appearance: none;
-		appearance: none;
-	}
-
-	.slider::-webkit-slider-thumb {
-		-webkit-appearance: none;
-		appearance: none;
-		width: 16px;
-		height: 16px;
-		border-radius: 50%;
-		background: var(--color-primary);
-		cursor: pointer;
-		transition: transform 0.15s ease;
-	}
-
-	.slider::-webkit-slider-thumb:hover {
-		transform: scale(1.1);
-	}
-
-	.slider::-moz-range-thumb {
-		width: 16px;
-		height: 16px;
-		border-radius: 50%;
-		background: var(--color-primary);
-		cursor: pointer;
-		border: none;
 	}
 
 	.toggle-group {
 		display: flex;
-		gap: var(--space-1);
+		gap: var(--space-2);
 	}
 
-	.toggle-btn {
+	.toggle-group .btn {
 		flex: 1;
-		padding: var(--space-2);
-		background: var(--color-bg-secondary);
-		border: 1px solid transparent;
-		color: var(--color-text-muted);
-		font-size: 0.875rem;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-
-	.toggle-btn:hover {
-		background: var(--color-bg-primary);
-	}
-
-	.toggle-btn.active {
-		background: var(--color-primary);
-		color: var(--color-bg-primary);
-		border-color: var(--color-primary);
+		justify-content: center;
 	}
 </style>

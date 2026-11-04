@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import type { GameState } from '$labs/bagchal/rules';
+	import type { GameState } from '#labs/bagchal/rules/index.js';
 
 	interface Props {
 		gameState: GameState;
@@ -166,172 +166,126 @@
 	onDestroy(() => {
 		cleanup();
 	});
-
-	// Get performance color classes
-	function getPerformanceColor(performance: string): string {
-		switch (performance.toLowerCase()) {
-			case 'excellent':
-				return 'text-green-500';
-			case 'good':
-				return 'text-yellow-500';
-			case 'fair':
-				return 'text-orange-500';
-			case 'bad':
-				return 'text-red-500';
-			case 'draw':
-				return 'text-gray-500';
-			default:
-				return 'text-text';
-		}
-	}
 </script>
 
 {#if gameState.winner}
-	<!-- Modal Overlay -->
-	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4
-			{modalVisible ? 'opacity-100' : 'opacity-0'}
-			transition-opacity duration-300"
-	>
-		<!-- Modal Card -->
-		<div
-			class="bg-bg-primary border-border max-h-[80vh] w-full max-w-md overflow-y-auto border-2
-				{modalVisible ? 'translate-y-0 scale-100' : 'translate-y-5 scale-95'}
-				shadow-[0_8px_0_rgba(201,42,42,0.2),0_12px_20px_rgba(0,0,0,0.3)] transition-all duration-300
-				ease-out"
-		>
-			<!-- Winner Announcement -->
-			<div class="border-border border-b p-8 pb-4 text-center">
-				<!-- Winner Icon with bounce animation -->
-				<div class="mb-4 animate-bounce">
-					{#if gameState.winner === 'DRAW'}
-						<div class="text-5xl">🤝</div>
-					{:else if gameState.winner === 'TIGER'}
-						<img src="/icons/tiger.svg" alt="Tiger" class="inline-block h-12 w-12" />
-					{:else}
-						<img src="/icons/goat.svg" alt="Goat" class="inline-block h-12 w-12" />
-					{/if}
-				</div>
+	<div class="overlay" class:visible={modalVisible}>
+		<div class="plate" role="dialog" aria-modal="true" aria-labelledby="winner-title">
+			<h2 id="winner-title">
+				{#if gameState.winner === 'DRAW'}
+					A draw
+				{:else if isPlayingComputer && playerWon !== null}
+					{playerWon ? 'You win' : 'You lose'}
+				{:else}
+					{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} win
+				{/if}
+			</h2>
+			<p class="dek">
+				{#if gameState.winner === 'DRAW'}
+					The position repeated too many times.
+				{:else if gameState.winner === 'TIGER'}
+					The tigers captured {gameState.goatsCaptured} goats.
+				{:else}
+					Every tiger is trapped.
+				{/if}
+			</p>
 
-				<!-- Winner Title -->
-				<h2 class="text-text mb-2 text-2xl font-bold tracking-wide uppercase">
-					{#if gameState.winner === 'DRAW'}
-						It's a Draw!
-					{:else if isPlayingComputer && playerWon !== null}
-						{playerWon ? 'Victory!' : 'Defeat!'}
-					{:else}
-						{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
-					{/if}
-				</h2>
-
-				<!-- Winner Subtitle -->
-				<p class="text-text-muted text-sm">
-					{#if gameState.winner === 'DRAW'}
-						Position repeated too many times!
-					{:else if gameState.winner === 'TIGER'}
-						Captured {gameState.goatsCaptured} goats!
-					{:else}
-						All tigers are trapped!
-					{/if}
-				</p>
-			</div>
-
-			<!-- Game Statistics -->
 			{#if stats}
-				<div class="border-border border-b p-6">
-					<h3 class="text-text mb-4 text-base font-semibold tracking-wider uppercase">
-						Game Summary
-					</h3>
-
-					<div class="grid grid-cols-2 gap-4">
-						<!-- Total Moves -->
-						<div class="flex flex-col items-center text-center">
-							<span class="text-text-muted mb-1 text-xs tracking-wider uppercase">
-								Total Moves
-							</span>
-							<span class="text-text text-xl font-bold">
-								{stats.totalMoves}
-							</span>
-						</div>
-
-						<!-- Goats Captured -->
-						<div class="flex flex-col items-center text-center">
-							<span class="text-text-muted mb-1 text-xs tracking-wider uppercase">
-								Goats Captured
-							</span>
-							<span class="text-text text-xl font-bold">
-								{stats.goatsCaptured}
-							</span>
-						</div>
-
-						{#if isPlayingComputer}
-							<!-- Your Moves -->
-							<div class="flex flex-col items-center text-center">
-								<span class="text-text-muted mb-1 text-xs tracking-wider uppercase">
-									Your Moves
-								</span>
-								<span class="text-text text-xl font-bold">
-									{stats.playerMoves}
-								</span>
-							</div>
-
-							<!-- Performance -->
-							<div class="flex flex-col items-center text-center">
-								<span class="text-text-muted mb-1 text-xs tracking-wider uppercase">
-									Performance
-								</span>
-								<span
-									class="text-base font-bold tracking-wider uppercase {getPerformanceColor(
-										stats.performance
-									)}"
-								>
-									{stats.performance}
-								</span>
-							</div>
-						{/if}
+				<dl class="rows">
+					<div>
+						<dt class="caps">Total moves</dt>
+						<dd>{stats.totalMoves}</dd>
 					</div>
-				</div>
+					<div>
+						<dt class="caps">Goats captured</dt>
+						<dd>{stats.goatsCaptured}</dd>
+					</div>
+					{#if isPlayingComputer}
+						<div>
+							<dt class="caps">Your moves</dt>
+							<dd>{stats.playerMoves}</dd>
+						</div>
+						<div>
+							<dt class="caps">Performance</dt>
+							<dd>{stats.performance}</dd>
+						</div>
+					{/if}
+				</dl>
 			{/if}
 
-			<!-- Action Buttons -->
-			<div class="flex flex-col gap-3 p-6">
-				<button
-					onclick={handlePlayAgain}
-					class="bg-primary border-primary w-full border px-6 py-3 text-sm
-						font-semibold tracking-wider text-white uppercase
-						transition-all duration-200
-						hover:border-red-700
-						hover:bg-red-700 active:translate-y-px"
-				>
-					Play Again
-				</button>
-
+			<div class="actions">
+				<button onclick={handlePlayAgain} class="btn active">Play again</button>
 				{#if isPlayingComputer && onSwitchSides}
-					<button
-						onclick={handleSwitchSides}
-						class="bg-bg-secondary border-border text-text hover:border-primary hover:text-text w-full border
-							px-6 py-3 text-sm font-semibold
-							tracking-wider uppercase
-							transition-all
-							duration-200 active:translate-y-px"
-					>
-						Switch Sides
-					</button>
+					<button onclick={handleSwitchSides} class="btn">Switch sides</button>
 				{/if}
-
 				{#if isPlayingComputer && onChangeMode}
-					<button
-						onclick={handleChangeMode}
-						class="bg-bg-secondary border-border text-text hover:border-primary hover:text-text w-full border
-							px-6 py-3 text-sm font-semibold
-							tracking-wider uppercase
-							transition-all
-							duration-200 active:translate-y-px"
-					>
-						Change Mode
-					</button>
+					<button onclick={handleChangeMode} class="btn">Change mode</button>
 				{/if}
 			</div>
 		</div>
 	</div>
 {/if}
+
+<style>
+	.overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 16px;
+		background: color-mix(in srgb, var(--color-ink) 60%, transparent);
+		opacity: 0;
+		transition: opacity 300ms ease-out;
+	}
+	.overlay.visible {
+		opacity: 1;
+	}
+	.plate {
+		width: 100%;
+		max-width: 28rem;
+		max-height: 80vh;
+		overflow-y: auto;
+		padding: 24px;
+		border: 1.5px solid var(--color-ink);
+		background: var(--color-paper);
+		color: var(--color-ink);
+	}
+	h2 {
+		font-size: 28px;
+		font-weight: 600;
+		line-height: 1.1;
+		letter-spacing: -0.015em;
+	}
+	.dek {
+		font-style: italic;
+		font-size: 17px;
+		margin-top: 6px;
+	}
+	.rows {
+		margin-top: 20px;
+		border-top: 1.5px solid var(--color-ink);
+		font-size: 15.5px;
+	}
+	.rows div {
+		display: flex;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 6px 0;
+		border-bottom: 1px solid var(--color-ink);
+	}
+	.rows dt {
+		color: var(--color-spot);
+	}
+	.rows dd {
+		margin: 0;
+		font-variant-numeric: tabular-nums;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 24px;
+	}
+</style>

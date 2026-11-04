@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import type { GameState, Line, Point } from '$labs/bagchal/rules';
+	import type { GameState, Line, Point } from '#labs/bagchal/rules/index.js';
 	import BoardGrid from './BoardGrid.svelte';
 	import PieceRenderer from './PieceRenderer.svelte';
 	import Animation from './Animation.svelte';
 	import MoveHistory from './MoveHistory.svelte';
-	import type { Move } from '$labs/bagchal/ai/types';
+	import type { Move } from '#labs/bagchal/ai/types.js';
 
 	interface Props {
 		points: Point[];
@@ -218,255 +218,93 @@
 </script>
 
 <section class="flex flex-col lg:order-2">
-	<div class="section-card min-h-0 lg:h-full">
-		<h2 class="section-title">Board</h2>
+	<!-- The board is the plate: ink lines on paper inside a 1.5px ink border -->
+	<svg
+		viewBox="0 0 500 500"
+		xmlns="http://www.w3.org/2000/svg"
+		class="board"
+		preserveAspectRatio="xMidYMid meet"
+		role="img"
+		aria-label="Bagchal game board"
+	>
+		<BoardGrid {lines} />
+		<PieceRenderer
+			{points}
+			{gameState}
+			{validMoves}
+			handlePointClick={handleBoardClick}
+			onDragStart={handleDragStart}
+			onDragEnd={handleDragEnd}
+			onDrop={handleDrop}
+		/>
+		<Animation {showAnimation} {animationProgress} currentMove={currentAnimationMove} {points} />
+	</svg>
 
-		<!-- Recessed Game Board Container -->
-		<div class="flex flex-1 flex-col items-center justify-center p-2 sm:p-4 lg:p-6">
-			<!-- Carved Board Well -->
-			<div class="board-well">
-				<div class="board-inner" class:thinking={isComputerThinking && isComputerTurn}>
-					<div class="board-wrapper">
-						<!-- SVG Board Container -->
-						<svg
-							viewBox="0 0 500 500"
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-full w-full"
-							preserveAspectRatio="xMidYMid meet"
-							role="img"
-							aria-label="Bagchal game board"
-							style="background: transparent;"
-						>
-							<!-- Board Grid and Lines -->
-							<BoardGrid {lines} />
-
-							<!-- Game Pieces -->
-							<PieceRenderer
-								{points}
-								{gameState}
-								{validMoves}
-								handlePointClick={handleBoardClick}
-								onDragStart={handleDragStart}
-								onDragEnd={handleDragEnd}
-								onDrop={handleDrop}
-							/>
-
-							<!-- Unified Animation -->
-							<Animation
-								{showAnimation}
-								{animationProgress}
-								currentMove={currentAnimationMove}
-								{points}
-							/>
-						</svg>
-					</div>
-				</div>
-			</div>
-
-			<!-- Game Instructions based on current state -->
-			<div class="mt-2 text-center sm:mt-3">
-				{#if gameState.winner}
-					<p class="text-primary text-base font-bold sm:text-lg">
-						{#if gameState.winner === 'DRAW'}
-							🤝 It's a Draw!
-						{:else}
-							🎉 {gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} Win!
-						{/if}
-					</p>
-				{/if}
-				<div class="flex h-8 items-center justify-center">
-					{#if showPhaseTransition}
-						<!-- Phase Transition Notification -->
-						<div
-							class="phase-transition-notification mx-auto flex max-w-sm items-center justify-center gap-2 border p-2 text-xs sm:text-sm"
-							class:visible={phaseTransitionVisible}
-						>
-							<div class="phase-transition-icon">🐐</div>
-							<span class="text-primary font-medium">Goats can now move!</span>
-						</div>
-					{:else if isComputerThinking && isComputerTurn()}
-						<!-- AI Thinking Indicator -->
-						<div
-							class="bg-bg-primary border-primary/20 mx-auto flex max-w-xs items-center gap-2 border p-2 text-xs sm:text-sm"
-						>
-							<div class="thinking-dots">
-								<span></span>
-								<span></span>
-								<span></span>
-							</div>
-							<span class="text-primary font-medium">AI is thinking...</span>
-						</div>
-					{/if}
-				</div>
-			</div>
-		</div>
+	<!-- Reading row: the live state of the plate, spot colour while the game runs -->
+	<div class="reading caps" class:over={gameState.winner} role="status" aria-live="polite">
+		<span class="state">
+			{#if gameState.winner === 'DRAW'}
+				Draw
+			{:else if gameState.winner}
+				{gameState.winner === 'TIGER' ? 'Tigers' : 'Goats'} win
+			{:else if showPhaseTransition}
+				<span class="notice" class:visible={phaseTransitionVisible}>Goats can now move</span>
+			{:else if isComputerThinking && isComputerTurn()}
+				Thinking
+			{:else}
+				{gameState.turn === 'TIGER' ? 'Tigers' : 'Goats'} to {gameState.phase === 'PLACEMENT' &&
+				gameState.turn === 'GOAT'
+					? 'place'
+					: 'move'}
+			{/if}
+		</span>
+		<span>Goats placed {gameState.goatsPlaced}/20</span>
+		<span>Captured {gameState.goatsCaptured}</span>
 	</div>
 
-	<!-- Move history below the board -->
 	{#if moveHistory}
 		<MoveHistory {moveHistory} />
 	{/if}
 </section>
 
 <style>
-	/* Recessed Board Well Effect */
-	.board-well {
+	.board {
+		display: block;
 		width: 100%;
-		max-width: none;
-		padding: 0.5rem;
-		position: relative;
-	}
-
-	@media (min-width: 640px) {
-		.board-well {
-			padding: 0.75rem;
-		}
-	}
-
-	.board-inner {
-		width: 100%;
+		max-width: 680px;
+		height: auto;
 		aspect-ratio: 1;
-		height: 100%;
-		background: linear-gradient(145deg, #151515, var(--color-bg-primary));
-		padding: 0.5rem;
-		position: relative;
-		/* Deep inset effect */
-		box-shadow: 
-			/* Strong inset shadows for depth */
-			inset 4px 4px 12px rgba(0, 0, 0, 0.7),
-			inset -2px -2px 8px rgba(255, 255, 255, 0.04),
-			/* Inner glow */ inset 0 0 20px rgba(0, 0, 0, 0.5),
-			/* Subtle red accent glow */ inset 0 0 40px rgba(201, 42, 42, 0.02);
+		border: 1.5px solid var(--color-ink);
+		background: var(--color-paper);
 	}
-
-	@media (min-width: 640px) {
-		.board-inner {
-			padding: 0.75rem;
-		}
+	.reading {
+		max-width: 680px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 18px;
+		margin-top: 8px;
+		padding-top: 8px;
+		border-top: 1px solid var(--color-ink);
+		color: var(--color-spot);
+		font-variant-numeric: tabular-nums;
 	}
-
-	/* Add subtle texture overlay */
-	.board-inner::before {
+	.reading.over {
+		color: var(--color-ink);
+	}
+	.state::before {
 		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background:
-			radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.015) 0%, transparent 50%),
-			radial-gradient(circle at 80% 70%, rgba(201, 42, 42, 0.008) 0%, transparent 50%);
-		pointer-events: none;
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		margin-right: 8px;
+		background: currentColor;
+		vertical-align: 1px;
 	}
-
-	/* Board wrapper styling - transparent to inherit board well background */
-	.board-wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-		padding: 0.5rem;
-		background: transparent;
-		/* Remove rounded corners and box-shadow for seamless integration */
-	}
-
-	@media (min-width: 640px) {
-		.board-wrapper {
-			padding: 0.75rem;
-		}
-	}
-
-	/* AI thinking animation */
-	.thinking {
-		animation: thinking-pulse 2s ease-in-out infinite;
-	}
-
-	@keyframes thinking-pulse {
-		0%,
-		100% {
-			box-shadow:
-				inset 4px 4px 12px rgba(0, 0, 0, 0.7),
-				inset -2px -2px 8px rgba(255, 255, 255, 0.04),
-				inset 0 0 20px rgba(0, 0, 0, 0.5),
-				inset 0 0 40px rgba(201, 42, 42, 0.02);
-		}
-		50% {
-			box-shadow:
-				inset 4px 4px 12px rgba(0, 0, 0, 0.7),
-				inset -2px -2px 8px rgba(255, 255, 255, 0.04),
-				inset 0 0 20px rgba(0, 0, 0, 0.5),
-				inset 0 0 40px rgba(201, 42, 42, 0.06);
-		}
-	}
-
-	/* Phase transition notification styles */
-	.phase-transition-notification {
-		background: linear-gradient(145deg, var(--color-bg-secondary), var(--color-bg-primary));
-		border-color: var(--color-primary);
+	.notice {
 		opacity: 0;
-		transform: translateY(-10px) scale(0.95);
-		transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-		box-shadow:
-			0 4px 15px rgba(201, 42, 42, 0.1),
-			inset 0 1px 0 rgba(255, 255, 255, 0.05);
+		transition: opacity 300ms ease-out;
 	}
-
-	.phase-transition-notification.visible {
+	.notice.visible {
 		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-
-	.phase-transition-icon {
-		animation: phase-bounce 0.6s ease-out;
-		filter: drop-shadow(0 0 3px rgba(201, 42, 42, 0.3));
-	}
-
-	@keyframes phase-bounce {
-		0% {
-			transform: scale(0.3) rotate(-10deg);
-			opacity: 0;
-		}
-		50% {
-			transform: scale(1.1) rotate(5deg);
-		}
-		100% {
-			transform: scale(1) rotate(0deg);
-			opacity: 1;
-		}
-	}
-
-	/* Thinking dots animation */
-	.thinking-dots {
-		display: flex;
-		gap: 3px;
-	}
-
-	.thinking-dots span {
-		width: 4px;
-		height: 4px;
-		background-color: var(--color-primary);
-		border-radius: 50%;
-		animation: thinking-dots 1.4s ease-in-out infinite both;
-	}
-
-	.thinking-dots span:nth-child(1) {
-		animation-delay: -0.32s;
-	}
-	.thinking-dots span:nth-child(2) {
-		animation-delay: -0.16s;
-	}
-
-	@keyframes thinking-dots {
-		0%,
-		80%,
-		100% {
-			transform: scale(0.8);
-			opacity: 0.5;
-		}
-		40% {
-			transform: scale(1);
-			opacity: 1;
-		}
 	}
 </style>

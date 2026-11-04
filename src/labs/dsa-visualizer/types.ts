@@ -1,12 +1,7 @@
 export type AlgorithmType = 'SORTING' | 'PATHFINDING';
 
 export type SortingAlgorithm =
-	| 'BUBBLE_SORT'
-	| 'SELECTION_SORT'
-	| 'INSERTION_SORT'
-	| 'QUICK_SORT'
-	| 'MERGE_SORT'
-	| 'HEAP_SORT';
+	'BUBBLE_SORT' | 'SELECTION_SORT' | 'INSERTION_SORT' | 'QUICK_SORT' | 'MERGE_SORT' | 'HEAP_SORT';
 
 export type PathfindingAlgorithm = 'A_STAR' | 'DIJKSTRA' | 'BFS' | 'DFS';
 

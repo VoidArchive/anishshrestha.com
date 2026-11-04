@@ -1,9 +1,9 @@
-import type { BaseEngine } from '$core/engine/BaseEngine';
+import type { BaseEngine } from '#core/engine/BaseEngine.js';
 import type { GameState } from './rules';
 import { makeInitialBoard, generatePoints, generateLines, buildAdjacencyMap } from './rules';
-import { MoveGenerator, PositionEvaluator } from '$labs/bagchal/ai';
+import { MoveGenerator, PositionEvaluator } from '#labs/bagchal/ai/index.js';
 import { executeMove } from './rules';
-import type { Move as BagchalMove } from '$labs/bagchal/ai/types';
+import type { Move as BagchalMove } from '#labs/bagchal/ai/types.js';
 
 // Pre-compute board description
 const points = generatePoints();

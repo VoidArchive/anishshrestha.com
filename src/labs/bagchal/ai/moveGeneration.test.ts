@@ -6,7 +6,7 @@ import {
 	generateLines,
 	buildAdjacencyMap,
 	type GameState
-} from '$labs/bagchal/rules';
+} from '#labs/bagchal/rules/index.js';
 
 // Pre-compute board geometry
 const points = generatePoints();

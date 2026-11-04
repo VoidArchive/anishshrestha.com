@@ -1,13 +1,24 @@
 <script lang="ts">
 	import '../app.css';
-	import { onNavigate } from '$app/navigation';
-	import Header from '$lib/components/Header.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import { afterNavigate, onNavigate } from '$app/navigation';
+	import Header from '#lib/components/Header.svelte';
+	import Footer from '#lib/components/Footer.svelte';
 
 	let { children } = $props();
 
+	// Every off-site link opens in a new tab; done after navigation so rendered markdown is covered too
+	afterNavigate(() => {
+		for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="http"]')) {
+			if (a.host !== location.host) {
+				a.target = '_blank';
+				a.relList.add('noopener');
+			}
+		}
+	});
+
 	// Use the native View Transitions API for smooth page transitions
 	onNavigate((navigation) => {
+		if (navigation.shallow && navigation.type === 'goto') return;
 		if (!document.startViewTransition) return;
 
 		return new Promise((resolve) => {
@@ -21,7 +32,9 @@
 
 <svelte:head>
 	<meta charset="utf-8" />
+
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
 	<meta
 		name="description"
 		content="Anish Shrestha - Full-Stack Software Developer in Kathmandu, Nepal. Building web applications, distributed systems, and interactive experiences. Specializing in Go, Python, SvelteKit, and modern development practices."
@@ -40,7 +53,9 @@
 	<title>Anish Shrestha | Software Developer</title>
 
 	<!-- Open Graph -->
+
 	<meta property="og:title" content="Anish Shrestha | Software Developer" />
+
 	<meta
 		property="og:description"
 		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences with modern technologies. Available for remote collaboration worldwide."
@@ -56,7 +71,9 @@
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />
+
 	<meta name="twitter:title" content="Anish Shrestha | Software Developer" />
+
 	<meta
 		name="twitter:description"
 		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences."

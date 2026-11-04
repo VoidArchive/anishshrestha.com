@@ -1,4 +1,4 @@
-import type { GameState, Point } from '$labs/bagchal/rules';
+import type { GameState, Point } from '#labs/bagchal/rules/index.js';
 import type { Move } from './types';
 
 export class MoveGenerator {

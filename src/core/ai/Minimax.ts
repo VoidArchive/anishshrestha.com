@@ -1,5 +1,5 @@
 // Generic alpha-beta search usable by any game engine implementing BaseEngine
-import type { BaseEngine } from '$core/engine/BaseEngine';
+import type { BaseEngine } from '#core/engine/BaseEngine.js';
 
 /**
  * Optional configuration for the Minimax search.

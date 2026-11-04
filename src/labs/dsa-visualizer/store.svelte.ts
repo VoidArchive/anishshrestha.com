@@ -155,6 +155,16 @@ export function resetVisualization() {
 	dsaState.pathLength = newState.pathLength;
 	dsaState.frontierNodes = newState.frontierNodes || [];
 	dsaState.currentNode = newState.currentNode || null;
+	placeDefaultEndpoints();
+}
+
+/** A fresh grid gets a start on the left and an end on the right, so Play works at once. */
+function placeDefaultEndpoints() {
+	if (dsaState.mode !== 'PATHFINDING' || dsaState.start || dsaState.end) return;
+	const { width, height } = dsaState.gridSize;
+	const mid = Math.floor(height / 2);
+	setStartPoint(2, mid);
+	setEndPoint(width - 3, mid);
 }
 
 /**
@@ -199,6 +209,7 @@ export function setMode(mode: AlgorithmType) {
 	dsaState.swaps = newState.swaps;
 	dsaState.nodesVisited = newState.nodesVisited;
 	dsaState.pathLength = newState.pathLength;
+	placeDefaultEndpoints();
 }
 
 /**

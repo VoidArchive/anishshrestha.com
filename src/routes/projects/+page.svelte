@@ -1,136 +1,139 @@
 <script lang="ts">
-	import ProjectCard from '$lib/components/ProjectCard.svelte';
-	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
-
 	const projects = [
 		{
-			title: 'nepal-payment-go – Unified Payment SDK',
+			title: 'nepal-payment-go',
+			kind: 'Unified payment SDK',
 			description:
-				'Production-ready Go SDK for Nepal payment providers. Integrates eSewa, Khalti, ConnectIPS, and FonePay with a single type-safe interface. Handles HMAC-SHA256, HMAC-SHA512, and RSA-SHA256 signatures. Zero external dependencies.',
+				'One Go SDK for eSewa, Khalti, ConnectIPS and FonePay behind a single type-safe interface. Handles HMAC-SHA256, HMAC-SHA512 and RSA-SHA256 signatures with zero external dependencies.',
 			tech: ['Go', 'SDK', 'eSewa', 'Khalti'],
 			repo: 'https://github.com/VoidArchive/nepal-payment-go',
 			demo: null
 		},
 		{
-			title: 'go-nepse – NEPSE API Client',
+			title: 'go-nepse',
+			kind: 'NEPSE API client',
 			description:
-				'Type-safe Go client for Nepal Stock Exchange API. Features automatic token handling via embedded WebAssembly (wazero), structured errors, exponential backoff retries, and clean modular design.',
+				'Type-safe Go client for the Nepal Stock Exchange API. Automatic token handling through embedded WebAssembly (wazero), structured errors, exponential backoff retries.',
 			tech: ['Go', 'API', 'NEPSE', 'WASM'],
 			repo: 'https://github.com/VoidArchive/go-nepse',
 			demo: null
 		},
 		{
-			title: 'NTX – Stock Research Platform',
+			title: 'NTX',
+			kind: 'Stock research platform',
 			description:
-				'Financial research platform for Nepal Stock Exchange. Go backend with Protobuf APIs and SvelteKit frontend. Features stock screener, company fundamentals, real-time market data, and portfolio tracking.',
+				'Financial research for the Nepal Stock Exchange. Go backend with Protobuf APIs, SvelteKit frontend. Stock screener, company fundamentals, real-time market data, portfolio tracking.',
 			tech: ['Go', 'SvelteKit', 'Protobuf', 'FinTech'],
 			repo: 'https://github.com/voidarchive/ntx',
 			demo: 'https://ntx.anishshrestha.com'
 		},
 		{
-			title: 'Bagchal – Nepali Strategy Game',
+			title: 'Bagchal',
+			kind: 'Nepali strategy game',
 			description:
-				'Browser implementation of Bagchal, the traditional Nepali Tigers & Goats board game. Features AI opponent with Easy and Hard difficulty levels.',
+				'Browser implementation of the traditional tigers-and-goats board game, with a minimax opponent at two difficulty levels.',
 			tech: ['SvelteKit', 'TypeScript', 'Game', 'AI'],
-			repo: 'https://github.com/VoidArchive/anishshrestha.com/tree/main/src/games/bagchal',
+			repo: 'https://github.com/VoidArchive/anishshrestha.com/tree/main/src/labs/bagchal',
 			demo: '/labs/bagchal'
 		},
 		{
 			title: 'Advent of Go',
+			kind: 'Advent of Code 2024',
 			description:
-				'My attempt at Advent of Code 2024 using Go. Some solutions are elegant, others are brute force. All of them work eventually. Includes notes on what I learned.',
-			tech: ['Go', 'Algorithms', 'AoC2024'],
+				'Advent of Code 2024 in Go. Some solutions are elegant, others are brute force. All of them work eventually, and the notes say which is which.',
+			tech: ['Go', 'Algorithms', 'AoC 2024'],
 			repo: 'https://github.com/VoidArchive/advent-of-go',
 			demo: null
 		},
 		{
-			title: 'Gator – CLI RSS Aggregator',
+			title: 'Gator',
+			kind: 'CLI RSS aggregator',
 			description:
-				'Gator is a command-line RSS reader written in Go. Import OPML files, follow feeds, browse fresh posts in a Vim-like interface— all without leaving your terminal.',
+				'A command-line RSS reader in Go. Import OPML files, follow feeds, and browse fresh posts in a Vim-like interface without leaving the terminal.',
 			tech: ['Go', 'PostgreSQL', 'sqlc'],
 			repo: 'https://github.com/VoidArchive/gator',
 			demo: null
 		},
 		{
-			title: 'Pokedex – Terminal Pokédex',
+			title: 'Pokedex',
+			kind: 'Terminal Pokédex',
 			description:
-				'Nostalgia project. Catch Pokémon in your terminal because why not. Uses the PokéAPI and caches everything locally so you can play offline.',
+				'Catch Pokémon in your terminal. Uses the PokéAPI and caches everything locally so it works offline.',
 			tech: ['Go', 'CLI', 'PokéAPI'],
 			repo: 'https://github.com/VoidArchive/pokedex',
 			demo: null
 		},
 		{
-			title: 'Conway of Life – TUI Simulator',
+			title: 'Conway of Life',
+			kind: 'TUI simulator',
 			description:
-				'Classic Game of Life with a terminal interface. Load patterns or just hit space and watch evolution.',
+				'The Game of Life with a terminal interface. Load patterns or hit space and watch evolution.',
 			tech: ['Go', 'TUI', 'ncurses'],
 			repo: 'https://github.com/VoidArchive/conway_of_life',
 			demo: null
 		},
 		{
-			title: 'Maze Solver – Path-finding Visualizer',
+			title: 'Maze Solver',
+			kind: 'Path-finding visualizer',
 			description:
-				'Generates random mazes and visualises BFS/DFS solving them. Built to understand path-finding.',
-			tech: ['Python', 'Algorithms', 'Dijkstra/A*', 'BFS/DFS'],
+				'Generates random mazes and visualises BFS and DFS solving them. Built to understand path-finding.',
+			tech: ['Python', 'Algorithms', 'BFS/DFS'],
 			repo: 'https://github.com/VoidArchive/maze-solver',
 			demo: null
 		},
 		{
-			title: 'Markdown Renderer – Static Site Generator',
+			title: 'Markdown Renderer',
+			kind: 'Static site generator',
 			description:
-				'Yet another static site generator. Converts markdown to HTML. Powers my old coursework blog.',
+				'Yet another static site generator. Converts markdown to HTML; powered an older coursework blog.',
 			tech: ['Python', 'Markdown', 'SSG'],
 			repo: 'https://github.com/VoidArchive/markdown-renderer',
 			demo: null
 		}
 	];
-
-	// Removed unused techTags variable
 </script>
 
 <svelte:head>
-	<title>Projects - Full-Stack Software Developer Portfolio | Anish Shrestha</title>
+	<title>Instruments – Projects | Anish Shrestha</title>
 	<meta
 		name="description"
-		content="Open source projects by Anish Shrestha - Full-stack applications, web tools, algorithms, and interactive experiences. Showcasing modern software development practices from Nepal."
+		content="Open source projects by Anish Shrestha: Go libraries for Nepal's payment providers and stock exchange, a stock research platform, games, CLI tools, and algorithm experiments."
 	/>
-	<meta
-		name="keywords"
-		content="software developer portfolio Nepal, full stack projects, web applications Nepal, open source projects, interactive demos, programming portfolio Nepal, software development showcase"
-	/>
-	<meta property="og:title" content="Projects - Full-Stack Software Developer Portfolio" />
-	<meta
-		property="og:description"
-		content="Open source projects by Anish Shrestha - Full-stack applications, web tools, algorithms, and interactive experiences from Nepal."
-	/>
+	<meta property="og:title" content="Instruments – Projects | Anish Shrestha" />
 	<meta property="og:url" content="https://anishshrestha.com/projects" />
 </svelte:head>
 
-<main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
-	<TwoColumnShell>
-		{#snippet left()}
-			<section class="section-card">
-				<h3 class="section-title text-lg">Projects</h3>
-				<p class="text-text-muted text-sm leading-relaxed">
-					A collection of open-source projects and personal experiments. From CLI tools and
-					algorithms to web applications and games, these projects showcase different aspects of
-					software development using Go, Python, and modern web technologies.
-				</p>
-			</section>
-		{/snippet}
+<main class="page container">
+	<h1 class="page-title">Instruments</h1>
+	<p class="dek">
+		Production Go libraries for Nepal's financial plumbing, then the smaller tools and experiments
+		built along the way.
+	</p>
 
-		<div class="w-full">
-			<section class="flex flex-col" style="gap: var(--space-4); padding-bottom: var(--space-16);">
-				{#each projects as p (p.title)}
-					<ProjectCard
-						title={p.title}
-						description={p.description}
-						tech={p.tech}
-						repo={p.repo}
-						demo={p.demo}
-					/>
-				{/each}
-			</section>
-		</div>
-	</TwoColumnShell>
+	<ol class="ruled">
+		{#each projects as p (p.title)}
+			<li>
+				<p class="meta">{p.kind} · {p.tech.join(' · ')}</p>
+				<h2>{p.title}</h2>
+				<p>{p.description}</p>
+				<p class="meta links">
+					<a href={p.repo} rel="noopener">Code</a>
+					{#if p.demo}· <a href={p.demo} rel="noopener"
+							>{p.demo.startsWith('/') ? 'Play' : 'Live'}</a
+						>{/if}
+				</p>
+			</li>
+		{/each}
+	</ol>
 </main>
+
+<style>
+	.links {
+		margin: 0;
+	}
+	.links a {
+		text-decoration: underline;
+		text-decoration-color: var(--color-spot);
+		text-underline-offset: 3px;
+	}
+</style>

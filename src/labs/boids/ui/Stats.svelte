@@ -1,64 +1,67 @@
 <script lang="ts">
-	import { state } from '../store.svelte';
+	import { state, toggleSimulation, resetSimulation } from '../store.svelte.js';
 </script>
 
-<div class="stats">
-	<div class="stat-item">
-		<span class="stat-label">Status</span>
-		<span class="stat-value" class:running={state.isRunning}>
-			{state.isRunning ? 'Running' : 'Paused'}
-		</span>
-	</div>
-
-	<div class="stat-item">
-		<span class="stat-label">Boids</span>
-		<span class="stat-value">{state.stats.boidCount}</span>
-	</div>
-
-	<div class="stat-item">
-		<span class="stat-label">FPS</span>
-		<span class="stat-value" class:low={state.stats.fps < 30}>{state.stats.fps}</span>
-	</div>
-
-	<div class="stat-item">
-		<span class="stat-label">Canvas</span>
-		<span class="stat-value">{state.canvasSize.width} × {state.canvasSize.height}</span>
-	</div>
+<div class="reading" aria-live="polite">
+	<span class="state">{state.isRunning ? 'Running' : 'Paused'}</span>
+	<span>{state.stats.boidCount} boids</span>
+	<span>{state.stats.fps} fps</span>
+	<span>{state.canvasSize.width} × {state.canvasSize.height}</span>
+	<span class="controls">
+		<button type="button" onclick={toggleSimulation}>{state.isRunning ? 'Pause' : 'Play'}</button>
+		<button type="button" onclick={resetSimulation}>Reset</button>
+	</span>
 </div>
 
 <style>
-	.stats {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: var(--space-3);
-	}
-
-	.stat-item {
+	.reading {
 		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
-
-	.stat-label {
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
+		flex-wrap: wrap;
+		gap: 4px 18px;
+		border-top: 1px solid var(--color-ink);
+		padding-top: 8px;
+		margin-top: 8px;
+		color: var(--color-spot);
+		font-family: var(--font-family-sans);
+		font-size: 11.5px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		font-family: var(--font-mono);
+		line-height: 1.5;
+		font-variant-numeric: tabular-nums;
 	}
 
-	.stat-value {
-		font-size: 1rem;
-		color: var(--color-text);
-		font-family: var(--font-mono);
-		font-weight: 600;
+	.state::before {
+		content: '';
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		background: currentColor;
+		margin-right: 6px;
+		vertical-align: 1px;
 	}
 
-	.stat-value.running {
-		color: var(--color-primary);
+	.controls {
+		margin-left: auto;
+		display: flex;
+		gap: 12px;
 	}
 
-	.stat-value.low {
-		color: #ff9800;
+	.reading button {
+		font: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		color: var(--color-ink);
+		background: none;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		text-decoration: underline;
+		text-decoration-color: var(--color-spot);
+		text-underline-offset: 3px;
+	}
+
+	.reading button:hover {
+		color: var(--color-spot);
 	}
 </style>

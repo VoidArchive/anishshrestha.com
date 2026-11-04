@@ -1,13 +1,12 @@
 <!--
 DSA Visualizer Control Panel
 
-Consolidated control panel matching Game of Life's design pattern.
-Provides simulation controls, algorithm selection, settings, and grid controls
-in logical groupings for better UX and consistency.
+Simulation, algorithm, settings and data controls as grotesk-caps buttons and
+native inputs, grouped under plain caps labels.
 -->
 
 <script lang="ts">
-	import { Play, Pause, SkipForward, SkipBack, RotateCcw, Shuffle, Square } from 'lucide-svelte';
+	import { Play, Pause, SkipForward, SkipBack, RotateCcw, Shuffle, Square } from '@lucide/svelte';
 	import type { AlgorithmType, SortingAlgorithm, PathfindingAlgorithm } from '../types';
 
 	interface Props {
@@ -74,7 +73,6 @@ in logical groupings for better UX and consistency.
 		{ value: 'A_STAR', label: 'A* Algorithm' }
 	];
 
-	// Updated speed options with much faster ranges
 	const speedOptions = [
 		{ value: 0, label: 'Instant' },
 		{ value: 10, label: 'Ultra Fast (10ms)' },
@@ -84,10 +82,6 @@ in logical groupings for better UX and consistency.
 		{ value: 250, label: 'Slow (250ms)' },
 		{ value: 500, label: 'Very Slow (500ms)' }
 	];
-
-	function handleModeChange(newMode: AlgorithmType) {
-		onModeChange(newMode);
-	}
 
 	function handleAlgorithmChange(event: Event) {
 		const target = event.target as HTMLSelectElement;
@@ -109,73 +103,63 @@ in logical groupings for better UX and consistency.
 			onPause();
 		} else if (completed) {
 			onReset();
+		} else if (currentStep === 0) {
+			onStart();
 		} else {
-			if (currentStep === 0) {
-				onStart();
-			} else {
-				onResume();
-			}
+			onResume();
 		}
-	}
-
-	function handleSkipToEnd() {
-		onSkipToEnd?.();
 	}
 </script>
 
 <div class="control-panel">
-	<!-- Simulation Controls -->
-	<div class="control-group">
-		<h4 class="control-group-title">Simulation</h4>
-		<div class="simulation-controls">
-			<!-- Primary Play/Pause Button -->
+	<div class="group">
+		<h3 class="caps">Simulation</h3>
+		<div class="row">
 			<button
-				class="btn control-btn primary"
+				type="button"
+				class="btn"
 				onclick={toggleSimulation}
 				aria-label={isAnimating ? 'Pause simulation' : completed ? 'Restart' : 'Start simulation'}
 			>
 				{#if isAnimating}
-					<Pause size={16} />
+					<Pause size={14} />
 					Pause
 				{:else if completed}
-					<RotateCcw size={16} />
+					<RotateCcw size={14} />
 					Restart
 				{:else}
-					<Play size={16} />
+					<Play size={14} />
 					Play
 				{/if}
 			</button>
 
-			<!-- Step Controls -->
-			<div class="step-controls">
-				<button
-					class="btn control-btn step-btn"
-					onclick={onStepBackward}
-					disabled={isAnimating || currentStep === 0}
-					aria-label="Step backward"
-					title="Previous step"
-				>
-					<SkipBack size={14} />
-				</button>
+			<button
+				type="button"
+				class="btn step-btn"
+				onclick={onStepBackward}
+				disabled={isAnimating || currentStep === 0}
+				aria-label="Step backward"
+				title="Previous step"
+			>
+				<SkipBack size={14} />
+			</button>
+			<span class="caps step-indicator">{currentStep}/{totalSteps}</span>
+			<button
+				type="button"
+				class="btn step-btn"
+				onclick={onStepForward}
+				disabled={isAnimating || completed || totalSteps === 0}
+				aria-label="Step forward"
+				title="Next step"
+			>
+				<SkipForward size={14} />
+			</button>
 
-				<span class="step-indicator">{currentStep}/{totalSteps}</span>
-
-				<button
-					class="btn control-btn step-btn"
-					onclick={onStepForward}
-					disabled={isAnimating || completed || totalSteps === 0}
-					aria-label="Step forward"
-					title="Next step"
-				>
-					<SkipForward size={14} />
-				</button>
-			</div>
-
-			<!-- Quick Actions -->
 			{#if onSkipToEnd && totalSteps > 0 && !completed && !isAnimating}
 				<button
-					class="btn control-btn skip-btn"
-					onclick={handleSkipToEnd}
+					type="button"
+					class="btn"
+					onclick={() => onSkipToEnd?.()}
 					aria-label="Skip to end"
 					title="Jump to final result"
 				>
@@ -185,135 +169,114 @@ in logical groupings for better UX and consistency.
 		</div>
 	</div>
 
-	<!-- Algorithm Selection -->
-	<div class="control-group">
-		<h4 class="control-group-title">Algorithm</h4>
-		<div class="algorithm-controls">
-			<!-- Mode Selection -->
-			<div class="mode-buttons">
-				<button
-					class="mode-btn"
-					class:active={mode === 'SORTING'}
-					onclick={() => handleModeChange('SORTING')}
-					disabled={isAnimating}
-				>
-					Sorting
-				</button>
-				<button
-					class="mode-btn"
-					class:active={mode === 'PATHFINDING'}
-					onclick={() => handleModeChange('PATHFINDING')}
-					disabled={isAnimating}
-				>
-					Pathfinding
-				</button>
-			</div>
-
-			<!-- Algorithm Selection -->
-			<select
-				class="algorithm-select"
-				value={algorithm}
-				onchange={handleAlgorithmChange}
+	<div class="group">
+		<h3 class="caps">Algorithm</h3>
+		<div class="row">
+			<button
+				type="button"
+				class="btn mode-btn"
+				class:active={mode === 'SORTING'}
+				onclick={() => onModeChange('SORTING')}
 				disabled={isAnimating}
 			>
-				{#if mode === 'SORTING'}
-					{#each sortingAlgorithms as algo (algo.value)}
-						<option value={algo.value}>{algo.label}</option>
-					{/each}
-				{:else}
-					{#each pathfindingAlgorithms as algo (algo.value)}
-						<option value={algo.value}>{algo.label}</option>
-					{/each}
-				{/if}
-			</select>
-		</div>
-	</div>
-
-	<!-- Settings -->
-	<div class="control-group">
-		<h4 class="control-group-title">Settings</h4>
-		<div class="settings-controls">
-			{#if mode === 'SORTING'}
-				<!-- Array Size -->
-				<div class="setting-item">
-					<label class="setting-label" for="array-size-input">
-						Array Size: <span class="setting-value">{arraySize}</span>
-						<span class="setting-hint">Drag to adjust</span>
-					</label>
-					<div class="range-container">
-						<input
-							id="array-size-input"
-							type="range"
-							class="range-input"
-							min="5"
-							max="50"
-							value={arraySize}
-							style="--value: {arraySize}"
-							oninput={handleArraySizeChange}
-							disabled={isAnimating}
-						/>
-						<div class="range-labels">
-							<span class="range-label-min">5</span>
-							<span class="range-label-max">50</span>
-						</div>
-					</div>
-				</div>
-			{/if}
-
-			<!-- Speed Control -->
-			<div class="setting-item">
-				<label class="setting-label" for="speed-select">Speed:</label>
-				<select
-					id="speed-select"
-					class="speed-select"
-					value={animationSpeed}
-					onchange={handleSpeedChange}
-					disabled={isAnimating}
-				>
-					{#each speedOptions as speed (speed.value)}
-						<option value={speed.value}>{speed.label}</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-	</div>
-
-	<!-- Data Controls -->
-	<div class="control-group">
-		<h4 class="control-group-title">Data</h4>
-		<div class="data-controls">
+				Sorting
+			</button>
 			<button
-				class="btn control-btn"
+				type="button"
+				class="btn mode-btn"
+				class:active={mode === 'PATHFINDING'}
+				onclick={() => onModeChange('PATHFINDING')}
+				disabled={isAnimating}
+			>
+				Pathfinding
+			</button>
+		</div>
+		<select
+			aria-label="Algorithm"
+			value={algorithm}
+			onchange={handleAlgorithmChange}
+			disabled={isAnimating}
+		>
+			{#if mode === 'SORTING'}
+				{#each sortingAlgorithms as algo (algo.value)}
+					<option value={algo.value}>{algo.label}</option>
+				{/each}
+			{:else}
+				{#each pathfindingAlgorithms as algo (algo.value)}
+					<option value={algo.value}>{algo.label}</option>
+				{/each}
+			{/if}
+		</select>
+	</div>
+
+	<div class="group">
+		<h3 class="caps">Settings</h3>
+		{#if mode === 'SORTING'}
+			<label class="caps field" for="array-size-input">
+				<span>Array size</span>
+				<span class="value">{arraySize}</span>
+			</label>
+			<input
+				id="array-size-input"
+				type="range"
+				min="5"
+				max="50"
+				value={arraySize}
+				oninput={handleArraySizeChange}
+				disabled={isAnimating}
+			/>
+		{/if}
+		<label class="caps field" for="speed-select">Speed</label>
+		<select
+			id="speed-select"
+			value={animationSpeed}
+			onchange={handleSpeedChange}
+			disabled={isAnimating}
+		>
+			{#each speedOptions as speed (speed.value)}
+				<option value={speed.value}>{speed.label}</option>
+			{/each}
+		</select>
+	</div>
+
+	<div class="group">
+		<h3 class="caps">Data</h3>
+		<div class="row">
+			<button
+				type="button"
+				class="btn"
 				onclick={onShuffle}
 				disabled={isAnimating}
 				aria-label={mode === 'SORTING' ? 'Shuffle array' : 'Add random walls'}
 				title={mode === 'SORTING' ? 'Generate new random array' : 'Add random walls to grid'}
 			>
-				<Shuffle size={16} />
+				<Shuffle size={14} />
 				{mode === 'SORTING' ? 'Shuffle' : 'Random Walls'}
 			</button>
 
 			{#if mode === 'PATHFINDING'}
 				<button
-					class="btn control-btn"
+					type="button"
+					class="btn"
 					onclick={onClearWalls}
 					disabled={isAnimating}
 					aria-label="Clear all walls"
 					title="Remove all walls from grid"
 				>
-					<Square size={16} />
+					<Square size={14} />
 					Clear Walls
 				</button>
 			{/if}
 
 			<button
-				class="btn control-btn reset-btn"
+				type="button"
+				class="btn"
 				onclick={onReset}
 				disabled={isAnimating}
 				aria-label="Reset everything"
 				title="Reset to initial state"
 			>
-				<RotateCcw size={16} />
+				<RotateCcw size={14} />
 				Reset All
 			</button>
 		</div>
@@ -324,350 +287,96 @@ in logical groupings for better UX and consistency.
 	.control-panel {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-3);
+		gap: 24px;
 	}
-
-	.control-group {
+	.group {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-2);
+		gap: 8px;
 	}
-
-	.control-group-title {
-		font-family: var(--font-family-mono);
-		font-size: 0.875rem;
-		font-weight: 600;
-		color: var(--color-text);
-		margin: 0;
-		padding-bottom: var(--space-1);
-		border-bottom: 1px solid var(--color-border);
+	.group h3 {
+		font-weight: 400;
+		letter-spacing: 0.14em;
+		font-size: 12px;
+		border-bottom: 1px solid var(--color-ink);
+		padding-bottom: 4px;
 	}
-
-	/* New Simulation Controls Layout */
-	.simulation-controls {
+	.row {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: var(--space-2);
+		gap: 8px;
 	}
-
-	.step-controls {
-		display: flex;
-		align-items: center;
-		gap: var(--space-1);
-		background: var(--color-bg-primary);
-		border: 1px solid var(--color-border);
-		padding: var(--space-1);
-	}
-
-	.step-indicator {
-		font-family: var(--font-family-mono);
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		min-width: 35px;
-		text-align: center;
-		font-weight: 600;
-	}
-
-	.data-controls {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-	}
-
-	.control-btn {
-		display: flex;
-		align-items: center;
-		gap: var(--space-1);
-		font-size: 0.875rem;
-		padding: var(--space-2) var(--space-3);
+	.btn {
 		white-space: nowrap;
+		min-height: 32px;
 	}
-
 	.step-btn {
-		padding: var(--space-1) var(--space-2);
-		background: transparent;
-		border: none;
+		min-width: 32px;
+		justify-content: center;
+		padding: 7px;
 	}
-
-	.step-btn:hover:not(:disabled) {
-		background: var(--color-bg-secondary);
+	.step-indicator {
+		min-width: 3.5em;
+		text-align: center;
+		font-variant-numeric: tabular-nums;
 	}
-
-	.skip-btn {
-		background: var(--color-bg-secondary);
-		border: 1px solid var(--color-border);
-		font-size: 0.75rem;
-		padding: var(--space-1) var(--space-2);
-	}
-
-	.reset-btn {
-		background: rgba(239, 68, 68, 0.1);
-		border-color: rgba(239, 68, 68, 0.3);
-		color: #ef4444;
-	}
-
-	.reset-btn:hover:not(:disabled) {
-		background: rgba(239, 68, 68, 0.2);
-		border-color: #ef4444;
-	}
-
-	.control-btn.primary {
-		background: var(--color-primary);
-		color: white;
-		border-color: var(--color-primary);
-	}
-
-	.control-btn.primary:hover:not(:disabled) {
-		background: #b91c1c;
-		border-color: #b91c1c;
-	}
-
-	.algorithm-controls {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-	}
-
-	.mode-buttons {
-		display: flex;
-		gap: var(--space-1);
-		width: 100%;
-	}
-
 	.mode-btn {
 		flex: 1;
-		padding: var(--space-2) var(--space-3);
-		font-size: 0.75rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		background: var(--color-bg-secondary);
-		border: 1px solid var(--color-border);
-		color: var(--color-text-secondary);
-		cursor: pointer;
-		transition: all 0.2s ease;
+		justify-content: center;
 	}
-
-	.mode-btn:hover:not(:disabled) {
-		border-color: var(--color-primary);
-		color: var(--color-text-primary);
+	select {
+		width: 100%;
+		min-height: 32px;
+		padding: 6px 8px;
+		font-size: 13px;
 	}
-
-	.mode-btn.active {
-		background: var(--color-bg-primary);
-		border-color: var(--color-primary);
-		color: var(--color-text-primary);
-	}
-
-	.mode-btn:disabled {
+	select:disabled,
+	input:disabled {
 		opacity: 0.4;
 		cursor: not-allowed;
 	}
-
-	.algorithm-select,
-	.speed-select {
-		width: 100%;
-		padding: var(--space-2) var(--space-3);
-		background: var(--color-bg-secondary);
-		border: 1px solid var(--color-border);
-		color: var(--color-text-primary);
-		font-size: 0.875rem;
-		transition: border-color 0.2s ease;
-	}
-
-	.algorithm-select:focus,
-	.speed-select:focus {
-		outline: none;
-		border-color: var(--color-primary);
-	}
-
-	.algorithm-select:disabled,
-	.speed-select:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.settings-controls {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-2);
-	}
-
-	.setting-item {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-1);
-	}
-
-	.setting-label {
+	.field {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
-		font-size: 0.875rem;
-		color: var(--color-text-secondary);
+		font-weight: 400;
+	}
+	.field .value {
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
 	}
 
-	.setting-value {
-		font-weight: 600;
-		color: var(--color-text-primary);
-	}
-
-	.setting-hint {
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		font-style: italic;
-		opacity: 0.8;
-	}
-
-	.range-container {
-		position: relative;
+	/* Range: a hairline track and a square spot thumb; the only non-native control */
+	input[type='range'] {
 		width: 100%;
+		height: 24px;
+		margin: 0;
+		border: 0;
+		background: transparent;
+		appearance: none;
+		cursor: pointer;
 	}
-
-	.range-container::before {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 0;
-		right: 0;
+	input[type='range']::-webkit-slider-runnable-track {
 		height: 1px;
-		background: repeating-linear-gradient(
-			to right,
-			transparent 0%,
-			transparent calc(20% - 1px),
-			var(--color-border) calc(20% - 1px),
-			var(--color-border) 20%
-		);
-		transform: translateY(-50%);
-		pointer-events: none;
-		opacity: 0.3;
-		z-index: 1;
+		background: var(--color-ink);
 	}
-
-	.range-labels {
-		display: flex;
-		justify-content: space-between;
-		margin-top: var(--space-1);
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		font-family: var(--font-family-mono);
+	input[type='range']::-moz-range-track {
+		height: 1px;
+		background: var(--color-ink);
 	}
-
-	.range-label-min,
-	.range-label-max {
-		user-select: none;
-		opacity: 0.7;
-	}
-
-	.range-input {
-		width: 100%;
-		height: 6px;
-		background: var(--color-border);
-		outline: none;
-		border: 1px solid var(--color-border);
-		-webkit-appearance: none;
+	input[type='range']::-webkit-slider-thumb {
 		appearance: none;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-		background-image: linear-gradient(
-			to right,
-			var(--color-primary) 0%,
-			var(--color-primary) calc((100% - 20px) * (var(--value, 25) - 5) / (50 - 5)),
-			var(--color-border) calc((100% - 20px) * (var(--value, 25) - 5) / (50 - 5)),
-			var(--color-border) 100%
-		);
-	}
-
-	.range-input:hover {
-		background: var(--color-bg-secondary);
-		border-color: var(--color-primary);
-		box-shadow:
-			inset 0 1px 2px rgba(0, 0, 0, 0.1),
-			0 0 0 1px rgba(201, 42, 42, 0.1);
-	}
-
-	.range-input:focus {
-		border-color: var(--color-primary);
-		box-shadow:
-			inset 0 1px 2px rgba(0, 0, 0, 0.1),
-			0 0 0 2px rgba(201, 42, 42, 0.2);
-	}
-
-	.range-input::-webkit-slider-thumb {
-		-webkit-appearance: none;
-		appearance: none;
-		width: 20px;
+		width: 12px;
 		height: 20px;
-		background: var(--color-primary);
-		cursor: pointer;
-		border-radius: 50%;
-		border: 2px solid white;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-		transition: all 0.2s ease;
-		position: relative;
-		z-index: 2;
+		margin-top: -10px;
+		border: 0;
+		background: var(--color-spot);
 	}
-
-	.range-input::-webkit-slider-thumb:hover {
-		transform: scale(1.1);
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-	}
-
-	.range-input::-webkit-slider-thumb:active {
-		transform: scale(1.05);
-		background: #b91c1c;
-	}
-
-	.range-input::-moz-range-thumb {
-		width: 20px;
+	input[type='range']::-moz-range-thumb {
+		width: 12px;
 		height: 20px;
-		background: var(--color-primary);
-		cursor: pointer;
-		border-radius: 50%;
-		border: 2px solid white;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-		transition: all 0.2s ease;
-	}
-
-	.range-input::-moz-range-thumb:hover {
-		transform: scale(1.1);
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-	}
-
-	.range-input::-moz-range-thumb:active {
-		transform: scale(1.05);
-		background: #b91c1c;
-	}
-
-	/* Track styling for Firefox */
-	.range-input::-moz-range-track {
-		height: 6px;
-		background: var(--color-border);
-		border-radius: 3px;
-		border: 1px solid var(--color-border);
-	}
-
-	.range-input:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.range-input:disabled::-webkit-slider-thumb {
-		cursor: not-allowed;
-		transform: none;
-	}
-
-	.range-input:disabled::-moz-range-thumb {
-		cursor: not-allowed;
-		transform: none;
-	}
-
-	/* Mobile responsive */
-	@media (max-width: 768px) {
-		.control-panel {
-			gap: var(--space-2);
-		}
+		border: 0;
+		border-radius: 0;
+		background: var(--color-spot);
 	}
 </style>

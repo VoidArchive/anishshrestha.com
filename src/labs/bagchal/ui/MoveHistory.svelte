@@ -6,38 +6,49 @@
 	let { moveHistory }: Props = $props();
 </script>
 
-<div class="section-card">
+<section class="history">
 	<h2 class="section-title">Move History</h2>
-	<div class="max-h-40 overflow-y-auto">
-		{#if moveHistory.length === 0}
-			<p class="text-text-muted text-sm">No moves yet</p>
-		{:else}
-			<ul class="space-y-1 text-xs sm:text-sm">
-				{#each moveHistory.toReversed() as move, index (index)}
-					<li class="text-text-muted list-none">
-						{moveHistory.length - index}. {move}
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-</div>
+	{#if moveHistory.length === 0}
+		<p class="empty">No moves yet.</p>
+	{:else}
+		<ol class="list">
+			{#each moveHistory.toReversed() as move, index (index)}
+				<li>
+					<span class="caps">{moveHistory.length - index}</span>
+					<span>{move}</span>
+				</li>
+			{/each}
+		</ol>
+	{/if}
+</section>
 
 <style>
-	/* Mobile scrollbar styling */
-	.max-h-40::-webkit-scrollbar {
-		width: 4px;
+	.history {
+		max-width: 680px;
+		margin-top: 24px;
 	}
-
-	.max-h-40::-webkit-scrollbar-track {
-		background: var(--color-bg-primary);
+	.empty {
+		font-style: italic;
 	}
-
-	.max-h-40::-webkit-scrollbar-thumb {
-		background: var(--color-border);
+	.list {
+		list-style: none;
+		max-height: 10rem;
+		overflow-y: auto;
+		font-size: 15.5px;
 	}
-
-	.max-h-40::-webkit-scrollbar-thumb:hover {
-		background: var(--color-primary-red);
+	.list li {
+		display: flex;
+		gap: 12px;
+		padding: 6px 0;
+		border-top: 1px solid var(--color-ink);
+	}
+	.list li:first-child {
+		border-top: 0;
+	}
+	.list .caps {
+		min-width: 2ch;
+		color: var(--color-spot);
+		font-variant-numeric: tabular-nums;
+		line-height: inherit;
 	}
 </style>

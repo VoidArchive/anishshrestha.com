@@ -1,125 +1,114 @@
 <script lang="ts">
-	import TwoColumnShell from '$lib/layouts/TwoColumnShell.svelte';
-	import { Grid3x3, BarChart3, BookOpen, Bird, Calendar } from 'lucide-svelte';
-	// Simple list of labs/experiments – can be replaced with fetched data later
-	const experiments = [
+	const labs = [
 		{
-			name: 'Life Calendar',
-			description:
-				'Visualize your life in weeks. A perspective on time that is both humbling and motivating.',
-			slug: 'life-calendar',
-			icon: 'calendar'
-		},
-		{
-			name: 'DSA Visualizer',
-			description:
-				'Interactive visualization of sorting algorithms and data structures with step-by-step animations.',
-			slug: 'dsa-visualizer',
-			icon: 'barchart',
-			blogSlug: 'building-dsa-visualizer-animation-engine',
-			blogTitle: 'Building a DSA Visualizer: Animation Engine Architecture'
-		},
-		{
+			n: 1,
 			name: 'Game of Life',
-			description: "Conway's cellular automaton - watch patterns evolve and create your own.",
+			description:
+				"Conway's cellular automaton with a pattern library, speed control and a grid you can edit while it runs.",
 			slug: 'gameoflife',
-			icon: 'grid',
-			blogSlug: 'building-conways-game-of-life-svelte',
-			blogTitle: "Building Conway's Game of Life: From Theory to Interactive Simulation"
+			blog: 'building-conways-game-of-life-svelte'
 		},
 		{
-			name: 'Bagchal',
-			description: 'Play the traditional Nepali tiger-goat strategy game.',
-			slug: 'bagchal',
-			icon: '/icons/tiger.svg',
-			blogSlug: 'bagchal-reforged-ai-chess-tigers',
-			blogTitle: 'Bagchal Reforged: AI Chess with Tigers and Goats'
-		},
-		{
-			name: 'Tic Tac Toe',
-			description: 'Play the classic Tic Tac Toe game.',
-			slug: 'tictactoe',
-			icon: '/icons/hash.svg'
-		},
-		{
+			n: 2,
 			name: 'Boids Flocking',
 			description:
-				'Watch emergent flocking behavior arise from three simple rules: separation, alignment, and cohesion.',
+				'Emergent flocking from three rules: separation, alignment, cohesion. Adjust the weights and watch the flock respond.',
 			slug: 'boids',
-			icon: 'bird'
+			blog: null
+		},
+		{
+			n: 3,
+			name: 'DSA Visualizer',
+			description:
+				'Sorting algorithms and pathfinding, one step at a time, with the comparisons and swaps counted as they happen.',
+			slug: 'dsa-visualizer',
+			blog: 'building-dsa-visualizer-animation-engine'
+		},
+		{
+			n: 4,
+			name: 'Life Calendar',
+			description: 'Your life drawn in weeks, one square each, assuming a hundred years.',
+			slug: 'life-calendar',
+			blog: null
+		},
+		{
+			n: 5,
+			name: 'Bagchal',
+			description:
+				'The traditional Nepali tigers-and-goats game against a minimax opponent with an opening book.',
+			slug: 'bagchal',
+			blog: 'bagchal-reforged-ai-chess-tigers'
+		},
+		{
+			n: 6,
+			name: 'Tic Tac Toe',
+			description: 'The classic game against an unbeatable minimax player.',
+			slug: 'tictactoe',
+			blog: null
 		}
 	];
 </script>
 
 <svelte:head>
 	<title>Labs | anishshrestha.com</title>
+	<meta
+		name="description"
+		content="Six working experiments: Game of Life, boids, a sorting and pathfinding visualizer, Bagchal, Tic Tac Toe, and a life calendar."
+	/>
 </svelte:head>
 
-<main class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-8);">
-	<TwoColumnShell>
-		{#snippet left()}
-			<!-- Labs description -->
-			<section class="section-card">
-				<h3 class="section-title text-lg">Labs</h3>
-				<p class="text-text-muted text-sm leading-relaxed">
-					This is my experimental playground where I build interactive projects, test new ideas, and
-					prototype concepts. Each lab is a hands-on exploration of different technologies and game
-					mechanics. If you find a bug, report it on GitHub or drop me a message.
-				</p>
-			</section>
-		{/snippet}
+<main class="page container">
+	<h1 class="page-title">Labs</h1>
+	<p class="dek">
+		Six experiments that run in the browser. Each is a figure on the home page; most come with a
+		note on how the engine behind it was built. If you find a bug, report it on GitHub or write to
+		me.
+	</p>
 
-		<!-- Main column -->
-		<div class="flex flex-col">
-			{#each experiments as experiment (experiment.slug)}
-				<section
-					class="section-card flex flex-row items-start justify-between rounded-none"
-					style="gap: var(--space-4);"
-				>
-					<!-- Text content -->
-					<div class="flex flex-1 flex-col" style="gap: var(--space-2);">
-						<h2 class="section-title m-0 text-xl">{experiment.name}</h2>
-						<p class="text-text-muted text-sm leading-relaxed">{experiment.description}</p>
-						<div
-							class="flex flex-wrap items-center"
-							style="margin-top: var(--space-1); gap: var(--space-2);"
-						>
-							<a
-								href={`/labs/${experiment.slug}`}
-								class="btn inline-flex items-center"
-								style="gap: var(--space-2);"
-							>
-								<span>Play</span>
-							</a>
-							{#if experiment.blogSlug}
-								<a
-									href={`/blog/${experiment.blogSlug}`}
-									class="btn-secondary inline-flex items-center"
-									style="gap: var(--space-2);"
-									title={experiment.blogTitle}
-								>
-									<BookOpen size={16} />
-									<span>Read the Story</span>
-								</a>
-							{/if}
-						</div>
-					</div>
-					<!-- Icon -->
-					<div class="flex h-16 w-16 flex-shrink-0 items-center justify-center">
-						{#if experiment.icon === 'grid'}
-							<Grid3x3 size={48} />
-						{:else if experiment.icon === 'calendar'}
-							<Calendar size={48} />
-						{:else if experiment.icon === 'barchart'}
-							<BarChart3 size={48} />
-						{:else if experiment.icon === 'bird'}
-							<Bird size={48} />
-						{:else}
-							<img src={experiment.icon} alt={experiment.name} class="h-16 w-16 flex-shrink-0" />
-						{/if}
-					</div>
-				</section>
-			{/each}
-		</div>
-	</TwoColumnShell>
+	<ol class="ruled figures">
+		{#each labs as lab (lab.slug)}
+			<li>
+				<span class="numeral" aria-hidden="true">Fig. {lab.n}</span>
+				<div>
+					<h2><a href="/labs/{lab.slug}">{lab.name}</a></h2>
+					<p>{lab.description}</p>
+					<p class="meta links">
+						<a href="/labs/{lab.slug}">Play</a>
+						{#if lab.blog}· <a href="/blog/{lab.blog}">Read how it was built</a>{/if}
+					</p>
+				</div>
+			</li>
+		{/each}
+	</ol>
 </main>
+
+<style>
+	.figures > li {
+		display: grid;
+		grid-template-columns: 150px minmax(0, 1fr);
+		gap: 24px;
+		align-items: start;
+		padding: 22px 0;
+	}
+	.figures .numeral {
+		font-size: 40px;
+		padding-top: 2px;
+	}
+	.links {
+		margin: 0;
+	}
+	.links a {
+		text-decoration: underline;
+		text-decoration-color: var(--color-spot);
+		text-underline-offset: 3px;
+	}
+	@media (max-width: 640px) {
+		.figures > li {
+			grid-template-columns: 1fr;
+			gap: 6px;
+		}
+		.figures .numeral {
+			font-size: 32px;
+		}
+	}
+</style>

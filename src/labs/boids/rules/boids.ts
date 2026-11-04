@@ -221,6 +221,21 @@ function handleEdges(boid: Boid, width: number, height: number, mode: 'wrap' | '
 		if (boid.position.y > height - margin) {
 			boid.velocity.y -= turnFactor;
 		}
+		// A boid that still reaches the edge bounces off it rather than leaving the plate
+		if (boid.position.x < 0) {
+			boid.position.x = 0;
+			boid.velocity.x = Math.abs(boid.velocity.x);
+		} else if (boid.position.x > width) {
+			boid.position.x = width;
+			boid.velocity.x = -Math.abs(boid.velocity.x);
+		}
+		if (boid.position.y < 0) {
+			boid.position.y = 0;
+			boid.velocity.y = Math.abs(boid.velocity.y);
+		} else if (boid.position.y > height) {
+			boid.position.y = height;
+			boid.velocity.y = -Math.abs(boid.velocity.y);
+		}
 	}
 }
 

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { SvelteSet } from 'svelte/reactivity';
 
 	let birthDate = $state('2000-03-28');
@@ -8,13 +7,20 @@
 
 	const TOTAL_YEARS = 100;
 	const WEEKS_PER_YEAR = 52;
+	const TOTAL_WEEKS = TOTAL_YEARS * WEEKS_PER_YEAR;
 
-	// Detect mobile/touch device to disable expensive ripple effect
-	let isMobile = $state(false);
+	const weeksLeft = $derived(Math.max(0, TOTAL_WEEKS - livedWeeks));
+	const percentLived = $derived(Math.min(100, (livedWeeks / TOTAL_WEEKS) * 100).toFixed(1));
+
+	// The ripple is skipped on touch devices (cost) and under reduced motion (preference)
+	let rippleOff = $state(false);
 
 	$effect(() => {
 		if (browser) {
-			isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+			rippleOff =
+				'ontouchstart' in window ||
+				navigator.maxTouchPoints > 0 ||
+				window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		}
 	});
 
@@ -40,16 +46,17 @@
 		return year * 52 + week === livedWeeks;
 	}
 
-	// Ripple Animation Logic (disabled on mobile for performance)
+	// Ripple Animation Logic
 	let svgRef: SVGSVGElement;
 	let mousePos = { x: -100, y: -100 };
 	let isHovering = false;
 	let animationFrameId: number;
+
+	$effect(() => () => cancelAnimationFrame(animationFrameId));
 	let dirtyKeys = new SvelteSet<string>();
 
 	function handleMouseMove(e: MouseEvent) {
-		// Skip ripple effect on mobile
-		if (isMobile || !svgRef) return;
+		if (rippleOff || !svgRef) return;
 
 		const rect = svgRef.getBoundingClientRect();
 		const viewBoxWidth = 60;
@@ -69,7 +76,7 @@
 	}
 
 	function handleMouseLeave() {
-		if (isMobile) return;
+		if (rippleOff) return;
 		isHovering = false;
 		if (!animationFrameId) {
 			animationFrameId = requestAnimationFrame(updateRipple);
@@ -124,128 +131,215 @@
 	<meta name="description" content="A visualization of your life in weeks." />
 </svelte:head>
 
-<main class="container mx-auto min-h-screen px-4 py-8 md:px-6">
-	<div class="w-full">
-		<header
-			class="border-border mb-10 flex flex-col items-start gap-6 border-b px-2 pb-6 md:flex-row md:items-end md:justify-between"
+<main class="lab container">
+	<header>
+		<div>
+			<span class="fig" aria-hidden="true">Fig. 4</span>
+			<h1>Life Calendar</h1>
+			<p class="dek">Your life in weeks: one square per week, a hundred years in rows.</p>
+		</div>
+		<div class="field">
+			<label for="birthdate" class="caps">Birth date</label>
+			<input type="date" id="birthdate" bind:value={birthDate} />
+		</div>
+	</header>
+
+	<figure class="plate">
+		<svg
+			bind:this={svgRef}
+			viewBox="-4 -6 60 110"
+			preserveAspectRatio="xMidYMin meet"
+			class="touch-none select-none"
+			role="img"
+			aria-label="Life Calendar Grid"
+			onmousemove={handleMouseMove}
+			onmouseleave={handleMouseLeave}
 		>
-			<div>
-				<h1 class="text-text text-3xl font-bold tracking-tight">Life Calendar</h1>
-				<p class="text-text-muted mt-2">
-					Your life in weeks. One box represents one week of your life. Assuming a 100-year
-					lifespan.
-				</p>
-			</div>
+			<text x="0" y="-3.5" text-anchor="start" class="axis-title">Weeks →</text>
 
-			<div class="flex flex-col gap-2">
-				<label for="birthdate" class="text-text-muted text-xs font-medium tracking-wider uppercase">
-					Date of Birth
-				</label>
-				<input
-					type="date"
-					id="birthdate"
-					bind:value={birthDate}
-					class="border-border bg-bg-tertiary text-text focus:border-primary rounded border px-3 py-2 text-sm focus:outline-none"
-				/>
-			</div>
-		</header>
+			{#each weeks as week (week)}
+				{#if (week + 1) % 5 === 0 || week === 0}
+					<text x={week + 0.4} y="-1.5" text-anchor="middle" class="label-text">
+						{week + 1}
+					</text>
+				{/if}
+			{/each}
 
-		<div class="w-full" in:fly={{ y: 20, duration: 500, delay: 200 }}>
-			<svg
-				bind:this={svgRef}
-				viewBox="-4 -6 60 110"
-				preserveAspectRatio="xMidYMin meet"
-				class="w-full touch-none select-none"
-				role="img"
-				aria-label="Life Calendar Grid"
-				onmousemove={handleMouseMove}
-				onmouseleave={handleMouseLeave}
+			<text x="-3" y="0" text-anchor="end" transform="rotate(-90, -3, 0)" class="axis-title"
+				>Years ←</text
 			>
-				<defs>
-					<style>
-						.label-text {
-							font-size: 0.6px;
-							fill: var(--color-text-muted);
-							font-family: var(--font-family-mono);
-							pointer-events: none;
-						}
-						.axis-title {
-							font-size: 0.7px;
-							fill: var(--color-text-muted);
-							font-weight: 500;
-							letter-spacing: 0.1px;
-							text-transform: uppercase;
-							pointer-events: none;
-						}
-						/* Removed will-change and heavy transitions for mobile perf */
-						.cell {
-							transition: fill 0.2s ease;
-						}
-					</style>
-				</defs>
 
-				<!-- Week Labels (Top) -->
-				<text x="0" y="-3.5" text-anchor="start" class="axis-title">Weeks &rarr;</text>
-				{#each weeks as week (week)}
-					{#if (week + 1) % 5 === 0 || week === 0}
-						<text x={week + 0.4} y="-1.5" text-anchor="middle" class="label-text">
-							{week + 1}
-						</text>
-					{/if}
-				{/each}
+			{#each years as year (year)}
+				{#if year % 5 === 0}
+					<text x="-1" y={year + 0.6} text-anchor="end" class="label-text">
+						{year}
+					</text>
+				{/if}
+			{/each}
 
-				<!-- Year Labels (Left) -->
-				<text x="-3" y="0" text-anchor="end" transform="rotate(-90, -3, 0)" class="axis-title">
-					Years &larr;
-				</text>
+			<g>
 				{#each years as year (year)}
-					{#if year % 5 === 0}
-						<text x="-1" y={year + 0.6} text-anchor="end" class="label-text">
-							{year}
-						</text>
-					{/if}
-				{/each}
-
-				<!-- Main Grid - with keys for efficient updates -->
-				<g>
-					{#each years as year (year)}
-						{#each weeks as week (week)}
-							<rect
-								id={`cell-${year}-${week}`}
-								x={week}
-								y={year}
-								width="0.8"
-								height="0.8"
-								rx="0.1"
-								class="cell"
-								style:fill={isCurrent(year, week)
-									? 'var(--color-primary)'
-									: isLived(year, week)
-										? 'var(--color-text-muted)'
-										: 'transparent'}
-								style:stroke={isLived(year, week) ? 'none' : 'var(--color-border)'}
-								style:stroke-width="0.05"
-								style:opacity={isLived(year, week) ? '0.8' : '0.5'}
-							/>
-						{/each}
+					{#each weeks as week (week)}
+						<rect
+							id={`cell-${year}-${week}`}
+							x={week}
+							y={year}
+							width="0.8"
+							height="0.8"
+							class="cell"
+							class:lived={isLived(year, week)}
+							class:current={isCurrent(year, week)}
+							vector-effect="non-scaling-stroke"
+						></rect>
 					{/each}
-				</g>
-			</svg>
-		</div>
+				{/each}
+			</g>
+		</svg>
 
-		<div class="text-text-muted mt-6 flex items-center gap-6 text-sm">
-			<div class="flex items-center gap-2">
-				<div class="bg-text-muted h-3 w-3 rounded opacity-80"></div>
-				<span>Past</span>
-			</div>
-			<div class="flex items-center gap-2">
-				<div class="bg-primary h-3 w-3 rounded"></div>
-				<span>Current</span>
-			</div>
-			<div class="flex items-center gap-2">
-				<div class="border-border h-3 w-3 rounded border"></div>
-				<span>Future</span>
-			</div>
-		</div>
-	</div>
+		<figcaption class="reading">
+			<span class="k lived">Weeks lived {livedWeeks.toLocaleString()}</span>
+			<span class="k left">Weeks left {weeksLeft.toLocaleString()}</span>
+			<span>{percentLived}% lived</span>
+		</figcaption>
+	</figure>
 </main>
+
+<style>
+	.lab {
+		padding-top: 40px;
+		padding-bottom: 72px;
+		color: var(--color-ink);
+	}
+
+	header {
+		margin-bottom: 40px;
+	}
+	.fig {
+		display: block;
+		font-family: var(--font-family-sans);
+		font-weight: 700;
+		font-size: clamp(40px, 5vw, 64px);
+		line-height: 1;
+		letter-spacing: -0.04em;
+		color: var(--color-spot);
+		margin: 0 0 8px -4px;
+	}
+	h1 {
+		font-family: var(--font-family-serif);
+		font-weight: 600;
+		font-size: clamp(34px, 3vw, 40px);
+		line-height: 1.02;
+		letter-spacing: -0.015em;
+		margin: 0 0 10px;
+	}
+	.dek {
+		font-style: italic;
+		font-size: 17px;
+		margin: 0 0 24px;
+		text-wrap: pretty;
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+	}
+	.field input {
+		font-size: 13px;
+		font-variant-numeric: tabular-nums;
+		padding: 7px 12px;
+		border: 1px solid var(--color-ink);
+		border-radius: 0;
+	}
+	.field input:focus-visible {
+		outline: 2px solid var(--color-spot);
+		outline-offset: 2px;
+	}
+
+	.plate {
+		margin: 0;
+		max-width: 760px;
+	}
+	@media (min-width: 1024px) {
+		.lab {
+			display: grid;
+			grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+			gap: 56px;
+			align-items: start;
+		}
+		header {
+			position: sticky;
+			top: 24px;
+			margin: 0;
+		}
+		.plate {
+			max-width: 820px;
+		}
+	}
+	.plate svg {
+		display: block;
+		width: 100%;
+		border: 1.5px solid var(--color-ink);
+		background: var(--color-paper);
+		padding: 8px;
+	}
+	.label-text,
+	.axis-title {
+		font-family: var(--font-family-sans);
+		fill: var(--color-ink);
+		pointer-events: none;
+	}
+	.label-text {
+		font-size: 0.6px;
+	}
+	.axis-title {
+		font-size: 0.7px;
+		font-weight: 700;
+		letter-spacing: 0.05px;
+		text-transform: uppercase;
+	}
+	.cell {
+		fill: var(--color-paper);
+		stroke: var(--color-tint);
+		stroke-width: 1px;
+	}
+	.cell.lived {
+		fill: var(--color-spot);
+		stroke: none;
+	}
+	.cell.current {
+		fill: var(--color-ink);
+		stroke: none;
+	}
+
+	.reading {
+		font-family: var(--font-family-sans);
+		font-size: 11.5px;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		line-height: 1.5;
+		font-variant-numeric: tabular-nums;
+		color: var(--color-spot);
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 18px;
+		border-top: 1px solid var(--color-ink);
+		padding-top: 8px;
+		margin-top: 8px;
+	}
+	.k::before {
+		content: '';
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		margin-right: 6px;
+		vertical-align: 1px;
+		background: currentColor;
+	}
+	.k.left::before {
+		background: var(--color-paper);
+		border: 1px solid var(--color-spot);
+	}
+</style>

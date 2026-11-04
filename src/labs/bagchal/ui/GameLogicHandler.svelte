@@ -5,8 +5,8 @@
 		points,
 		getValidMoves,
 		getCurrentTigerCaptures
-	} from '$labs/bagchal/store.svelte';
-	import { executeMove, checkIfTigersAreTrapped } from '$labs/bagchal/rules';
+	} from '#labs/bagchal/store.svelte.js';
+	import { executeMove, checkIfTigersAreTrapped } from '#labs/bagchal/rules/index.js';
 
 	interface Props {
 		onSaveGameState: () => void;
