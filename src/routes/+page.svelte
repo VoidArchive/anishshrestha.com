@@ -33,7 +33,7 @@
 	<section class="opening">
 		<div class="column">
 			<h1>Six working experiments, and how I built each one</h1>
-			<p class="byline">by Anish Shrestha, software developer, Kathmandu</p>
+			<p class="byline">by Anish Shrestha, software developer</p>
 			<div class="essay">
 				<p>
 					Every figure on this page is running. Fig. 1 is Conway's Game of Life, the cellular
@@ -70,7 +70,8 @@
 			<BoidsFigure />
 			<figcaption>
 				<b>Fig. 2</b> Boids flocking from three rules: separation, alignment, cohesion.
-				<a href="/labs/boids">Open the lab</a>
+				<a href="/labs/boids">Open the lab</a> ·
+				<a href="/blog/boids-in-a-small-box">Read how it was built</a>
 			</figcaption>
 		</figure>
 		<figure class="plate">
@@ -86,8 +87,9 @@
 			<span class="fig" aria-hidden="true">Fig. 4</span>
 			<LifeCalendarFigure />
 			<figcaption>
-				<b>Fig. 4</b> My life in weeks: one square each, a hundred years, counted from my birth
-				date. <a href="/labs/life-calendar">Enter your own</a>
+				<b>Fig. 4</b> My life in weeks, one square each, replayed from my birth date to today with
+				the decade ahead in view. The square that blinks is this week.
+				<a href="/labs/life-calendar">Enter your own</a>
 			</figcaption>
 		</figure>
 	</section>
@@ -128,7 +130,8 @@
 				>hi@anishshrestha.com</a
 			>, or find me as <a href="https://github.com/VoidArchive" rel="me">VoidArchive</a> on GitHub
 			and on
-			<a href="https://linkedin.com/in/theinanish" rel="me">LinkedIn</a>.
+			<a href="https://linkedin.com/in/theinanish" rel="me">LinkedIn</a>. This site is a magazine
+			spread on purpose; <a href="/blog/redesigning-my-site-as-a-magazine-spread">here is why</a>.
 		</p>
 	</section>
 </main>

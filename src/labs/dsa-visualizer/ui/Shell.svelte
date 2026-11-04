@@ -6,6 +6,7 @@ reading row, and a controls column. On narrow screens the board comes first.
 -->
 
 <script lang="ts">
+	import BlogStoryCallout from '#lib/components/BlogStoryCallout.svelte';
 	import {
 		dsaState,
 		setAlgorithm,
@@ -62,6 +63,11 @@ reading row, and a controls column. On narrow screens the board comes first.
 				or step through by hand.
 			</p>
 		</header>
+		<BlogStoryCallout
+			variant="banner"
+			blogTitle="Why My Pathfinding Visualizer Forgot Its Past"
+			blogUrl="/blog/pathfinding-visualizer-forgot-its-past"
+		/>
 
 		<div class="layout">
 			<div class="board">

@@ -14,7 +14,7 @@
 			description:
 				'Emergent flocking from three rules: separation, alignment, cohesion. Adjust the weights and watch the flock respond.',
 			slug: 'boids',
-			blog: null
+			blog: 'boids-in-a-small-box'
 		},
 		{
 			n: 3,

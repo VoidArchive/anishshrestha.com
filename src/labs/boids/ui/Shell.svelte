@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BlogStoryCallout from '#lib/components/BlogStoryCallout.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import Canvas from './Canvas.svelte';
 	import ControlPanel from './ControlPanel.svelte';
@@ -23,6 +24,11 @@
 			Three rules per bird, separation, alignment and cohesion, and a flock emerges with no leader.
 		</p>
 	</header>
+	<BlogStoryCallout
+		variant="banner"
+		blogTitle="Boids in a Small Box"
+		blogUrl="/blog/boids-in-a-small-box"
+	/>
 
 	<div class="lab-grid">
 		<figure class="plate-col">
