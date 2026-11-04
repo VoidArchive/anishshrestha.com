@@ -32,22 +32,24 @@
 <main class="spread">
 	<section class="opening">
 		<div class="column">
-			<h1>Six working experiments, each with the story of how it was built</h1>
+			<h1>Six working experiments, and how I built each one</h1>
 			<p class="byline">by Anish Shrestha, software developer, Kathmandu</p>
 			<div class="essay">
 				<p>
 					Every figure on this page is running. Fig. 1 is Conway's Game of Life, the cellular
 					automaton in which a handful of rules about neighbours produces gliders, oscillators and
-					still lifes; click any cell to change it. The figures that follow are a flock of boids, a
-					sorting visualizer, and a life drawn in weeks.
+					still lifes. Click any cell and the colony changes course. After it come a flock of boids,
+					a sorting visualizer, and my own life drawn in weeks.
 				</p>
 				<p>
-					Each lab is paired with a written account of its engine: the animation step system behind
-					the visualizer, the opening book behind Bagchal, the spatial hash that keeps the flock
-					fast. Alongside the labs sit the production Go libraries, a unified payment SDK for Nepal
-					and a client for the Nepal Stock Exchange.
+					I wrote up the engine behind each lab: the animation step system in the visualizer, the
+					opening book in Bagchal, the spatial hash that keeps the flock fast. Next to the labs are
+					the Go libraries I maintain, a unified payment SDK for Nepal and a client for the Nepal
+					Stock Exchange.
 				</p>
-				<p>Some solutions are elegant, others are brute force. All of them work eventually.</p>
+				<p>
+					Some of my solutions are elegant, others are brute force. All of them work eventually.
+				</p>
 			</div>
 		</div>
 
@@ -84,8 +86,8 @@
 			<span class="fig" aria-hidden="true">Fig. 4</span>
 			<LifeCalendarFigure />
 			<figcaption>
-				<b>Fig. 4</b> A life in weeks: one square each, a hundred years, counted from the author's
-				birth date. <a href="/labs/life-calendar">Open the lab</a>
+				<b>Fig. 4</b> My life in weeks: one square each, a hundred years, counted from my birth
+				date. <a href="/labs/life-calendar">Enter your own</a>
 			</figcaption>
 		</figure>
 	</section>
@@ -109,7 +111,7 @@
 		</div>
 		<div class="instruments">
 			<h2>Instruments</h2>
-			<p class="lede">Production Go libraries, built for Nepal's financial plumbing.</p>
+			<p class="lede">The Go libraries I built for Nepal's financial plumbing.</p>
 			{#each instruments as tool (tool.name)}
 				<article>
 					<h3><a href={tool.href} rel="noopener">{tool.name}</a></h3>
@@ -122,10 +124,11 @@
 
 	<section class="colophon">
 		<p>
-			Anish Shrestha writes Go for a living and builds these experiments for the fun of it. Find him
-			as <a href="https://github.com/VoidArchive" rel="me">VoidArchive</a> on GitHub, on
-			<a href="https://linkedin.com/in/theinanish" rel="me">LinkedIn</a>, or at
-			<a href="mailto:hi@anishshrestha.com">hi@anishshrestha.com</a>.
+			I'm Anish Shrestha. Write to me at <a href="mailto:hi@anishshrestha.com"
+				>hi@anishshrestha.com</a
+			>, or find me as <a href="https://github.com/VoidArchive" rel="me">VoidArchive</a> on GitHub
+			and on
+			<a href="https://linkedin.com/in/theinanish" rel="me">LinkedIn</a>.
 		</p>
 	</section>
 </main>
