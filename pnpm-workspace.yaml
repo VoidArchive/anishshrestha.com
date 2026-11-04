@@ -1,3 +1,7 @@
+packages:
+  - .
+
+# pnpm 12: dependencies allowed to run install scripts
 allowBuilds:
   esbuild: true
   sharp: true

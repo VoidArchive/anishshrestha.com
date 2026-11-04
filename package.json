@@ -58,5 +58,6 @@
 		"#lib/*": "./src/lib/*",
 		"#core/*": "./src/core/*",
 		"#labs/*": "./src/labs/*"
-	}
+	},
+	"packageManager": "pnpm@12.16.1"
 }
