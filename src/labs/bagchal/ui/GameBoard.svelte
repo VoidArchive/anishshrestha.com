@@ -262,7 +262,7 @@
 		<span>Captured {gameState.goatsCaptured}</span>
 	</div>
 
-	{#if moveHistory}
+	{#if moveHistory?.length}
 		<MoveHistory {moveHistory} />
 	{/if}
 </section>

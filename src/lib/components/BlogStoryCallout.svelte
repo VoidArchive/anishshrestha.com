@@ -23,7 +23,7 @@
 
 <style>
 	.story {
-		margin: 0 0 24px;
+		margin: 32px 0 0;
 		padding: 10px 0 14px;
 		border-top: 1px solid var(--color-ink);
 		border-bottom: 1px solid var(--color-ink);

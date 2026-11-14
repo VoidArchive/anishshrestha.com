@@ -7,8 +7,6 @@ published: true
 tags: ['arch-linux', 'cloudflare', 'warp', 'vpn', 'privacy', 'networking']
 ---
 
-# Cloudflare WARP implementation on Arch Linux
-
 Cloudflare WARP tunnels your traffic through Cloudflare's global edge network. A traditional VPN routes traffic through centralized endpoints. WARP picks a Cloudflare edge server based on where you are and on network conditions.
 
 ## WARP architecture overview
@@ -256,6 +254,6 @@ fi
 
 ## Conclusion
 
-WARP on Arch Linux is a simple way to get both privacy and performance. Its modes let you choose the level of protection for each situation, from DNS security alone to full VPN protection.
+WARP's modes let you choose the level of protection for each situation, from DNS security alone to full VPN protection, and the CLI is easy to script.
 
-The CLI fits Arch Linux's philosophy and gives you full control without unnecessary complexity. It is useful both for protecting your privacy on public Wi-Fi and for faster, more secure DNS resolution.
+It is useful both for protecting your privacy on public Wi-Fi and for faster, more secure DNS resolution.

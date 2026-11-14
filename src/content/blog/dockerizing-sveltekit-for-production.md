@@ -9,7 +9,7 @@ tags: ['docker', 'sveltekit', 'nginx', 'deployment', 'ci-cd']
 
 ## The "it works on my machine" dilemma
 
-You have put hours into a SvelteKit application and it runs well on your local machine. The next question is how to get it from your laptop to a server and have it run just as reliably for your users.
+Your SvelteKit application runs well on your local machine. The next question is how to get it from your laptop to a server and have it run just as reliably for your users.
 
 That is the classic "it works on my machine" problem. Differences in operating systems, Node.js versions, and system dependencies can break a deployment that worked locally.
 

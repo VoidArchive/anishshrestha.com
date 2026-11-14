@@ -62,11 +62,6 @@ reading row, and a controls column. On narrow screens the board comes first.
 				or step through by hand.
 			</p>
 		</header>
-		<BlogStoryCallout
-			variant="banner"
-			blogTitle="Why My Pathfinding Visualizer Forgot Its Past"
-			blogUrl="/blog/pathfinding-visualizer-forgot-its-past"
-		/>
 
 		<div class="layout">
 			<div class="board">
@@ -112,6 +107,11 @@ reading row, and a controls column. On narrow screens the board comes first.
 				</section>
 			</aside>
 		</div>
+		<BlogStoryCallout
+			variant="banner"
+			blogTitle="Why My Pathfinding Visualizer Forgot Its Past"
+			blogUrl="/blog/pathfinding-visualizer-forgot-its-past"
+		/>
 	</main>
 </ErrorBoundary>
 

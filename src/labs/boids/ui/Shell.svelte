@@ -23,11 +23,6 @@
 			Three rules per bird, separation, alignment and cohesion, and a flock emerges with no leader.
 		</p>
 	</header>
-	<BlogStoryCallout
-		variant="banner"
-		blogTitle="Boids in a Small Box"
-		blogUrl="/blog/boids-in-a-small-box"
-	/>
 
 	<div class="lab-grid">
 		<figure class="plate-col">
@@ -55,6 +50,11 @@
 			</section>
 		</aside>
 	</div>
+	<BlogStoryCallout
+		variant="banner"
+		blogTitle="Boids in a Small Box"
+		blogUrl="/blog/boids-in-a-small-box"
+	/>
 </section>
 
 <style>

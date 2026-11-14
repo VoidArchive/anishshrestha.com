@@ -529,20 +529,14 @@ Using `requestAnimationFrame` keeps the animations in sync with the browser's re
 
 ### Key design insights
 
+Treating each animation step as an immutable state transition simplified debugging and made features like step-backward navigation possible. Starting with simple algorithms and adding complexity gradually helped validate the architecture.
+
 Finding the right animation granularity, detailed enough to teach and still practical as a demonstration, took extensive user testing.
-
-Treating each animation step as an immutable state transition simplified debugging and made features like step-backward navigation possible.
-
-Starting with simple algorithms and adding complexity gradually helped validate the architecture.
-
-Keeping the animations smooth without losing the educational value meant instrumenting the algorithms carefully.
 
 ## Conclusion
 
-Building the DSA Visualizer taught me that an educational tool needs a deep understanding of the learning process as well as the subject. Implementing the algorithms was the smaller part of the work. The larger part was an animation system that shows an abstract concept without overwhelming the learner.
+Implementing the algorithms was the smaller part of the work. The larger part was an animation system that shows an abstract concept without overwhelming the learner.
 
-The step-based architecture was flexible enough to handle both kinds of algorithm with a consistent user experience. The visualizer also shows that complex algorithmic concepts become accessible when users can interact with them directly.
-
-The project reinforced something I already believed: the best educational tools let learners explore, experiment, and find the patterns themselves.
+The step-based architecture was flexible enough to handle both sorting and pathfinding with the same controls, and it lets people step through an algorithm and find the patterns themselves.
 
 _The DSA Visualizer is at [/labs/dsa-visualizer](/labs/dsa-visualizer), with the full algorithm library and animation controls._

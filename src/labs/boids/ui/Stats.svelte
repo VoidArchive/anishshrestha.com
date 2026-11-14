@@ -23,7 +23,7 @@
 		margin-top: 8px;
 		color: var(--color-spot-text);
 		font-family: var(--font-family-sans);
-		font-size: 11.5px;
+		font-size: 12px;
 		font-weight: 700;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;

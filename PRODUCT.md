@@ -39,7 +39,7 @@ A Go backend developer learning system design in public with AI, with every less
 
 ## Brand Commitments
 
-- The Go gopher easter egg stays: the footer hover gopher and the peek-a-boo corner gopher with its one-liners (`static/go-vim.svg`).
+- The bird mark stays: in the header beside the site name and as the favicon (`static/bird-logo.svg`).
 - The VoidArchive handle and the author name Anish Shrestha are the identity.
 - The red bird mark (`static/bird-logo.svg`) is kept only if it fits the chosen theme; the user allows replacing it when it does not match.
 - The terminal and CRT motif (prompt logo, `$ whoami` profile, scanlines) is NOT binding. The look is open for full replacement.
@@ -60,8 +60,8 @@ A Go backend developer learning system design in public with AI, with every less
 2. Every experiment has a story. Labs link to their post and posts link back; new labs are not complete until both halves exist.
 3. Honest engineering over polish claims. Copy says what was built and what is rough; no invented metrics or social proof.
 4. Secondary audiences get a clear path, not a pitch. Fintech work and contact details are easy to find without turning the home page into a resume.
-5. Playfulness is part of the identity. The gopher stays; small moments of character are welcome where they do not block the task.
+5. Playfulness is part of the identity. The labs carry it; small moments of character are welcome where they do not block the task.
 
 ## Accessibility & Inclusion
 
-Labs must be fully operable by keyboard and by touch, with cell and control targets at least 24 CSS px. Body and muted text must meet WCAG AA contrast. Motion must respect `prefers-reduced-motion`, including the gopher loops and card entrances. The 2026-11-03 audit found gaps in all of these; they are requirements for the redesign, not optional polish.
+Labs must be fully operable by keyboard and by touch, with cell and control targets at least 24 CSS px. Body and muted text must meet WCAG AA contrast. Motion must respect `prefers-reduced-motion`. The 2026-11-03 audit found gaps in all of these; they are requirements for the redesign, not optional polish.

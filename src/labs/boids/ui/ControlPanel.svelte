@@ -112,6 +112,7 @@
 	input[type='range'] {
 		width: 100%;
 		margin: 0;
+		height: 24px; /* tap height; the native track stays centred */
 		border: 0;
 		background: none;
 		cursor: pointer;

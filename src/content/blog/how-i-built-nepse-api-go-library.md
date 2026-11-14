@@ -13,7 +13,8 @@ A lot of Nepali developers end up writing an API client for the Nepal Stock Exch
 
 I recently built go-nepse, a type-safe Go client that handles the biggest hurdles of scraping NEPSE: authentication, reliability, and type safety. This post goes through how it works.
 
-The Challenge: Protection by Obfuscation
+## The challenge: protection by obfuscation
+
 The most interesting part of the NEPSE API is its authentication mechanism, which is not a standard OAuth flow. When you visit the NEPSE site, it fetches a token, but that token isn't used directly.
 
 The server sends a "proof" response containing 5 integer "salts":
@@ -31,20 +32,17 @@ The server sends a "proof" response containing 5 integer "salts":
 }
 ```
 
-The client must then use these salts to figure out which characters to remove from the accessToken before sending it back in the Authorization header.
+The client must then use these salts to figure out which characters to remove from the `accessToken` before sending it back in the Authorization header.
 
-On the official website, this logic is hidden inside a WebAssembly file named
-css.wasm
-(yes, named like a stylesheet to blend in). This WASM module exports functions that take the salts as input and return the indices of the "junk" characters to strip from the token.
+On the official website, this logic is hidden inside a WebAssembly file named `css.wasm` (yes, named like a stylesheet to blend in). This WASM module exports functions that take the salts as input and return the indices of the "junk" characters to strip from the token.
 
-The Solution: Embedding the WASM Runtime
-At first I considered reverse-engineering the WASM logic and rewriting it in Go, but that's brittle. If NEPSE changes the WASM logic detailed in
-css.wasm
-, my library would break.
+## The solution: embedding the WASM runtime
+
+At first I considered reverse-engineering the WASM logic and rewriting it in Go, but that's brittle. If NEPSE changes the WASM logic detailed in `css.wasm`, my library would break.
 
 So I embedded the WASM file directly into the Go library.
 
-Using \_embed and the excellent wazero runtime, go-nepse runs the exact same WASM logic as the browser.
+Using Go’s `embed` package and the excellent wazero runtime, go-nepse runs the exact same WASM logic as the browser.
 
 ```go
 //go:embed css.wasm
@@ -60,14 +58,13 @@ func (p *tokenParser) indicesFromSalts(s [5]int) (tokenIndices, error) {
 }
 ```
 
-As long as the
-css.wasm
-file itself doesn't change drastically (or if I update the embedded file), the library behaves exactly like a legitimate browser client.
+As long as the `css.wasm` file itself doesn't change drastically (or if I update the embedded file), the library behaves exactly like a legitimate browser client.
 
-Reliability: Retries and Exponential Backoff
+## Reliability: retries and exponential backoff
+
 Scraping is unstable. The NEPSE server might be under load, or rate limits might kick in, and a library should cope with both.
 
-I wrote a custom transport layer that wraps http.Client. It retries with exponential backoff on network errors, 5xx server errors, and rate limits (429).
+I wrote a custom transport layer that wraps `http.Client`. It retries with exponential backoff on network errors, 5xx server errors, and rate limits (429).
 
 ```go
 func (c *Client) doRequest(req *http.Request) (*http.Response, error) {
@@ -84,12 +81,11 @@ func (c *Client) doRequest(req *http.Request) (*http.Response, error) {
 }
 ```
 
-Users of the library don't need to write their own retry loops. They call client.MarketSummary(ctx) and it works, even if the network blips.
+Users of the library don't need to write their own retry loops. They call `client.MarketSummary(ctx)` and it works, even if the network blips.
 
-Automatic Token Management
-The
-Client
-struct manages the authentication lifecycle, so you don't need to fetch or refresh tokens yourself.
+## Automatic token management
+
+The `Client` struct manages the authentication lifecycle, so you don't need to fetch or refresh tokens yourself.
 
 When you make a request, the client checks if it has a valid token. If not, or if it's nearing expiration (tokens last about 60 seconds), it fetches a new one first.
 
@@ -106,18 +102,13 @@ if resp.StatusCode == http.StatusUnauthorized && !tokenRetry {
 }
 ```
 
-Type Safety and Structured Errors
-One of the main reasons to use Go is its type system. Parsing JSON into map[string]any is painful and error-prone.
+## Type safety and structured errors
 
-go-nepse has concrete structs for every API response. Whether you're fetching
-MarketSummary
-,
-PriceHistory
-, or
-FloorSheet
-, you get a typed struct with proper JSON tags.
+One of the main reasons to use Go is its type system. Parsing JSON into `map[string]any` is painful and error-prone.
 
-Errors are structured too. The library returns a \*NepseError, which wraps the underlying error and classifies it into types like ErrorTypeNetwork, ErrorTypeRateLimit, or ErrorTypeNotFound.
+go-nepse has concrete structs for every API response. Whether you're fetching `MarketSummary`, `PriceHistory`, or `FloorSheet`, you get a typed struct with proper JSON tags.
+
+Errors are structured too. The library returns a `*NepseError`, which wraps the underlying error and classifies it into types like `ErrorTypeNetwork`, `ErrorTypeRateLimit`, or `ErrorTypeNotFound`.
 
 ```go
 if err != nil {
@@ -131,10 +122,9 @@ if err != nil {
 }
 ```
 
-Conclusion
-Building go-nepse was a fun exercise in replicating browser behavior server-side. Because it uses wazero to run the original
-css.wasm
-, the library is more robust than a pure reverse-engineered version could be.
+## Conclusion
+
+Building go-nepse was a fun exercise in replicating browser behavior server-side. Because it uses wazero to run the original `css.wasm`, the library is more robust than a pure reverse-engineered version could be.
 
 With automatic retries, token management, and Go's strong typing on top, it should be a solid base for anyone building financial tools for the Nepali market.
 

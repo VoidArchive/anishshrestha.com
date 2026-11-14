@@ -31,11 +31,6 @@ sits beneath it, and the controls follow (beside it on desktop, after it on phon
 			Conway's cellular automaton: three rules about neighbours, run on a grid you can draw on.
 		</p>
 	</header>
-	<BlogStoryCallout
-		variant="banner"
-		blogTitle="Making Game of Life Playable on a Phone"
-		blogUrl="/blog/game-of-life-on-a-phone"
-	/>
 
 	<div class="game-layout">
 		<div class="game-main">
@@ -65,6 +60,11 @@ sits beneath it, and the controls follow (beside it on desktop, after it on phon
 			</section>
 		</aside>
 	</div>
+	<BlogStoryCallout
+		variant="banner"
+		blogTitle="Making Game of Life Playable on a Phone"
+		blogUrl="/blog/game-of-life-on-a-phone"
+	/>
 </main>
 
 <style>

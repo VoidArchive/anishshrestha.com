@@ -1,13 +1,11 @@
 ---
 title: 'Advent of Code 2024 Day 17: Virtual Machine Implementation and Quine Generation'
 slug: 'aoc-2024-day-17-3bit-computer'
-description: 'A 3-bit virtual machine written in Go, with minimax search for generating a self-replicating program.'
+description: 'A 3-bit virtual machine written in Go, and a reverse search for the input that makes the program print itself.'
 date: '2025-06-11'
 published: true
 tags: ['adventofcode', 'quine', 'go']
 ---
-
-# Advent of Code 2024 Day 17: virtual machine implementation
 
 ## 3-bit computer architecture
 
@@ -195,11 +193,4 @@ Building the value in reverse reduces the search space from exponential to linea
 
 ## Summary
 
-What the solution contains:
-
-- A minimal virtual machine with an 8-instruction set and 3 registers
-- Efficient combo operand resolution supporting both interpretation modes
-- A reverse-engineering quine search that exploits the predictable bit patterns
-- A complete solution that avoids brute-force search by generating candidates in a structured way
-
-The virtual machine shows that a constrained instruction set can still do complex computation, self-replication included. The reverse-engineering approach is a problem-specific optimization, and here it beats a general search strategy.
+The reverse search is specific to this program. It works because A shifts right by 3 bits on every loop, so each output digit depends on one 3-bit chunk of the starting value, and the search stays linear in the program length.

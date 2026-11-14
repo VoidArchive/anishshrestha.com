@@ -11,7 +11,7 @@ project: 'ntx'
 
 Checking company fundamentals in Nepal is harder than it should be. The official [NEPSE](https://www.nepalstock.com.np/) website works but is often slow and clunky. Third-party portals exist, but they usually come with ads, confusing layouts, and paywalls for basic info.
 
-So I built [NTX (Nepal Trade Xplorer)](https://github.com/voidarchive/ntx). It's a clean, fast, open-source stock screener that gives you a clear snapshot of market data without the noise.
+So I built [NTX (Nepal Trade Xplorer)](https://github.com/voidarchive/ntx). It's an open-source stock screener with fast pages and no ads.
 
 ![NTX Showcase](/ntx-showcase.png)
 
@@ -19,7 +19,7 @@ So I built [NTX (Nepal Trade Xplorer)](https://github.com/voidarchive/ntx). It's
 
 As a developer and an investor, I kept getting frustrated with the existing tools when I just wanted to check a company's status. Loading a simple company page often took seconds. Pop-ups and banner ads distracted from the data. Important metrics like P/E ratio, paid-up capital, or dividends were often buried or hard to compare.
 
-I wanted a tool that felt instant, looked premium, and respected the user's time.
+I wanted a tool that loaded instantly and put the numbers first.
 
 ## The solution: speed and simplicity
 
@@ -51,6 +51,6 @@ The biggest challenge was data normalization. NEPSE's raw data can be inconsiste
 
 ## Conclusion
 
-NTX started as a weekend project to scratch my own itch and to over-engineer something for the sake of learning. It has since grown into a mature, open-source platform.
+NTX started as a weekend project to scratch my own itch and to over-engineer something for the sake of learning. It is now a live, open-source platform.
 
 If you are interested in Go or SvelteKit, or just want to see how a full-stack app like this is put together, the code is at [github.com/voidarchive/ntx](https://github.com/voidarchive/ntx).

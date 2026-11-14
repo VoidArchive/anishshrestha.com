@@ -224,6 +224,4 @@ I could add CellPay and PrabhuPay later if their APIs become more accessible.
 
 ## Conclusion
 
-nepal-payment-go is a type-safe, tested SDK that keeps each provider's complexity behind one interface, so the integration code stays the same across all four.
-
 The code is open source and on GitHub: [github.com/voidarchive/nepal-payment-go](https://github.com/voidarchive/nepal-payment-go)

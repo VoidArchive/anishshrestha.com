@@ -4,7 +4,7 @@
 @import 'tailwindcss';
 
 /*
- * The Mathematical Games spread: white stock, near-black ink, one cobalt spot ink.
+ * The Mathematical Games spread: white stock, near-black ink, one orange spot ink.
  * See DESIGN.md. Legacy token names stay so Tailwind utilities across the labs keep working.
  */
 @theme {
@@ -57,7 +57,7 @@
 
 /*
  * Night edition: the same two inks reversed. Paper goes near-black, ink goes off-white,
- * and the cobalt is lightened so it still clears AA on the dark sheet.
+ * and the orange keeps its full strength because it already clears AA on the dark sheet.
  * app.html sets data-theme before first paint; the footer toggle changes it.
  */
 :root[data-theme='dark'] {
@@ -447,7 +447,7 @@ tr:last-child td {
 }
 .ruled h2,
 .ruled h3 {
-	font-family: var(--font-family-serif);
+	font-family: var(--font-family-display);
 	font-size: 24px;
 	font-weight: 600;
 	line-height: 1.2;
@@ -523,4 +523,17 @@ tr:last-child td {
 		font-size: 13px;
 		padding: 14px;
 	}
+}
+
+/* 24px tap height for small standalone links and readout buttons. Inline padding does not move the text. */
+.meta a,
+figcaption a,
+.more a,
+footer a {
+	padding-block: 5px;
+}
+.reading button,
+.controls button {
+	min-height: 24px;
+	padding-block: 4px;
 }

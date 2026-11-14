@@ -1,62 +1,86 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-14T00:00:00Z",
+  "generatedAt": "2026-11-14T17:00:00Z",
   "title": "Design System: anishshrestha.com",
   "source": {
     "seed": "seed:a9745f2fa560bd8e",
-    "scope": "Every route. Tokens in src/app.css; home in src/routes/+page.svelte and src/lib/components/spread/*; reading routes share .page, .section, .ruled, .codeblock; lab pages share .section-card, .section-title, .btn, .caps."
+    "scope": "Every route. Tokens in src/app.css; home in src/routes/+page.svelte and src/lib/components/spread/*; reading routes share .page, .section, .ruled, .codeblock; lab pages share .section-card, .section-title, .btn, .caps. Two editions: @theme (day) and :root[data-theme='dark'] (night)."
   },
   "extensions": {
     "colorMeta": {
-      "cobalt-spot": {
+      "arcade-orange": {
         "role": "primary",
-        "displayName": "Cobalt Spot",
-        "canonical": "#2242c8",
+        "displayName": "Arcade Orange",
+        "canonical": "#ff6a13",
+        "cssVar": "--color-spot",
         "tonalRamp": [
-          "oklch(15% 0.08 268)",
-          "oklch(26% 0.15 268)",
-          "oklch(36% 0.2 268)",
-          "oklch(44% 0.22 268)",
-          "oklch(56% 0.19 268)",
-          "oklch(70% 0.13 268)",
-          "oklch(84% 0.07 268)",
-          "oklch(95% 0.02 268)"
+          "oklch(18% 0.05 45)",
+          "oklch(30% 0.09 45)",
+          "oklch(42% 0.13 45)",
+          "oklch(55% 0.18 45)",
+          "oklch(70% 0.2 45)",
+          "oklch(80% 0.13 45)",
+          "oklch(90% 0.06 45)",
+          "oklch(96% 0.02 45)"
         ]
       },
-      "cobalt-deep": {
+      "orange-text": {
         "role": "primary",
-        "displayName": "Cobalt Deep",
-        "canonical": "#1a35a3",
+        "displayName": "Orange Text",
+        "canonical": "#c2410c",
+        "cssVar": "--color-spot-text",
+        "night": "#ff6a13",
         "tonalRamp": [
-          "oklch(15% 0.07 268)",
-          "oklch(24% 0.13 268)",
-          "oklch(32% 0.17 268)",
-          "oklch(38% 0.19 268)",
-          "oklch(50% 0.17 268)",
-          "oklch(66% 0.12 268)",
-          "oklch(82% 0.06 268)",
-          "oklch(95% 0.02 268)"
+          "oklch(15% 0.05 40)",
+          "oklch(26% 0.09 40)",
+          "oklch(38% 0.13 40)",
+          "oklch(48% 0.17 40)",
+          "oklch(55% 0.19 40)",
+          "oklch(70% 0.15 40)",
+          "oklch(84% 0.08 40)",
+          "oklch(95% 0.02 40)"
         ]
       },
-      "cobalt-tint": {
+      "orange-deep": {
         "role": "primary",
-        "displayName": "Cobalt Tint",
-        "canonical": "#dfe6fb",
+        "displayName": "Orange Deep",
+        "canonical": "#a8380a",
+        "cssVar": "--color-spot-dim",
+        "night": "#ff8a45",
         "tonalRamp": [
-          "oklch(15% 0.03 268)",
-          "oklch(28% 0.04 268)",
-          "oklch(42% 0.05 268)",
-          "oklch(56% 0.05 268)",
-          "oklch(70% 0.05 268)",
-          "oklch(82% 0.04 268)",
-          "oklch(92% 0.03 268)",
-          "oklch(97% 0.01 268)"
+          "oklch(15% 0.05 40)",
+          "oklch(25% 0.09 40)",
+          "oklch(35% 0.12 40)",
+          "oklch(48% 0.16 40)",
+          "oklch(60% 0.16 40)",
+          "oklch(72% 0.13 40)",
+          "oklch(85% 0.07 40)",
+          "oklch(95% 0.02 40)"
+        ]
+      },
+      "orange-tint": {
+        "role": "primary",
+        "displayName": "Orange Tint",
+        "canonical": "#ffe3d1",
+        "cssVar": "--color-tint",
+        "night": "#3d2212",
+        "tonalRamp": [
+          "oklch(15% 0.03 50)",
+          "oklch(28% 0.04 50)",
+          "oklch(42% 0.05 50)",
+          "oklch(56% 0.06 50)",
+          "oklch(70% 0.06 50)",
+          "oklch(82% 0.05 50)",
+          "oklch(92% 0.04 50)",
+          "oklch(97% 0.01 50)"
         ]
       },
       "paper": {
         "role": "neutral",
         "displayName": "Paper",
         "canonical": "#ffffff",
+        "cssVar": "--color-paper",
+        "night": "#0e1014",
         "tonalRamp": [
           "oklch(15% 0 0)",
           "oklch(28% 0 0)",
@@ -72,6 +96,8 @@
         "role": "neutral",
         "displayName": "Ink",
         "canonical": "#141414",
+        "cssVar": "--color-ink",
+        "night": "#e9e9e6",
         "tonalRamp": [
           "oklch(10% 0 0)",
           "oklch(19% 0 0)",
@@ -87,6 +113,8 @@
         "role": "neutral",
         "displayName": "Ink Muted",
         "canonical": "#555555",
+        "cssVar": "--color-ink-muted",
+        "night": "#a4a6ad",
         "tonalRamp": [
           "oklch(15% 0 0)",
           "oklch(28% 0 0)",
@@ -97,12 +125,158 @@
           "oklch(86% 0 0)",
           "oklch(95% 0 0)"
         ]
+      },
+      "code-teal": {
+        "role": "tertiary",
+        "displayName": "Code Teal",
+        "canonical": "#0b6b5f",
+        "cssVar": "--color-code-number",
+        "night": "#6fd3c3",
+        "tonalRamp": [
+          "oklch(15% 0.03 180)",
+          "oklch(28% 0.05 180)",
+          "oklch(40% 0.07 180)",
+          "oklch(52% 0.09 180)",
+          "oklch(65% 0.1 180)",
+          "oklch(78% 0.1 180)",
+          "oklch(88% 0.06 180)",
+          "oklch(96% 0.02 180)"
+        ]
+      },
+      "code-oxblood": {
+        "role": "tertiary",
+        "displayName": "Code Oxblood",
+        "canonical": "#8a1c1c",
+        "cssVar": "--color-code-string",
+        "night": "#f2a8a8",
+        "tonalRamp": [
+          "oklch(15% 0.05 25)",
+          "oklch(26% 0.1 25)",
+          "oklch(36% 0.14 25)",
+          "oklch(48% 0.16 25)",
+          "oklch(60% 0.14 25)",
+          "oklch(72% 0.11 25)",
+          "oklch(82% 0.08 25)",
+          "oklch(95% 0.02 25)"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Night Paper",
+        "canonical": "#0e1014",
+        "cssVar": "--color-paper (dark)",
+        "tonalRamp": [
+          "oklch(8% 0.005 265)",
+          "oklch(17% 0.008 265)",
+          "oklch(28% 0.01 265)",
+          "oklch(42% 0.01 265)",
+          "oklch(56% 0.01 265)",
+          "oklch(70% 0.008 265)",
+          "oklch(84% 0.005 265)",
+          "oklch(95% 0.003 265)"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "#e9e9e6",
+        "cssVar": "--color-ink (dark)",
+        "tonalRamp": [
+          "oklch(15% 0.003 105)",
+          "oklch(28% 0.004 105)",
+          "oklch(42% 0.005 105)",
+          "oklch(56% 0.005 105)",
+          "oklch(70% 0.005 105)",
+          "oklch(84% 0.005 105)",
+          "oklch(93% 0.004 105)",
+          "oklch(98% 0.002 105)"
+        ]
+      },
+      "night-ink-muted": {
+        "role": "neutral",
+        "displayName": "Night Ink Muted",
+        "canonical": "#a4a6ad",
+        "cssVar": "--color-ink-muted (dark)",
+        "tonalRamp": [
+          "oklch(15% 0.005 265)",
+          "oklch(28% 0.008 265)",
+          "oklch(42% 0.01 265)",
+          "oklch(56% 0.012 265)",
+          "oklch(72% 0.012 265)",
+          "oklch(82% 0.01 265)",
+          "oklch(90% 0.006 265)",
+          "oklch(96% 0.003 265)"
+        ]
+      },
+      "night-orange-deep": {
+        "role": "primary",
+        "displayName": "Orange Deep, night",
+        "canonical": "#ff8a45",
+        "cssVar": "--color-spot-dim (dark)",
+        "tonalRamp": [
+          "oklch(18% 0.05 50)",
+          "oklch(30% 0.08 50)",
+          "oklch(44% 0.12 50)",
+          "oklch(58% 0.15 50)",
+          "oklch(75% 0.16 50)",
+          "oklch(84% 0.11 50)",
+          "oklch(92% 0.05 50)",
+          "oklch(97% 0.02 50)"
+        ]
+      },
+      "night-orange-tint": {
+        "role": "primary",
+        "displayName": "Orange Tint, night",
+        "canonical": "#3d2212",
+        "cssVar": "--color-tint (dark)",
+        "tonalRamp": [
+          "oklch(12% 0.02 50)",
+          "oklch(20% 0.03 50)",
+          "oklch(28% 0.05 50)",
+          "oklch(38% 0.06 50)",
+          "oklch(50% 0.07 50)",
+          "oklch(64% 0.07 50)",
+          "oklch(80% 0.05 50)",
+          "oklch(93% 0.02 50)"
+        ]
+      },
+      "night-code-teal": {
+        "role": "tertiary",
+        "displayName": "Code Teal, night",
+        "canonical": "#6fd3c3",
+        "cssVar": "--color-code-number (dark)",
+        "tonalRamp": [
+          "oklch(15% 0.03 180)",
+          "oklch(28% 0.05 180)",
+          "oklch(40% 0.07 180)",
+          "oklch(52% 0.09 180)",
+          "oklch(65% 0.1 180)",
+          "oklch(80% 0.1 180)",
+          "oklch(90% 0.06 180)",
+          "oklch(96% 0.02 180)"
+        ]
+      },
+      "night-code-rose": {
+        "role": "tertiary",
+        "displayName": "Code Rose, night",
+        "canonical": "#f2a8a8",
+        "cssVar": "--color-code-string (dark)",
+        "tonalRamp": [
+          "oklch(15% 0.04 20)",
+          "oklch(28% 0.07 20)",
+          "oklch(40% 0.1 20)",
+          "oklch(52% 0.12 20)",
+          "oklch(65% 0.12 20)",
+          "oklch(80% 0.09 20)",
+          "oklch(90% 0.05 20)",
+          "oklch(96% 0.02 20)"
+        ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "The home h1: one line of role. Home only."
+        "purpose": "The home h1 in Besley: one line of role. Home only."
       },
       "page-title": {
         "displayName": "Page Title",
@@ -130,15 +304,15 @@
       },
       "numeral": {
         "displayName": "Numeral",
-        "purpose": "Cobalt entry numbers: billboard on the system design hub, 22px 'No. n' on home, the status code on the error page."
+        "purpose": "Orange entry numbers: billboard on the system design hub, 22px 'No. n' on home, the status code on the error page."
       },
       "label-head": {
         "displayName": "Running Head Label",
-        "purpose": "Masthead, nav and footer line in spaced capitals."
+        "purpose": "Masthead, nav and footer line (with the theme toggle) in spaced capitals."
       },
       "label": {
         "displayName": "Label",
-        "purpose": ".caps and .meta: dates, kinds, readings, button text, table heads, row labels, 'Fig. n' and 'What it proves' prefixes."
+        "purpose": ".caps and .meta: dates, kinds, readings, button text, table heads, row labels, the 'Fig. n' prefix."
       },
       "caption": {
         "displayName": "Caption",
@@ -154,7 +328,17 @@
       {
         "name": "button-colour",
         "value": "color 120ms ease-out, border-color 120ms ease-out",
-        "purpose": "The only transition on a control: a button's text and border easing to cobalt. Links change colour with none."
+        "purpose": "The only transition on a control: a button's text and border easing to orange. Links change colour with none."
+      },
+      {
+        "name": "page-crossfade",
+        "value": "document.startViewTransition (browser default)",
+        "purpose": "Route changes use the native view transition where supported; nothing else enters or exits with motion."
+      },
+      {
+        "name": "bagchal-step",
+        "value": "650ms per move",
+        "purpose": "The self-playing Bagchal plate advances one move per step; pieces jump, they do not tween."
       },
       {
         "name": "reduced-motion",
@@ -194,35 +378,51 @@
         "purpose": "Definition rows stack label above value."
       }
     ],
+    "themes": {
+      "attribute": "data-theme on :root, values light | dark",
+      "default": "saved localStorage 'theme', else prefers-color-scheme; set in src/app.html before first paint",
+      "toggle": "Footer 'Dark mode' button, aria-pressed",
+      "tokens": {
+        "light": "@theme in src/app.css",
+        "dark": ":root[data-theme='dark'] in src/app.css"
+      }
+    },
+    "acceptedExceptions": [
+      {
+        "name": "bagchal-pieces",
+        "value": "static/icons/tiger.svg, static/icons/goat.svg",
+        "purpose": "Full-colour illustrated pieces on a Bagchal board (home Fig. 2 and the lab), chosen by the owner; the only multicolour imagery outside code highlighting."
+      }
+    ],
     "rules": [
       {
         "name": "plate-border",
-        "value": "1.5px solid #141414",
+        "value": "1.5px solid var(--color-ink)",
         "purpose": "Frame around live plates, screenshots, chain nodes and lab panels; also the running head, footer and section opener rules."
       },
       {
         "name": "plate-border-paused",
-        "value": "1.5px dashed #141414",
+        "value": "1.5px dashed var(--color-ink)",
         "purpose": "A paused plate."
       },
       {
         "name": "hairline",
-        "value": "1px solid #141414",
+        "value": "1px solid var(--color-ink)",
         "purpose": "Rows, column rules, reading row rule, code blocks, secondary buttons, inputs."
       },
       {
         "name": "nav-current",
-        "value": "3px solid #2242c8",
+        "value": "3px solid var(--color-spot)",
         "purpose": "Bar under the current nav tab, sitting on the running head rule (built as an inset box-shadow)."
       },
       {
         "name": "focus",
-        "value": "outline: 2px solid #2242c8; outline-offset: 2px",
+        "value": "outline: 2px solid var(--color-spot); outline-offset: 2px",
         "purpose": "Keyboard focus on links, buttons and scrollable code."
       },
       {
         "name": "selection",
-        "value": "background: #2242c8; color: #ffffff",
+        "value": "background: var(--color-spot); color: var(--color-on-spot)",
         "purpose": "Text selection."
       }
     ]
@@ -232,41 +432,41 @@
       "name": "Inline Link",
       "kind": "custom",
       "refersTo": "link-inline",
-      "description": "Prose link: ink text with a 1px cobalt underline; hover turns cobalt with no transition.",
+      "description": "Prose link: ink text with a 1px orange underline; hover turns orange with no transition.",
       "html": "<p class=\"ds-prose\">The payment SDK puts four providers behind one Go interface. <a class=\"ds-link\" href=\"#\">Work with me</a>.</p>",
-      "css": ".ds-prose { font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: #141414; } .ds-link { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-decoration-thickness: 1px; text-underline-offset: 3px; } .ds-link:hover { color: #2242c8; } .ds-link:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; }"
+      "css": ".ds-prose { font-family: 'Literata', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.6; color: var(--color-ink); } .ds-link { color: inherit; text-decoration: underline; text-decoration-color: var(--color-spot); text-decoration-thickness: 1px; text-underline-offset: 3px; } .ds-link:hover { color: var(--color-spot-text); } .ds-link:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; }"
     },
     {
       "name": "Running Head",
       "kind": "nav",
       "refersTo": "running-head",
-      "description": "Cobalt masthead and four nav links in spaced grotesk capitals on a 1.5px ink rule; the current tab is cobalt with a 3px bar on the rule.",
-      "html": "<header class=\"ds-head\"><a class=\"ds-masthead\" href=\"#\">anishshrestha.com</a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Projects</a><a href=\"#\">System Design</a><a href=\"#\">Blog</a><a href=\"#\">About</a></nav></header>",
-      "css": ".ds-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 24px; border-bottom: 1.5px solid #141414; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; } .ds-head a { display: inline-block; padding: 10px 0; color: inherit; text-decoration: none; white-space: nowrap; } .ds-head a:hover { color: #2242c8; } .ds-head a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-masthead { color: #2242c8 !important; font-weight: 700; } .ds-nav { display: flex; flex-wrap: wrap; gap: 0 28px; } .ds-nav a[aria-current='page'] { color: #2242c8; border-bottom: 3px solid #2242c8; padding-bottom: 7px; }"
+      "description": "Orange masthead and four nav links in spaced grotesk capitals on a 1.5px ink rule; the current tab is orange with a 3px bar on the rule.",
+      "html": "<header class=\"ds-head\"><a class=\"ds-masthead\" href=\"#\"><span class=\"ds-bird\" aria-hidden=\"true\"></span>anishshrestha.com</a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Projects</a><a href=\"#\">System Design</a><a href=\"#\">Blog</a><a href=\"#\">About</a></nav></header>",
+      "css": ".ds-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 24px; border-bottom: 1.5px solid var(--color-ink); font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.5; color: var(--color-ink); background: var(--color-paper); } .ds-head a { display: inline-block; padding: 10px 0; color: inherit; text-decoration: none; white-space: nowrap; } .ds-head a:hover { color: var(--color-spot-text); } .ds-head a:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-masthead { color: var(--color-spot-text) !important; font-weight: 700; } .ds-bird { display: inline-block; width: 14px; height: 26px; margin: -10px 8px -6px 0; vertical-align: middle; background: currentColor; mask: url('/bird-logo.svg') center / contain no-repeat; } .ds-nav { display: flex; flex-wrap: wrap; gap: 0 28px; } .ds-nav a[aria-current='page'] { color: var(--color-spot-text); box-shadow: inset 0 -3px 0 var(--color-spot); }"
     },
     {
       "name": "Button",
       "kind": "button",
       "refersTo": "button",
-      "description": "Square paper button with a 1.5px ink border and grotesk capitals; hover turns text and border cobalt over 120ms. Secondary drops to a 1px border and muted text.",
+      "description": "Square paper button with a 1.5px ink border and grotesk capitals; hover turns text and border orange over 120ms. Secondary drops to a 1px border and muted text.",
       "html": "<span class=\"ds-row\"><a class=\"ds-btn\" href=\"#\">Open the lab</a><button class=\"ds-btn ds-btn-secondary\" type=\"button\">Go back</button></span>",
-      "css": ".ds-row { display: flex; gap: 12px; } .ds-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; border: 1.5px solid #141414; border-radius: 0; padding: 7px 12px; cursor: pointer; text-decoration: none; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: #2242c8; border-color: #2242c8; } .ds-btn:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-btn-secondary { border-width: 1px; color: #555555; }"
+      "css": ".ds-row { display: flex; gap: 12px; } .ds-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-ink); background: var(--color-paper); border: 1.5px solid var(--color-ink); border-radius: 0; padding: 7px 12px; cursor: pointer; text-decoration: none; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: var(--color-spot-text); border-color: var(--color-spot); } .ds-btn:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-btn-secondary { border-width: 1px; color: var(--color-ink-muted); }"
     },
     {
       "name": "Toggle Button, active",
       "kind": "button",
       "refersTo": "button-active",
-      "description": "A lab mode switch: the selected option goes solid cobalt with paper text.",
+      "description": "A lab mode switch: the selected option goes solid orange with dark ink text.",
       "html": "<span class=\"ds-row\"><button class=\"ds-btn\" type=\"button\">Human</button><button class=\"ds-btn ds-active\" type=\"button\">AI</button></span>",
-      "css": ".ds-row { display: flex; gap: 8px; } .ds-btn { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; border: 1.5px solid #141414; border-radius: 0; padding: 7px 12px; cursor: pointer; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: #2242c8; border-color: #2242c8; } .ds-btn:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-btn.ds-active { background: #2242c8; border-color: #2242c8; color: #ffffff; }"
+      "css": ".ds-row { display: flex; gap: 8px; } .ds-btn { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-ink); background: var(--color-paper); border: 1.5px solid var(--color-ink); border-radius: 0; padding: 7px 12px; cursor: pointer; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: var(--color-spot-text); border-color: var(--color-spot); } .ds-btn:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-btn.ds-active { background: var(--color-spot); border-color: var(--color-spot); color: var(--color-on-spot); }"
     },
     {
       "name": "Live Plate, running",
       "kind": "card",
       "refersTo": "plate-running",
-      "description": "A live figure: 1.5px ink-bordered plate drawing in cobalt while running, with its reading row and a 'Fig. n' caption beneath.",
+      "description": "A live figure: 1.5px ink-bordered plate drawing in orange while running, with its reading row and a 'Fig. n' caption beneath.",
       "html": "<figure class=\"ds-plate ds-running\"><div class=\"ds-canvas\"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class=\"ds-reading\"><span class=\"ds-state\">Running</span><span>Comparisons 41</span><span class=\"ds-controls\"><button class=\"ds-ctl\" type=\"button\">Pause</button><button class=\"ds-ctl\" type=\"button\">Shuffle</button></span></div><figcaption class=\"ds-caption\"><b>Fig. 4</b> Quick sort, one comparison per frame. <a href=\"#\">Open the lab</a></figcaption></figure>",
-      "css": ".ds-plate { margin: 0; font-family: 'Public Sans', system-ui, sans-serif; color: #141414; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-running .ds-canvas i { background: #2242c8; } .ds-reading { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid #141414; padding-top: 8px; margin-top: 8px; color: #2242c8; } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: #141414; background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-caption { margin-top: 10px; font-size: 13px; letter-spacing: 0.02em; line-height: 1.5; } .ds-caption b { color: #2242c8; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; margin-right: 6px; } .ds-caption a { color: inherit; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-caption a:hover { color: #2242c8; }"
+      "css": ".ds-plate { margin: 0; font-family: 'Libre Franklin', system-ui, sans-serif; color: var(--color-ink); } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid var(--color-ink); background: var(--color-paper); display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: var(--color-ink); } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-running .ds-canvas i { background: var(--color-spot); } .ds-reading { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid var(--color-ink); padding-top: 8px; margin-top: 8px; color: var(--color-spot-text); } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--color-ink); background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--color-spot); text-underline-offset: 3px; } .ds-ctl:hover { color: var(--color-spot-text); } .ds-ctl:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-caption { margin-top: 10px; font-size: 13px; letter-spacing: 0.02em; line-height: 1.5; } .ds-caption b { color: var(--color-spot-text); text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; margin-right: 6px; } .ds-caption a { color: inherit; text-decoration-color: var(--color-spot); text-underline-offset: 3px; } .ds-caption a:hover { color: var(--color-spot-text); }"
     },
     {
       "name": "Live Plate, paused",
@@ -274,23 +474,23 @@
       "refersTo": "plate-paused",
       "description": "The same plate paused: dashed ink border, the simulation and its reading drawn in ink.",
       "html": "<figure class=\"ds-plate ds-paused\"><div class=\"ds-canvas\"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class=\"ds-reading\"><span class=\"ds-state\">Paused</span><span>Comparisons 41</span><span class=\"ds-controls\"><button class=\"ds-ctl\" type=\"button\">Play</button></span></div></figure>",
-      "css": ".ds-plate { margin: 0; font-family: 'Public Sans', system-ui, sans-serif; color: #141414; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-paused .ds-canvas { border-style: dashed; } .ds-reading { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid #141414; padding-top: 8px; margin-top: 8px; color: #2242c8; } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: #141414; background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-paused .ds-reading { color: #141414; }"
+      "css": ".ds-plate { margin: 0; font-family: 'Libre Franklin', system-ui, sans-serif; color: var(--color-ink); } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid var(--color-ink); background: var(--color-paper); display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: var(--color-ink); } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-paused .ds-canvas { border-style: dashed; } .ds-reading { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid var(--color-ink); padding-top: 8px; margin-top: 8px; color: var(--color-spot-text); } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--color-ink); background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--color-spot); text-underline-offset: 3px; } .ds-ctl:hover { color: var(--color-spot-text); } .ds-ctl:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-paused .ds-reading { color: var(--color-ink); }"
     },
     {
       "name": "Proof Columns",
       "kind": "custom",
       "refersTo": "link-inline",
-      "description": "Three proofs on a 1.5px rule divided by 1px column rules: linked project name, one sentence of what it proves, a cobalt kind line.",
+      "description": "Three proofs on a 1.5px rule divided by 1px column rules: linked project name, one sentence of what it proves, a orange kind line.",
       "html": "<ol class=\"ds-proof\"><li><h2><a href=\"#\">NTX</a></h2><p>I can design, build and run a whole backend. It is live.</p><p class=\"ds-meta\">Stock research platform</p></li><li><h2><a href=\"#\">Nepal payment SDK</a></h2><p>I can hide four providers behind one typed interface.</p><p class=\"ds-meta\">Go library</p></li><li><h2><a href=\"#\">Kursi Fighter</a></h2><p>Nothing yet. It is in progress.</p><p class=\"ds-meta\">Game · in progress</p></li></ol>",
-      "css": ".ds-proof { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1.5px solid #141414; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-proof li { padding: 18px 28px 0; border-left: 1px solid #141414; } .ds-proof li:first-child { padding-left: 0; border-left: 0; } .ds-proof li:last-child { padding-right: 0; } .ds-proof h2 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 8px; } .ds-proof h2 a { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-decoration-thickness: 2px; text-underline-offset: 5px; } .ds-proof h2 a:hover { color: #2242c8; } .ds-proof h2 a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-proof p { margin: 0 0 10px; font-size: 17px; line-height: 1.5; } .ds-proof .ds-meta { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin: 0; }"
+      "css": ".ds-proof { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1.5px solid var(--color-ink); font-family: 'Literata', Georgia, 'Times New Roman', serif; color: var(--color-ink); background: var(--color-paper); } .ds-proof li { padding: 18px 28px 0; border-left: 1px solid var(--color-ink); } .ds-proof li:first-child { padding-left: 0; border-left: 0; } .ds-proof li:last-child { padding-right: 0; } .ds-proof h2 { font-family: 'Besley', Georgia, serif; font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 8px; } .ds-proof h2 a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-spot); text-decoration-thickness: 2px; text-underline-offset: 5px; } .ds-proof h2 a:hover { color: var(--color-spot-text); } .ds-proof h2 a:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-proof p { margin: 0 0 10px; font-size: 17px; line-height: 1.5; } .ds-proof .ds-meta { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-spot-text); margin: 0; }"
     },
     {
       "name": "Numbered Entry",
       "kind": "custom",
       "refersTo": "entry-numeral",
-      "description": "A system design entry: billboard cobalt numeral, serif title, description, and a meta line naming the project behind it.",
+      "description": "A system design entry: billboard orange numeral, serif title, description, and a meta line naming the project behind it.",
       "html": "<ol class=\"ds-entries\"><li><span class=\"ds-no\" aria-hidden=\"true\">3</span><div><h3><a href=\"#\">Building a Unified Payment SDK for Nepal in Go</a></h3><p>One interface over four providers, signatures and amount checks included.</p><p class=\"ds-meta\">January 14, 2026 · Backed by <a href=\"#\">Nepal payment SDK</a></p></div></li></ol>",
-      "css": ".ds-entries { list-style: none; margin: 0; padding: 0; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-entries li { display: grid; grid-template-columns: clamp(64px, 12vw, 140px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 24px 0; border-top: 1px solid #141414; } .ds-no { font-family: 'Public Sans', system-ui, sans-serif; font-weight: 700; font-size: clamp(56px, 9vw, 96px); line-height: 0.85; letter-spacing: -0.04em; color: #2242c8; font-variant-numeric: tabular-nums; } .ds-entries h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; line-height: 1.15; margin: 0 0 8px; } .ds-entries h3 a { color: inherit; text-decoration: none; } .ds-entries h3 a:hover { color: #2242c8; text-decoration: underline; text-underline-offset: 3px; } .ds-entries a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-entries p { margin: 0 0 8px; font-size: 17px; line-height: 1.5; } .ds-entries .ds-meta { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin: 0; } .ds-meta a { color: #141414; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-meta a:hover { color: #2242c8; }"
+      "css": ".ds-entries { list-style: none; margin: 0; padding: 0; font-family: 'Literata', Georgia, 'Times New Roman', serif; color: var(--color-ink); background: var(--color-paper); } .ds-entries li { display: grid; grid-template-columns: clamp(64px, 12vw, 140px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 24px 0; border-top: 1px solid var(--color-ink); } .ds-no { font-family: 'Libre Franklin', system-ui, sans-serif; font-weight: 700; font-size: clamp(56px, 9vw, 96px); line-height: 0.85; letter-spacing: -0.04em; color: var(--color-spot-text); font-variant-numeric: tabular-nums; } .ds-entries h3 { font-family: 'Besley', Georgia, serif; font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; line-height: 1.15; margin: 0 0 8px; } .ds-entries h3 a { color: inherit; text-decoration: none; } .ds-entries h3 a:hover { color: var(--color-spot-text); text-decoration: underline; text-underline-offset: 3px; } .ds-entries a:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; } .ds-entries p { margin: 0 0 8px; font-size: 17px; line-height: 1.5; } .ds-entries .ds-meta { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-spot-text); margin: 0; } .ds-meta a { color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-spot); text-underline-offset: 3px; } .ds-meta a:hover { color: var(--color-spot-text); }"
     },
     {
       "name": "How It Runs Chain",
@@ -298,7 +498,15 @@
       "refersTo": "chain-node",
       "description": "Architecture figure: 1.5px bordered nodes joined by an ink rule with an arrowhead; turns top-to-bottom under 820px.",
       "html": "<figure class=\"ds-chain\"><figcaption>Starting a payment</figcaption><ol><li><b>Your handler</b><span>Amount, order ID, callback URL</span></li><li><b>InitiatePayment</b><span>Signs the request for that provider</span></li><li><b>Provider</b><span>The customer pays there</span></li></ol></figure>",
-      "css": ".ds-chain { --gap: 30px; margin: 0; color: #141414; background: #ffffff; font-family: 'Source Serif 4', Georgia, serif; } .ds-chain figcaption { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin-bottom: 10px; } .ds-chain ol { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--gap); } .ds-chain li { position: relative; flex: 1 1 0; min-width: 0; border: 1.5px solid #141414; padding: 12px 14px 14px; } .ds-chain li b { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; } .ds-chain li span { display: block; font-family: 'Public Sans', system-ui, sans-serif; font-size: 13px; line-height: 1.45; } .ds-chain li + li::before { content: ''; position: absolute; right: 100%; top: 50%; width: var(--gap); border-top: 1.5px solid #141414; margin-top: -0.75px; } .ds-chain li + li::after { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border: 5px solid transparent; border-left: 8px solid #141414; border-right: 0; }"
+      "css": ".ds-chain { --gap: 30px; margin: 0; color: var(--color-ink); background: var(--color-paper); font-family: 'Literata', Georgia, 'Times New Roman', serif; } .ds-chain figcaption { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-spot-text); margin-bottom: 10px; } .ds-chain ol { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--gap); } .ds-chain li { position: relative; flex: 1 1 0; min-width: 0; border: 1.5px solid var(--color-ink); padding: 12px 14px 14px; } .ds-chain li b { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; } .ds-chain li span { display: block; font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 13px; line-height: 1.45; } .ds-chain li + li::before { content: ''; position: absolute; right: 100%; top: 50%; width: var(--gap); border-top: 1.5px solid var(--color-ink); margin-top: -0.75px; } .ds-chain li + li::after { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border: 5px solid transparent; border-left: 8px solid var(--color-ink); border-right: 0; }"
+    },
+    {
+      "name": "Footer and Theme Toggle",
+      "kind": "nav",
+      "refersTo": "theme-toggle",
+      "description": "The footer line on a 1.5px rule: copyright, the Dark mode toggle (an 8px square, outlined when off, filled when on) and the GitHub link.",
+      "html": "<footer class=\"ds-foot\"><p>&copy; 2026 Anish Shrestha</p><p><button class=\"ds-theme\" type=\"button\" aria-pressed=\"false\" onclick=\"this.setAttribute('aria-pressed', this.getAttribute('aria-pressed') !== 'true')\">Dark mode</button></p><p><a href=\"#\">VoidArchive on GitHub</a></p></footer>",
+      "css": ".ds-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 24px; border-top: 1.5px solid var(--color-ink); padding-top: 6px; font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-ink); background: var(--color-paper); } .ds-foot p { margin: 0; padding: 4px 0; } .ds-foot a { color: inherit; text-decoration: none; } .ds-foot a:hover, .ds-theme:hover { color: var(--color-spot-text); } .ds-theme { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 4px 0; cursor: pointer; } .ds-theme::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border: 1.5px solid currentColor; box-sizing: border-box; } .ds-theme[aria-pressed='true']::before { background: currentColor; } .ds-foot a:focus-visible, .ds-theme:focus-visible { outline: 2px solid var(--color-spot); outline-offset: 2px; }"
     },
     {
       "name": "Code Block",
@@ -306,43 +514,53 @@
       "refersTo": "codeblock",
       "description": "The code voice: Fira Code in a 1px ink frame on paper. Mono is for code only.",
       "html": "<pre class=\"ds-code\" tabindex=\"0\"><code>go get github.com/voidarchive/nepal-payment-go</code></pre>",
-      "css": ".ds-code { margin: 0; padding: 16px 18px; border: 1px solid #141414; background: #ffffff; color: #141414; font-family: 'Fira Code', ui-monospace, monospace; font-size: 14px; line-height: 1.6; tab-size: 4; overflow-x: auto; } .ds-code:focus-visible { outline: 2px solid #2242c8; outline-offset: -2px; }"
+      "css": ".ds-code { margin: 0; padding: 16px 18px; border: 1px solid var(--color-ink); background: var(--color-paper); color: var(--color-ink); font-family: 'Fira Code', ui-monospace, monospace; font-size: 14px; line-height: 1.6; tab-size: 4; overflow-x: auto; } .ds-code:focus-visible { outline: 2px solid var(--color-spot); outline-offset: -2px; }"
     },
     {
       "name": "Definition Rows",
       "kind": "custom",
       "refersTo": "definition-label",
-      "description": "Hosting, skills and contact rows: a cobalt capitals label in a fixed column, the value in serif, on hairline rules.",
+      "description": "Hosting, skills and contact rows: a orange capitals label in a fixed column, the value in serif, on hairline rules.",
       "html": "<dl class=\"ds-rows\"><div><dt>Nothing to host</dt><dd>It is a library. It runs inside your Go service.</dd></div><div><dt>Docs</dt><dd>Served by pkg.go.dev from the tagged source.</dd></div></dl>",
-      "css": ".ds-rows { margin: 0; border-top: 1px solid #141414; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-rows div { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 4px 24px; padding: 10px 0; border-bottom: 1px solid #141414; } .ds-rows dt { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; padding-top: 4px; } .ds-rows dd { margin: 0; font-size: 17px; line-height: 1.5; }"
+      "css": ".ds-rows { margin: 0; border-top: 1px solid var(--color-ink); font-family: 'Literata', Georgia, 'Times New Roman', serif; color: var(--color-ink); background: var(--color-paper); } .ds-rows div { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 4px 24px; padding: 10px 0; border-bottom: 1px solid var(--color-ink); } .ds-rows dt { font-family: 'Libre Franklin', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: var(--color-spot-text); padding-top: 4px; } .ds-rows dd { margin: 0; font-size: 17px; line-height: 1.5; }"
     }
   ],
   "narrative": {
     "northStar": "The Mathematical Games Spread",
-    "overview": "The site is set like a mid-century popular-science magazine: white coated stock, near-black ink, and one cobalt spot ink that does every job colour has to do. The front page is no longer an essay. It opens with the role in one serif line, an italic dek and a single \"work with me\" line on the left, and the shipped product on the right as a bordered screenshot plate captioned Fig. 1. Under both, on a heavy rule, three proof columns divided by column rules. Below that come the numbered system design entries, each naming the project behind it, and then four lab plates that are not illustrations of the labs but the labs themselves, running in place, with their reading (generation, population, running) printed beneath on a hairline rule.\n\nThe world is dense and quiet. Rules do the structural work (running head, section openers, rows, caption rows, column rules), and the only things that move are the simulations. Hover changes colour, never position. There is no chrome: no shadows, no gradients, no rounded corners, no filled cards, no kickers above headings. The one box the world owns is the plate, a 1.5px ink frame on paper, used for a live figure, a screenshot, an architecture node, a lab control panel; code sits in its lighter 1px cousin. This world evolves the home spread committed under seed:a9745f2fa560bd8e; it refuses the essay-first magazine opening it replaces, the profile-card-plus-skill-grid portfolio, and the terminal costume that came before both.\n\nScope. This system ships on every route: the home page (src/routes/+page.svelte, src/lib/components/spread/*), the shared running head and footer (src/lib/components/Header.svelte, Footer.svelte), the reading routes (projects index and project pages, the system design hub, about, blog index and posts, error page), which share the .page, .page-title, .dek, .meta, .ruled, .section, .prose-block and .codeblock scaffolding in src/app.css, and the six lab pages, where the global .section-card, .section-title, .btn and .caps classes carry the world and each lab opens with a serif h1 and an italic dek. The legacy token names in src/app.css (--color-bg-*, --color-text*, --color-primary*, --color-border) are aliases of the two inks kept so Tailwind utilities keep working. Three brand commitments bind every surface: the Go gopher easter egg stays, VoidArchive is the handle, and the theme is light.",
+    "overview": "The site is set like a mid-century popular-science magazine: white coated stock, near-black ink, and one arcade-orange spot ink that does every job colour has to do. A night edition prints the same sheet reversed: near-black paper, off-white ink, the same orange. The front page is no longer an essay. It opens with the role in one serif line, an italic dek and a single \"work with me\" line on the left, and the shipped product on the right as a bordered screenshot plate captioned Fig. 1. Under both, on a heavy rule, three proof columns divided by column rules. Below that come the numbered system design entries, each naming the project behind it, and then four lab plates that are not illustrations of the labs but the labs themselves, running in place (a Bagchal board playing itself, a flock, a quick sort, a life in weeks), with their reading (state, counts) printed beneath on a hairline rule.\n\nThe world is dense and quiet. Rules do the structural work (running head, section openers, rows, caption rows, column rules), and the only things that move are the simulations. Hover changes colour, never position. There is no chrome: no shadows, no gradients, no rounded corners, no filled cards, no kickers above headings. The one box the world owns is the plate, a 1.5px ink frame on paper, used for a live figure, a screenshot, an architecture node, a lab control panel; code sits in its lighter 1px cousin. This world evolves the home spread committed under seed:a9745f2fa560bd8e; it refuses the essay-first magazine opening it replaces, the profile-card-plus-skill-grid portfolio, and the terminal costume that came before both.\n\nScope. This system ships on every route: the home page (src/routes/+page.svelte, src/lib/components/spread/*), the shared running head and footer (src/lib/components/Header.svelte, Footer.svelte), the reading routes (projects index and project pages, the system design hub, about, blog index and posts, error page), which share the .page, .page-title, .dek, .meta, .ruled, .section, .prose-block and .codeblock scaffolding in src/app.css, and the six lab pages, where the global .section-card, .section-title, .btn and .caps classes carry the world and each lab opens with a serif h1 and an italic dek. Tokens live in the @theme block of src/app.css and are overridden for the night edition in :root[data-theme='dark']; src/app.html sets data-theme before first paint from the saved choice or, failing that, the system preference, and the footer toggle changes and saves it. The legacy token names (--color-bg-*, --color-text*, --color-primary*, --color-border) are aliases of the same inks, kept so Tailwind utilities keep working. Three commitments bind every surface: VoidArchive is the handle, the bird is the mark (masthead and favicon), and every surface is built from tokens so it prints in both editions.",
     "keyCharacteristics": [
-      "White paper, near-black ink, one cobalt spot ink and its tint; nothing else.",
+      "Paper, ink, one arcade-orange spot ink and its tint; nothing else, in a day and a night edition.",
       "Hairline (1px) and heavy (1.5px) ink rules carry all structure.",
-      "Source Serif 4 for reading, Public Sans capitals for labels, readings and captions, Fira Code for code only.",
+      "Besley for headings, Literata for reading and italics, Libre Franklin capitals for labels, nav, readings and captions, Fira Code for code only.",
       "The claim and the shipped product share the first screen; proof sits directly under both.",
-      "Cobalt grotesk numerals number the evidence: \"Fig. n\" caption prefixes on home, entry numbers on the system design hub.",
+      "Orange grotesk numerals number the evidence: \"Fig. n\" caption prefixes on home, entry numbers on the system design hub.",
       "Live plates: spot colour and a solid border while running, ink and a dashed border when paused.",
       "Square corners, no shadows, no gradients, no filled cards, no kickers."
     ],
     "rules": [
       {
         "name": "The Two-Ink Rule",
-        "body": "Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind prose. If something needs to stand out, it is cobalt; if not, it is ink. Syntax highlighting inside a code block is the one place a reader meets other hues, and it is recorded below as an exception, not as palette.",
+        "body": "Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind prose. If something needs to stand out, it is orange; if not, it is ink. Two exceptions are accepted and neither is palette: syntax highlighting inside a code block, and the tiger and goat pieces on a Bagchal board (home Fig. 2 and the Bagchal lab), which are full-colour illustrated icons the owner chose on purpose. The board under them stays ink lines on paper. Do not extend either exception to other surfaces.",
+        "section": "colors"
+      },
+      {
+        "name": "The Orange Text Rule",
+        "body": "Orange as a fill, rule, underline or outline is Arcade Orange. Orange as text is the Orange Text token. A label on an orange fill is On-Orange. Never set text in raw Arcade Orange on the day edition, and never set paper-coloured text on orange.",
         "section": "colors"
       },
       {
         "name": "The Running Ink Rule",
-        "body": "Spot colour on a plate means it is running. A paused or idle plate drops to ink and its border goes dashed. The reading row's state square inherits the same colour, so colour and the word (Running / Paused) always agree.",
+        "body": "Spot colour on a plate means it is running. A paused plate draws in ink and its border goes dashed; the reading row beneath stays in orange text and its first word says which state it is (Running / Paused).",
+        "section": "colors"
+      },
+      {
+        "name": "The Night Edition Rule",
+        "body": "Dark is the same sheet reversed, not a second design. Every colour in a component comes from a token, so a surface that works by day works at night with no extra rules; the only per-theme values are the token overrides.",
         "section": "colors"
       },
       {
         "name": "The Capitals Rule",
-        "body": "Public Sans appears as spaced uppercase (0.06em to 0.14em) at 12px, as a tight-tracked cobalt numeral, or as a 13px caption. It is never running text, and it is never smaller than 12px.",
+        "body": "Libre Franklin appears as spaced uppercase (0.06em to 0.14em) at 12px, as a tight-tracked orange numeral, or as a 13px caption. It is never running text, and it is never smaller than 12px.",
         "section": "typography"
       },
       {
@@ -357,34 +575,39 @@
       },
       {
         "name": "The One-Sheet Rule",
-        "body": "There is one surface and one depth. If something needs to be separated, draw a rule; if it needs to be framed, draw a plate; if it needs to be noticed, print it in cobalt. Never a shadow, a blur, a gradient or a raised surface.",
+        "body": "There is one surface and one depth. If something needs to be separated, draw a rule; if it needs to be framed, draw a plate; if it needs to be noticed, print it in orange. Never a shadow, a blur, a gradient or a raised surface.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do print with two inks: ink and cobalt on white, with the tint reserved for grid lines inside a plate, table row rules and inline code.",
+      "Do print with two inks: ink and arcade orange on paper, with the tint reserved for grid lines inside a plate, table row rules and inline code.",
+      "Do take every colour from a token (--color-paper, --color-ink, --color-spot, --color-spot-text, --color-on-spot, --color-tint) so the surface prints in both the day and the night edition.",
+      "Do use the Orange Text token for orange text and Arcade Orange for fills, rules, underlines and outlines; put dark ink, never white, on an orange fill.",
       "Do structure with rules: 1.5px ink to open a section or frame a plate, 1px for rows, column rules and caption rows.",
       "Do put the claim and the shipped product on the same first screen, with the proof directly under both.",
-      "Do set apparatus (readings, dates, nav, row labels, button text) in Public Sans capitals at 12px with 0.06em to 0.14em tracking; set reading text in Source Serif 4 at 17px, 18px in posts.",
-      "Do number evidence with cobalt Public Sans 700: \"Fig. n\" as a caption prefix, \"No. n\" beside an entry, a billboard numeral on the hub.",
-      "Do show state by colour and border: cobalt and solid while running, ink and dashed while paused, with the reading row's word and square agreeing.",
-      "Do keep hover to a colour change (ink to cobalt) and focus to a 2px cobalt outline offset 2px; nothing changes position.",
+      "Do set h1, h2 and h3 in Besley 600; set reading text and italics in Literata at 17px, 18px in posts.",
+      "Do set apparatus (readings, dates, nav, row labels, button text) in Libre Franklin capitals at 12px with 0.06em to 0.14em tracking.",
+      "Do number evidence with orange Libre Franklin 700: \"Fig. n\" as a caption prefix, \"No. n\" beside an entry, a billboard numeral on the hub.",
+      "Do show state by colour and border: orange and solid while running, ink and dashed while paused, with the reading row's first word naming the state.",
+      "Do keep hover to a colour change (ink to orange text) and focus to a 2px Arcade Orange outline offset 2px; nothing changes position.",
       "Do draw architecture as plates joined by an ink rule and arrowhead, and turn the chain vertical under 820px.",
       "Do put the proof before the picture on narrow screens: under 860px the proof rows follow the claim and the screenshot follows them.",
       "Do render one still frame with a Play control under prefers-reduced-motion: reduce.",
-      "Do keep the Go gopher, the VoidArchive handle, and the light theme on every surface."
+      "Do keep the bird mark as a mask in the masthead and as the favicon, the VoidArchive handle in the footer, and the theme toggle beside it."
     ],
     "donts": [
-      "Don't use shadows, gradients, blur, translucency or a second surface colour; the page is one sheet of paper.",
+      "Don't use shadows, gradients, blur, translucency or a second surface colour; the page is one sheet of paper, by day and at night.",
       "Don't draw filled, shadowed or rounded cards; the only box is a plate, an ink frame on paper, and everything else is separated by rules and whitespace.",
       "Don't round a corner; every radius is 0.",
-      "Don't add a kicker or eyebrow above a headline; the grotesk capitals belong to apparatus (dates, readings, row labels), not to headings.",
+      "Don't add a kicker or eyebrow above a headline, and don't label a sentence with a capitals prefix; the grotesk capitals belong to apparatus (dates, readings, row labels), not to headings or prose.",
       "Don't set a billboard \"Fig. n\" above or over a plate, a masthead issue number, a drop cap or a multi-column essay; that front page was replaced.",
       "Don't introduce grey text for hierarchy; use italic, size or the serif/grotesk switch instead.",
-      "Don't add a second accent, a tinted background behind prose, or the legacy coral #ff6b6b, scanlines or terminal prompt motif.",
+      "Don't add a second accent or a tinted background behind prose, and don't bring back the cobalt spot ink, the legacy coral #ff6b6b, scanlines or the terminal prompt motif.",
+      "Don't treat the Bagchal tiger and goat icons as licence for multicolour illustration elsewhere; they are the one accepted exception, on a Bagchal board only.",
+      "Don't hard-code a hex value in a component or write a rule that only works in one edition.",
       "Don't set anything but code in Fira Code, and don't set code in anything else.",
-      "Don't animate anything but the simulations: no entrance animations, no hover lifts, no movement on links or buttons.",
-      "Don't set Public Sans as running text or below 12px, or Source Serif 4 as a label."
+      "Don't animate anything but the simulations: no entrance animations, no hover lifts, no movement on links or buttons, no animated mascot.",
+      "Don't set Libre Franklin as running text or below 12px, Besley as body text, or Literata as a capitals label."
     ]
   }
 }

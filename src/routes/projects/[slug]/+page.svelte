@@ -14,6 +14,19 @@
 	<p class="dek">{p.summary}</p>
 	<p class="proves">{p.proves}</p>
 
+	{#if p.image}
+		<figure class="shot">
+			<img
+				src={p.image.src}
+				alt={p.image.alt}
+				width={p.image.width}
+				height={p.image.height}
+				loading="lazy"
+			/>
+			<figcaption>{p.image.caption}</figcaption>
+		</figure>
+	{/if}
+
 	<section class="section">
 		<h2>{p.start.heading}</h2>
 		{#if p.start.command}
@@ -25,7 +38,7 @@
 		{#if p.start.note}<p class="note">{p.start.note}</p>{/if}
 	</section>
 
-	{#if p.example || p.image}
+	{#if p.example}
 		<section class="section">
 			<h2>A working example</h2>
 			{#if p.example}
@@ -33,18 +46,6 @@
 				<!-- tabindex: a scrollable region has to be reachable by keyboard -->
 				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 				<pre class="codeblock" tabindex="0"><code>{p.example.code}</code></pre>
-			{/if}
-			{#if p.image}
-				<figure class="shot">
-					<img
-						src={p.image.src}
-						alt={p.image.alt}
-						width={p.image.width}
-						height={p.image.height}
-						loading="lazy"
-					/>
-					<figcaption>{p.image.caption}</figcaption>
-				</figure>
 			{/if}
 		</section>
 	{/if}

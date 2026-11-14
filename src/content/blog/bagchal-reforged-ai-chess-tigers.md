@@ -59,7 +59,7 @@ function minimax(
 }
 ```
 
-At depth 16, the AI was unbeatable. At depth 12, it still beat me consistently. Nothing in it was broken. It was simply too good.
+At depth 16, the AI was unbeatable. At depth 12, it still beat me consistently, and that was the problem.
 
 ### The perfect play problem
 
@@ -276,9 +276,9 @@ function iterativeDeepening(state: GameState, maxTime: number): Move {
 
 ## Results and lessons learned
 
-The final Bagchal AI is competitive and still enjoyable to play against. It handles both short-term tactics and long-term positioning, so games feel authentic and not mechanical. By adjusting search depth and evaluation weights, the same engine covers difficulty levels from beginner to expert.
+The final Bagchal AI is competitive and still enjoyable to play against. It handles both short-term tactics and long-term positioning, so a game feels like playing a person. By adjusting search depth and evaluation weights, the same engine covers difficulty levels from beginner to expert.
 
-A digital version also helps preserve this traditional Nepali game and share it with a global audience. And the asymmetric evaluation approach could be applied to other games with unequal player roles.
+The asymmetric evaluation approach could be applied to other games with unequal player roles.
 
 ### Performance metrics
 
@@ -300,10 +300,8 @@ Things that could make it stronger:
 
 ## Conclusion
 
-Building the Bagchal AI taught me to think about how the game feels to the person playing it. The most technically sophisticated AI is worthless if it makes the game frustrating or boring.
+Building the Bagchal AI taught me to think about how the game feels to the person playing it. The depth-16 version was the strongest thing I built and the least fun, so the version that shipped is the one that gives a human a real game and sometimes loses.
 
-Traditional games carry centuries of strategic thinking. Bagchal's asymmetric design produces tactical situations that stay engaging even after extensive analysis. Putting these games in digital form keeps that heritage around and makes it accessible to new generations.
-
-I also learned that an AI should support human creativity. The best Bagchal AI gives human players a worthy opponent and helps them improve their own strategic thinking. Playing optimally comes second.
+Bagchal's asymmetric design still produces positions I find interesting after all the analysis.
 
 You can play the complete Bagchal implementation against the AI at [/labs/bagchal](/labs/bagchal). It has multiple difficulty levels and traditional rule variations.

@@ -25,10 +25,12 @@
 					<h2><a href="/blog/{post.slug}">{post.title}</a></h2>
 					<p>{post.description}</p>
 					<p class="meta">
-						<time datetime={post.date}>{formatDate(post.date)}</time>
-						{#if post.series === 'system-design'}· <a href="/system-design">System design</a>{/if}
-						{#if post.relatedLab}· <a href={post.relatedLab.url}>Has a live lab</a>{/if}
-						{#each post.tags as tag (tag)}<span class="tag">· {tag}</span>{/each}
+						<time class="tag" datetime={post.date}>{formatDate(post.date)}</time>
+						{#if post.series === 'system-design'}<a class="tag" href="/system-design"
+								>System design</a
+							>{/if}
+						{#if post.relatedLab}<a class="tag" href={post.relatedLab.url}>Has a live lab</a>{/if}
+						{#each post.tags as tag (tag)}<span class="tag">{tag}</span>{/each}
 					</p>
 				</li>
 			{/each}
@@ -47,5 +49,10 @@
 		display: inline-block;
 		white-space: nowrap;
 		margin-right: 0.35em;
+	}
+	/* The dot trails its item, so a wrapped line never starts with one */
+	.tag:not(:last-child)::after {
+		content: ' ·';
+		color: var(--color-spot-text);
 	}
 </style>

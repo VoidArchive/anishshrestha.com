@@ -14,7 +14,7 @@ relatedLab:
 
 ## The mathematical foundation
 
-Conway's Game of Life is a cellular automaton where complex behavior comes out of four simple rules. When I decided to implement it, I wanted a proper educational tool that shows the patterns and behaviors those rules produce, which a basic grid simulation does not.
+Conway's Game of Life is a cellular automaton where complex behavior comes out of four simple rules. When I decided to implement it, I wanted it to show the patterns and behaviors those rules produce, so it has a pattern library and live statistics on top of the grid.
 
 The rules:
 
@@ -248,7 +248,7 @@ I track four metrics during simulation:
 - Died: cells that died this generation
 - Total generations: cumulative generation count
 
-These statistics help users understand how a pattern behaves and spot interesting evolutionary dynamics.
+These statistics show how a pattern is behaving from one generation to the next.
 
 ## Svelte integration challenges
 
@@ -279,7 +279,7 @@ Rendering large grids in real time was a performance problem. I optimized the gr
 
 ### Component architecture
 
-The UI is structured as three main components:
+The UI is structured as four components:
 
 - GameGrid: renders the cellular grid with click handling
 - ControlPanel: simulation controls (play/pause/speed/reset)
@@ -362,8 +362,8 @@ Extensions that could improve the simulation:
 
 ## Conclusion
 
-Building Conway's Game of Life taught me about complexity emerging from simple rules, the value of clean architectural separation, and the difficulty of real-time simulation in the browser. An interactive visualization makes the mathematical concepts tangible.
+The hard part was real-time simulation in the browser, and keeping the rules, the engine and the UI separate is what made it testable.
 
-The implementation uses modern TypeScript patterns, efficient algorithms, and responsive UI design. What I like most is watching simple rules generate infinite complexity, which is what John Conway intended when he created this cellular automaton in 1970.
+What I like most is watching simple rules generate patterns nobody drew by hand, which is what John Conway intended when he created this cellular automaton in 1970.
 
 You can explore the Game of Life implementation at [/labs/gameoflife](/labs/gameoflife), with interactive controls and the pattern library.
