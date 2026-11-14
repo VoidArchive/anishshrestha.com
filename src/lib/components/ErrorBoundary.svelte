@@ -149,7 +149,7 @@
 	.error-stack {
 		font-family: var(--font-family-mono);
 		font-size: 0.8rem;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		overflow-x: auto;
 		white-space: pre-wrap;
 		margin: 0;
@@ -182,7 +182,7 @@
 	.error-btn.primary {
 		background: var(--color-primary-red);
 		border-color: var(--color-primary-red);
-		color: white;
+		color: var(--color-on-spot);
 	}
 
 	.error-btn.primary:hover {

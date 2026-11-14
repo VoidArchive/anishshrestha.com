@@ -1,73 +1,89 @@
 <script lang="ts">
 	import { page } from '$app/state';
 
-	const issue = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 	const links = [
-		{ href: '/labs', label: 'Labs' },
+		// Labs live under Projects, so a lab page lights the Projects tab
+		{ href: '/projects', label: 'Projects', also: '/labs' },
+		{ href: '/system-design', label: 'System Design' },
 		{ href: '/blog', label: 'Blog' },
-		{ href: '/projects', label: 'Projects' }
+		{ href: '/about', label: 'About' }
 	];
-	const current = (href: string) => page.url.pathname.startsWith(href);
+	const current = (link: (typeof links)[number]) =>
+		page.url.pathname.startsWith(link.href) ||
+		(link.also !== undefined && page.url.pathname.startsWith(link.also));
 </script>
 
 <header class="running-head">
 	<div class="container">
-		<a class="masthead" href="/">
-			<b>anishshrestha.com</b>
-			{#if page.data.postCount}· No. {page.data.postCount}{/if}
-			· {issue}
-		</a>
+		<a class="masthead" href="/"><span class="bird" aria-hidden="true"></span>anishshrestha.com</a>
 		<nav aria-label="Primary">
 			{#each links as link (link.href)}
-				<a href={link.href} aria-current={current(link.href) ? 'page' : undefined}>{link.label}</a>
+				<a href={link.href} aria-current={current(link) ? 'page' : undefined}>{link.label}</a>
 			{/each}
-			<a href="https://github.com/VoidArchive" rel="me">GitHub</a>
 		</nav>
 	</div>
 </header>
 
 <style>
 	.running-head {
-		padding-top: 36px;
+		padding-top: 28px;
 	}
 	.running-head .container {
 		display: flex;
 		align-items: baseline;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		gap: 10px 16px;
-		border-bottom: 1.5px solid var(--color-ink);
-		padding-bottom: 10px;
+		gap: 0 24px;
 		font-family: var(--font-family-sans);
 		font-size: 12px;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		line-height: 1.5;
 	}
+	/* The rule sits on the container's content box so it lines up with the page margin */
+	.running-head .container::after {
+		content: '';
+		flex-basis: 100%;
+		border-bottom: 1.5px solid var(--color-ink);
+	}
 	.running-head a {
 		display: inline-block;
-		padding: 4px 0;
+		padding: 10px 0;
 		text-decoration: none;
 		white-space: nowrap;
 	}
-	.masthead b {
-		color: var(--color-spot);
+	.masthead {
+		color: var(--color-spot-text);
 		font-weight: 700;
+	}
+	/* The bird is a mask so it takes the spot ink in both themes */
+	.bird {
+		display: inline-block;
+		width: 14px;
+		height: 26px;
+		margin: -10px 8px -6px 0;
+		vertical-align: middle;
+		background: currentColor;
+		mask: url('/bird-logo.svg') center / contain no-repeat;
 	}
 	nav {
 		display: flex;
-		gap: 28px;
+		flex-wrap: wrap;
+		gap: 0 28px;
 	}
 	nav a[aria-current='page'] {
-		color: var(--color-spot);
-		border-bottom: 2px solid var(--color-spot);
+		color: var(--color-spot-text);
+		box-shadow: inset 0 -3px 0 var(--color-spot);
 	}
 	@media (max-width: 640px) {
 		.running-head {
-			padding-top: 20px;
+			padding-top: 12px;
+		}
+		.running-head .container {
+			letter-spacing: 0.08em;
 		}
 		nav {
-			gap: 18px;
+			gap: 0 16px;
 		}
 	}
 </style>

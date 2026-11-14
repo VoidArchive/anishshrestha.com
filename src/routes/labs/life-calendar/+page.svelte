@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
 	import { browser } from '$app/env';
 	import { SvelteSet } from 'svelte/reactivity';
 
@@ -126,15 +127,14 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Life Calendar - Anish Shrestha</title>
-	<meta name="description" content="A visualization of your life in weeks." />
-</svelte:head>
+<Seo
+	title="Life Calendar | Anish Shrestha"
+	description="Your life drawn in weeks: enter a birth date and see every week of a hundred years as one square, lived or still ahead."
+/>
 
-<main class="lab container">
+<main class="lab life-calendar container">
 	<header>
 		<div>
-			<span class="fig" aria-hidden="true">Fig. 4</span>
 			<h1>Life Calendar</h1>
 			<p class="dek">Your life in weeks: one square per week, a hundred years in rows.</p>
 		</div>
@@ -142,6 +142,10 @@
 			<label for="birthdate" class="caps">Birth date</label>
 			<input type="date" id="birthdate" bind:value={birthDate} />
 		</div>
+		<!-- The browser's print dialog covers both: a printer, or "Save as PDF" -->
+		<button type="button" class="print caps" onclick={() => window.print()}>
+			Print / Save as PDF
+		</button>
 	</header>
 
 	<figure class="plate">
@@ -214,18 +218,8 @@
 	header {
 		margin-bottom: 40px;
 	}
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
-		margin: 0 0 8px -4px;
-	}
 	h1 {
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-weight: 600;
 		font-size: clamp(34px, 3vw, 40px);
 		line-height: 1.02;
@@ -253,6 +247,24 @@
 		border-radius: 0;
 	}
 	.field input:focus-visible {
+		outline: 2px solid var(--color-spot);
+		outline-offset: 2px;
+	}
+
+	.print {
+		margin-top: 16px;
+		padding: 8px 14px;
+		border: 1px solid var(--color-ink);
+		background: var(--color-ink);
+		color: var(--color-paper);
+		cursor: pointer;
+	}
+	.print:hover {
+		background: var(--color-spot);
+		color: var(--color-on-spot);
+		border-color: var(--color-spot);
+	}
+	.print:focus-visible {
 		outline: 2px solid var(--color-spot);
 		outline-offset: 2px;
 	}
@@ -321,7 +333,7 @@
 		text-transform: uppercase;
 		line-height: 1.5;
 		font-variant-numeric: tabular-nums;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		display: flex;
 		flex-wrap: wrap;
 		gap: 4px 18px;
@@ -341,5 +353,46 @@
 	.k.left::before {
 		background: var(--color-paper);
 		border: 1px solid var(--color-spot);
+	}
+
+	/* One sheet: title, grid, reading. :has() keeps these rules off other pages after navigation. */
+	@media print {
+		@page {
+			size: A4 portrait;
+			margin: 10mm;
+		}
+		/* Always print the light edition, whatever the screen theme is */
+		:global(:root:has(.life-calendar)) {
+			--color-paper: #ffffff !important;
+			--color-ink: #141414 !important;
+			--color-spot: #ff6a13 !important;
+			--color-tint: #ffe3d1 !important;
+		}
+		:global(body:has(.life-calendar) .running-head),
+		:global(body:has(.life-calendar) .colophon-foot),
+		.field,
+		.print {
+			display: none;
+		}
+		/* The grid is 60:110, so height is the limit: 133mm wide fills A4's 277mm of printable height */
+		.lab {
+			display: block;
+			width: 133mm;
+			max-width: none;
+			margin: 0 auto;
+			padding: 0;
+			print-color-adjust: exact;
+		}
+		header {
+			position: static;
+			margin: 0 0 12px;
+		}
+		.dek {
+			margin: 0;
+		}
+		.plate {
+			max-width: none;
+			break-inside: avoid;
+		}
 	}
 </style>

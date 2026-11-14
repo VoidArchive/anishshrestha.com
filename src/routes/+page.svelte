@@ -1,264 +1,341 @@
 <script lang="ts">
-	import LifeFigure from '#lib/components/spread/LifeFigure.svelte';
+	import Seo from '#lib/components/Seo.svelte';
+	import BagchalFigure from '#lib/components/spread/BagchalFigure.svelte';
 	import BoidsFigure from '#lib/components/spread/BoidsFigure.svelte';
 	import SortFigure from '#lib/components/spread/SortFigure.svelte';
 	import LifeCalendarFigure from '#lib/components/spread/LifeCalendarFigure.svelte';
 	import { formatDate } from '#lib/utils/blog.js';
+	import { projects } from '#lib/site.js';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	let cols = $state(35);
-	let rows = $state(26);
 
-	const instruments = [
-		{
-			name: 'nepal-payment-go',
-			what: 'One Go SDK for eSewa, Khalti, ConnectIPS and FonePay. HMAC and RSA signatures handled.',
-			href: 'https://github.com/VoidArchive/nepal-payment-go'
-		},
-		{
-			name: 'go-nepse',
-			what: 'Type-safe client for the Nepal Stock Exchange API, with token handling via embedded WebAssembly.',
-			href: 'https://github.com/VoidArchive/go-nepse'
-		},
-		{
-			name: 'NTX',
-			what: 'Stock research for NEPSE. Go and Protobuf behind, SvelteKit in front. Live.',
-			href: 'https://ntx.anishshrestha.com'
-		}
-	];
+	const proof = ['ntx', 'nepal-payment-go', 'kursi-fighter'].map((slug) =>
+		projects.find((p) => p.slug === slug)!
+	);
 </script>
 
-<main class="spread">
+<Seo
+	title="Anish Shrestha | Software Developer"
+	description="Anish Shrestha is a Go backend developer learning system design in public. Every lesson is backed by a deployed project: NTX, a payment SDK for Nepal, and a NEPSE client."
+/>
+
+<main class="home container">
 	<section class="opening">
-		<div class="column">
-			<h1>Six working experiments, and how I built each one</h1>
-			<p class="byline">by Anish Shrestha, software developer</p>
-			<div class="essay">
-				<p>
-					Every figure on this page is running. Fig. 1 is Conway's Game of Life, the cellular
-					automaton in which a handful of rules about neighbours produces gliders, oscillators and
-					still lifes. Click any cell and the colony changes course. After it come a flock of boids,
-					a sorting visualizer, and my own life drawn in weeks.
-				</p>
-				<p>
-					I wrote up the engine behind each lab: the animation step system in the visualizer, the
-					opening book in Bagchal, the spatial hash that keeps the flock fast. Next to the labs are
-					the Go libraries I maintain, a unified payment SDK for Nepal and a client for the Nepal
-					Stock Exchange.
-				</p>
-				<p>
-					Some of my solutions are elegant, others are brute force. All of them work eventually.
-				</p>
-			</div>
+		<div class="lead">
+			<h1>Go backend developer, learning system design in public.</h1>
+			<p class="dek">
+				I’m Anish Shrestha. I write backends in Go, and I’m learning system design by building
+				things. I only write a lesson up once the project behind it is deployed.
+			</p>
+			<p class="hire">
+				I take contract work on Go backends, Nepali payment gateways and NEPSE data.
+				<a href="/about">Work with me</a>.
+			</p>
 		</div>
 
-		<figure class="plate lead">
-			<span class="fig" aria-hidden="true">Fig. 1</span>
-			<LifeFigure bind:cols bind:rows />
+		<figure class="shot">
+			<a href="/projects/ntx" aria-label="NTX project page">
+				<img
+					src="/ntx-hero.webp"
+					alt="The NTX company page for Nabil Bank: share price chart and a stock overview of the checks that hold."
+					width="2600"
+					height="1536"
+					fetchpriority="high"
+				/>
+			</a>
 			<figcaption>
-				<b>Fig. 1</b> Conway's Game of Life, {cols} × {rows} cells, edges wrap.
-				<a href="/labs/gameoflife">Open the lab</a> ·
-				<a href="/blog/building-conways-game-of-life-svelte">Read how it was built</a>
+				<b>Fig. 1</b> NTX, my stock research platform for the Nepal Stock Exchange. Go, ConnectRPC
+				and SQLite behind this page. <a href="https://ntx.anishshrestha.com">See it live</a>
 			</figcaption>
 		</figure>
-	</section>
 
-	<section class="plates" aria-label="More figures">
-		<figure class="plate">
-			<span class="fig" aria-hidden="true">Fig. 2</span>
-			<BoidsFigure />
-			<figcaption>
-				<b>Fig. 2</b> Boids flocking from three rules: separation, alignment, cohesion.
-				<a href="/labs/boids">Open the lab</a> ·
-				<a href="/blog/boids-in-a-small-box">Read how it was built</a>
-			</figcaption>
-		</figure>
-		<figure class="plate">
-			<span class="fig" aria-hidden="true">Fig. 3</span>
-			<SortFigure />
-			<figcaption>
-				<b>Fig. 3</b> Quick sort, one comparison per frame.
-				<a href="/labs/dsa-visualizer">Open the lab</a> ·
-				<a href="/blog/building-dsa-visualizer-animation-engine">Read how it was built</a>
-			</figcaption>
-		</figure>
-		<figure class="plate">
-			<span class="fig" aria-hidden="true">Fig. 4</span>
-			<LifeCalendarFigure />
-			<figcaption>
-				<b>Fig. 4</b> My life in weeks, one square each, replayed from my birth date to today with
-				the decade ahead in view. The square that blinks is this week.
-				<a href="/labs/life-calendar">Enter your own</a>
-			</figcaption>
-		</figure>
-	</section>
-	<p class="also">
-		<b>Figs. 5, 6</b> Two more labs, without plates: <a href="/labs/bagchal">Bagchal</a>, the Nepali
-		tigers-and-goats game with a minimax opponent, and <a href="/labs/tictactoe">Tic Tac Toe</a>
-		with an unbeatable minimax player. <a href="/labs">All labs</a>
-	</p>
-
-	<section class="back">
-		<div class="notes">
-			<h2>Notes</h2>
-			{#each data.latestPosts as post (post.slug)}
-				<article>
-					<time datetime={post.date}>{formatDate(post.date)}</time>
-					<h3><a href="/blog/{post.slug}">{post.title}</a></h3>
-					<p>{post.description}</p>
-				</article>
+		<ol class="proof" aria-label="Three projects that back this up">
+			{#each proof as p (p.slug)}
+				<li>
+					<h2><a href="/projects/{p.slug}">{p.name}</a></h2>
+					<p>{p.proves}</p>
+					<p class="meta">{p.kind}</p>
+				</li>
 			{/each}
-			<p class="more"><a href="/blog">All notes</a></p>
-		</div>
-		<div class="instruments">
-			<h2>Instruments</h2>
-			<p class="lede">The Go libraries I built for Nepal's financial plumbing.</p>
-			{#each instruments as tool (tool.name)}
-				<article>
-					<h3><a href={tool.href} rel="noopener">{tool.name}</a></h3>
-					<p>{tool.what}</p>
-				</article>
-			{/each}
-			<p class="more"><a href="/projects">All projects</a></p>
-		</div>
+		</ol>
 	</section>
 
-	<section class="colophon">
-		<p>
-			I'm Anish Shrestha. Write to me at <a href="mailto:hi@anishshrestha.com"
-				>hi@anishshrestha.com</a
-			>, or find me as <a href="https://github.com/VoidArchive" rel="me">VoidArchive</a> on GitHub
-			and on
-			<a href="https://linkedin.com/in/theinanish" rel="me">LinkedIn</a>. This site is a magazine
-			spread on purpose; <a href="/blog/redesigning-my-site-as-a-magazine-spread">here is why</a>.
+	{#if data.entries.length > 0}
+		<section class="section entries">
+			<h2>Latest system design entries</h2>
+			<ol>
+				{#each data.entries as entry (entry.slug)}
+					<li>
+						<span class="no">No. {entry.no}</span>
+						<div>
+							<h3><a href="/blog/{entry.slug}">{entry.title}</a></h3>
+							<p>{entry.description}</p>
+							<p class="meta">
+								<time datetime={entry.date}>{formatDate(entry.date)}</time>
+								{#if entry.project}· Backed by <a href="/projects/{entry.project.slug}"
+										>{entry.project.name}</a
+									>{/if}
+							</p>
+						</div>
+					</li>
+				{/each}
+			</ol>
+			<p class="more"><a href="/system-design">All entries, in order</a></p>
+		</section>
+	{/if}
+
+	<section class="section labs">
+		<h2>Labs</h2>
+		<p class="lede">
+			Smaller things I built to learn something. These four are running right now; poke them.
+		</p>
+		<div class="plates">
+			<figure class="plate">
+				<BagchalFigure />
+				<figcaption>
+					<b>Fig. 2</b> Bagchal, four tigers against twenty goats, playing itself.
+					<a href="/labs/bagchal">Play it yourself</a>
+				</figcaption>
+			</figure>
+			<figure class="plate">
+				<BoidsFigure />
+				<figcaption>
+					<b>Fig. 3</b> Boids flocking from three rules.
+					<a href="/labs/boids">Open the lab</a>
+				</figcaption>
+			</figure>
+			<figure class="plate">
+				<SortFigure />
+				<figcaption>
+					<b>Fig. 4</b> Quick sort, one comparison per frame.
+					<a href="/labs/dsa-visualizer">Open the lab</a>
+				</figcaption>
+			</figure>
+			<figure class="plate">
+				<LifeCalendarFigure />
+				<figcaption>
+					<b>Fig. 5</b> My life in weeks; the blinking square is this week.
+					<a href="/labs/life-calendar">Enter your own</a>
+				</figcaption>
+			</figure>
+		</div>
+		<p class="also">
+			You can play <a href="/labs/bagchal">Bagchal</a> and <a href="/labs/tictactoe">Tic Tac Toe</a>
+			against a minimax opponent.
+			<a href="/projects#labs">All six labs</a>
 		</p>
 	</section>
 </main>
 
 <style>
-	.spread {
+	.home {
+		--grot: var(--font-family-sans);
+		/* The live figures read their inks from these */
 		--spread-paper: var(--color-paper);
 		--spread-ink: var(--color-ink);
 		--spread-spot: var(--color-spot);
 		--spread-tint: var(--color-tint);
-		--serif: var(--font-family-serif);
-		--grot: var(--font-family-sans);
-		--measure: 520px;
-		color: var(--spread-ink);
-		background: var(--spread-paper);
-		font-family: var(--serif);
-		font-size: 16px;
-		line-height: 1.5;
-		padding: 0 clamp(16px, 5vw, 72px) 0;
-		max-width: 1440px;
-		margin: 0 auto;
-	}
-	.spread :global(::selection) {
-		background: var(--spread-spot);
-		color: var(--spread-paper);
-	}
-	.spread a {
-		color: inherit;
-		text-decoration: underline;
-		text-decoration-color: var(--spread-spot);
-		text-decoration-thickness: 1px;
-		text-underline-offset: 3px;
-		transition: none;
-	}
-	.spread a:hover {
-		color: var(--spread-spot);
-	}
-	.spread a:focus-visible,
-	.spread :global(button:focus-visible) {
-		outline: 2px solid var(--spread-spot);
-		outline-offset: 2px;
+		padding-bottom: 88px;
 	}
 
-	/* Opening spread */
+	/* Opening: the claim on the left, the shipped product on the right, three proofs under both */
 	.opening {
 		display: grid;
-		grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);
-		gap: 56px;
-		padding-top: 40px;
-		align-items: start;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+		gap: 0 clamp(32px, 5vw, 72px);
+		padding-top: clamp(28px, 4vw, 52px);
 	}
 	h1 {
 		font-weight: 600;
-		font-size: clamp(34px, 4.2vw, 60px);
-		line-height: 1.02;
-		letter-spacing: -0.015em;
+		font-size: clamp(38px, 5.4vw, 80px);
+		line-height: 1;
+		letter-spacing: -0.02em;
 		text-wrap: balance;
-		margin: 0 0 18px;
+		margin: 0 0 24px;
 	}
-	.byline {
-		font-style: italic;
-		font-size: 17px;
-		margin: 0 0 26px;
-	}
-	.essay {
-		column-count: 2;
-		column-gap: 28px;
-		column-rule: 1px solid var(--spread-ink);
-		font-size: 15.5px;
+	.dek {
+		font-size: clamp(18px, 1.5vw, 21px);
+		line-height: 1.5;
+		max-width: 46ch;
+		margin: 0 0 20px;
 		text-wrap: pretty;
 	}
-	.essay p {
-		margin: 0 0 12px;
-		text-indent: 1.4em;
+	.hire {
+		font-style: italic;
+		font-size: 18px;
+		max-width: 46ch;
+		margin: 0;
+		text-wrap: pretty;
 	}
-	.essay p:first-child {
-		text-indent: 0;
-	}
-	.essay p:first-child::first-letter {
-		float: left;
-		font-size: 58px;
-		line-height: 0.85;
-		padding: 6px 8px 0 0;
+	.hire a {
+		font-style: normal;
 		font-weight: 600;
-		color: var(--spread-spot);
 	}
 
-	/* Plates */
-	.plate {
-		position: relative;
+	.shot {
 		margin: 0;
-		/* numeral height plus a gap: the number sits above the plate, never over the figure */
-		padding-top: calc(clamp(48px, 6vw, 88px) + 10px);
+		align-self: start;
 	}
-	.fig {
-		position: absolute;
-		top: 0;
-		left: -14px;
+	.shot > a {
+		display: block;
+		border: 1.5px solid var(--color-ink);
+	}
+	.shot img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	figcaption {
+		margin-top: 10px;
+		font-family: var(--grot);
+		font-size: 13px;
+		letter-spacing: 0.02em;
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+	figcaption b {
+		color: var(--color-spot-text);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		font-size: 12px;
+		margin-right: 6px;
+	}
+
+	.proof {
+		grid-column: 1 / -1;
+		list-style: none;
+		margin: clamp(32px, 4vw, 48px) 0 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		border-top: 1.5px solid var(--color-ink);
+	}
+	.proof li {
+		padding: 18px 28px 0;
+		border-left: 1px solid var(--color-ink);
+	}
+	.proof li:first-child {
+		padding-left: 0;
+		border-left: 0;
+	}
+	.proof li:last-child {
+		padding-right: 0;
+	}
+	.proof h2 {
+		font-size: clamp(24px, 2.4vw, 32px);
+		font-weight: 600;
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		margin: 0 0 8px;
+	}
+	.proof h2 a {
+		text-decoration-thickness: 2px;
+		text-underline-offset: 5px;
+	}
+	.proof p:not(.meta) {
+		margin: 0 0 10px;
+		font-size: 17px;
+		text-wrap: pretty;
+	}
+	.proof .meta {
+		margin: 0;
+	}
+
+	/* System design entries */
+	.entries ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.entries li {
+		display: grid;
+		grid-template-columns: 96px minmax(0, 1fr);
+		gap: 20px;
+		padding: 16px 0;
+		border-top: 1px solid var(--color-ink);
+	}
+	.entries li:first-child {
+		border-top: 0;
+		padding-top: 4px;
+	}
+	.no {
 		font-family: var(--grot);
 		font-weight: 700;
-		font-size: clamp(48px, 6vw, 88px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--spread-spot);
-		z-index: 1;
-		pointer-events: none;
+		font-size: 22px;
+		letter-spacing: -0.02em;
+		color: var(--color-spot-text);
+		font-variant-numeric: tabular-nums;
+		padding-top: 2px;
 	}
-	.plate figcaption,
-	.spread :global(.reading) {
+	.entries h3 {
+		font-size: 22px;
+		font-weight: 600;
+		line-height: 1.2;
+		margin: 0 0 6px;
+		text-wrap: balance;
+	}
+	.entries h3 a {
+		text-decoration: none;
+	}
+	.entries h3 a:hover {
+		text-decoration: underline;
+	}
+	.entries li p:not(.meta) {
+		margin: 0 0 6px;
+		font-size: 17px;
+		max-width: 68ch;
+		text-wrap: pretty;
+	}
+	.entries .meta {
+		margin: 0;
+	}
+	.entries .meta a {
+		text-decoration: underline;
+		text-decoration-color: var(--color-spot);
+		text-underline-offset: 3px;
+	}
+	.more {
+		margin: 14px 0 0;
+		padding-top: 14px;
+		border-top: 1px solid var(--color-ink);
 		font-family: var(--grot);
-		font-size: 11.5px;
+		font-size: 12px;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	/* Labs: the live plates */
+	.lede {
+		font-style: italic;
+		font-size: 18px;
+		margin: 0 0 24px;
+	}
+	.plates {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 40px 32px;
+	}
+	.plate {
+		margin: 0;
+	}
+	.home :global(.reading) {
+		font-family: var(--grot);
+		font-size: 12px;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		line-height: 1.5;
-	}
-	.spread :global(.reading) {
 		font-variant-numeric: tabular-nums;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 4px 18px;
-		border-top: 1px solid var(--spread-ink);
+		gap: 4px 16px;
+		border-top: 1px solid var(--color-ink);
 		padding-top: 8px;
 		margin-top: 8px;
-		color: var(--spread-spot);
+		color: var(--color-spot-text);
 		font-weight: 700;
 	}
-	.spread :global(.reading .state::before) {
+	.home :global(.reading .state::before) {
 		content: '';
 		display: inline-block;
 		width: 8px;
@@ -267,166 +344,73 @@
 		margin-right: 6px;
 		vertical-align: 1px;
 	}
-	.spread :global(.reading .controls) {
+	.home :global(.reading .controls) {
 		margin-left: auto;
 		display: flex;
 		gap: 12px;
 	}
-	.spread :global(.reading button),
-	.spread :global(.reading a) {
+	.home :global(.reading button),
+	.home :global(.reading a) {
 		font: inherit;
 		letter-spacing: inherit;
 		text-transform: inherit;
-		color: var(--spread-ink);
+		color: var(--color-ink);
 		background: none;
 		border: 0;
-		padding: 0;
+		/* 24px tall target without moving the baseline */
+		padding: 3px 0;
+		margin: -3px 0;
 		cursor: pointer;
 		text-decoration: underline;
-		text-decoration-color: var(--spread-spot);
+		text-decoration-color: var(--color-spot);
 		text-underline-offset: 3px;
 	}
-	.spread :global(.reading button:hover),
-	.spread :global(.reading a:hover) {
-		color: var(--spread-spot);
-	}
-	.plate figcaption {
-		margin-top: 10px;
-		text-transform: none;
-		letter-spacing: 0.02em;
-		font-size: 13px;
-	}
-	.plate figcaption b {
-		color: var(--spread-spot);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		font-size: 11.5px;
-		margin-right: 6px;
-	}
-
-	.plates {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 48px 40px;
-		margin-top: 72px;
-		padding-top: 24px;
-		border-top: 1.5px solid var(--spread-ink);
+	.home :global(.reading button:hover),
+	.home :global(.reading a:hover) {
+		color: var(--color-spot-text);
 	}
 	.also {
-		margin: 24px 0 0;
-		padding-top: 10px;
-		border-top: 1px solid var(--spread-ink);
-		font-size: 15.5px;
-		text-wrap: pretty;
-	}
-	.also b {
-		font-family: var(--grot);
-		font-size: 11.5px;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		color: var(--spread-spot);
-		margin-right: 6px;
-	}
-
-	/* Back pages */
-	.back {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		gap: 56px;
-		margin-top: 72px;
-		padding-top: 24px;
-		border-top: 1.5px solid var(--spread-ink);
-	}
-	.back h2 {
-		font-family: var(--grot);
-		font-size: 12px;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--spread-spot);
-		margin: 0 0 18px;
-	}
-	.back article {
-		padding: 14px 0;
-		border-top: 1px solid var(--spread-ink);
-	}
-	.back time {
-		display: block;
-		font-family: var(--grot);
-		font-size: 11.5px;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		margin-bottom: 4px;
-	}
-	.back h3 {
-		font-size: 22px;
-		font-weight: 600;
-		line-height: 1.2;
-		margin: 0 0 6px;
-		text-wrap: balance;
-	}
-	.back h3 a {
-		text-decoration: none;
-	}
-	.back h3 a:hover {
-		text-decoration: underline;
-	}
-	.back p {
-		margin: 0;
-		font-size: 15.5px;
-		text-wrap: pretty;
-	}
-	.back .lede {
-		margin-bottom: 14px;
-		font-style: italic;
-	}
-	.back .more {
-		margin-top: 16px;
-		font-family: var(--grot);
-		font-size: 12px;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-	}
-
-	.colophon {
-		margin-top: 72px;
-		padding: 24px 0 56px;
-		border-top: 1.5px solid var(--spread-ink);
-		font-style: italic;
+		margin: 28px 0 0;
+		padding-top: 12px;
+		border-top: 1px solid var(--color-ink);
 		font-size: 17px;
-		max-width: 60ch;
-	}
-	.colophon p {
-		margin: 0;
+		text-wrap: pretty;
 	}
 
-	@media (max-width: 1024px) {
-		/* The live lab leads on narrow screens: plate right after the byline, essay after the plate */
+	@media (max-width: 1100px) {
+		.plates {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 860px) {
 		.opening {
 			grid-template-columns: 1fr;
-			gap: 0;
 		}
-		.column {
-			display: contents;
-		}
-		.plate.lead {
-			order: 1;
-			margin-bottom: 40px;
-		}
-		.essay {
-			order: 2;
-		}
-		.plates,
-		.back {
+		/* Proof links come straight after the claim; the screenshot follows them */
+		.proof {
 			grid-template-columns: 1fr;
-			gap: 40px;
+			grid-row: 2;
+			margin-bottom: 36px;
+			border-bottom: 1.5px solid var(--color-ink);
+		}
+		.proof li,
+		.proof li:first-child,
+		.proof li:last-child {
+			padding: 16px 0;
+			border-left: 0;
+			border-top: 1px solid var(--color-ink);
+		}
+		.proof li:first-child {
+			border-top: 0;
 		}
 	}
 	@media (max-width: 640px) {
-		.essay {
-			column-count: 1;
+		.plates {
+			grid-template-columns: 1fr;
 		}
-		.fig {
-			left: -4px;
+		.entries li {
+			grid-template-columns: 1fr;
+			gap: 2px;
 		}
 	}
 </style>

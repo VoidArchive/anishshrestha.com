@@ -2,8 +2,6 @@ import { getBlogPost } from '#lib/utils/blog.js';
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-export const prerender = true;
-
 export const load: PageLoad = async ({ params }) => {
 	const post = await getBlogPost(params.slug);
 

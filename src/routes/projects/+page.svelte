@@ -1,139 +1,138 @@
 <script lang="ts">
-	const projects = [
-		{
-			title: 'nepal-payment-go',
-			kind: 'Unified payment SDK',
-			description:
-				'One Go SDK for eSewa, Khalti, ConnectIPS and FonePay behind a single type-safe interface. Handles HMAC-SHA256, HMAC-SHA512 and RSA-SHA256 signatures with zero external dependencies.',
-			tech: ['Go', 'SDK', 'eSewa', 'Khalti'],
-			repo: 'https://github.com/VoidArchive/nepal-payment-go',
-			demo: null
-		},
-		{
-			title: 'go-nepse',
-			kind: 'NEPSE API client',
-			description:
-				'Type-safe Go client for the Nepal Stock Exchange API. Automatic token handling through embedded WebAssembly (wazero), structured errors, exponential backoff retries.',
-			tech: ['Go', 'API', 'NEPSE', 'WASM'],
-			repo: 'https://github.com/VoidArchive/go-nepse',
-			demo: null
-		},
-		{
-			title: 'NTX',
-			kind: 'Stock research platform',
-			description:
-				'Financial research for the Nepal Stock Exchange. Go backend with Protobuf APIs, SvelteKit frontend. Stock screener, company fundamentals, real-time market data, portfolio tracking.',
-			tech: ['Go', 'SvelteKit', 'Protobuf', 'FinTech'],
-			repo: 'https://github.com/voidarchive/ntx',
-			demo: 'https://ntx.anishshrestha.com'
-		},
-		{
-			title: 'Bagchal',
-			kind: 'Nepali strategy game',
-			description:
-				'Browser implementation of the traditional tigers-and-goats board game, with a minimax opponent at two difficulty levels.',
-			tech: ['SvelteKit', 'TypeScript', 'Game', 'AI'],
-			repo: 'https://github.com/VoidArchive/anishshrestha.com/tree/main/src/labs/bagchal',
-			demo: '/labs/bagchal'
-		},
-		{
-			title: 'Advent of Go',
-			kind: 'Advent of Code 2024',
-			description:
-				'Advent of Code 2024 in Go. Some solutions are elegant, others are brute force. All of them work eventually, and the notes say which is which.',
-			tech: ['Go', 'Algorithms', 'AoC 2024'],
-			repo: 'https://github.com/VoidArchive/advent-of-go',
-			demo: null
-		},
-		{
-			title: 'Gator',
-			kind: 'CLI RSS aggregator',
-			description:
-				'A command-line RSS reader in Go. Import OPML files, follow feeds, and browse fresh posts in a Vim-like interface without leaving the terminal.',
-			tech: ['Go', 'PostgreSQL', 'sqlc'],
-			repo: 'https://github.com/VoidArchive/gator',
-			demo: null
-		},
-		{
-			title: 'Pokedex',
-			kind: 'Terminal Pokédex',
-			description:
-				'Catch Pokémon in your terminal. Uses the PokéAPI and caches everything locally so it works offline.',
-			tech: ['Go', 'CLI', 'PokéAPI'],
-			repo: 'https://github.com/VoidArchive/pokedex',
-			demo: null
-		},
-		{
-			title: 'Conway of Life',
-			kind: 'TUI simulator',
-			description:
-				'The Game of Life with a terminal interface. Load patterns or hit space and watch evolution.',
-			tech: ['Go', 'TUI', 'ncurses'],
-			repo: 'https://github.com/VoidArchive/conway_of_life',
-			demo: null
-		},
-		{
-			title: 'Maze Solver',
-			kind: 'Path-finding visualizer',
-			description:
-				'Generates random mazes and visualises BFS and DFS solving them. Built to understand path-finding.',
-			tech: ['Python', 'Algorithms', 'BFS/DFS'],
-			repo: 'https://github.com/VoidArchive/maze-solver',
-			demo: null
-		},
-		{
-			title: 'Markdown Renderer',
-			kind: 'Static site generator',
-			description:
-				'Yet another static site generator. Converts markdown to HTML; powered an older coursework blog.',
-			tech: ['Python', 'Markdown', 'SSG'],
-			repo: 'https://github.com/VoidArchive/markdown-renderer',
-			demo: null
-		}
-	];
+	import Seo from '#lib/components/Seo.svelte';
+	import { projects, labs } from '#lib/site.js';
 </script>
 
-<svelte:head>
-	<title>Instruments – Projects | Anish Shrestha</title>
-	<meta
-		name="description"
-		content="Open source projects by Anish Shrestha: Go libraries for Nepal's payment providers and stock exchange, a stock research platform, games, CLI tools, and algorithm experiments."
-	/>
-	<meta property="og:title" content="Instruments – Projects | Anish Shrestha" />
-	<meta property="og:url" content="https://anishshrestha.com/projects" />
-</svelte:head>
+<Seo
+	title="Projects | Anish Shrestha"
+	description="Projects by Anish Shrestha: NTX, a payment SDK for Nepal, a NEPSE client library and Kursi Fighter, plus six small labs that run in the browser."
+/>
 
-<main class="page container">
-	<h1 class="page-title">Instruments</h1>
+<main class="page page-wide container">
+	<h1 class="page-title">Projects</h1>
 	<p class="dek">
-		Production Go libraries for Nepal's financial plumbing, then the smaller tools and experiments
-		built along the way.
+		Three things I built and keep running, one game in progress, and six smaller labs you can play
+		with in the browser.
 	</p>
 
-	<ol class="ruled">
-		{#each projects as p (p.title)}
+	<ol class="ruled big">
+		{#each projects as p (p.slug)}
 			<li>
-				<p class="meta">{p.kind} · {p.tech.join(' · ')}</p>
-				<h2>{p.title}</h2>
-				<p>{p.description}</p>
-				<p class="meta links">
-					<a href={p.repo} rel="noopener">Code</a>
-					{#if p.demo}· <a href={p.demo} rel="noopener"
-							>{p.demo.startsWith('/') ? 'Play' : 'Live'}</a
-						>{/if}
-				</p>
+				<div class="name">
+					<h2><a href="/projects/{p.slug}">{p.name}</a></h2>
+					<p class="meta">{p.kind}</p>
+				</div>
+				<div>
+					<p>{p.summary}</p>
+					<p>{p.proves}</p>
+					<p class="meta links">
+						<a href="/projects/{p.slug}"
+							>{p.runs.chains.length > 0 ? 'How it runs' : 'Project page'}</a
+						>
+						{#each p.links.filter((l) => l.href.startsWith('http')).slice(0, 2) as link (link.href)}
+							<span class="sep" aria-hidden="true">·</span><a href={link.href}>{link.label}</a>
+						{/each}
+					</p>
+				</div>
 			</li>
 		{/each}
 	</ol>
+
+	<section class="section" id="labs">
+		<h2>Labs</h2>
+		<p class="lede">Small experiments. Each one runs the moment it loads.</p>
+		<ul class="labs">
+			{#each labs as lab (lab.slug)}
+				<li>
+					<h3><a href="/labs/{lab.slug}">{lab.name}</a></h3>
+					<p>{lab.description}</p>
+					<p class="meta links">
+						<a href="/labs/{lab.slug}">Play</a>
+						{#if lab.post}· <a href="/blog/{lab.post}">How it was built</a>{/if}
+					</p>
+				</li>
+			{/each}
+		</ul>
+	</section>
 </main>
 
 <style>
+	.big > li {
+		display: grid;
+		grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+		gap: 8px 40px;
+		padding: 26px 0;
+	}
+	.big h2 {
+		font-size: clamp(28px, 3vw, 38px);
+		line-height: 1.05;
+		letter-spacing: -0.015em;
+		margin: 0 0 8px;
+	}
+	.big .name .meta {
+		margin: 0;
+	}
 	.links {
 		margin: 0;
+	}
+	.sep {
+		margin: 0 6px;
 	}
 	.links a {
 		text-decoration: underline;
 		text-decoration-color: var(--color-spot);
 		text-underline-offset: 3px;
+		/* 24px tap target */
+		display: inline-block;
+		padding: 3px 0;
+	}
+
+	.lede {
+		font-style: italic;
+		font-size: 18px;
+		margin: 0 0 20px;
+	}
+	.labs {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0 32px;
+	}
+	.labs li {
+		padding: 14px 0 18px;
+		border-top: 1px solid var(--color-ink);
+	}
+	.labs h3 {
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 1.2;
+		margin: 0 0 4px;
+	}
+	.labs h3 a {
+		text-decoration: none;
+	}
+	.labs h3 a:hover {
+		text-decoration: underline;
+	}
+	.labs p:not(.meta) {
+		margin: 0 0 6px;
+		font-size: 16px;
+		text-wrap: pretty;
+	}
+
+	@media (max-width: 820px) {
+		.big > li {
+			grid-template-columns: 1fr;
+		}
+		.labs {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 520px) {
+		.labs {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

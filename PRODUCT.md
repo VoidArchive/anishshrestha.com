@@ -8,9 +8,11 @@ web
 
 ## Users
 
-Primary: fellow developers and learners. They arrive from a blog post, a GitHub README, or a shared lab link, usually on their own time, to play with a working experiment and read how it was built. Success for them is a lab that runs the moment it loads and a post that explains the engineering honestly.
+In priority order (changed 2026-11-14):
 
-Secondary, confirmed as present but not primary: hiring managers and contract clients evaluating a Go engineer. They should find the fintech work and contact details without the site being reorganized around them.
+1. A remote employer deciding in seconds whether the author can ship backend systems. Success: the role, three deployed proofs and a way to get in touch are on the first screen.
+2. Nepali companies needing payment or stock-data integrations. Success: they find the payment SDK and NEPSE work, how each runs, and the availability note on /about.
+3. Fellow developers reading the blog and playing the labs. Success: a lab that runs the moment it loads and a post that explains the engineering honestly.
 
 ## Product Purpose
 
@@ -18,16 +20,14 @@ A personal site that is both a portfolio and a coding laboratory. It exists to s
 
 ## Positioning
 
-The builder who ships working experiments. Six playable labs with real engines behind them (minimax AI with opening books for Bagchal, a step-based animation engine for the DSA visualizer, a virtualized Game of Life grid, boids with spatial hashing), several paired with a written deep-dive. A neighboring portfolio can list skills; it cannot show this many finished, playable artifacts with their stories.
-
-Supporting proof: production Go libraries for Nepal fintech (nepal-payment-go, go-nepse) and the live NTX platform at ntx.anishshrestha.com.
+A Go backend developer learning system design in public with AI, with every lesson backed by a deployed project. Voice is casual, first person. Proof: NTX (live), nepal-payment-go, go-nepse, Kursi Fighter. The six labs are supporting evidence, shown after the projects.
 
 ## Operating Context
 
-- Routes: home, /labs (index plus six labs: bagchal, boids, dsa-visualizer, gameoflife, life-calendar, tictactoe), /blog (nine mdsvex posts, three linked to a lab), /projects.
+- Routes: home, /projects (four projects, then six labs), /projects/<slug>, /labs/<name> (six labs; /labs redirects to /projects), /system-design (blog posts with `series: 'system-design'`), /blog, /about. Projects and labs are listed once in `src/lib/site.ts`.
 - Labs are used in the browser, on desktop and phones, often for a few minutes at a time. Pathfinding and grid labs involve dragging and tapping cells.
 - Blog posts are long technical reads with Go and TypeScript code blocks, tables, and callouts linking to the related lab.
-- Dev: `pnpm dev`. Deploy: Cloudflare Workers via wrangler. Home and blog routes are prerendered; lab routes are server-rendered then hydrated.
+- Dev: `pnpm dev`. Deploy: Cloudflare Workers via wrangler. Every page is prerendered; labs hydrate in the browser.
 - Analytics: Umami. Contact: hi@anishshrestha.com, GitHub VoidArchive, LinkedIn theinanish.
 
 ## Capabilities and Constraints
@@ -35,8 +35,7 @@ Supporting proof: production Go libraries for Nepal fintech (nepal-payment-go, g
 - SvelteKit 2 with Svelte 5 runes, TypeScript, Tailwind CSS 4 with tokens declared in `src/app.css`, mdsvex for posts, lucide-svelte icons, prism-themes for code highlighting.
 - Lab engines live in `src/labs/<name>` with engine, rules, ai, and ui folders; a shared `src/core` holds BaseEngine and Minimax. Redesign must keep these engines and their public state stores intact.
 - Content is real and must not be invented: project descriptions, post text, lab names, and repo links are facts.
-- Dark theme only today. A light theme is a listed todo in the README, not a commitment.
-- Undecided: whether the site should foreground availability for work. Recorded as secondary audience only.
+- Light and dark themes. Light is the default look; dark follows the system preference or the footer toggle, and the choice is saved in localStorage.
 
 ## Brand Commitments
 

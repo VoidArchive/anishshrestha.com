@@ -26,7 +26,6 @@ sits beneath it, and the controls follow (beside it on desktop, after it on phon
 
 <main class="lab container">
 	<header class="lab-head">
-		<span class="fig" aria-hidden="true">Fig. 1</span>
 		<h1>Game of Life</h1>
 		<p class="dek">
 			Conway's cellular automaton: three rules about neighbours, run on a grid you can draw on.
@@ -78,19 +77,8 @@ sits beneath it, and the controls follow (beside it on desktop, after it on phon
 		margin-bottom: 40px;
 	}
 
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
-		margin-left: -4px;
-	}
-
 	h1 {
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-weight: 600;
 		font-size: clamp(34px, 3vw, 40px);
 		line-height: 1.02;

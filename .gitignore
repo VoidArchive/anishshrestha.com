@@ -27,3 +27,6 @@ vite.config.ts.timestamp-*
 .impeccable/mocks/
 .impeccable/questions/
 .impeccable/live/
+
+# Design-tool scratch output
+.taste-skill/

@@ -161,7 +161,7 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 
 	.pattern-item:hover,
 	.pattern-item.selected {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 
 	.pattern-item.selected::before {
@@ -202,7 +202,7 @@ oscillators, still lifes, and complex patterns. Provides preview and insertion f
 
 	.info-header h3 {
 		margin: 0;
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-size: 17px;
 		font-weight: 600;
 		line-height: 1.2;

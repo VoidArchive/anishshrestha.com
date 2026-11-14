@@ -105,7 +105,7 @@
 	.control-label b {
 		font-weight: 700;
 		letter-spacing: 0.06em;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-variant-numeric: tabular-nums;
 	}
 

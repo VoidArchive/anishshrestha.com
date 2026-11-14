@@ -6,6 +6,10 @@ export interface BlogPost {
 	published: boolean;
 	tags: string[];
 	content: unknown;
+	/** 'system-design' puts the post on the /system-design hub */
+	series?: string;
+	/** Slug of the deployed project that backs the entry */
+	project?: string;
 	// New fields for lab integration
 	labSlug?: string;
 	relatedLab?: {

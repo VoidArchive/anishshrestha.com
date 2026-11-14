@@ -364,7 +364,7 @@ for the grid, and the current step as a serif caption.
 		margin: 8px 0 0;
 		padding-top: 8px;
 		border-top: 1px solid var(--color-ink);
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-variant-numeric: tabular-nums;
 	}
 	.state::before {

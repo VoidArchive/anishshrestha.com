@@ -11,31 +11,37 @@
 	--color-paper: #ffffff;
 	--color-ink: #141414;
 	--color-ink-muted: #555555;
-	--color-spot: #2242c8;
-	--color-spot-dim: #1a35a3;
-	--color-tint: #dfe6fb;
+	--color-spot: #ff6a13;
+	--color-spot-dim: #a8380a;
+	--color-tint: #ffe3d1;
+	/* #ff6a13 is 2.9:1 on white: text takes this darker orange, and labels on an orange fill take ink */
+	--color-spot-text: #c2410c;
+	--color-on-spot: #141414;
+	--color-code-number: #0b6b5f;
+	--color-code-string: #8a1c1c;
 
 	--color-bg-primary: #ffffff;
 	--color-bg-secondary: #ffffff;
-	--color-bg-tertiary: #dfe6fb;
+	--color-bg-tertiary: #ffe3d1;
 	--color-text: #141414;
 	--color-text-muted: #555555;
-	--color-primary: #2242c8;
-	--color-primary-dim: #1a35a3;
+	--color-primary: #ff6a13;
+	--color-primary-dim: #a8380a;
 	--color-border: #141414;
-	--color-glow: rgba(34, 66, 200, 0.15);
-	--color-glow-strong: rgba(34, 66, 200, 0.3);
+	--color-glow: rgba(255, 106, 19, 0.15);
+	--color-glow-strong: rgba(255, 106, 19, 0.3);
 
 	/* Names some older components use; all resolve into the same two inks */
 	--color-text-primary: #141414;
 	--color-text-secondary: #141414;
-	--color-primary-red: #2242c8;
+	--color-primary-red: #ff6a13;
 
-	--font-family-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-	--font-family-sans: 'Public Sans', system-ui, sans-serif;
+	--font-family-serif: 'Literata', Georgia, 'Times New Roman', serif;
+	--font-family-display: 'Besley', Georgia, serif;
+	--font-family-sans: 'Libre Franklin', system-ui, sans-serif;
 	--font-family-mono: 'Fira Code', ui-monospace, monospace;
 	--font-mono: 'Fira Code', ui-monospace, monospace;
-	--font-sans: 'Public Sans', system-ui, sans-serif;
+	--font-sans: 'Libre Franklin', system-ui, sans-serif;
 
 	/* 8px spacing scale */
 	--space-1: 0.25rem;
@@ -49,7 +55,48 @@
 	--space-16: 4rem;
 }
 
+/*
+ * Night edition: the same two inks reversed. Paper goes near-black, ink goes off-white,
+ * and the cobalt is lightened so it still clears AA on the dark sheet.
+ * app.html sets data-theme before first paint; the footer toggle changes it.
+ */
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--color-paper: #0e1014;
+	--color-ink: #e9e9e6;
+	--color-ink-muted: #a4a6ad;
+	--color-spot: #ff6a13;
+	--color-spot-dim: #ff8a45;
+	--color-tint: #3d2212;
+	--color-spot-text: #ff6a13;
+	--color-on-spot: #0e1014;
+	--color-code-number: #6fd3c3;
+	--color-code-string: #f2a8a8;
+
+	--color-bg-primary: #0e1014;
+	--color-bg-secondary: #0e1014;
+	--color-bg-tertiary: #3d2212;
+	--color-text: #e9e9e6;
+	--color-text-muted: #a4a6ad;
+	--color-primary: #ff6a13;
+	--color-primary-dim: #ff8a45;
+	--color-border: #e9e9e6;
+	--color-glow: rgba(255, 106, 19, 0.15);
+	--color-glow-strong: rgba(255, 106, 19, 0.3);
+	--color-text-primary: #e9e9e6;
+	--color-text-secondary: #e9e9e6;
+	--color-primary-red: #ff6a13;
+}
+
+/* Headings are a Clarendon; body stays an old-style serif */
+h1,
+h2,
+h3 {
+	font-family: var(--font-family-display);
+}
+
 html {
+	color-scheme: light;
 	background-color: var(--color-paper);
 }
 
@@ -65,7 +112,7 @@ body {
 
 ::selection {
 	background: var(--color-spot);
-	color: var(--color-paper);
+	color: var(--color-on-spot);
 }
 
 ::-webkit-scrollbar {
@@ -87,7 +134,7 @@ a {
 	text-underline-offset: 3px;
 }
 a:hover {
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 }
 
 :focus-visible {
@@ -98,7 +145,7 @@ a:hover {
 /* Caption capitals: the grotesk label voice used by rules, readings and controls */
 .caps {
 	font-family: var(--font-family-sans);
-	font-size: 11.5px;
+	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
@@ -131,7 +178,7 @@ a:hover {
 	font-weight: 700;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 	border-bottom: 1px solid var(--color-ink);
 	padding-bottom: var(--space-2);
 	margin-bottom: var(--space-4);
@@ -156,7 +203,7 @@ a:hover {
 	align-items: center;
 	gap: var(--space-2);
 	font-family: var(--font-family-sans);
-	font-size: 11.5px;
+	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
@@ -173,7 +220,7 @@ a:hover {
 }
 .btn:hover,
 .btn-secondary:hover {
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 	border-color: var(--color-spot);
 }
 .btn-secondary {
@@ -189,7 +236,7 @@ a:hover {
 .mode-btn.active {
 	background: var(--color-spot);
 	border-color: var(--color-spot);
-	color: var(--color-paper);
+	color: var(--color-on-spot);
 }
 
 input,
@@ -231,8 +278,20 @@ textarea {
 }
 .copy-code-button:hover,
 .copy-code-button.copied {
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 	border-color: var(--color-spot);
+}
+
+/* The imported code theme is light-only: put its surfaces and leftover tokens on our inks */
+pre[class*='language-'],
+code[class*='language-'],
+:not(pre) > code[class*='language-'] {
+	color: var(--color-ink);
+	background-color: var(--color-paper);
+	border-color: var(--color-ink);
+}
+[data-theme='dark'] .token {
+	color: var(--color-ink);
 }
 
 /* Code token colours lifted to AA on white; the theme's defaults sit under 3:1 */
@@ -256,11 +315,11 @@ textarea {
 .token.number,
 .token.boolean,
 .token.constant {
-	color: #0b6b5f;
+	color: var(--color-code-number);
 }
 .token.string,
 .token.attr-value {
-	color: #8a1c1c;
+	color: var(--color-code-string);
 }
 
 /* Markdown defaults used by posts */
@@ -291,7 +350,7 @@ details summary {
 	color: var(--color-ink-muted);
 }
 details summary:hover {
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 }
 details summary::-webkit-details-marker {
 	display: none;
@@ -313,7 +372,7 @@ td {
 }
 th {
 	font-family: var(--font-family-sans);
-	font-size: 11.5px;
+	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
@@ -328,6 +387,8 @@ tr:last-child td {
 	*::before,
 	*::after {
 		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
 	}
 }
 
@@ -341,7 +402,7 @@ tr:last-child td {
 	max-width: 1040px;
 }
 .page-title {
-	font-family: var(--font-family-serif);
+	font-family: var(--font-family-display);
 	font-weight: 600;
 	font-size: clamp(32px, 4vw, 48px);
 	line-height: 1.05;
@@ -351,7 +412,7 @@ tr:last-child td {
 }
 .dek {
 	font-style: italic;
-	font-size: 18px;
+	font-size: 19px;
 	line-height: 1.5;
 	margin: 0 0 36px;
 	max-width: 60ch;
@@ -359,12 +420,12 @@ tr:last-child td {
 }
 .meta {
 	font-family: var(--font-family-sans);
-	font-size: 11.5px;
+	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	line-height: 1.5;
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 	font-variant-numeric: tabular-nums;
 }
 .meta a {
@@ -372,7 +433,7 @@ tr:last-child td {
 	text-decoration: none;
 }
 .meta a:hover {
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 }
 .ruled {
 	list-style: none;
@@ -387,7 +448,7 @@ tr:last-child td {
 .ruled h2,
 .ruled h3 {
 	font-family: var(--font-family-serif);
-	font-size: 22px;
+	font-size: 24px;
 	font-weight: 600;
 	line-height: 1.2;
 	margin: 4px 0 6px;
@@ -401,16 +462,65 @@ tr:last-child td {
 .ruled h3 a:hover {
 	text-decoration: underline;
 }
-.ruled p {
+.ruled p:not(.meta) {
 	margin: 0 0 8px;
-	font-size: 15.5px;
+	font-size: 17px;
 	text-wrap: pretty;
 	max-width: 65ch;
 }
 .numeral {
 	font-family: var(--font-family-sans);
 	font-weight: 700;
-	color: var(--color-spot);
+	color: var(--color-spot-text);
 	letter-spacing: -0.04em;
 	line-height: 1;
+}
+
+/* Section opener on the reading routes: a heavy rule, then a serif heading */
+.section {
+	margin-top: 64px;
+	padding-top: 20px;
+	border-top: 1.5px solid var(--color-ink);
+}
+.section > h2 {
+	font-size: clamp(24px, 2.4vw, 30px);
+	font-weight: 600;
+	line-height: 1.15;
+	letter-spacing: -0.01em;
+	text-wrap: balance;
+	margin: 0 0 14px;
+}
+.prose-block p {
+	font-size: 17px;
+	line-height: 1.6;
+	max-width: 68ch;
+	margin: 0 0 1em;
+	text-wrap: pretty;
+}
+
+/* Code voice: install lines and examples. Mono is for code only. */
+.codeblock {
+	margin: 0;
+	padding: 16px 18px;
+	border: 1px solid var(--color-ink);
+	background: var(--color-paper);
+	font-family: var(--font-family-mono);
+	font-size: 14px;
+	line-height: 1.6;
+	tab-size: 4;
+	overflow-x: auto;
+}
+/* A one-line command wraps instead of scrolling */
+.codeblock.wrap {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.codeblock:focus-visible {
+	outline-offset: -2px;
+}
+@media (max-width: 640px) {
+	.codeblock {
+		font-size: 13px;
+		padding: 14px;
+	}
 }

@@ -88,7 +88,6 @@
 />
 
 <header class="lab-head">
-	<span class="fig" aria-hidden="true">Fig. 5</span>
 	<h1>Bagchal</h1>
 	<p class="dek">The Nepali tigers-and-goats game, with a minimax opponent.</p>
 </header>
@@ -143,15 +142,6 @@
 <style>
 	.lab-head {
 		margin-bottom: 40px;
-	}
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
 	}
 	h1 {
 		font-weight: 600;

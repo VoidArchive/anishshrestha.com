@@ -47,7 +47,7 @@
 	}
 	.list .caps {
 		min-width: 2ch;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-variant-numeric: tabular-nums;
 		line-height: inherit;
 	}

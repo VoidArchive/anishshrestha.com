@@ -45,7 +45,7 @@ private static updateGrid(grid, x, y, type) {
 
 It clones `grid` and flags one node. The problem is which grid it clones. `grid` is the argument the algorithm received, the original board with walls and endpoints, and it never changes. So every step's snapshot was the original board plus exactly one visited cell. Apply step 50 and you see one cell. Apply step 51 and you see a different single cell. The frontier helper had the same shape and was never called at all.
 
-The board rendered what it was given, faithfully. The search was correct. The record of it was wrong.
+The board faithfully rendered what it was given, and the search itself was correct. Only the record of it was wrong.
 
 ## The fix
 

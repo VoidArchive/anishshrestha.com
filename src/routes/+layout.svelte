@@ -31,55 +31,17 @@
 </script>
 
 <svelte:head>
-	<meta charset="utf-8" />
-
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-	<meta
-		name="description"
-		content="Anish Shrestha - Full-Stack Software Developer in Kathmandu, Nepal. Building web applications, distributed systems, and interactive experiences. Specializing in Go, Python, SvelteKit, and modern development practices."
-	/>
-	<meta
-		name="keywords"
-		content="software developer Nepal, full stack developer Nepal, Kathmandu web developer, Nepal programmer, software engineer Nepal, Go developer, Python developer, SvelteKit developer, remote developer Nepal, web development Nepal, software development Nepal, tech talent Nepal"
-	/>
+	<!-- Title, description and canonical come from each page's <Seo>; only site-wide tags live here -->
 	<meta name="author" content="Anish Shrestha" />
 	<meta name="robots" content="index, follow" />
-	<meta name="language" content="en" />
-	<meta name="geo.region" content="NP-BA" />
-	<meta name="geo.placename" content="Kathmandu, Nepal" />
-	<meta name="geo.position" content="27.7172;85.3240" />
-	<meta name="ICBM" content="27.7172, 85.3240" />
-	<title>Anish Shrestha | Software Developer</title>
-
-	<!-- Open Graph -->
-
-	<meta property="og:title" content="Anish Shrestha | Software Developer" />
-
-	<meta
-		property="og:description"
-		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences with modern technologies. Available for remote collaboration worldwide."
-	/>
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://anishshrestha.com" />
 	<meta property="og:site_name" content="Anish Shrestha" />
 	<meta property="og:locale" content="en_US" />
 	<meta property="og:image" content="https://anishshrestha.com/og-image.png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="Anish Shrestha - Software Developer from Nepal" />
-
-	<!-- Twitter Card -->
+	<meta property="og:image:alt" content="Anish Shrestha, software developer" />
 	<meta name="twitter:card" content="summary_large_image" />
-
-	<meta name="twitter:title" content="Anish Shrestha | Software Developer" />
-
-	<meta
-		name="twitter:description"
-		content="Full-stack software developer from Kathmandu, Nepal. Creating web applications, distributed systems, and interactive experiences."
-	/>
 	<meta name="twitter:image" content="https://anishshrestha.com/og-image.png" />
-	<meta name="twitter:image:alt" content="Anish Shrestha - Software Developer from Nepal" />
 
 	<!-- JSON-LD Schema -->
 	<script type="application/ld+json">

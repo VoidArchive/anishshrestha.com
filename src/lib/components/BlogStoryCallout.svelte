@@ -14,8 +14,7 @@
 	<p class="meta line"><a href={blogUrl}>Read how it was built</a></p>
 {:else}
 	<aside class="story">
-		<p class="meta">Read how it was built</p>
-		<p class="title"><a href={blogUrl}>{blogTitle}</a></p>
+		<p class="title">Read how it was built: <a href={blogUrl}>{blogTitle}</a></p>
 		{#if blogDescription && variant === 'default'}
 			<p class="what">{blogDescription}</p>
 		{/if}
@@ -30,17 +29,13 @@
 		border-bottom: 1px solid var(--color-ink);
 	}
 	.title {
-		margin: 4px 0 0;
+		margin: 0;
 		font-size: 17px;
-		font-weight: 600;
 		line-height: 1.3;
 		text-wrap: balance;
 	}
 	.title a {
-		text-decoration: none;
-	}
-	.title a:hover {
-		text-decoration: underline;
+		font-weight: 600;
 	}
 	.what {
 		margin: 6px 0 0;

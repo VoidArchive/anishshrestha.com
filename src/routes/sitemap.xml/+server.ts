@@ -1,67 +1,34 @@
 import { getBlogPosts } from '#lib/utils/blog.js';
-import type { BlogPost } from '#lib/utils/blog.js';
+import { SITE, projects } from '#lib/site.js';
 
-interface SitemapPage {
-	url: string;
-	priority: string;
-	changefreq: string;
-	lastmod?: string;
-}
+export const prerender = true;
+
+// Every static page route is found from the filesystem, so a new lab or page lands here without an edit
+const staticPaths = Object.keys(import.meta.glob('/src/routes/**/+page.svelte'))
+	.filter((file) => !file.includes('['))
+	.map((file) => file.slice('/src/routes'.length, -'/+page.svelte'.length));
 
 export async function GET() {
+	const today = new Date().toISOString().split('T')[0];
 	const posts = await getBlogPosts();
-	const baseUrl = 'https://anishshrestha.com';
 
-	const staticPages: SitemapPage[] = [
-		{
-			url: '',
-			priority: '1.0',
-			changefreq: 'weekly',
-			lastmod: new Date().toISOString().split('T')[0]
-		},
-		{ url: '/projects', priority: '0.9', changefreq: 'monthly' },
-		{ url: '/blog', priority: '0.8', changefreq: 'weekly' },
-		{ url: '/labs', priority: '0.7', changefreq: 'monthly' },
-		{ url: '/labs/bagchal', priority: '0.6', changefreq: 'monthly' },
-		{ url: '/labs/dsa-visualizer', priority: '0.6', changefreq: 'monthly' },
-		{ url: '/labs/gameoflife', priority: '0.6', changefreq: 'monthly' },
-		{ url: '/labs/tictactoe', priority: '0.6', changefreq: 'monthly' }
+	const urls = [
+		...staticPaths.map((path) => ({ path, lastmod: path === '' ? today : undefined })),
+		...projects.map((p) => ({ path: `/projects/${p.slug}`, lastmod: undefined })),
+		...posts.map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.date }))
 	];
 
-	const blogPosts: SitemapPage[] = posts.map((post: BlogPost) => ({
-		url: `/blog/${post.slug}`,
-		priority: '0.8',
-		changefreq: 'monthly',
-		lastmod: post.date
-	}));
-
-	const allPages = [...staticPages, ...blogPosts];
-
-	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-${allPages
+	const body = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls
 	.map(
-		(page) => `
-	<url>
-		<loc>${baseUrl}${page.url}</loc>
-		<priority>${page.priority}</priority>
-		<changefreq>${page.changefreq}</changefreq>
-		${page.lastmod ? `<lastmod>${page.lastmod}</lastmod>` : ''}
-	</url>`
+		({ path, lastmod }) =>
+			`	<url><loc>${SITE}${path || '/'}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
 	)
-	.join('')}
+	.join('\n')}
 </urlset>`;
 
-	return new Response(sitemap, {
-		headers: {
-			'Content-Type': 'application/xml',
-			'Cache-Control': 'max-age=3600',
-			'X-Robots-Tag': 'index, follow'
-		}
+	return new Response(body, {
+		headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'max-age=3600' }
 	});
 }

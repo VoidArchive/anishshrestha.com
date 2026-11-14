@@ -26,7 +26,7 @@ export const DEFAULT_PARAMS = {
 };
 ```
 
-On the lab's canvas, roughly 900 by 600 pixels, that produces the thing you want: bands of birds wheeling around and reforming. When I put the same engine on the home page as Fig. 2, in a 600 by 400 plate with 120 birds, it produced something else. Within a few seconds the flock collapsed into five or six tight clumps that drifted around like blobs. The rules were the same. The box was smaller.
+On the lab's canvas, roughly 900 by 600 pixels, that produces the thing you want: bands of birds wheeling around and reforming. When I put the same engine on the home page as Fig. 2, in a 600 by 400 plate with 120 birds, it produced something else. Within a few seconds the flock collapsed into five or six tight clumps that drifted around like blobs. The rules were the same and only the box was smaller.
 
 ## Why the box matters
 

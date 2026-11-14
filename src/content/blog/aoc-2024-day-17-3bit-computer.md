@@ -1,29 +1,27 @@
 ---
 title: 'Advent of Code 2024 Day 17: Virtual Machine Implementation and Quine Generation'
 slug: 'aoc-2024-day-17-3bit-computer'
-description: 'Technical implementation of a 3-bit virtual machine in Go with minimax search for self-replicating program generation.'
+description: 'A 3-bit virtual machine written in Go, with minimax search for generating a self-replicating program.'
 date: '2025-06-11'
 published: true
 tags: ['adventofcode', 'quine', 'go']
 ---
 
-# Advent of Code 2024 Day 17: Virtual Machine Implementation
+# Advent of Code 2024 Day 17: virtual machine implementation
 
-## 3-Bit Computer Architecture
+## 3-bit computer architecture
 
-The puzzle presents a minimalist virtual machine architecture featuring three general-purpose registers and an eight-instruction command set. The system operates on unlimited-precision integers with 3-bit operand encoding for specific operations.
+The puzzle describes a minimal virtual machine with three general-purpose registers and eight instructions. It works on unlimited-precision integers, and some operations encode their operand in 3 bits.
 
-Implementation requirements:
+The solution needs three things:
 
-1. Virtual machine execution engine with proper instruction cycle handling
-2. Combo operand resolution mechanism
-3. Self-replicating program search algorithm utilizing reverse engineering approach
+1. A virtual machine execution engine that handles the instruction cycle properly
+2. A way to resolve combo operands
+3. A search for a self-replicating program, done by reverse engineering
 
----
+## Virtual machine data structure
 
-## Virtual Machine Data Structure
-
-The virtual machine implementation requires a state container managing three integer registers and program execution context:
+The machine state is three integer registers plus the program execution context:
 
 ```go
 // Computer represents the virtual machine state
@@ -35,18 +33,16 @@ type Computer struct {
 }
 ```
 
-Core components:
+The fields:
 
-- **A, B, C**: Unlimited-precision integer registers for computation
-- **program**: Instruction sequence stored as integer array
-- **ip**: Program counter tracking current execution position
-- **output**: Accumulated output from OUT instructions
+- A, B, C: unlimited-precision integer registers for computation
+- program: the instruction sequence, stored as an integer array
+- ip: the program counter, tracking the current execution position
+- output: accumulated output from OUT instructions
 
----
+## Instruction set architecture
 
-## Instruction Set Architecture
-
-The virtual machine implements eight distinct operations encoded as opcode-operand pairs. Each instruction consumes two consecutive program values for complete specification.
+The machine has eight operations, encoded as opcode-operand pairs. Each instruction takes two consecutive program values.
 
 | Opcode | Mnemonic | Operation                         |
 | ------ | -------- | --------------------------------- |
@@ -59,7 +55,7 @@ The virtual machine implements eight distinct operations encoded as opcode-opera
 | 6      | bdv      | B = A / 2^combo(operand)          |
 | 7      | cdv      | C = A / 2^combo(operand)          |
 
-Implementation details:
+The implementation:
 
 ```go
 switch opcode {
@@ -95,9 +91,9 @@ case 7: // cdv - Division storing result in C
 }
 ```
 
-### Combo Operand Resolution
+### Combo operand resolution
 
-The instruction set utilizes dual operand interpretation modes: literal values (0-3) and register references (4-6).
+An operand is read in one of two modes: literal values (0-3) and register references (4-6).
 
 ```go
 func (c *Computer) getComboValue(operand int) int {
@@ -116,9 +112,7 @@ func (c *Computer) getComboValue(operand int) int {
 }
 ```
 
----
-
-## Execution Engine
+## Execution engine
 
 ```go
 func (c *Computer) Execute() {
@@ -137,26 +131,24 @@ func (c *Computer) Execute() {
 }
 ```
 
-Standard fetch-decode-execute cycle:
+This is the standard fetch-decode-execute cycle:
 
-1. Fetch opcode and operand from program memory
-2. Decode instruction type and operand interpretation
-3. Execute operation with appropriate register/memory modifications
-4. Increment instruction pointer by 2 (unless jump occurred)
+1. Fetch the opcode and operand from program memory
+2. Decode the instruction type and how to interpret the operand
+3. Execute the operation, modifying registers or memory as needed
+4. Increment the instruction pointer by 2, unless a jump occurred
 
-Process continues until instruction pointer exceeds program bounds.
+It continues until the instruction pointer goes past the end of the program.
 
----
+## Quine generation algorithm
 
-## Quine Generation Algorithm
+Part 2 asks for an initial value of register A that makes the program output its own instruction sequence. That makes it a self-replicating program, or quine.
 
-Part 2 requires finding an initial register A value that causes the program to output its own instruction sequence. This represents a self-replicating program or quine.
+### Reverse engineering approach
 
-### Reverse Engineering Approach
+The program divides register A by 8 (a right shift by 3 bits) on each iteration, and the output depends on the current value of A modulo 8. So each 3-bit chunk of the initial A value maps directly to one output digit.
 
-Critical observation: the program systematically divides register A by 8 (right-shift by 3 bits) each iteration. The output depends on the current value of A modulo 8. This creates a direct mapping between 3-bit chunks of the initial A value and corresponding output digits.
-
-Solution methodology: construct the required A value from right to left, validating each 3-bit segment.
+That means the required A value can be built from right to left, validating each 3-bit segment along the way.
 
 ```go
 type candidate int
@@ -187,29 +179,27 @@ func findQuineValue(program []int) int {
 }
 ```
 
-Algorithm summary: systematically build candidate values by appending 3-bit segments from right to left, validating output correctness at each step. This approach exploits the predictable bit-shifting pattern to avoid exhaustive search.
+The search builds candidate values by appending 3-bit segments from right to left and checks the output at each step. The predictable bit shifting is what lets it avoid an exhaustive search.
 
----
-
-## Implementation Analysis
+## Implementation analysis
 
 Example program: `[2,4,1,3,7,5,0,3,1,4,4,7,5,5,3,0]`
 
-Algorithm execution:
+How the algorithm runs on it:
 
-1. Target final output digit: `0`. Test 3-bit candidates `000`-`111`, retain matches.
-2. Append next 3-bit segment to left side, validate output digit `3`.
-3. Continue iteratively until complete program output matches.
+1. The final output digit must be `0`. Test the 3-bit candidates `000`-`111` and retain the matches.
+2. Append the next 3-bit segment on the left side and validate output digit `3`.
+3. Continue until the complete program output matches.
 
-The reverse construction approach reduces search space from exponential to linear in program length.
+Building the value in reverse reduces the search space from exponential to linear in program length.
 
 ## Summary
 
-Key implementation achievements:
+What the solution contains:
 
-- Minimal virtual machine with 8-instruction set and 3-register architecture
-- Efficient combo operand resolution supporting dual interpretation modes
-- Reverse-engineering quine search algorithm exploiting predictable bit patterns
-- Complete solution avoiding brute-force search through structured candidate generation
+- A minimal virtual machine with an 8-instruction set and 3 registers
+- Efficient combo operand resolution supporting both interpretation modes
+- A reverse-engineering quine search that exploits the predictable bit patterns
+- A complete solution that avoids brute-force search by generating candidates in a structured way
 
-The virtual machine demonstrates how constrained instruction sets can still achieve complex computational tasks including self-replication, while the reverse-engineering approach showcases problem-specific optimization over general search strategies.
+The virtual machine shows that a constrained instruction set can still do complex computation, self-replication included. The reverse-engineering approach is a problem-specific optimization, and here it beats a general search strategy.

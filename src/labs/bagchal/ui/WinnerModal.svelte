@@ -276,7 +276,7 @@
 		border-bottom: 1px solid var(--color-ink);
 	}
 	.rows dt {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 	.rows dd {
 		margin: 0;

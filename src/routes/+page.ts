@@ -1,13 +1,7 @@
-import { getBlogPosts } from '#lib/utils/blog.js';
+import { getEntries } from '#lib/utils/entries.js';
 import type { PageLoad } from './$types';
 
-export const prerender = true;
-
 export const load: PageLoad = async () => {
-	const allPosts = await getBlogPosts();
-	const latestPosts = allPosts.slice(0, 3);
-
-	return {
-		latestPosts
-	};
+	// Newest three, newest first
+	return { entries: (await getEntries()).slice(-3).reverse() };
 };

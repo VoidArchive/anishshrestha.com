@@ -1,19 +1,21 @@
 ---
 title: 'Building a Unified Payment SDK for Nepal in Go'
 slug: 'building-nepal-payment-sdk-go'
-description: 'A type-safe Go SDK that unifies eSewa, Khalti, ConnectIPS, and FonePay with a single interface. HMAC signatures, RSA certificates, and zero hassle.'
+description: 'A type-safe Go SDK that puts eSewa, Khalti, ConnectIPS and FonePay behind one interface and handles their HMAC signatures and RSA certificates.'
 date: '2026-01-14'
 published: true
 tags: ['go', 'payments', 'nepal', 'fintech', 'sdk', 'open-source']
+series: 'system-design'
+project: 'nepal-payment-go'
 ---
 
-If you've ever integrated a payment gateway in Nepal, you know the pain. Each provider has its own authentication scheme, callback format, and quirks. eSewa wants Form POST with HMAC-SHA256. Khalti uses API keys with JSON. ConnectIPS requires RSA-signed certificates. FonePay has HMAC-SHA512.
+Integrating payment gateways in Nepal is painful because each provider has its own authentication scheme, callback format, and quirks. eSewa wants Form POST with HMAC-SHA256. Khalti uses API keys with JSON. ConnectIPS requires RSA-signed certificates. FonePay has HMAC-SHA512.
 
-I built **nepal-payment-go** to solve this: a single Go SDK that provides a unified interface for all major Nepali payment providers.
+I built nepal-payment-go to deal with that. It is a single Go SDK with one interface for all major Nepali payment providers.
 
-## The Problem
+## The problem
 
-Let's say you're building an e-commerce site and want to accept payments. Without a unified SDK, your code looks like this:
+Say you're building an e-commerce site and want to accept payments. Without a unified SDK, your code looks like this:
 
 ```go
 // eSewa: Form POST with HMAC signature
@@ -33,11 +35,11 @@ signature, _ := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hash[:]
 // POST form with certificate...
 ```
 
-Three providers, three completely different implementations. Add error handling, callback verification, and amount validation, and you've got a maintenance nightmare.
+That is three providers and three completely different implementations. You still have to add error handling, callback verification, and amount validation to each one, and then maintain all of it.
 
-## The Solution: One Interface
+## The solution: one interface
 
-nepal-payment-go abstracts all of this behind a single `Provider` interface:
+nepal-payment-go puts all of this behind a single `Provider` interface:
 
 ```go
 type Provider interface {
@@ -46,7 +48,7 @@ type Provider interface {
 }
 ```
 
-Now, regardless of which provider you use, the code is identical:
+The calling code is then identical whichever provider you use:
 
 ```go
 // Works for eSewa, Khalti, ConnectIPS, or FonePay
@@ -64,9 +66,9 @@ if resp.IsFormPOST {
 }
 ```
 
-## Under the Hood: Handling Each Provider's Quirks
+## Under the hood: handling each provider's quirks
 
-### eSewa: HMAC-SHA256 Signatures
+### eSewa: HMAC-SHA256 signatures
 
 eSewa uses a Form POST flow. You generate an HMAC-SHA256 signature of the payment parameters and submit a hidden form that auto-redirects the user.
 
@@ -78,20 +80,20 @@ func (p *Provider) generateSignature(message string) string {
 }
 ```
 
-The callback returns a Base64-encoded JSON payload. The SDK decodes it, verifies the signature, and returns a clean `VerifyResponse`.
+The callback returns a Base64-encoded JSON payload. The SDK decodes it, verifies the signature, and returns a `VerifyResponse`.
 
 ### Khalti: REST API with JSON
 
-Khalti is the simplest. It's a standard REST API with API key authentication. The SDK handles the HTTP requests, JSON marshaling, and status normalization.
+Khalti is the simplest: a standard REST API with API key authentication. The SDK handles the HTTP requests, JSON marshaling, and status normalization.
 
 ```go
 req.Header.Set("Authorization", "Key "+p.config.SecretKey)
 req.Header.Set("Content-Type", "application/json")
 ```
 
-Khalti also uses paisa (NPR × 100) for amounts, which the SDK handles transparently.
+Khalti also uses paisa (NPR × 100) for amounts, which the SDK handles for you.
 
-### ConnectIPS: RSA Certificates
+### ConnectIPS: RSA certificates
 
 ConnectIPS is the most complex. It requires a `.pfx` certificate file from NCHL (Nepal Clearing House) and uses RSA-SHA256 for signing.
 
@@ -117,9 +119,9 @@ func (p *Provider) generateHMAC(message string) string {
 }
 ```
 
-## Verification: The Critical Part
+## Verification: the critical part
 
-Payment verification is where most bugs happen. Did the user actually pay? Is the amount correct? Was the callback tampered with?
+Payment verification is where most bugs happen. You have to confirm that the user actually paid, that the amount is correct, and that the callback was not tampered with.
 
 The SDK handles all of this:
 
@@ -143,7 +145,7 @@ if result.Success {
 
 Each provider has different callback formats, but the SDK normalizes them all to the same `VerifyResponse` struct.
 
-## Status Normalization
+## Status normalization
 
 Each provider returns different status strings:
 
@@ -154,7 +156,7 @@ Each provider returns different status strings:
 | ConnectIPS | "SUCCESS"   | "PENDING" | various   |
 | FonePay    | "true"      | "pending" | "false"   |
 
-The SDK normalizes these to consistent constants:
+The SDK maps these to one set of constants:
 
 ```go
 const (
@@ -165,15 +167,15 @@ const (
 )
 ```
 
-## Zero External Dependencies
+## Zero external dependencies
 
 The core package has zero external dependencies. The only exception is ConnectIPS, which uses `golang.org/x/crypto/pkcs12` for PFX certificate parsing.
 
-Everything else—HMAC, SHA256, SHA512, RSA, Base64—uses Go's standard library.
+Everything else (HMAC, SHA256, SHA512, RSA, Base64) uses Go's standard library.
 
 ## Testing
 
-The SDK includes comprehensive table-driven tests for each provider:
+The SDK has table-driven tests for each provider:
 
 ```bash
 $ go test ./...
@@ -185,7 +187,7 @@ ok  providers/khalti      0.007s
 
 Each test covers configuration validation, payment initiation, callback verification, signature validation, and error handling.
 
-## Getting Started
+## Getting started
 
 ```bash
 go get github.com/voidarchive/nepal-payment-go
@@ -207,21 +209,21 @@ resp, _ := provider.InitiatePayment(ctx, &core.PaymentRequest{
 })
 ```
 
-A combined demo server showcasing all 4 providers is included:
+The repo also includes a combined demo server with all 4 providers:
 
 ```bash
 go run ./examples/demo/
 # Open http://localhost:8080
 ```
 
-## What's Next?
+## What's next?
 
-The SDK covers the major players: eSewa, Khalti, ConnectIPS, and FonePay. Together with the IME Pay + Khalti merger, this effectively covers the vast majority of digital payments in Nepal.
+The SDK covers the major players: eSewa, Khalti, ConnectIPS, and FonePay. Counting the IME Pay + Khalti merger, that effectively covers the vast majority of digital payments in Nepal.
 
-Future additions could include CellPay and PrabhuPay if their APIs become more accessible.
+I could add CellPay and PrabhuPay later if their APIs become more accessible.
 
 ## Conclusion
 
-Building payment integrations in Nepal doesn't have to be painful. nepal-payment-go provides a clean, type-safe, well-tested SDK that handles the complexity of each provider behind a unified interface.
+nepal-payment-go is a type-safe, tested SDK that keeps each provider's complexity behind one interface, so the integration code stays the same across all four.
 
-The code is open source and available on GitHub: [github.com/voidarchive/nepal-payment-go](https://github.com/voidarchive/nepal-payment-go)
+The code is open source and on GitHub: [github.com/voidarchive/nepal-payment-go](https://github.com/voidarchive/nepal-payment-go)

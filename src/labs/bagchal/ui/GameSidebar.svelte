@@ -196,7 +196,7 @@
 		padding-top: 0;
 	}
 	.rows dt {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		white-space: nowrap;
 	}
 	.rows dd {
@@ -212,7 +212,7 @@
 		margin-left: 4px;
 	}
 	.warn {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 	.choices {
 		display: flex;

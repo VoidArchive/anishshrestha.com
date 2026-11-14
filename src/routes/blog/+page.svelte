@@ -1,50 +1,51 @@
 <script lang="ts">
+	import Seo from '#lib/components/Seo.svelte';
 	import { formatDate } from '#lib/utils/blog.js';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-	<title>Notes – Blog | Anish Shrestha</title>
-	<meta
-		name="description"
-		content="Technical notes by Anish Shrestha: how the labs were built, Go libraries for Nepal's payment and stock systems, and what went wrong along the way."
-	/>
-	<meta property="og:title" content="Notes – Blog | Anish Shrestha" />
-	<meta property="og:url" content="https://anishshrestha.com/blog" />
-</svelte:head>
+<Seo
+	title="Blog | Anish Shrestha"
+	description="Technical writing by Anish Shrestha: system design entries, Go libraries for Nepal's payment and stock systems, how the labs were built, and what went wrong along the way."
+/>
 
 <main class="page container">
-	<h1 class="page-title">Notes</h1>
+	<h1 class="page-title">Blog</h1>
 	<p class="dek">
-		The written half of each experiment: engines, opening books, spatial hashes, payment signatures,
-		and the parts that were brute force.
+		How I built things and what broke: Go libraries, system design entries, the engines behind the
+		labs, and the parts that were brute force.
 	</p>
 
 	{#if data.posts.length > 0}
 		<ol class="ruled">
 			{#each data.posts as post (post.slug)}
 				<li>
-					<p class="meta">
-						<time datetime={post.date}>{formatDate(post.date)}</time>
-						{#if post.relatedLab}· <a href={post.relatedLab.url}>Has a live lab</a>{/if}
-					</p>
 					<h2><a href="/blog/{post.slug}">{post.title}</a></h2>
 					<p>{post.description}</p>
-					<p class="meta tags">{post.tags.join(' · ')}</p>
+					<p class="meta">
+						<time datetime={post.date}>{formatDate(post.date)}</time>
+						{#if post.series === 'system-design'}· <a href="/system-design">System design</a>{/if}
+						{#if post.relatedLab}· <a href={post.relatedLab.url}>Has a live lab</a>{/if}
+						{#each post.tags as tag (tag)}<span class="tag">· {tag}</span>{/each}
+					</p>
 				</li>
 			{/each}
 		</ol>
 	{:else}
-		<p class="dek">No notes yet.</p>
+		<p class="dek">No posts yet.</p>
 	{/if}
 </main>
 
 <style>
-	.tags {
-		color: var(--color-ink-muted);
-		font-weight: 400;
+	.ruled .meta {
 		margin: 0;
+	}
+	/* A hyphenated tag never breaks across lines */
+	.tag {
+		display: inline-block;
+		white-space: nowrap;
+		margin-right: 0.35em;
 	}
 </style>

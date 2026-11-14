@@ -27,7 +27,7 @@
 	}
 	.headline {
 		margin: 0;
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-size: 22px;
 		font-weight: 600;
 		line-height: 1.2;

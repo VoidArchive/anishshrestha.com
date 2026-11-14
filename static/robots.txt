@@ -38,7 +38,6 @@ Disallow: /admin/
 Disallow: /.git/
 Disallow: /node_modules/
 Disallow: /src/
-Disallow: /_app/
 
 # Crawl delay for politeness (lower for AI crawlers)
 Crawl-delay: 1 

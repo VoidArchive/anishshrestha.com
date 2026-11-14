@@ -85,7 +85,7 @@
 		cursor: pointer;
 	}
 	.cell.o {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 	.cell.win {
 		background: var(--color-tint);

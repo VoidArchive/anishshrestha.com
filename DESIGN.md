@@ -1,49 +1,67 @@
 ---
 name: anishshrestha.com
-description: A magazine spread whose numbered figures are live labs, running.
+description: A magazine front page where the claim, the shipped product and the live labs share one sheet of paper.
 colors:
   paper: '#ffffff'
   ink: '#141414'
   ink-muted: '#555555'
   cobalt-spot: '#2242c8'
+  cobalt-deep: '#1a35a3'
   cobalt-tint: '#dfe6fb'
 typography:
   display:
     fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
-    fontSize: 'clamp(34px, 4.2vw, 60px)'
+    fontSize: 'clamp(38px, 5.4vw, 80px)'
     fontWeight: 600
-    lineHeight: 1.02
-    letterSpacing: '-0.015em'
-  figure-numeral:
-    fontFamily: 'Public Sans, system-ui, sans-serif'
-    fontSize: 'clamp(64px, 9vw, 132px)'
-    fontWeight: 700
     lineHeight: 1
-    letterSpacing: '-0.04em'
+    letterSpacing: '-0.02em'
+  page-title:
+    fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
+    fontSize: 'clamp(32px, 4vw, 48px)'
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: '-0.015em'
+  section-heading:
+    fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
+    fontSize: 'clamp(24px, 2.4vw, 30px)'
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: '-0.01em'
   headline:
     fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
-    fontSize: '22px'
+    fontSize: '24px'
     fontWeight: 600
     lineHeight: 1.2
-  title-italic:
+  dek:
     fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
-    fontSize: '17px'
+    fontSize: '19px'
     fontWeight: 400
     lineHeight: 1.5
   body:
     fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
-    fontSize: '15.5px'
+    fontSize: '17px'
     fontWeight: 400
-    lineHeight: 1.5
+    lineHeight: 1.6
+  body-post:
+    fontFamily: 'Source Serif 4, Georgia, Times New Roman, serif'
+    fontSize: '18px'
+    fontWeight: 400
+    lineHeight: 1.6
+  numeral:
+    fontFamily: 'Public Sans, system-ui, sans-serif'
+    fontSize: 'clamp(56px, 9vw, 96px)'
+    fontWeight: 700
+    lineHeight: 0.85
+    letterSpacing: '-0.04em'
   label-head:
     fontFamily: 'Public Sans, system-ui, sans-serif'
     fontSize: '12px'
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: '0.14em'
-  label-reading:
+  label:
     fontFamily: 'Public Sans, system-ui, sans-serif'
-    fontSize: '11.5px'
+    fontSize: '12px'
     fontWeight: 700
     lineHeight: 1.5
     letterSpacing: '0.06em'
@@ -53,18 +71,23 @@ typography:
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: '0.02em'
+  code:
+    fontFamily: 'Fira Code, ui-monospace, monospace'
+    fontSize: '14px'
+    fontWeight: 400
+    lineHeight: 1.6
 rounded:
   none: '0px'
 spacing:
   hairline-gap: '8px'
   caption-gap: '10px'
-  row: '14px'
-  section-head: '24px'
+  row: '18px'
+  section-head: '20px'
   column-gap: '28px'
-  nav-gap: '28px'
-  plate-gap: '40px'
-  spread-gap: '56px'
-  section: '72px'
+  plate-gap: '32px'
+  plate-row-gap: '40px'
+  section: '64px'
+  page-foot: '72px'
 components:
   link-inline:
     textColor: '{colors.ink}'
@@ -76,17 +99,36 @@ components:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.ink}'
     typography: '{typography.label-head}'
-    padding: '0 0 10px'
+    padding: '10px 0'
+  running-head-current:
+    textColor: '{colors.cobalt-spot}'
+  button:
+    backgroundColor: '{colors.paper}'
+    textColor: '{colors.ink}'
+    typography: '{typography.label}'
+    rounded: '{rounded.none}'
+    padding: '7px 12px'
+  button-hover:
+    textColor: '{colors.cobalt-spot}'
+  button-active:
+    backgroundColor: '{colors.cobalt-spot}'
+    textColor: '{colors.paper}'
+  button-secondary:
+    backgroundColor: '{colors.paper}'
+    textColor: '{colors.ink-muted}'
+    typography: '{typography.label}'
+    rounded: '{rounded.none}'
+    padding: '7px 12px'
   reading-row:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.cobalt-spot}'
-    typography: '{typography.label-reading}'
+    typography: '{typography.label}'
     padding: '8px 0 0'
   reading-control:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.ink}'
-    typography: '{typography.label-reading}'
-    padding: '0'
+    typography: '{typography.label}'
+    padding: '3px 0'
     rounded: '{rounded.none}'
   reading-control-hover:
     textColor: '{colors.cobalt-spot}'
@@ -98,13 +140,23 @@ components:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.ink}'
     rounded: '{rounded.none}'
-  section-label:
-    textColor: '{colors.cobalt-spot}'
-    typography: '{typography.label-head}'
-  back-row:
+  codeblock:
     backgroundColor: '{colors.paper}'
     textColor: '{colors.ink}'
-    padding: '14px 0'
+    typography: '{typography.code}'
+    rounded: '{rounded.none}'
+    padding: '16px 18px'
+  chain-node:
+    backgroundColor: '{colors.paper}'
+    textColor: '{colors.ink}'
+    rounded: '{rounded.none}'
+    padding: '12px 14px 14px'
+  entry-numeral:
+    textColor: '{colors.cobalt-spot}'
+    typography: '{typography.numeral}'
+  definition-label:
+    textColor: '{colors.cobalt-spot}'
+    typography: '{typography.label}'
 ---
 
 # Design System: anishshrestha.com
@@ -113,154 +165,196 @@ components:
 
 **Creative North Star: "The Mathematical Games Spread"**
 
-The site is set like a feature spread in a mid-century popular-science magazine: white coated stock, near-black ink, and one cobalt spot ink that does every job colour has to do. The figures are not illustrations of the labs; they are the labs, running in place, numbered Fig. 1 to Fig. 4 with their reading (generation, population, running) printed beneath on a hairline rule. Essay text sits in two narrow serif columns with a column rule and a spot-colour drop cap. The running head carries the masthead, issue number and the primary nav as small grotesk capitals on a 1.5px rule. There is no chrome: no cards, no shadows, no gradients, no rounded corners, no kickers above headings. Depth is never faked: nothing overlaps, nothing casts a shadow.
+The site is set like a mid-century popular-science magazine: white coated stock, near-black ink, and one cobalt spot ink that does every job colour has to do. The front page is no longer an essay. It opens with the role in one serif line, an italic dek and a single "work with me" line on the left, and the shipped product on the right as a bordered screenshot plate captioned Fig. 1. Under both, on a heavy rule, three proof columns divided by column rules. Below that come the numbered system design entries, each naming the project behind it, and then four lab plates that are not illustrations of the labs but the labs themselves, running in place, with their reading (generation, population, running) printed beneath on a hairline rule.
 
-The world is deliberately dense and quiet. Rules do the structural work (running head, section openers, article rows, caption rows), and the only motion on the page is the simulations themselves. Hover changes colour, never position. This world was committed for the home route under the direction contract `seed:a9745f2fa560bd8e` and refuses the profile-card-plus-grid portfolio and the terminal costume that preceded it.
+The world is dense and quiet. Rules do the structural work (running head, section openers, rows, caption rows, column rules), and the only things that move are the simulations. Hover changes colour, never position. There is no chrome: no shadows, no gradients, no rounded corners, no filled cards, no kickers above headings. The one box the world owns is the plate, a 1.5px ink frame on paper, used for a live figure, a screenshot, an architecture node, a lab control panel; code sits in its lighter 1px cousin. This world evolves the home spread committed under `seed:a9745f2fa560bd8e`; it refuses the essay-first magazine opening it replaces, the profile-card-plus-skill-grid portfolio, and the terminal costume that came before both.
 
-**Scope.** This system ships on every route: the home spread (`src/routes/+page.svelte`, `src/lib/components/spread/*`), the shared running head and colophon footer (`src/lib/components/Header.svelte`, `Footer.svelte`), the reading routes (blog index and posts, projects, labs index, error page, which share the `.page`, `.page-title`, `.dek`, `.meta`, `.ruled` scaffolding in `src/app.css`), and the six lab pages, where the global `.section-card`, `.section-title`, `.btn` and `.caps` classes carry the world and each lab opens with its figure numeral and a serif h1. The legacy dark terminal world is gone; the old token names in `src/app.css` (`--color-bg-*`, `--color-text*`, `--color-primary*`, `--color-border`) are aliases of the two inks kept so Tailwind utilities keep working. Figure numerals run at `clamp(48px, 6vw, 88px)` on the home plates and `clamp(40px, 5vw, 64px)` on lab pages; they sit above their plate, never over it. Three brand commitments bind every surface: the Go gopher easter egg stays, VoidArchive is the handle, and the theme is light.
+**Scope.** This system ships on every route: the home page (`src/routes/+page.svelte`, `src/lib/components/spread/*`), the shared running head and footer (`src/lib/components/Header.svelte`, `Footer.svelte`), the reading routes (projects index and project pages, the system design hub, about, blog index and posts, error page), which share the `.page`, `.page-title`, `.dek`, `.meta`, `.ruled`, `.section`, `.prose-block` and `.codeblock` scaffolding in `src/app.css`, and the six lab pages, where the global `.section-card`, `.section-title`, `.btn` and `.caps` classes carry the world and each lab opens with a serif h1 and an italic dek. The legacy token names in `src/app.css` (`--color-bg-*`, `--color-text*`, `--color-primary*`, `--color-border`) are aliases of the two inks kept so Tailwind utilities keep working. Three brand commitments bind every surface: the Go gopher easter egg stays, VoidArchive is the handle, and the theme is light.
 
 **Key Characteristics:**
 
 - White paper, near-black ink, one cobalt spot ink and its tint; nothing else.
 - Hairline (1px) and heavy (1.5px) ink rules carry all structure.
-- Source Serif 4 for reading, Public Sans capitals for labels, readings and captions.
-- Figure numerals in spot colour, set above their plates.
+- Source Serif 4 for reading, Public Sans capitals for labels, readings and captions, Fira Code for code only.
+- The claim and the shipped product share the first screen; proof sits directly under both.
+- Cobalt grotesk numerals number the evidence: "Fig. n" caption prefixes on home, entry numbers on the system design hub.
 - Live plates: spot colour and a solid border while running, ink and a dashed border when paused.
-- Flat everywhere; depth only by overlap across a rule.
-- Square corners, no shadows, no gradients, no cards, no kickers.
+- Square corners, no shadows, no gradients, no filled cards, no kickers.
 
 ## Colors
 
-A two-ink print palette: paper and ink with a single cobalt spot ink and its screen tint.
+A two-ink print palette: paper and ink with a single cobalt spot ink, its screen tint, and a deeper pull of the same ink for code.
 
 ### Primary
 
-- **Cobalt Spot** (`{colors.cobalt-spot}`): the one spot ink. Figure numerals, the masthead wordmark, drop cap, section labels (Notes, Instruments), "Fig. n" caption prefixes, the running state of every live plate (live cells, flock, sort bars, tigers), the reading row text, link underlines, hover colour, focus outline, and text selection background.
-- **Cobalt Tint** (`{colors.cobalt-tint}`): the spot ink screened back. Used for the cell grid lines inside the Game of Life plate and as the retinted legacy `--color-bg-tertiary`. Never used as a fill behind text.
+- **Cobalt Spot** (`{colors.cobalt-spot}`): the one spot ink. The masthead wordmark, the current nav tab and its bar, entry numerals, "Fig. n" caption prefixes, the `.meta` line under a row, definition-row labels and the "What it proves" prefix, list markers, the running state of every live plate, the reading row, link underlines, hover colour, the active state of a toggle button, the focus outline, and the text selection background.
+- **Cobalt Deep** (`{colors.cobalt-deep}`): the same ink, pulled darker. Function, class and tag names inside highlighted code. Nothing outside a code block uses it.
+- **Cobalt Tint** (`{colors.cobalt-tint}`): the spot ink screened back. Grid lines inside the Game of Life plate, the row rules inside a table body, and the fill behind inline code in a post. Inline code is the only place it sits behind text.
 
 ### Neutral
 
-- **Paper** (`{colors.paper}`): page and plate background. Plates are paper, not a lighter or darker surface; there is only one surface.
-- **Ink** (`{colors.ink}`): all text, every rule and border, the paused state of every plate (paused cells, paused flock, idle bars, Bagchal board lines and points), and the resting colour of reading controls.
-- **Ink Muted** (`{colors.ink-muted}`): exists only as the retinted legacy `--color-text-muted` for the shared Footer on the home route. The spread itself uses no muted text; secondary voice is carried by italic and by size, not by grey.
+- **Paper** (`{colors.paper}`): page, plate, button and code block background. There is only one surface.
+- **Ink** (`{colors.ink}`): all text, every rule and border, the paused state of every plate, chain nodes and their arrows, Bagchal board lines and points, and the resting colour of buttons and reading controls.
+- **Ink Muted** (`{colors.ink-muted}`): three small jobs only: the label of a secondary button, comments in highlighted code, and a collapsed `details` summary. Prose never uses it; secondary voice is carried by italic and by size, not by grey.
 
 ### Named Rules
 
-**The Two-Ink Rule.** Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind text. If something needs to stand out, it is cobalt; if not, it is ink.
+**The Two-Ink Rule.** Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind prose. If something needs to stand out, it is cobalt; if not, it is ink. Syntax highlighting inside a code block is the one place a reader meets other hues, and it is recorded below as an exception, not as palette.
 
-**The Running Ink Rule.** Spot colour on a plate means it is running. A paused or idle plate drops to ink. The reading row's state square inherits the same colour, so colour and the word (Running / Paused / Opening) always agree.
+**The Running Ink Rule.** Spot colour on a plate means it is running. A paused or idle plate drops to ink and its border goes dashed. The reading row's state square inherits the same colour, so colour and the word (Running / Paused) always agree.
 
 ## Typography
 
 **Display Font:** Source Serif 4 (with Georgia, Times New Roman, serif)
 **Body Font:** Source Serif 4 (same family; optical size 8..60, weights 400, 600, italic 400)
 **Label/Numeral Font:** Public Sans (with system-ui, sans-serif; weights 400, 700)
+**Code Font:** Fira Code (with ui-monospace, monospace; weights 400, 600)
 
-**Character:** A text serif doing the essay work and a plain grotesk doing the apparatus work (running head, figure numbers, readings, captions, dates). The two never mix inside a sentence; the grotesk is always set in capitals or at billboard size, so the pairing reads as magazine typography rather than a web font stack.
+**Character:** A text serif doing the reading work and a plain grotesk doing the apparatus work (running head, entry numbers, readings, captions, dates, row labels). The two never mix inside a sentence; the grotesk is set in spaced capitals, as a tight numeral, or as a small caption. The mono is a third voice with one job: text a reader could paste into a terminal or an editor.
 
 ### Hierarchy
 
-- **Display** (600, `clamp(34px, 4.2vw, 60px)`, 1.02, -0.015em, balanced wrap): the page headline. One per page.
-- **Figure numeral** (Public Sans 700, `clamp(64px, 9vw, 132px)`, 1, -0.04em): "Fig. n" set in spot colour, absolutely positioned at the top-left of its plate, overlapping it; `aria-hidden`, since the caption repeats the number.
-- **Headline** (600, 22px, 1.2, balanced): article titles in the Notes and Instruments columns. Links in headlines have no underline at rest and underline on hover.
-- **Title italic** (400 italic, 17px, 1.5): byline, column ledes, and the colophon. Italic is the secondary voice of this world.
-- **Body** (400, 15.5px, 1.5, `text-wrap: pretty`): essay and article text. Essay paragraphs after the first indent 1.4em with 12px between; the first paragraph opens with a 58px, 600-weight spot-colour floated drop cap. Columns are at most 520px wide (`--measure`).
-- **Label, running head** (Public Sans 400, 12px, 0.14em, uppercase): masthead, nav, section labels (Notes, Instruments), "All notes / All projects" links (0.1em).
-- **Label, reading** (Public Sans 700, 11.5px, 0.06em, uppercase, tabular numerals): the live reading beneath each plate; also the dates in the back pages at weight 400, and the spot-colour "Fig. n" caption prefix.
-- **Caption** (Public Sans 400, 13px, 0.02em, sentence case): figure captions. The only grotesk text set in sentence case.
+- **Display** (600, `clamp(38px, 5.4vw, 80px)`, 1, -0.02em, balanced wrap): the home h1, one line of role. Home only.
+- **Page title** (600, `clamp(32px, 4vw, 48px)`, 1.05, -0.015em, balanced): the h1 of every reading route. Lab pages run their h1 a step smaller, `clamp(34px, 3vw, 40px)`. One h1 per page.
+- **Section heading** (600, `clamp(24px, 2.4vw, 30px)`, 1.15, -0.01em): the h2 that follows a heavy section rule. The home proof columns set their project names at `clamp(24px, 2.4vw, 32px)` and the projects index at `clamp(28px, 3vw, 38px)`.
+- **Headline** (600, 24px, 1.2, balanced): row titles in ruled lists (blog index). Entry titles are 22px on home and `clamp(22px, 2.4vw, 28px)` on the hub; lab cards 20px. Headline links have no underline at rest and underline on hover.
+- **Dek** (400 italic, 19px, 1.5, max 60ch): the sentence under a page title. Italic is the secondary voice of this world: deks, ledes (18px), the hire line (18px), closing notes (17px).
+- **Body** (400, 17px, 1.5 in rows and 1.6 in prose blocks, `text-wrap: pretty`, max 65 to 68ch): reading text on every reading route. Posts run at 18px / 1.6 and drop to 17px under 640px. Lab control panels run a denser 15.5px.
+- **Numeral** (Public Sans 700, -0.04em, tabular, cobalt): entry numbers. Billboard size on the system design hub (`clamp(56px, 9vw, 96px)`, line-height 0.85, `aria-hidden`), 22px as "No. n" on home, and `clamp(96px, 16vw, 200px)` for the status code on the error page.
+- **Label, running head** (Public Sans 400, 12px, 0.14em, uppercase): masthead (700, cobalt), nav, footer line.
+- **Label** (Public Sans 700, 12px, 0.06em, uppercase, tabular numerals): `.caps` and `.meta`. Dates, kinds, readings, button text, table heads, definition-row labels, the "Fig. n" and "What it proves" prefixes. Lab panel titles use the same face at 0.14em in cobalt.
+- **Caption** (Public Sans 400, 13px, 0.02em, sentence case): figure captions and the detail line inside a chain node. The only grotesk text set in sentence case.
+- **Code** (Fira Code 400, 14px, 1.6, tab size 4; 13px under 640px): code blocks. Inline code in a post is 0.85em.
 
 ### Named Rules
 
-**The Capitals Rule.** Public Sans appears either as spaced uppercase (0.06em to 0.14em) at 11.5px to 12px, or as a tight-tracked figure numeral at billboard size. It is never body text.
+**The Capitals Rule.** Public Sans appears as spaced uppercase (0.06em to 0.14em) at 12px, as a tight-tracked cobalt numeral, or as a 13px caption. It is never running text, and it is never smaller than 12px.
 
-**The Base-16 Rule.** The spread root is 16px / 1.5; every text size is a fixed pixel value against it (11.5, 12, 13, 15.5, 17, 22), with only the headline and numeral fluid.
+**The Base-16 Rule.** The root is 16px / 1.5; text sizes are fixed pixel values against it (12, 13, 17, 18, 19, 22, 24), and only headings and numerals are fluid.
+
+**The Code-Only Rule.** Fira Code sets code and nothing else: install lines, examples, inline identifiers. It is never a label, a heading or a mood.
 
 ## Layout
 
-The spread is a centred page up to 1440px wide with fluid side margins (`clamp(16px, 5vw, 72px)`) and 36px above the running head (20px under 640px). Sections stack vertically and each opens on a rule: the running head closes with a 1.5px ink rule; the plates strip, back pages and colophon each open with a 1.5px rule, 72px above and 24px of padding below; the "Figs. 5, 6" note opens on a 1px rule. Every article row in the back pages opens on a 1px rule with 14px of padding above and below. These rules are the entire structure; there are no boxes.
+Every page sits in a centred container up to 1440px wide with fluid side margins (`clamp(16px, 5vw, 72px)`). The running head's 1.5px rule and the footer's 1.5px rule are drawn on the container's content box, so both line up exactly with the page margin. Reading routes narrow the column inside that container: 760px by default, 1040px on the wide routes (projects, project pages, system design), with 44px above the title and 72px below the page.
 
-The opening spread is a two-column grid: a 520px text column (`minmax(0, 520px)`) and the lead plate filling the rest, 56px apart, 44px below the running head. Essay text runs in two CSS columns, 28px apart, with a 1px ink column rule. The plates strip is a three-column grid (48px row gap, 40px column gap). The back pages are two equal columns 56px apart. The colophon is a single italic paragraph at most 60ch wide.
+Sections stack vertically and each opens on a rule: 64px of space, a 1.5px ink rule, 20px of padding, then a serif h2. Rows inside a section open on 1px rules; a ruled list opens with a 1.5px rule and gives each row 18px of padding. These rules are the entire structure.
 
-Breakpoints, observed: at 1024px the opening collapses to one column and reorders so the lead plate follows the byline and the essay follows the plate (the live lab must lead on narrow screens); the plates and back pages become single columns with 40px gaps. At 640px the running head stacks (masthead above nav, 10px gap, nav gap 18px), the essay drops to a single column, and the figure numeral's left offset shrinks from -14px to -4px. Plate height follows its aspect ratio (700:520 for Fig. 1, 3:2 for Figs. 2 and 3, square SVG viewBox for Fig. 4), so plates stay fully visible at every width.
+The home opening is a two-column grid, `minmax(0, 1fr)` for the claim and `minmax(0, 0.82fr)` for the screenshot plate, `clamp(32px, 5vw, 72px)` apart. The proof strip spans both columns: three equal columns on a 1.5px top rule, divided by 1px ink column rules with 28px of padding either side. System design entries are a two-column row (a 96px numeral column on home, `clamp(64px, 12vw, 140px)` on the hub). The lab plates are a four-up grid with a 32px column gap and 40px row gap. Definition rows put a cobalt label in a fixed column (160px on about, 180px for hosting) and the value beside it. The projects index pairs a 300px name column with the description.
 
-Spacing is a small fixed set: 8px (hairline rule to reading), 10px (caption gap, running head padding), 14px (article row padding), 24px (section opener padding), 28px (column and nav gaps), 40px and 56px (grid gaps), 72px (between sections).
+Breakpoints, observed: at 1100px the plates drop to two-up, and to one column at 640px. At 860px the home opening becomes one column and reorders so the proof strip follows the claim directly and the screenshot follows the proofs; the proofs become stacked rows on 1px rules, closed by a 1.5px rule. At 820px the "How it runs" chain turns from left-to-right to top-to-bottom and hosting rows stack. At 640px the running head tightens (tracking 0.08em, nav gap 16px, 12px above), entry rows stack their numeral above the title, and code drops to 13px. At 520px definition rows stack. Lab pages put the board beside a 350px control column from 1025px up and stack below it.
+
+Spacing is a small fixed set: 8px (hairline rule to reading), 10px (caption gap, running head link padding), 18px (ruled row padding), 20px (section opener padding), 28px (column padding, nav gap), 32px and 40px (plate grid gaps), 64px (between sections), 72px (page foot, above the footer rule).
 
 ## Elevation & Depth
 
-No shadows, no tonal layering, no translucent surfaces. The world is a single sheet of paper and everything sits on it at the same depth. The only depth cue is overlap: the spot-colour figure numeral is positioned above its plate's top edge (`z-index: 1`, `pointer-events: none`) and crosses the plate's 1.5px border, like a number printed over a photograph. Links, buttons and plates do not lift, scale or glow on hover; state is shown by colour (ink to cobalt) and by the border style of the plate (solid to dashed). Focus is a 2px cobalt outline offset 2px.
+No shadows, no tonal layering, no translucent surfaces, no blur. The world is a single sheet of paper and everything sits on it at the same depth. Nothing overlaps anything else. Links, buttons and plates do not lift, scale or glow on hover; state is shown by colour (ink to cobalt), by fill (a selected toggle goes solid cobalt with paper text), and by the border style of a plate (solid to dashed). Focus is a 2px cobalt outline offset 2px, pulled inside the frame on a scrollable code block.
 
 ### Named Rules
 
-**The Overlap-Only Rule.** Depth is produced by one element crossing a rule or a border, never by shadow, blur, gradient or a raised surface. If a component needs to sit "above" something, it overlaps an edge.
+**The One-Sheet Rule.** There is one surface and one depth. If something needs to be separated, draw a rule; if it needs to be framed, draw a plate; if it needs to be noticed, print it in cobalt. Never a shadow, a blur, a gradient or a raised surface.
 
 ## Shapes
 
-Square. Every box, plate, button and outline has a 0px radius; the design.json tonal and shape vocabulary has a single step, `none`. Borders are ink: 1.5px solid around every plate and under the running head and section openers, 1px for column rules, caption rules, article rows and the inline note. A paused plate keeps the same 1.5px weight and switches to `dashed`. Inside plates, the Bagchal board is 1.5px ink lines with 4px-radius ink points and 16px-radius cobalt tiger discs, the only circles in the world. The reading row's state marker is an 8px square of currentColor, not a dot. Links underline with a 1px spot-colour line offset 3px, which is the world's smallest rule.
+Square. Every box, plate, button, input and outline has a 0px radius; the shape vocabulary has a single step, `none`. Borders are ink in two weights: 1.5px for plates (live figures, screenshots, chain nodes, lab control panels), primary buttons, the running head and footer rules, section openers and the top and bottom of a table; 1px for rows, column rules, caption rules, code blocks, secondary buttons, inputs and post images. A paused plate keeps its 1.5px weight and switches to `dashed`. The current nav tab carries a 3px cobalt bar on its bottom edge, sitting on the running head rule; it is the heaviest rule in the world and the only cobalt one. Chain nodes are joined by a 1.5px ink rule ending in a solid triangular arrowhead (8px long, 10px tall). The reading row's state marker is an 8px square of currentColor, not a dot. Links underline with a 1px spot-colour line offset 3px; the home proof names thicken it to 2px at 5px offset. The scrollbar thumb is a square ink bar on paper.
 
 ## Components
-
-The home route has no form inputs, cards or chips. The components below are the ones that recur.
 
 ### Links
 
 - **Inline:** inherit ink colour, 1px underline in cobalt, offset 3px, no transition. Hover turns the text cobalt and keeps the underline.
-- **Headline links** (back pages): no underline at rest; underline on hover.
-- **Running head links** (masthead, nav): no underline at any state; hover turns cobalt.
-- **Focus:** 2px solid cobalt outline, 2px offset, on links and buttons alike.
+- **Headline links** (ruled lists, entries, lab cards): no underline at rest; underline on hover.
+- **Meta links** (inside a `.meta` line): ink among cobalt capitals; no underline in ruled lists, underlined where the line is a list of actions.
+- **Focus:** 2px solid cobalt outline, 2px offset, on links, buttons and scrollable code alike.
 
-### Running Head (navigation)
+### Running Head and Footer (navigation)
 
-- A flex row on a 1.5px ink bottom rule, baseline aligned, Public Sans 12px uppercase 0.14em. Left: masthead with the domain in cobalt bold, issue number and month. Right: four nav links 28px apart, ink, no underline, cobalt on hover. Under 640px it stacks, masthead first, 10px gap, nav links 18px apart. It replaces the shared Header on this route.
+- **Running head:** a baseline-aligned flex row on a 1.5px ink rule, Public Sans 12px uppercase 0.14em, 28px above the row. Left: the domain as masthead, cobalt bold. Right: Projects, System Design, Blog, About, 28px apart, ink, no underline, cobalt on hover. The current section is cobalt with a 3px cobalt bar on the rule; lab pages light Projects, because the labs live under it. The row wraps rather than collapsing into a menu; under 640px tracking drops to 0.08em and the gap to 16px.
+- **Footer:** 72px above a 1.5px rule on the content box, then one line of the same capitals: the copyright on the left, "VoidArchive on GitHub" on the right. GitHub lives here, not in the nav. The gopher lives here too: on the home route, hovering the handle brings it out.
 
-### Plates (live figures)
+### Buttons
+
+- **Shape:** square, paper fill, Public Sans 700 12px uppercase 0.06em, padding 7px 12px.
+- **Primary:** 1.5px ink border, ink text. Used for the one action a block offers ("Open the lab", "All posts", "Front page") and for lab controls.
+- **Secondary:** 1px ink border, muted text.
+- **Hover:** text and border turn cobalt, eased over 120ms. Colour only; nothing moves.
+- **Active (toggles):** solid cobalt fill, cobalt border, paper text. The selected option in a lab's mode switch.
+- **Disabled:** 40% opacity, not-allowed cursor.
+
+### Plates (live figures and screenshots)
 
 - **Shape:** 1.5px solid ink border on paper, square corners, width 100%, height from aspect ratio.
-- **Running:** the simulation draws in cobalt (cells, boids, bars, tigers); grid lines inside the Life plate are cobalt tint; border solid.
-- **Paused:** the simulation draws in ink and the border goes dashed. In the sort plate the active bar inverts (ink while running, cobalt while paused) so there is always one mark in the other ink.
-- **Numeral:** "Fig. n" overlapping the top-left corner, with 52px of top padding reserved on the figure (68px on the lead plate) so the numeral crosses the border without covering the content.
-- **Interaction:** the Life canvas uses a crosshair cursor and toggles a cell on click or tap; the others are pokeable only through their controls. Under `prefers-reduced-motion: reduce` a plate renders one still frame, paused, with its Play control available.
+- **Running:** the simulation draws in cobalt (cells, boids, bars); grid lines inside the Life plate are cobalt tint; border solid.
+- **Paused:** the simulation draws in ink and the border goes dashed.
+- **Screenshot plate:** the same frame around an image, linked to its project page. Project pages crop a tall screenshot to 4:3 from the top.
+- **Interaction:** the Life canvas uses a crosshair cursor and toggles a cell on click or tap; the others are pokeable through their controls. Under `prefers-reduced-motion: reduce` a plate renders one still frame, paused, with its Play control available.
 
-### Reading Row
+### Reading Row and Controls
 
-- Sits directly under a plate on a 1px ink top rule, 8px padding and margin. Public Sans 700, 11.5px, uppercase, 0.06em, tabular numerals, cobalt. Items wrap with a 4px by 18px gap. The first item is the state word (Running / Paused / Opening) preceded by an 8px square in currentColor. Controls are pushed right (`margin-left: auto`, 12px apart).
-
-### Reading Controls (buttons)
-
-- Text buttons with no background, no border and no padding: they inherit the reading row's face and tracking, set in ink with a cobalt 1px underline offset 3px; hover turns cobalt. Labels are verbs (Pause, Play, Reseed, Shuffle). This is the only button style in the world; there is no filled primary button.
+- Sits directly under a live plate on a 1px ink top rule, 8px padding and margin. Public Sans 700, 12px, uppercase, 0.06em, tabular numerals, cobalt. Items wrap with a 4px by 16px gap. The first item is the state word preceded by an 8px square in currentColor. Controls are pushed right, 12px apart.
+- **Reading controls** are text buttons with no background and no border: ink, with a cobalt 1px underline offset 3px, cobalt on hover, 3px of vertical padding (cancelled by a negative margin) for a 24px target. Labels are verbs (Pause, Play, Reseed, Shuffle).
 
 ### Figure Captions
 
-- Under the reading row with 10px gap: Public Sans 13px, 0.02em, sentence case, ink. Open with the spot-colour "Fig. n" prefix (11.5px uppercase bold, 6px right margin), then one sentence of fact, then the inline links "Open the lab" and "Read how it was built" separated by a middle dot.
+- Under the plate or reading row with a 10px gap: Public Sans 13px, 0.02em, sentence case, ink. On home each opens with the cobalt "Fig. n" prefix (12px uppercase bold, 6px right margin), then one sentence of fact, then an inline link. The number lives in the caption only; there is no numeral above or over the plate.
 
-### Back Page Rows
+### Proof Columns
 
-- Section label in cobalt capitals (12px, 0.14em, 18px below). Each article: 1px ink top rule, 14px vertical padding, a date in grotesk capitals (11.5px, 4px below), a 22px serif 600 headline, a 15.5px serif description. Columns close with an "All notes" / "All projects" link in grotesk capitals (12px, 0.1em), 16px above.
+- Three columns on a 1.5px rule, 1px column rules between, 18px above and 28px either side. Each: the project name as a linked serif heading with a 2px cobalt underline, one 17px sentence of what it proves, and a cobalt `.meta` line naming its kind. Under 860px they become stacked rows.
 
-### Colophon
+### Numbered Entries
 
-- Opens on a 1.5px rule with 72px above, 24px of padding, 56px below. One italic 17px serif paragraph, at most 60ch, with inline links. The byline, handle and contact live here; the gopher lives in the retinted shared Footer beneath it.
+- A row on a 1px rule: a cobalt Public Sans 700 numeral in a fixed left column, then a serif title, a 17px description, and a `.meta` line with the date and "Backed by" the project. On home the numeral reads "No. n" at 22px; on the system design hub it is the bare number at billboard size. The list closes on a 1px rule with a link in grotesk capitals (12px, 0.1em).
+
+### Definition Rows
+
+- A `dl` of rows on 1px rules: a cobalt `.caps` label in a fixed column, the value in 17px serif beside it. Used for hosting, skills, contact and the rules of a game. "What it proves" is the inline form: a cobalt `.caps` prefix, 6px right margin, then the sentence, on a 1px rule.
+
+### Code Blocks
+
+- 1px ink border on paper, padding 16px 18px, Fira Code 14px / 1.6, horizontal scroll, keyboard-focusable when it scrolls. A one-line command wraps instead of scrolling. In posts the same frame carries syntax highlighting and a 32px square copy button at the top right (1px ink border, cobalt on hover and when copied). Inline code is 0.85em on cobalt tint.
+
+### How It Runs (chain figure)
+
+- A `figure` with a cobalt `.caps` caption naming the flow, then an ordered row of equal-width nodes 30px apart. Each node is a plate (1.5px ink border, padding 12px 14px 14px) holding an 18px serif bold name and a 13px grotesk detail. Each node after the first is joined to the previous by a 1.5px ink rule across the gap ending in an arrowhead. Under 820px the row turns vertical with 22px gaps, and the rule and arrowhead turn to point down from 24px in.
+
+### Tables
+
+- 1.5px ink rules top and bottom, no vertical rules; head cells in `.caps` on a 1px ink rule, body rows on cobalt-tint rules, tabular numerals, cells top-aligned.
+
+### Callouts
+
+- A lab's link to its write-up and a post's link to its lab are rule-bound blocks, not boxes: a 1px (or 1.5px opening) rule above, a 1px rule below, a `.meta` line, a sentence and one button or link.
+
+### Lab Control Panels
+
+- A plate holding controls: 1.5px ink border, 16px padding, opened by a cobalt capitals title (12px, 700, 0.14em) on a 1px ink rule. Inputs are square, 1px ink border, grotesk, with cobalt as the accent colour.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** print with two inks: ink `#141414` and cobalt `#2242c8` on white, with the tint `#dfe6fb` reserved for grid lines inside a plate.
-- **Do** structure with rules: 1.5px ink to open a section or frame a plate, 1px for column rules, caption rows and article rows.
-- **Do** set reading apparatus (readings, dates, captions, nav, section labels) in Public Sans capitals at 11.5px to 12px with 0.06em to 0.14em tracking; set prose in Source Serif 4 at 15.5px / 1.5.
-- **Do** number a live figure with a cobalt Public Sans 700 numeral at `clamp(64px, 9vw, 132px)` overlapping the top-left corner of its plate, and repeat the number as a cobalt caption prefix.
+- **Do** print with two inks: ink and cobalt on white, with the tint reserved for grid lines inside a plate, table row rules and inline code.
+- **Do** structure with rules: 1.5px ink to open a section or frame a plate, 1px for rows, column rules and caption rows.
+- **Do** put the claim and the shipped product on the same first screen, with the proof directly under both.
+- **Do** set apparatus (readings, dates, nav, row labels, button text) in Public Sans capitals at 12px with 0.06em to 0.14em tracking; set reading text in Source Serif 4 at 17px, 18px in posts.
+- **Do** number evidence with cobalt Public Sans 700: "Fig. n" as a caption prefix, "No. n" beside an entry, a billboard numeral on the hub.
 - **Do** show state by colour and border: cobalt and solid while running, ink and dashed while paused, with the reading row's word and square agreeing.
-- **Do** keep hover to a colour change (ink to cobalt) and focus to a 2px cobalt outline offset 2px; no transition, no movement.
-- **Do** let the lead plate come before the essay under 1024px so the live lab stays in the first viewport on phones.
+- **Do** keep hover to a colour change (ink to cobalt) and focus to a 2px cobalt outline offset 2px; nothing changes position.
+- **Do** draw architecture as plates joined by an ink rule and arrowhead, and turn the chain vertical under 820px.
+- **Do** put the proof before the picture on narrow screens: under 860px the proof rows follow the claim and the screenshot follows them.
 - **Do** render one still frame with a Play control under `prefers-reduced-motion: reduce`.
-- **Do** keep the Go gopher, the VoidArchive handle, and the light theme on every surface, in this world or the legacy one.
+- **Do** keep the Go gopher, the VoidArchive handle, and the light theme on every surface.
 
 ### Don't:
 
 - **Don't** use shadows, gradients, blur, translucency or a second surface colour; the page is one sheet of paper.
-- **Don't** draw cards or boxed containers; separate content with rules and whitespace.
+- **Don't** draw filled, shadowed or rounded cards; the only box is a plate, an ink frame on paper, and everything else is separated by rules and whitespace.
 - **Don't** round a corner; every radius is 0.
-- **Don't** add a kicker or eyebrow above a headline; the grotesk capitals belong to apparatus (section labels, dates, readings), not to headings.
+- **Don't** add a kicker or eyebrow above a headline; the grotesk capitals belong to apparatus (dates, readings, row labels), not to headings.
+- **Don't** set a billboard "Fig. n" above or over a plate, a masthead issue number, a drop cap or a multi-column essay; that front page was replaced.
 - **Don't** introduce grey text for hierarchy; use italic, size or the serif/grotesk switch instead.
-- **Don't** add a second accent, a tinted background behind text, or the legacy coral `#ff6b6b`, Fira Code, scanlines or terminal prompt motif on a surface built in this world.
-- **Don't** animate anything but the simulations: no entrance animations, no hover lifts, no transitions on links.
-- **Don't** set Public Sans as running text or Source Serif 4 as a label.
+- **Don't** add a second accent, a tinted background behind prose, or the legacy coral `#ff6b6b`, scanlines or terminal prompt motif.
+- **Don't** set anything but code in Fira Code, and don't set code in anything else.
+- **Don't** animate anything but the simulations: no entrance animations, no hover lifts, no movement on links or buttons.
+- **Don't** set Public Sans as running text or below 12px, or Source Serif 4 as a label.

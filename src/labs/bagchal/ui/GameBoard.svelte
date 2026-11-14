@@ -285,7 +285,7 @@
 		margin-top: 8px;
 		padding-top: 8px;
 		border-top: 1px solid var(--color-ink);
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-variant-numeric: tabular-nums;
 	}
 	.reading.over {

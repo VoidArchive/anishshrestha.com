@@ -56,7 +56,6 @@ reading row, and a controls column. On narrow screens the board comes first.
 <ErrorBoundary fallback="The DSA Visualizer encountered an error. Please try refreshing the page.">
 	<main class="dsa container">
 		<header class="head">
-			<span class="fig" aria-hidden="true">Fig. 3</span>
 			<h1>DSA Visualizer</h1>
 			<p class="dek">
 				Six sorting and four pathfinding algorithms, drawn one step at a time. Pick one, press Play,
@@ -123,16 +122,6 @@ reading row, and a controls column. On narrow screens the board comes first.
 	}
 	.head {
 		margin-bottom: 40px;
-	}
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
-		margin-left: -0.04em;
 	}
 	h1 {
 		font-size: clamp(34px, 3vw, 40px);

@@ -74,7 +74,6 @@
 </script>
 
 <header class="lab-head">
-	<span class="fig" aria-hidden="true">Fig. 6</span>
 	<h1>Tic Tac Toe</h1>
 	<p class="dek">The classic game against an unbeatable minimax player.</p>
 </header>
@@ -120,18 +119,8 @@
 	.lab-head {
 		margin-bottom: 40px;
 	}
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
-		margin-left: -0.04em;
-	}
 	h1 {
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-weight: 600;
 		font-size: clamp(34px, 3vw, 40px);
 		line-height: 1.02;
@@ -177,7 +166,7 @@
 		text-transform: uppercase;
 		line-height: 1.5;
 		font-variant-numeric: tabular-nums;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 	.state::before {
 		content: '';
@@ -207,7 +196,7 @@
 		text-underline-offset: 3px;
 	}
 	.reading button:hover {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 
 	@media (min-width: 1025px) {

@@ -1,41 +1,230 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-04T00:00:00Z",
+  "generatedAt": "2026-11-14T00:00:00Z",
   "title": "Design System: anishshrestha.com",
-  "source": { "seed": "seed:a9745f2fa560bd8e", "scope": "Home route only (src/routes/+page.svelte, src/lib/components/spread/*). Blog, labs, projects and the shared Header still carry the legacy dark terminal world in src/app.css :root; html:has(.spread) retints it on the home route." },
+  "source": {
+    "seed": "seed:a9745f2fa560bd8e",
+    "scope": "Every route. Tokens in src/app.css; home in src/routes/+page.svelte and src/lib/components/spread/*; reading routes share .page, .section, .ruled, .codeblock; lab pages share .section-card, .section-title, .btn, .caps."
+  },
   "extensions": {
     "colorMeta": {
-      "cobalt-spot": { "role": "primary", "displayName": "Cobalt Spot", "canonical": "#2242c8", "tonalRamp": ["oklch(15% 0.08 268)", "oklch(26% 0.15 268)", "oklch(36% 0.20 268)", "oklch(44% 0.22 268)", "oklch(56% 0.19 268)", "oklch(70% 0.13 268)", "oklch(84% 0.07 268)", "oklch(95% 0.02 268)"] },
-      "cobalt-tint": { "role": "primary", "displayName": "Cobalt Tint", "canonical": "#dfe6fb", "tonalRamp": ["oklch(15% 0.03 268)", "oklch(28% 0.04 268)", "oklch(42% 0.05 268)", "oklch(56% 0.05 268)", "oklch(70% 0.05 268)", "oklch(82% 0.04 268)", "oklch(92% 0.03 268)", "oklch(97% 0.01 268)"] },
-      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#ffffff", "tonalRamp": ["oklch(15% 0 0)", "oklch(28% 0 0)", "oklch(42% 0 0)", "oklch(56% 0 0)", "oklch(70% 0 0)", "oklch(84% 0 0)", "oklch(95% 0 0)", "oklch(100% 0 0)"] },
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#141414", "tonalRamp": ["oklch(10% 0 0)", "oklch(19% 0 0)", "oklch(30% 0 0)", "oklch(42% 0 0)", "oklch(56% 0 0)", "oklch(70% 0 0)", "oklch(84% 0 0)", "oklch(95% 0 0)"] },
-      "ink-muted": { "role": "neutral", "displayName": "Ink Muted", "canonical": "#555555", "tonalRamp": ["oklch(15% 0 0)", "oklch(28% 0 0)", "oklch(42% 0 0)", "oklch(50% 0 0)", "oklch(62% 0 0)", "oklch(74% 0 0)", "oklch(86% 0 0)", "oklch(95% 0 0)"] }
+      "cobalt-spot": {
+        "role": "primary",
+        "displayName": "Cobalt Spot",
+        "canonical": "#2242c8",
+        "tonalRamp": [
+          "oklch(15% 0.08 268)",
+          "oklch(26% 0.15 268)",
+          "oklch(36% 0.2 268)",
+          "oklch(44% 0.22 268)",
+          "oklch(56% 0.19 268)",
+          "oklch(70% 0.13 268)",
+          "oklch(84% 0.07 268)",
+          "oklch(95% 0.02 268)"
+        ]
+      },
+      "cobalt-deep": {
+        "role": "primary",
+        "displayName": "Cobalt Deep",
+        "canonical": "#1a35a3",
+        "tonalRamp": [
+          "oklch(15% 0.07 268)",
+          "oklch(24% 0.13 268)",
+          "oklch(32% 0.17 268)",
+          "oklch(38% 0.19 268)",
+          "oklch(50% 0.17 268)",
+          "oklch(66% 0.12 268)",
+          "oklch(82% 0.06 268)",
+          "oklch(95% 0.02 268)"
+        ]
+      },
+      "cobalt-tint": {
+        "role": "primary",
+        "displayName": "Cobalt Tint",
+        "canonical": "#dfe6fb",
+        "tonalRamp": [
+          "oklch(15% 0.03 268)",
+          "oklch(28% 0.04 268)",
+          "oklch(42% 0.05 268)",
+          "oklch(56% 0.05 268)",
+          "oklch(70% 0.05 268)",
+          "oklch(82% 0.04 268)",
+          "oklch(92% 0.03 268)",
+          "oklch(97% 0.01 268)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(28% 0 0)",
+          "oklch(42% 0 0)",
+          "oklch(56% 0 0)",
+          "oklch(70% 0 0)",
+          "oklch(84% 0 0)",
+          "oklch(95% 0 0)",
+          "oklch(100% 0 0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "oklch(10% 0 0)",
+          "oklch(19% 0 0)",
+          "oklch(30% 0 0)",
+          "oklch(42% 0 0)",
+          "oklch(56% 0 0)",
+          "oklch(70% 0 0)",
+          "oklch(84% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "#555555",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(28% 0 0)",
+          "oklch(42% 0 0)",
+          "oklch(50% 0 0)",
+          "oklch(62% 0 0)",
+          "oklch(74% 0 0)",
+          "oklch(86% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "The single page headline, Source Serif 4 600, balanced wrap." },
-      "figure-numeral": { "displayName": "Figure Numeral", "purpose": "Billboard 'Fig. n' in cobalt overlapping the top-left corner of a live plate; aria-hidden." },
-      "headline": { "displayName": "Headline", "purpose": "Article titles in the Notes and Instruments columns." },
-      "title-italic": { "displayName": "Title Italic", "purpose": "Byline, column ledes, colophon; the world's secondary voice." },
-      "body": { "displayName": "Body", "purpose": "Essay and article prose; essay runs in two 520px-max columns with a column rule and spot drop cap." },
-      "label-head": { "displayName": "Running Head Label", "purpose": "Masthead, nav and section labels in spaced capitals." },
-      "label-reading": { "displayName": "Reading Label", "purpose": "Live reading row under each plate, tabular numerals; also dates at weight 400 and the caption 'Fig. n' prefix." },
-      "caption": { "displayName": "Caption", "purpose": "Figure captions, the only grotesk text in sentence case." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "The home h1: one line of role. Home only."
+      },
+      "page-title": {
+        "displayName": "Page Title",
+        "purpose": "The h1 of every reading route; lab pages run a step smaller."
+      },
+      "section-heading": {
+        "displayName": "Section Heading",
+        "purpose": "The h2 that follows a 1.5px section rule."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Row titles in ruled lists; no underline at rest."
+      },
+      "dek": {
+        "displayName": "Dek",
+        "purpose": "Italic sentence under a page title; italic is the world's secondary voice."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading text on reading routes, max 65 to 68ch."
+      },
+      "body-post": {
+        "displayName": "Post Body",
+        "purpose": "Blog post prose; 17px under 640px."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Cobalt entry numbers: billboard on the system design hub, 22px 'No. n' on home, the status code on the error page."
+      },
+      "label-head": {
+        "displayName": "Running Head Label",
+        "purpose": "Masthead, nav and footer line in spaced capitals."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": ".caps and .meta: dates, kinds, readings, button text, table heads, row labels, 'Fig. n' and 'What it proves' prefixes."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Figure captions and chain node details; the only grotesk text in sentence case."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code blocks only; 13px under 640px, 0.85em inline."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "none", "value": "transition: none", "purpose": "Links and controls change colour with no transition; only the simulations move. No entrance animations." },
-      { "name": "reduced-motion", "value": "@media (prefers-reduced-motion: reduce)", "purpose": "Plates render one still frame, paused, with a Play control." }
+      {
+        "name": "button-colour",
+        "value": "color 120ms ease-out, border-color 120ms ease-out",
+        "purpose": "The only transition on a control: a button's text and border easing to cobalt. Links change colour with none."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "@media (prefers-reduced-motion: reduce)",
+        "purpose": "Plates render one still frame, paused, with a Play control; all transitions and animations collapse to 0.01ms."
+      }
     ],
     "breakpoints": [
-      { "name": "stack", "value": "1024px", "purpose": "Opening becomes one column with the lead plate before the essay; plates and back pages become single columns." },
-      { "name": "phone", "value": "640px", "purpose": "Running head stacks, essay drops to one column, figure numeral offset -4px, top padding 20px." }
+      {
+        "name": "plates-2up",
+        "value": "1100px",
+        "purpose": "Lab plates drop from four-up to two-up."
+      },
+      {
+        "name": "lab-stack",
+        "value": "1024px",
+        "purpose": "Lab pages stack the control column under the board."
+      },
+      {
+        "name": "opening-stack",
+        "value": "860px",
+        "purpose": "Home opening becomes one column: claim, proof rows, then the screenshot."
+      },
+      {
+        "name": "chain-vertical",
+        "value": "820px",
+        "purpose": "The 'How it runs' chain turns top-to-bottom; hosting rows and the projects index stack."
+      },
+      {
+        "name": "phone",
+        "value": "640px",
+        "purpose": "Plates go one column, entry numerals stack above titles, running head tightens, code drops to 13px."
+      },
+      {
+        "name": "rows-stack",
+        "value": "520px",
+        "purpose": "Definition rows stack label above value."
+      }
     ],
     "rules": [
-      { "name": "plate-border", "value": "1.5px solid #141414", "purpose": "Frame around every live plate; also the running head and section opener rules." },
-      { "name": "plate-border-paused", "value": "1.5px dashed #141414", "purpose": "A paused plate." },
-      { "name": "hairline", "value": "1px solid #141414", "purpose": "Column rule, reading row rule, article rows, inline note." },
-      { "name": "focus", "value": "outline: 2px solid #2242c8; outline-offset: 2px", "purpose": "Keyboard focus on links and buttons." },
-      { "name": "selection", "value": "background: #2242c8; color: #ffffff", "purpose": "Text selection." }
+      {
+        "name": "plate-border",
+        "value": "1.5px solid #141414",
+        "purpose": "Frame around live plates, screenshots, chain nodes and lab panels; also the running head, footer and section opener rules."
+      },
+      {
+        "name": "plate-border-paused",
+        "value": "1.5px dashed #141414",
+        "purpose": "A paused plate."
+      },
+      {
+        "name": "hairline",
+        "value": "1px solid #141414",
+        "purpose": "Rows, column rules, reading row rule, code blocks, secondary buttons, inputs."
+      },
+      {
+        "name": "nav-current",
+        "value": "3px solid #2242c8",
+        "purpose": "Bar under the current nav tab, sitting on the running head rule (built as an inset box-shadow)."
+      },
+      {
+        "name": "focus",
+        "value": "outline: 2px solid #2242c8; outline-offset: 2px",
+        "purpose": "Keyboard focus on links, buttons and scrollable code."
+      },
+      {
+        "name": "selection",
+        "value": "background: #2242c8; color: #ffffff",
+        "purpose": "Text selection."
+      }
     ]
   },
   "components": [
@@ -44,105 +233,158 @@
       "kind": "custom",
       "refersTo": "link-inline",
       "description": "Prose link: ink text with a 1px cobalt underline; hover turns cobalt with no transition.",
-      "html": "<p class=\"ds-prose\">Conway's Game of Life. <a class=\"ds-link\" href=\"#\">Open the lab</a> · <a class=\"ds-link\" href=\"#\">Read how it was built</a></p>",
-      "css": ".ds-prose { font-family: 'Source Serif 4', Georgia, serif; font-size: 15.5px; line-height: 1.5; color: #141414; } .ds-link { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-decoration-thickness: 1px; text-underline-offset: 3px; transition: none; } .ds-link:hover { color: #2242c8; } .ds-link:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; }"
+      "html": "<p class=\"ds-prose\">The payment SDK puts four providers behind one Go interface. <a class=\"ds-link\" href=\"#\">Work with me</a>.</p>",
+      "css": ".ds-prose { font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: #141414; } .ds-link { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-decoration-thickness: 1px; text-underline-offset: 3px; } .ds-link:hover { color: #2242c8; } .ds-link:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; }"
     },
     {
       "name": "Running Head",
       "kind": "nav",
       "refersTo": "running-head",
-      "description": "Masthead and primary nav in spaced grotesk capitals on a 1.5px ink rule; replaces the shared Header on this route.",
-      "html": "<header class=\"ds-head\"><a class=\"ds-masthead\" href=\"#\"><b>anishshrestha.com</b> · No. 9 · November 2026</a><nav class=\"ds-nav\"><a href=\"#\">Labs</a><a href=\"#\">Blog</a><a href=\"#\">Projects</a><a href=\"#\">GitHub</a></nav></header>",
-      "css": ".ds-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1.5px solid #141414; padding-bottom: 10px; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #141414; background: #ffffff; } .ds-head a { color: inherit; text-decoration: none; } .ds-head a:hover { color: #2242c8; } .ds-head a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-masthead { white-space: nowrap; } .ds-masthead b { color: #2242c8; } .ds-nav { display: flex; gap: 28px; }"
+      "description": "Cobalt masthead and four nav links in spaced grotesk capitals on a 1.5px ink rule; the current tab is cobalt with a 3px bar on the rule.",
+      "html": "<header class=\"ds-head\"><a class=\"ds-masthead\" href=\"#\">anishshrestha.com</a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Projects</a><a href=\"#\">System Design</a><a href=\"#\">Blog</a><a href=\"#\">About</a></nav></header>",
+      "css": ".ds-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 24px; border-bottom: 1.5px solid #141414; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; } .ds-head a { display: inline-block; padding: 10px 0; color: inherit; text-decoration: none; white-space: nowrap; } .ds-head a:hover { color: #2242c8; } .ds-head a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-masthead { color: #2242c8 !important; font-weight: 700; } .ds-nav { display: flex; flex-wrap: wrap; gap: 0 28px; } .ds-nav a[aria-current='page'] { color: #2242c8; border-bottom: 3px solid #2242c8; padding-bottom: 7px; }"
+    },
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Square paper button with a 1.5px ink border and grotesk capitals; hover turns text and border cobalt over 120ms. Secondary drops to a 1px border and muted text.",
+      "html": "<span class=\"ds-row\"><a class=\"ds-btn\" href=\"#\">Open the lab</a><button class=\"ds-btn ds-btn-secondary\" type=\"button\">Go back</button></span>",
+      "css": ".ds-row { display: flex; gap: 12px; } .ds-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; border: 1.5px solid #141414; border-radius: 0; padding: 7px 12px; cursor: pointer; text-decoration: none; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: #2242c8; border-color: #2242c8; } .ds-btn:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-btn-secondary { border-width: 1px; color: #555555; }"
+    },
+    {
+      "name": "Toggle Button, active",
+      "kind": "button",
+      "refersTo": "button-active",
+      "description": "A lab mode switch: the selected option goes solid cobalt with paper text.",
+      "html": "<span class=\"ds-row\"><button class=\"ds-btn\" type=\"button\">Human</button><button class=\"ds-btn ds-active\" type=\"button\">AI</button></span>",
+      "css": ".ds-row { display: flex; gap: 8px; } .ds-btn { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #141414; background: #ffffff; border: 1.5px solid #141414; border-radius: 0; padding: 7px 12px; cursor: pointer; transition: color 120ms ease-out, border-color 120ms ease-out; } .ds-btn:hover { color: #2242c8; border-color: #2242c8; } .ds-btn:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-btn.ds-active { background: #2242c8; border-color: #2242c8; color: #ffffff; }"
     },
     {
       "name": "Live Plate, running",
       "kind": "card",
       "refersTo": "plate-running",
-      "description": "A numbered figure: cobalt billboard numeral overlapping a 1.5px ink-bordered plate; running state draws in cobalt.",
-      "html": "<figure class=\"ds-plate\"><span class=\"ds-fig\" aria-hidden=\"true\">Fig. 2</span><div class=\"ds-canvas ds-running\"><i></i><i></i><i></i><i></i><i></i><i></i></div><figcaption class=\"ds-caption\"><b>Fig. 2</b> Boids flocking from three rules: separation, alignment, cohesion.</figcaption></figure>",
-      "css": ".ds-plate { position: relative; margin: 0; padding-top: 52px; font-family: 'Public Sans', system-ui, sans-serif; color: #141414; } .ds-fig { position: absolute; top: 0; left: -14px; font-weight: 700; font-size: clamp(64px, 9vw, 132px); line-height: 1; letter-spacing: -0.04em; color: #2242c8; z-index: 1; pointer-events: none; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-running i { background: #2242c8; } .ds-caption { margin-top: 10px; font-size: 13px; letter-spacing: 0.02em; line-height: 1.5; } .ds-caption b { color: #2242c8; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11.5px; margin-right: 6px; }"
+      "description": "A live figure: 1.5px ink-bordered plate drawing in cobalt while running, with its reading row and a 'Fig. n' caption beneath.",
+      "html": "<figure class=\"ds-plate ds-running\"><div class=\"ds-canvas\"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class=\"ds-reading\"><span class=\"ds-state\">Running</span><span>Comparisons 41</span><span class=\"ds-controls\"><button class=\"ds-ctl\" type=\"button\">Pause</button><button class=\"ds-ctl\" type=\"button\">Shuffle</button></span></div><figcaption class=\"ds-caption\"><b>Fig. 4</b> Quick sort, one comparison per frame. <a href=\"#\">Open the lab</a></figcaption></figure>",
+      "css": ".ds-plate { margin: 0; font-family: 'Public Sans', system-ui, sans-serif; color: #141414; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-running .ds-canvas i { background: #2242c8; } .ds-reading { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid #141414; padding-top: 8px; margin-top: 8px; color: #2242c8; } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: #141414; background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-caption { margin-top: 10px; font-size: 13px; letter-spacing: 0.02em; line-height: 1.5; } .ds-caption b { color: #2242c8; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; margin-right: 6px; } .ds-caption a { color: inherit; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-caption a:hover { color: #2242c8; }"
     },
     {
       "name": "Live Plate, paused",
       "kind": "card",
       "refersTo": "plate-paused",
-      "description": "The same plate paused: dashed ink border and the simulation drawn in ink.",
-      "html": "<figure class=\"ds-plate\"><span class=\"ds-fig\" aria-hidden=\"true\">Fig. 3</span><div class=\"ds-canvas ds-paused\"><i></i><i></i><i></i><i></i><i></i><i></i></div></figure>",
-      "css": ".ds-plate { position: relative; margin: 0; padding-top: 52px; font-family: 'Public Sans', system-ui, sans-serif; } .ds-fig { position: absolute; top: 0; left: -14px; font-weight: 700; font-size: clamp(64px, 9vw, 132px); line-height: 1; letter-spacing: -0.04em; color: #2242c8; z-index: 1; pointer-events: none; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-paused { border-style: dashed; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; }"
+      "description": "The same plate paused: dashed ink border, the simulation and its reading drawn in ink.",
+      "html": "<figure class=\"ds-plate ds-paused\"><div class=\"ds-canvas\"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class=\"ds-reading\"><span class=\"ds-state\">Paused</span><span>Comparisons 41</span><span class=\"ds-controls\"><button class=\"ds-ctl\" type=\"button\">Play</button></span></div></figure>",
+      "css": ".ds-plate { margin: 0; font-family: 'Public Sans', system-ui, sans-serif; color: #141414; } .ds-canvas { aspect-ratio: 3 / 2; border: 1.5px solid #141414; background: #ffffff; display: flex; align-items: flex-end; gap: 4px; padding: 0 12px; } .ds-canvas i { flex: 1; background: #141414; } .ds-canvas i:nth-child(1) { height: 40%; } .ds-canvas i:nth-child(2) { height: 75%; } .ds-canvas i:nth-child(3) { height: 20%; } .ds-canvas i:nth-child(4) { height: 90%; } .ds-canvas i:nth-child(5) { height: 55%; } .ds-canvas i:nth-child(6) { height: 30%; } .ds-paused .ds-canvas { border-style: dashed; } .ds-reading { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 16px; border-top: 1px solid #141414; padding-top: 8px; margin-top: 8px; color: #2242c8; } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: #141414; background: none; border: 0; padding: 3px 0; margin: -3px 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-paused .ds-reading { color: #141414; }"
     },
     {
-      "name": "Reading Row",
-      "kind": "custom",
-      "refersTo": "reading-row",
-      "description": "Live reading under a plate on a hairline rule: state square and word, tabular figures, text-button controls pushed right.",
-      "html": "<div class=\"ds-reading\"><span class=\"ds-state\">Running</span><span>Generation 11</span><span>Population 158</span><span class=\"ds-controls\"><button class=\"ds-ctl\" type=\"button\">Pause</button><button class=\"ds-ctl\" type=\"button\">Reseed</button></span></div>",
-      "css": ".ds-reading { font-family: 'Public Sans', system-ui, sans-serif; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; gap: 4px 18px; border-top: 1px solid #141414; padding-top: 8px; margin-top: 8px; color: #2242c8; font-weight: 700; background: #ffffff; } .ds-state::before { content: ''; display: inline-block; width: 8px; height: 8px; background: currentColor; margin-right: 6px; vertical-align: 1px; } .ds-controls { margin-left: auto; display: flex; gap: 12px; } .ds-ctl { font: inherit; letter-spacing: inherit; text-transform: inherit; color: #141414; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; }"
-    },
-    {
-      "name": "Reading Control",
-      "kind": "button",
-      "refersTo": "reading-control",
-      "description": "The only button in the world: a grotesk-capitals text button with a cobalt underline, no fill, no border.",
-      "html": "<button class=\"ds-ctl\" type=\"button\">Play</button>",
-      "css": ".ds-ctl { font-family: 'Public Sans', system-ui, sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #141414; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; transition: none; } .ds-ctl:hover { color: #2242c8; } .ds-ctl:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; }"
-    },
-    {
-      "name": "Back Page Row",
-      "kind": "custom",
-      "refersTo": "back-row",
-      "description": "Section label in cobalt capitals, then article rows opening on hairline rules: date, serif headline, serif description.",
-      "html": "<section class=\"ds-back\"><h2 class=\"ds-label\">Notes</h2><article class=\"ds-row\"><time class=\"ds-date\">January 14, 2026</time><h3 class=\"ds-h3\"><a href=\"#\">Building a Unified Payment SDK for Nepal in Go</a></h3><p class=\"ds-p\">A type-safe Go SDK that unifies eSewa, Khalti, ConnectIPS, and FonePay with a single interface.</p></article><p class=\"ds-more\"><a href=\"#\">All notes</a></p></section>",
-      "css": ".ds-back { color: #141414; background: #ffffff; font-family: 'Source Serif 4', Georgia, serif; } .ds-label { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: #2242c8; margin: 0 0 18px; } .ds-row { padding: 14px 0; border-top: 1px solid #141414; } .ds-date { display: block; font-family: 'Public Sans', system-ui, sans-serif; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; } .ds-h3 { font-size: 22px; font-weight: 600; line-height: 1.2; margin: 0 0 6px; text-wrap: balance; } .ds-h3 a { color: inherit; text-decoration: none; } .ds-h3 a:hover { text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; color: #2242c8; } .ds-h3 a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-p { margin: 0; font-size: 15.5px; line-height: 1.5; } .ds-more { margin: 16px 0 0; font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; } .ds-more a { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-more a:hover { color: #2242c8; }"
-    },
-    {
-      "name": "Essay Column",
+      "name": "Proof Columns",
       "kind": "custom",
       "refersTo": "link-inline",
-      "description": "Two serif columns with a 1px ink column rule, indented paragraphs and a cobalt drop cap.",
-      "html": "<div class=\"ds-essay\"><p>Every figure on this page is running. Fig. 1 is Conway's Game of Life, the cellular automaton in which a handful of rules about neighbours produces gliders, oscillators and still lifes; click any cell to change it.</p><p>Each lab is paired with a written account of its engine: the animation step system behind the visualizer, the opening book behind Bagchal, the spatial hash that keeps the flock fast.</p><p>Some solutions are elegant, others are brute force. All of them work eventually.</p></div>",
-      "css": ".ds-essay { font-family: 'Source Serif 4', Georgia, serif; font-size: 15.5px; line-height: 1.5; color: #141414; background: #ffffff; max-width: 520px; column-count: 2; column-gap: 28px; column-rule: 1px solid #141414; text-wrap: pretty; } .ds-essay p { margin: 0 0 12px; text-indent: 1.4em; } .ds-essay p:first-child { text-indent: 0; } .ds-essay p:first-child::first-letter { float: left; font-size: 58px; line-height: 0.85; padding: 6px 8px 0 0; font-weight: 600; color: #2242c8; }"
+      "description": "Three proofs on a 1.5px rule divided by 1px column rules: linked project name, one sentence of what it proves, a cobalt kind line.",
+      "html": "<ol class=\"ds-proof\"><li><h2><a href=\"#\">NTX</a></h2><p>I can design, build and run a whole backend. It is live.</p><p class=\"ds-meta\">Stock research platform</p></li><li><h2><a href=\"#\">Nepal payment SDK</a></h2><p>I can hide four providers behind one typed interface.</p><p class=\"ds-meta\">Go library</p></li><li><h2><a href=\"#\">Kursi Fighter</a></h2><p>Nothing yet. It is in progress.</p><p class=\"ds-meta\">Game · in progress</p></li></ol>",
+      "css": ".ds-proof { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1.5px solid #141414; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-proof li { padding: 18px 28px 0; border-left: 1px solid #141414; } .ds-proof li:first-child { padding-left: 0; border-left: 0; } .ds-proof li:last-child { padding-right: 0; } .ds-proof h2 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 8px; } .ds-proof h2 a { color: inherit; text-decoration: underline; text-decoration-color: #2242c8; text-decoration-thickness: 2px; text-underline-offset: 5px; } .ds-proof h2 a:hover { color: #2242c8; } .ds-proof h2 a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-proof p { margin: 0 0 10px; font-size: 17px; line-height: 1.5; } .ds-proof .ds-meta { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin: 0; }"
+    },
+    {
+      "name": "Numbered Entry",
+      "kind": "custom",
+      "refersTo": "entry-numeral",
+      "description": "A system design entry: billboard cobalt numeral, serif title, description, and a meta line naming the project behind it.",
+      "html": "<ol class=\"ds-entries\"><li><span class=\"ds-no\" aria-hidden=\"true\">3</span><div><h3><a href=\"#\">Building a Unified Payment SDK for Nepal in Go</a></h3><p>One interface over four providers, signatures and amount checks included.</p><p class=\"ds-meta\">January 14, 2026 · Backed by <a href=\"#\">Nepal payment SDK</a></p></div></li></ol>",
+      "css": ".ds-entries { list-style: none; margin: 0; padding: 0; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-entries li { display: grid; grid-template-columns: clamp(64px, 12vw, 140px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 24px 0; border-top: 1px solid #141414; } .ds-no { font-family: 'Public Sans', system-ui, sans-serif; font-weight: 700; font-size: clamp(56px, 9vw, 96px); line-height: 0.85; letter-spacing: -0.04em; color: #2242c8; font-variant-numeric: tabular-nums; } .ds-entries h3 { font-size: clamp(22px, 2.4vw, 28px); font-weight: 600; line-height: 1.15; margin: 0 0 8px; } .ds-entries h3 a { color: inherit; text-decoration: none; } .ds-entries h3 a:hover { color: #2242c8; text-decoration: underline; text-underline-offset: 3px; } .ds-entries a:focus-visible { outline: 2px solid #2242c8; outline-offset: 2px; } .ds-entries p { margin: 0 0 8px; font-size: 17px; line-height: 1.5; } .ds-entries .ds-meta { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin: 0; } .ds-meta a { color: #141414; text-decoration: underline; text-decoration-color: #2242c8; text-underline-offset: 3px; } .ds-meta a:hover { color: #2242c8; }"
+    },
+    {
+      "name": "How It Runs Chain",
+      "kind": "custom",
+      "refersTo": "chain-node",
+      "description": "Architecture figure: 1.5px bordered nodes joined by an ink rule with an arrowhead; turns top-to-bottom under 820px.",
+      "html": "<figure class=\"ds-chain\"><figcaption>Starting a payment</figcaption><ol><li><b>Your handler</b><span>Amount, order ID, callback URL</span></li><li><b>InitiatePayment</b><span>Signs the request for that provider</span></li><li><b>Provider</b><span>The customer pays there</span></li></ol></figure>",
+      "css": ".ds-chain { --gap: 30px; margin: 0; color: #141414; background: #ffffff; font-family: 'Source Serif 4', Georgia, serif; } .ds-chain figcaption { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; margin-bottom: 10px; } .ds-chain ol { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--gap); } .ds-chain li { position: relative; flex: 1 1 0; min-width: 0; border: 1.5px solid #141414; padding: 12px 14px 14px; } .ds-chain li b { display: block; font-size: 18px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; } .ds-chain li span { display: block; font-family: 'Public Sans', system-ui, sans-serif; font-size: 13px; line-height: 1.45; } .ds-chain li + li::before { content: ''; position: absolute; right: 100%; top: 50%; width: var(--gap); border-top: 1.5px solid #141414; margin-top: -0.75px; } .ds-chain li + li::after { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border: 5px solid transparent; border-left: 8px solid #141414; border-right: 0; }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "custom",
+      "refersTo": "codeblock",
+      "description": "The code voice: Fira Code in a 1px ink frame on paper. Mono is for code only.",
+      "html": "<pre class=\"ds-code\" tabindex=\"0\"><code>go get github.com/voidarchive/nepal-payment-go</code></pre>",
+      "css": ".ds-code { margin: 0; padding: 16px 18px; border: 1px solid #141414; background: #ffffff; color: #141414; font-family: 'Fira Code', ui-monospace, monospace; font-size: 14px; line-height: 1.6; tab-size: 4; overflow-x: auto; } .ds-code:focus-visible { outline: 2px solid #2242c8; outline-offset: -2px; }"
+    },
+    {
+      "name": "Definition Rows",
+      "kind": "custom",
+      "refersTo": "definition-label",
+      "description": "Hosting, skills and contact rows: a cobalt capitals label in a fixed column, the value in serif, on hairline rules.",
+      "html": "<dl class=\"ds-rows\"><div><dt>Nothing to host</dt><dd>It is a library. It runs inside your Go service.</dd></div><div><dt>Docs</dt><dd>Served by pkg.go.dev from the tagged source.</dd></div></dl>",
+      "css": ".ds-rows { margin: 0; border-top: 1px solid #141414; font-family: 'Source Serif 4', Georgia, serif; color: #141414; background: #ffffff; } .ds-rows div { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 4px 24px; padding: 10px 0; border-bottom: 1px solid #141414; } .ds-rows dt { font-family: 'Public Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.5; color: #2242c8; padding-top: 4px; } .ds-rows dd { margin: 0; font-size: 17px; line-height: 1.5; }"
     }
   ],
   "narrative": {
     "northStar": "The Mathematical Games Spread",
-    "overview": "The site is set like a feature spread in a mid-century popular-science magazine: white coated stock, near-black ink, and one cobalt spot ink that does every job colour has to do. The figures are not illustrations of the labs; they are the labs, running in place, numbered Fig. 1 to Fig. 4 with their reading (generation, population, running) printed beneath on a hairline rule. Essay text sits in two narrow serif columns with a column rule and a spot-colour drop cap. The running head carries the masthead, issue number and the primary nav as small grotesk capitals on a 1.5px rule. There is no chrome: no cards, no shadows, no gradients, no rounded corners, no kickers above headings. Depth exists only where a billboard figure numeral overlaps the plate below it.\n\nThe world is deliberately dense and quiet. Rules do the structural work (running head, section openers, article rows, caption rows), and the only motion on the page is the simulations themselves. Hover changes colour, never position. This world was committed for the home route under the direction contract seed:a9745f2fa560bd8e and refuses the profile-card-plus-grid portfolio and the terminal costume that preceded it.\n\nScope. This system ships on the home route (src/routes/+page.svelte and src/lib/components/spread/*). The blog, labs, projects routes and the shared Header.svelte still render the legacy dark terminal world defined by the :root tokens in src/app.css (near-black backgrounds, coral #ff6b6b, Fira Code); the html:has(.spread) block in that file retints those legacy tokens to this world so the shared Footer survives on the home route. That legacy world is the incumbent being replaced route by route; new surfaces extend the spread, not the terminal. Three brand commitments bind every surface regardless of world: the Go gopher easter egg stays, VoidArchive is the handle, and the theme is light.",
+    "overview": "The site is set like a mid-century popular-science magazine: white coated stock, near-black ink, and one cobalt spot ink that does every job colour has to do. The front page is no longer an essay. It opens with the role in one serif line, an italic dek and a single \"work with me\" line on the left, and the shipped product on the right as a bordered screenshot plate captioned Fig. 1. Under both, on a heavy rule, three proof columns divided by column rules. Below that come the numbered system design entries, each naming the project behind it, and then four lab plates that are not illustrations of the labs but the labs themselves, running in place, with their reading (generation, population, running) printed beneath on a hairline rule.\n\nThe world is dense and quiet. Rules do the structural work (running head, section openers, rows, caption rows, column rules), and the only things that move are the simulations. Hover changes colour, never position. There is no chrome: no shadows, no gradients, no rounded corners, no filled cards, no kickers above headings. The one box the world owns is the plate, a 1.5px ink frame on paper, used for a live figure, a screenshot, an architecture node, a lab control panel; code sits in its lighter 1px cousin. This world evolves the home spread committed under seed:a9745f2fa560bd8e; it refuses the essay-first magazine opening it replaces, the profile-card-plus-skill-grid portfolio, and the terminal costume that came before both.\n\nScope. This system ships on every route: the home page (src/routes/+page.svelte, src/lib/components/spread/*), the shared running head and footer (src/lib/components/Header.svelte, Footer.svelte), the reading routes (projects index and project pages, the system design hub, about, blog index and posts, error page), which share the .page, .page-title, .dek, .meta, .ruled, .section, .prose-block and .codeblock scaffolding in src/app.css, and the six lab pages, where the global .section-card, .section-title, .btn and .caps classes carry the world and each lab opens with a serif h1 and an italic dek. The legacy token names in src/app.css (--color-bg-*, --color-text*, --color-primary*, --color-border) are aliases of the two inks kept so Tailwind utilities keep working. Three brand commitments bind every surface: the Go gopher easter egg stays, VoidArchive is the handle, and the theme is light.",
     "keyCharacteristics": [
       "White paper, near-black ink, one cobalt spot ink and its tint; nothing else.",
       "Hairline (1px) and heavy (1.5px) ink rules carry all structure.",
-      "Source Serif 4 for reading, Public Sans capitals for labels, readings and captions.",
-      "Figure numerals at billboard scale in spot colour, overlapping their plates.",
+      "Source Serif 4 for reading, Public Sans capitals for labels, readings and captions, Fira Code for code only.",
+      "The claim and the shipped product share the first screen; proof sits directly under both.",
+      "Cobalt grotesk numerals number the evidence: \"Fig. n\" caption prefixes on home, entry numbers on the system design hub.",
       "Live plates: spot colour and a solid border while running, ink and a dashed border when paused.",
-      "Flat everywhere; depth only by overlap across a rule.",
-      "Square corners, no shadows, no gradients, no cards, no kickers."
+      "Square corners, no shadows, no gradients, no filled cards, no kickers."
     ],
     "rules": [
-      { "name": "The Two-Ink Rule", "body": "Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind text. If something needs to stand out, it is cobalt; if not, it is ink.", "section": "colors" },
-      { "name": "The Running Ink Rule", "body": "Spot colour on a plate means it is running. A paused or idle plate drops to ink. The reading row's state square inherits the same colour, so colour and the word (Running / Paused / Opening) always agree.", "section": "colors" },
-      { "name": "The Capitals Rule", "body": "Public Sans appears either as spaced uppercase (0.06em to 0.14em) at 11.5px to 12px, or as a tight-tracked figure numeral at billboard size. It is never body text.", "section": "typography" },
-      { "name": "The Base-16 Rule", "body": "The spread root is 16px / 1.5; every text size is a fixed pixel value against it (11.5, 12, 13, 15.5, 17, 22), with only the headline and numeral fluid.", "section": "typography" },
-      { "name": "The Overlap-Only Rule", "body": "Depth is produced by one element crossing a rule or a border, never by shadow, blur, gradient or a raised surface. If a component needs to sit \"above\" something, it overlaps an edge.", "section": "elevation" }
+      {
+        "name": "The Two-Ink Rule",
+        "body": "Every surface is printed with ink and one spot colour on paper. No greys for hierarchy, no second accent, no tinted backgrounds behind prose. If something needs to stand out, it is cobalt; if not, it is ink. Syntax highlighting inside a code block is the one place a reader meets other hues, and it is recorded below as an exception, not as palette.",
+        "section": "colors"
+      },
+      {
+        "name": "The Running Ink Rule",
+        "body": "Spot colour on a plate means it is running. A paused or idle plate drops to ink and its border goes dashed. The reading row's state square inherits the same colour, so colour and the word (Running / Paused) always agree.",
+        "section": "colors"
+      },
+      {
+        "name": "The Capitals Rule",
+        "body": "Public Sans appears as spaced uppercase (0.06em to 0.14em) at 12px, as a tight-tracked cobalt numeral, or as a 13px caption. It is never running text, and it is never smaller than 12px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Base-16 Rule",
+        "body": "The root is 16px / 1.5; text sizes are fixed pixel values against it (12, 13, 17, 18, 19, 22, 24), and only headings and numerals are fluid.",
+        "section": "typography"
+      },
+      {
+        "name": "The Code-Only Rule",
+        "body": "Fira Code sets code and nothing else: install lines, examples, inline identifiers. It is never a label, a heading or a mood.",
+        "section": "typography"
+      },
+      {
+        "name": "The One-Sheet Rule",
+        "body": "There is one surface and one depth. If something needs to be separated, draw a rule; if it needs to be framed, draw a plate; if it needs to be noticed, print it in cobalt. Never a shadow, a blur, a gradient or a raised surface.",
+        "section": "elevation"
+      }
     ],
     "dos": [
-      "Do print with two inks: ink #141414 and cobalt #2242c8 on white, with the tint #dfe6fb reserved for grid lines inside a plate.",
-      "Do structure with rules: 1.5px ink to open a section or frame a plate, 1px for column rules, caption rows and article rows.",
-      "Do set reading apparatus (readings, dates, captions, nav, section labels) in Public Sans capitals at 11.5px to 12px with 0.06em to 0.14em tracking; set prose in Source Serif 4 at 15.5px / 1.5.",
-      "Do number a live figure with a cobalt Public Sans 700 numeral at clamp(64px, 9vw, 132px) overlapping the top-left corner of its plate, and repeat the number as a cobalt caption prefix.",
+      "Do print with two inks: ink and cobalt on white, with the tint reserved for grid lines inside a plate, table row rules and inline code.",
+      "Do structure with rules: 1.5px ink to open a section or frame a plate, 1px for rows, column rules and caption rows.",
+      "Do put the claim and the shipped product on the same first screen, with the proof directly under both.",
+      "Do set apparatus (readings, dates, nav, row labels, button text) in Public Sans capitals at 12px with 0.06em to 0.14em tracking; set reading text in Source Serif 4 at 17px, 18px in posts.",
+      "Do number evidence with cobalt Public Sans 700: \"Fig. n\" as a caption prefix, \"No. n\" beside an entry, a billboard numeral on the hub.",
       "Do show state by colour and border: cobalt and solid while running, ink and dashed while paused, with the reading row's word and square agreeing.",
-      "Do keep hover to a colour change (ink to cobalt) and focus to a 2px cobalt outline offset 2px; no transition, no movement.",
-      "Do let the lead plate come before the essay under 1024px so the live lab stays in the first viewport on phones.",
+      "Do keep hover to a colour change (ink to cobalt) and focus to a 2px cobalt outline offset 2px; nothing changes position.",
+      "Do draw architecture as plates joined by an ink rule and arrowhead, and turn the chain vertical under 820px.",
+      "Do put the proof before the picture on narrow screens: under 860px the proof rows follow the claim and the screenshot follows them.",
       "Do render one still frame with a Play control under prefers-reduced-motion: reduce.",
-      "Do keep the Go gopher, the VoidArchive handle, and the light theme on every surface, in this world or the legacy one."
+      "Do keep the Go gopher, the VoidArchive handle, and the light theme on every surface."
     ],
     "donts": [
       "Don't use shadows, gradients, blur, translucency or a second surface colour; the page is one sheet of paper.",
-      "Don't draw cards or boxed containers; separate content with rules and whitespace.",
+      "Don't draw filled, shadowed or rounded cards; the only box is a plate, an ink frame on paper, and everything else is separated by rules and whitespace.",
       "Don't round a corner; every radius is 0.",
-      "Don't add a kicker or eyebrow above a headline; the grotesk capitals belong to apparatus (section labels, dates, readings), not to headings.",
+      "Don't add a kicker or eyebrow above a headline; the grotesk capitals belong to apparatus (dates, readings, row labels), not to headings.",
+      "Don't set a billboard \"Fig. n\" above or over a plate, a masthead issue number, a drop cap or a multi-column essay; that front page was replaced.",
       "Don't introduce grey text for hierarchy; use italic, size or the serif/grotesk switch instead.",
-      "Don't add a second accent, a tinted background behind text, or the legacy coral #ff6b6b, Fira Code, scanlines or terminal prompt motif on a surface built in this world.",
-      "Don't animate anything but the simulations: no entrance animations, no hover lifts, no transitions on links.",
-      "Don't set Public Sans as running text or Source Serif 4 as a label."
+      "Don't add a second accent, a tinted background behind prose, or the legacy coral #ff6b6b, scanlines or terminal prompt motif.",
+      "Don't set anything but code in Fira Code, and don't set code in anything else.",
+      "Don't animate anything but the simulations: no entrance animations, no hover lifts, no movement on links or buttons.",
+      "Don't set Public Sans as running text or below 12px, or Source Serif 4 as a label."
     ]
   }
 }

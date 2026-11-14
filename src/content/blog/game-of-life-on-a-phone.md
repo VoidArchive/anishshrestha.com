@@ -14,11 +14,9 @@ relatedLab:
 
 The Game of Life lab was the first one I built for this site, and it worked well on a laptop. A technical audit of the site this month measured it on a phone: 1,203 cell buttons, each six pixels square. WCAG asks for 24. You could not toggle a cell with a finger if you tried, and the controls panel sat above the grid, so on a 390-pixel screen the board itself was a thousand pixels below the fold.
 
-Here is what changed.
-
 ## Cell size from the container, not the grid
 
-The old cell size was a function of the grid dimensions alone: eight pixels for a normal grid, six for a large one, four for a huge one. Reasonable on a wide screen, meaningless on a narrow one. The new rule looks at the width the grid actually has:
+The old cell size was a function of the grid dimensions alone: eight pixels for a normal grid, six for a large one, four for a huge one. That is reasonable on a wide screen and meaningless on a narrow one. The new rule looks at the width the grid actually has:
 
 ```ts
 const narrow = window.innerWidth <= 1024;
@@ -27,7 +25,7 @@ const cellSize = Math.max(narrow ? 24 : 6, Math.floor(containerWidth / gridWidth
 
 On a phone the floor is 24 pixels, so the default 40 by 30 grid becomes 1,000 pixels wide and the container scrolls. That is a deliberate trade. A grid you can pan and tap beats a grid you can see whole and cannot touch. On a desktop the floor is six pixels and the whole grid fits as before.
 
-The home page figure takes the other route. It is a canvas, not a grid of buttons, and it is decorative rather than the main event, so under 600 pixels it drops from 35 by 26 cells to 14 by 10. The cells land at about 25 pixels and the caption reads the live size.
+The home page figure takes the other route. It is a canvas, not a grid of buttons, and on that page it is decoration, so under 600 pixels it drops from 35 by 26 cells to 14 by 10. The cells land at about 25 pixels and the caption reads the live size.
 
 ## Board first
 
@@ -35,7 +33,7 @@ The lab's layout used to put controls, patterns, and rules in a sidebar on the l
 
 ## Seed the grid
 
-An empty grid makes the first tap on Play do nothing, which reads as broken. The shell now seeds the grid at 25 percent density on mount if the population is zero. Randomize and Clear still work as before; the difference is that the lab is alive when you arrive.
+An empty grid makes the first tap on Play do nothing, which reads as broken. The shell now seeds the grid at 25 percent density on mount if the population is zero. Randomize and Clear still work as before, but the lab is alive when you arrive.
 
 ## The parts that were just wrong
 
@@ -45,4 +43,4 @@ Two strings in the pattern panel began with "Debug:" and shipped to production f
 
 No contrast failures, one `h1`, no skipped headings, no horizontal overflow at 390 pixels, every tap target at 24 pixels or more. The lab lost nothing. The pattern library, the toroidal wrap option, the speed presets, and the virtualised path for grids over 50 cells wide are all still there.
 
-If you want the before and after in one gesture: open the lab on your phone and tap a cell.
+To see the before and after, open the lab on your phone and tap a cell.

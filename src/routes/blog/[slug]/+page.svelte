@@ -1,19 +1,16 @@
 <script lang="ts">
 	import { formatDate } from '#lib/utils/blog.js';
+	import Seo from '#lib/components/Seo.svelte';
+	import { projects } from '#lib/site.js';
 	import LiveDemoCallout from '#lib/components/LiveDemoCallout.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 	let post = $derived(data.post);
+	let backing = $derived(projects.find((p) => p.slug === post.project));
 </script>
 
-<svelte:head>
-	<title>{post.title} – Anish Shrestha</title>
-	<meta name="description" content={post.description} />
-	<meta property="og:title" content={post.title} />
-	<meta property="og:description" content={post.description} />
-	<meta property="og:type" content="article" />
-</svelte:head>
+<Seo title="{post.title} | Anish Shrestha" description={post.description} type="article" />
 
 <main class="page container">
 	<article class="post">
@@ -23,6 +20,12 @@
 			<p class="meta stamp">
 				<time datetime={post.date}>{formatDate(post.date)}</time> · {post.tags.join(' · ')}
 			</p>
+			{#if post.series === 'system-design'}
+				<p class="series">
+					A <a href="/system-design">system design</a> entry{#if backing}, backed by
+						<a href="/projects/{backing.slug}">{backing.name}</a>{/if}.
+				</p>
+			{/if}
 		</header>
 
 		{#if post.relatedLab}
@@ -47,7 +50,7 @@
 		{/if}
 
 		<footer class="post-foot">
-			<a class="btn" href="/blog">All notes</a>
+			<a class="btn" href="/blog">All posts</a>
 		</footer>
 	</article>
 </main>
@@ -58,9 +61,17 @@
 		padding-top: 8px;
 		margin-bottom: 36px;
 	}
+	.stamp:has(+ .series) {
+		margin-bottom: 8px;
+	}
+	.series {
+		font-style: italic;
+		font-size: 17px;
+		margin: 0 0 36px;
+	}
 
 	.prose {
-		font-size: 17px;
+		font-size: 18px;
 		line-height: 1.6;
 		text-wrap: pretty;
 	}
@@ -89,7 +100,7 @@
 		font-weight: 700;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		margin: 1.6em 0 0.4em;
 	}
 	.prose :global(ul),
@@ -101,7 +112,7 @@
 		margin-bottom: 0.4em;
 	}
 	.prose :global(li::marker) {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 	.prose :global(code) {
 		font-family: var(--font-family-mono);
@@ -149,7 +160,7 @@
 
 	@media (max-width: 640px) {
 		.prose {
-			font-size: 16px;
+			font-size: 17px;
 		}
 		.prose :global(pre) {
 			font-size: 13px;

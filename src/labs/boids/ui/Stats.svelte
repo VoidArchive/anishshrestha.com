@@ -21,7 +21,7 @@
 		border-top: 1px solid var(--color-ink);
 		padding-top: 8px;
 		margin-top: 8px;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-family: var(--font-family-sans);
 		font-size: 11.5px;
 		font-weight: 700;
@@ -62,6 +62,6 @@
 	}
 
 	.reading button:hover {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 </style>

@@ -37,7 +37,7 @@ deaths, with a Play/Pause text control on the right.
 		border-top: 1px solid var(--color-ink);
 		padding-top: 8px;
 		margin-top: 8px;
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -72,6 +72,6 @@ deaths, with a Play/Pause text control on the right.
 	}
 
 	.reading button:hover {
-		color: var(--color-spot);
+		color: var(--color-spot-text);
 	}
 </style>

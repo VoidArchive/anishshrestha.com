@@ -18,7 +18,6 @@
 
 <section class="lab container">
 	<header class="lab-head">
-		<span class="fig" aria-hidden="true">Fig. 2</span>
 		<h1>Boids Flocking</h1>
 		<p class="dek">
 			Three rules per bird, separation, alignment and cohesion, and a flock emerges with no leader.
@@ -69,19 +68,8 @@
 		margin-bottom: 40px;
 	}
 
-	.fig {
-		display: block;
-		font-family: var(--font-family-sans);
-		font-weight: 700;
-		font-size: clamp(40px, 5vw, 64px);
-		line-height: 1;
-		letter-spacing: -0.04em;
-		color: var(--color-spot);
-		margin-left: -0.04em;
-	}
-
 	h1 {
-		font-family: var(--font-family-serif);
+		font-family: var(--font-family-display);
 		font-weight: 600;
 		font-size: clamp(34px, 4vw, 40px);
 		line-height: 1.02;
