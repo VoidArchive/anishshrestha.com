@@ -50,7 +50,7 @@ A Go backend developer learning system design in public with AI, with every less
 - Six working labs with source in `src/labs` and `src/routes/labs`.
 - Nine published posts in `src/content/blog` with dates, tags, and lab links.
 - Project list with real repo URLs in `src/routes/projects/+page.svelte`; one link (Bagchal) points at a path that no longer exists.
-- Open Graph image `static/og-image.png`, NTX screenshot `static/ntx-showcase.png`, lab icons in `static/icons`.
+- Open Graph image `static/og-image.png`, NTX screenshots `static/ntx-hero.webp` and `static/ntx-company.webp`, lab icons in `static/icons`.
 - JSON-LD person and project schema in the root layout; `static/llms.txt`.
 - Absent, must not be fabricated: testimonials, client logos, employer case studies, download or star counts.
 
