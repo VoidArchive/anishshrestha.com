@@ -1,5 +1,5 @@
 ---
-title: 'Cloudflare WARP Implementation on Arch Linux: Network Configuration and Performance Optimization'
+title: 'Cloudflare WARP on Arch Linux: Setup and Network Modes'
 slug: 'cloudflare-warp-arch-linux'
 description: 'How to set up the Cloudflare WARP client on Arch Linux: configuration, choosing a network mode, and performance tuning.'
 date: '2025-06-10'

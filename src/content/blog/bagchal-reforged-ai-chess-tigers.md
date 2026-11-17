@@ -1,5 +1,5 @@
 ---
-title: 'Building Bagchal AI: Asymmetric Game Theory and Minimax Implementation'
+title: 'Building a Bagchal AI with Minimax for an Asymmetric Game'
 slug: 'bagchal-reforged-ai-chess-tigers'
 description: 'Building an AI for the traditional Nepali board game Bagchal, with asymmetric gameplay, minimax optimization, and strategic evaluation functions.'
 date: '2025-06-25'

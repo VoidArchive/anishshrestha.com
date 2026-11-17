@@ -1,7 +1,7 @@
 ---
 title: 'Making Game of Life Playable on a Phone'
 slug: 'game-of-life-on-a-phone'
-description: 'An audit found the Game of Life grid rendering 1,203 cells at six pixels each on a 390-pixel screen. What it took to make every cell a real tap target without losing the grid.'
+description: 'The Game of Life grid drew 1,203 cells at six pixels each on a 390-pixel screen. What it took to make every cell a real tap target.'
 date: '2026-11-04'
 published: true
 tags: ['accessibility', 'mobile', 'svelte', 'game-of-life']

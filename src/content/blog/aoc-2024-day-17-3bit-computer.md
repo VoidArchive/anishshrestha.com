@@ -1,5 +1,5 @@
 ---
-title: 'Advent of Code 2024 Day 17: Virtual Machine Implementation and Quine Generation'
+title: 'Advent of Code 2024 Day 17: A 3-Bit VM and a Quine'
 slug: 'aoc-2024-day-17-3bit-computer'
 description: 'A 3-bit virtual machine written in Go, and a reverse search for the input that makes the program print itself.'
 date: '2025-06-11'

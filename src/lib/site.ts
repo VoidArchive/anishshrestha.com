@@ -13,6 +13,8 @@ export interface Project {
 	kind: string;
 	/** What it is, in a sentence or two */
 	summary: string;
+	/** Meta description when the summary does not fit 70–160 chars */
+	description?: string;
 	/** The second sentence on cards: what I did or what was hard */
 	proves: string;
 	/** Install or play */
@@ -32,6 +34,8 @@ export const projects: Project[] = [
 		slug: 'ntx',
 		name: 'NTX',
 		kind: 'Stock research platform',
+		description:
+			'A stock snapshot for the Nepal Stock Exchange: a screener with fundamental filters, company pages with the source beside every figure, and a market overview.',
 		summary:
 			'NTX is a stock snapshot for the Nepal Stock Exchange: a screener with fundamental filters, company pages that put the period and source beside every figure, and a market overview.',
 		proves:
@@ -102,6 +106,8 @@ mise run sqlc`
 		slug: 'nepal-payment-go',
 		name: 'Nepal payment SDK',
 		kind: 'Go library · nepal-payment-go',
+		description:
+			'One Go SDK for eSewa, Khalti, ConnectIPS and FonePay behind a single interface. It does the HMAC and RSA signing each provider asks for.',
 		summary:
 			'One Go SDK for eSewa, Khalti, ConnectIPS and FonePay behind a single interface. It does the HMAC-SHA256, HMAC-SHA512 and RSA-SHA256 signing each provider asks for, on the standard library plus golang.org/x/crypto for ConnectIPS.',
 		proves:
@@ -187,6 +193,8 @@ if result.Success {
 		slug: 'go-nepse',
 		name: 'NEPSE library',
 		kind: 'Go library · go-nepse',
+		description:
+			'An unofficial, type-safe Go client for Nepal Stock Exchange market data: prices, floor sheets, market depth, indices and company fundamentals.',
 		summary:
 			'A type-safe Go client for Nepal Stock Exchange market data: prices, floor sheets, market depth, indices and company fundamentals. It is unofficial. NEPSE’s API is undocumented and can change without notice.',
 		proves:
@@ -267,6 +275,8 @@ func main() {
 		slug: 'kursi-fighter',
 		name: 'Kursi Fighter',
 		kind: 'Game · in progress',
+		description:
+			'Kursi Fighter is a game I am building. It is not playable yet. The link goes up with the first build.',
 		summary: 'Kursi Fighter is a game I am building. It is not playable yet.',
 		proves: 'Nothing to show yet.',
 		start: {

@@ -10,7 +10,13 @@
 	let backing = $derived(projects.find((p) => p.slug === post.project));
 </script>
 
-<Seo title="{post.title} | Anish Shrestha" description={post.description} type="article" />
+<Seo
+	title={`${post.title} | Anish Shrestha`.length <= 60
+		? `${post.title} | Anish Shrestha`
+		: post.title}
+	description={post.description}
+	type="article"
+/>
 
 <main class="page container">
 	<article class="post">

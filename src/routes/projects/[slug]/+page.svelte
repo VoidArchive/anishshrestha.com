@@ -7,7 +7,7 @@
 	let p = $derived(data.project);
 </script>
 
-<Seo title="{p.name} | Anish Shrestha" description={p.summary} />
+<Seo title="{p.name} | Anish Shrestha" description={p.description ?? p.summary} />
 
 <main class="page page-wide container">
 	<h1 class="page-title">{p.name}</h1>

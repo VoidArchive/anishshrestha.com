@@ -1,7 +1,7 @@
 ---
 title: 'Why My Pathfinding Visualizer Forgot Its Past'
 slug: 'pathfinding-visualizer-forgot-its-past'
-description: 'For a year the pathfinding grid only ever lit one cell at a time. Every step was snapshotting the original grid instead of the one the search had been drawing on. One working grid fixed it.'
+description: 'For a year my pathfinding grid lit one cell at a time, because every step snapshotted the original grid instead of the live one. One working grid fixed it.'
 date: '2026-11-04'
 published: true
 tags: ['algorithms', 'pathfinding', 'typescript', 'debugging', 'visualization']

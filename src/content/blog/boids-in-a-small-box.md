@@ -1,7 +1,7 @@
 ---
 title: 'Boids in a Small Box'
 slug: 'boids-in-a-small-box'
-description: 'The boids lab runs 150 birds on a big canvas. The home page shows 120 in a 600 by 400 plate, and the same rules looked wrong there. What cohesion, perception radius, and edge handling do when the box shrinks.'
+description: 'The home page fits 120 boids in a 600 by 400 plate, and the lab rules looked wrong there. What cohesion, perception radius and edges do when the box shrinks.'
 date: '2026-11-04'
 published: true
 tags: ['boids', 'simulation', 'canvas', 'typescript']

@@ -17,7 +17,7 @@
 
 <Seo
 	title="Anish Shrestha | Software Developer"
-	description="Anish Shrestha is a Go backend developer learning system design in public. Every lesson is backed by a deployed project: NTX, a payment SDK for Nepal, and a NEPSE client."
+	description="Anish Shrestha, a Go backend developer learning system design in public. Each lesson is backed by a deployed project, like NTX or a payment SDK for Nepal."
 />
 
 <main class="home container">

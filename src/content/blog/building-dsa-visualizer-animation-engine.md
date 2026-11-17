@@ -1,5 +1,5 @@
 ---
-title: 'Building a DSA Visualizer: Animation Engine Architecture and Algorithm Visualization'
+title: 'Building a DSA Visualizer and Its Animation Engine'
 slug: 'building-dsa-visualizer-animation-engine'
 description: 'How I built an interactive data structures and algorithms visualizer with step-by-step animations, covering sorting, pathfinding and performance optimization.'
 date: '2025-06-25'

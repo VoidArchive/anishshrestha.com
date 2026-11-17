@@ -1,5 +1,5 @@
 ---
-title: 'Dockerizing SvelteKit for Production: A Practical Guide to Lean Images'
+title: 'Dockerizing SvelteKit for Production'
 slug: 'dockerizing-sveltekit-for-production'
 description: 'A step-by-step guide to containerizing a SvelteKit app with Docker multi-stage builds, ending with a lean production image served by Nginx.'
 date: '2025-07-08'

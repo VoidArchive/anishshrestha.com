@@ -8,7 +8,7 @@
 
 <Seo
 	title="Blog | Anish Shrestha"
-	description="Technical writing by Anish Shrestha: system design entries, Go libraries for Nepal's payment and stock systems, how the labs were built, and what went wrong along the way."
+	description="Anish Shrestha on system design, Go libraries for Nepal's payment and stock systems, how the labs were built, and what went wrong."
 />
 
 <main class="page container">

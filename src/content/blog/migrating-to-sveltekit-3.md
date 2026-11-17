@@ -1,7 +1,7 @@
 ---
 title: 'Migrating to SvelteKit 3: What Actually Broke'
 slug: 'migrating-to-sveltekit-3'
-description: 'The automated migration handles the imports and the config. These are the eight things it did not handle, from a server crash in onDestroy to a pnpm workspace file Cloudflare refused.'
+description: 'The automated migration handles imports and config. Here are eight things it missed, from a crash in onDestroy to a pnpm workspace file Cloudflare refused.'
 date: '2026-11-04'
 published: true
 tags: ['sveltekit', 'svelte', 'migration', 'pnpm', 'cloudflare']

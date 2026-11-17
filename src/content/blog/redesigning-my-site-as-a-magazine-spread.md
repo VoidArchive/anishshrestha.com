@@ -1,7 +1,7 @@
 ---
 title: 'Redesigning My Site as a Magazine Spread'
 slug: 'redesigning-my-site-as-a-magazine-spread'
-description: 'The old site was a dark terminal with a glowing red accent, like most developer portfolios. The new one is white stock, one cobalt ink, and numbered figures that are the labs themselves, running. How that decision got made.'
+description: 'I swapped a dark terminal look with a red accent for white stock, one cobalt ink, and numbered figures that are the labs themselves, running.'
 date: '2026-11-04'
 published: true
 tags: ['design', 'sveltekit', 'portfolio', 'process']

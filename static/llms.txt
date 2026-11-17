@@ -62,7 +62,7 @@ Open to remote work, contract projects, and consulting engagements. Particularly
 - Building a Unified Payment SDK for Nepal in Go
 - How I Built a Go Library for the NEPSE API
 - Dockerizing SvelteKit for Production
-- Building Conway's Game of Life in Svelte
-- Building a DSA Visualizer Animation Engine
+- Building Conway's Game of Life in SvelteKit
+- Building a DSA Visualizer and Its Animation Engine
 
 Read more at: https://anishshrestha.com/blog

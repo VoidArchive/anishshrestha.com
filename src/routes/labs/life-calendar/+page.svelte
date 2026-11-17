@@ -208,6 +208,57 @@
 	</figure>
 </main>
 
+<div class="notes container pb-8 lg:pb-12">
+	<section class="section rules" id="about">
+		<h2>How the life calendar works</h2>
+		<p class="intro">
+			Each square is one week. Each row is a year of 52 weeks, and there are a hundred rows, so the
+			whole grid is 5,200 weeks. Filled squares are the weeks you’ve lived, counting the one you’re
+			in now. The outlined ones are what’s left if you make it to 100.
+		</p>
+
+		<div class="cols">
+			<div>
+				<h3>Using it</h3>
+				<ol>
+					<li>Type your birth date into the field. The grid and the numbers update right away.</li>
+					<li>The line under the grid gives weeks lived, weeks left and the percentage lived.</li>
+					<li>
+						Print / Save as PDF opens your browser’s print dialog. It prints the grid on one A4
+						page, always in the light colours, without the date field.
+					</li>
+					<li>
+						On a desktop, the squares near your cursor swell a little. That’s off on touch screens
+						and if you’ve asked for reduced motion.
+					</li>
+				</ol>
+			</div>
+
+			<div>
+				<h3>Reading the grid</h3>
+				<p>
+					Rows run from the top, starting the week you were born. The numbers down the left mark
+					every fifth year from 0, and the numbers across the top mark week 1 and then every fifth
+					week up to 50. A hundred years is generous for most people. I still find it odd that even
+					the full grid fits on one sheet of paper.
+				</p>
+
+				<h3>Your birth date stays here</h3>
+				<p>
+					The counting happens in your browser. This page doesn’t send the date anywhere and doesn’t
+					save it, so if you reload, it goes back to the default date.
+				</p>
+
+				<h3>One simplification</h3>
+				<p>
+					Every row is exactly 52 weeks, but a real year is a day or two longer, so the grid runs
+					slightly ahead of the calendar: about a week every five or six years.
+				</p>
+			</div>
+		</div>
+	</section>
+</div>
+
 <style>
 	.lab {
 		padding-top: 40px;
@@ -371,7 +422,8 @@
 		:global(body:has(.life-calendar) .running-head),
 		:global(body:has(.life-calendar) .colophon-foot),
 		.field,
-		.print {
+		.print,
+		.notes {
 			display: none;
 		}
 		/* The grid is 60:110, so height is the limit: 133mm wide fills A4's 277mm of printable height */

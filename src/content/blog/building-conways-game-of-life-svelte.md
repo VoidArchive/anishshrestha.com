@@ -1,7 +1,7 @@
 ---
-title: 'Building Conways Game of Life: From Cellular Automata Theory to Interactive Simulation'
+title: "Building Conway's Game of Life in SvelteKit"
 slug: 'building-conways-game-of-life-svelte'
-description: 'Implementing Conways Game of Life with SvelteKit, covering cellular automata rules, performance optimization, and pattern library integration.'
+description: "Implementing Conway's Game of Life with SvelteKit, covering cellular automata rules, performance optimization, and pattern library integration."
 date: '2025-06-25'
 published: true
 tags: ['gamedev', 'sveltekit', 'typescript', 'cellular-automata', 'simulation']
